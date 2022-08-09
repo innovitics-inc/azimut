@@ -40,6 +40,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	@Autowired ValifyUtility valifyUtility;
 	@Autowired UserUtility userUtility;
 	@Autowired ListUtility<UserImage> userImageListUtility; 
+	@Autowired BusinessUserService businessUserService;
 	public BusinessValify valifyFacial (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile straightFace,MultipartFile smilingFace,MultipartFile leftSide,MultipartFile rightSide,Integer userStep,String language) throws BusinessException,IntegrationException, IOException
 	{		
 		//this.validate(businessValify, valifyFacialImages,BusinessValify.class.getName());

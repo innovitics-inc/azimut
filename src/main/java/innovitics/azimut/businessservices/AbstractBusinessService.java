@@ -52,7 +52,6 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> {
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected NumberUtility numberUtility;
 	@Autowired protected UserUtility userUtility;
-	@Autowired protected BusinessUserService businessUserService;
 
 
 	protected  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
