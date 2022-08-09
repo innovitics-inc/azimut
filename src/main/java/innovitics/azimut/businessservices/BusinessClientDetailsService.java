@@ -174,7 +174,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		azimutAccount.setEmail(businessUser.getEmailAddress());
 		azimutAccount.setPhone("0"+businessUser.getPhoneNumber());
 		azimutAccount.setClientAML(0L);
-		this.logger.info("");
+		this.logger.info("Azimut Account:::"+azimutAccount.toString());
 		
 		return azimutAccount;
 	}

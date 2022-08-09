@@ -200,6 +200,18 @@ public class AzimutAccount extends BusinessUser{
 	public void setPostalNo(String postalNo) {
 		this.postalNo = postalNo;
 	}
+
+	@Override
+	public String toString() {
+		return "AzimutAccount [fullName=" + fullName + ", idDate=" + idDate + ", idMaturityDate=" + idMaturityDate
+				+ ", clientAML=" + clientAML + ", iDIssueCityId=" + iDIssueCityId + ", iDIssueCountryId="
+				+ iDIssueCountryId + ", iDIssueDistrictId=" + iDIssueDistrictId + ", customerNameAr=" + customerNameAr
+				+ ", customerNameEn=" + customerNameEn + ", birthDate=" + birthDate + ", sexId=" + sexId
+				+ ", clientTypeId=" + clientTypeId + ", email=" + email + ", phone=" + phone + ", addressAr="
+				+ addressAr + ", addressEn=" + addressEn + ", cityId=" + cityId + ", countryId=" + countryId
+				+ ", nationalityId=" + nationalityId + ", externalcode=" + externalcode + ", occupation=" + occupation
+				+ ", postalNo=" + postalNo + "]";
+	}
 	
 	
 	
