@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
+        <!--Property name="APP_LOG_ROOT">e:\Development\Java_Projects\logs</Property-->
+		 <Property name="APP_LOG_ROOT">${bundle:application-test:log.file.path}</Property> 
+    </Properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+  
+        <RollingFile name="file"
+            fileName="${APP_LOG_ROOT}/application.log"
+            filePattern="${APP_LOG_ROOT}/application-%d{yyyy-MM-dd}.log.zip">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            <!--SizeBasedTriggeringPolicy size="100 KB" /-->
+            </Policies>
+            <DefaultRolloverStrategy max="1" />
+        </RollingFile>
+  
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Root>
+    </Loggers>
+</Configuration>
