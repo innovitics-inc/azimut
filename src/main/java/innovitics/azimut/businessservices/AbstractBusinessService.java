@@ -50,7 +50,6 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> {
 	@Autowired BlobFileUtility blobFileUtility;
 	@Autowired protected ConfigProperties configProperties;
 	@Autowired protected FileUtility fileUtility;
-	@Autowired protected NumberUtility numberUtility;
 	@Autowired protected UserUtility userUtility;
 
 

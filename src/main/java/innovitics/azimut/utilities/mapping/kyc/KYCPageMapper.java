@@ -14,6 +14,7 @@ import innovitics.azimut.businessutilities.KYCUtility;
 import innovitics.azimut.models.kyc.KYCPage;
 import innovitics.azimut.models.kyc.Question;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.mapping.GrandParentMapper;
 @Component
 public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
@@ -88,8 +89,14 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 			
 			this.matchAndAssign(businessKYCPage,businessQuestions,businessSubQuestions,kycPage.getId(), kycPage.getAppUserId());
 			
-			businessKYCPage.setQuestions(this.kycUtility.populateTheObjectsWidth(businessQuestions));
+			if(kycPage!=null&&kycPage.getDraw()!=null&&kycPage.getDraw())
 			
+				businessKYCPage.setQuestions(this.kycUtility.populateTheObjectsWidth(businessQuestions));
+			
+			else
+			
+				businessKYCPage.setQuestions(businessQuestions);
+				
 			
 			
 		}
@@ -112,7 +119,7 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 			List<BusinessSubmittedAnswer> questionRelatedBusinessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
 			for(BusinessSubmittedAnswer businessSubmittedAnswer:businessSubmittedAnswers)
 			{
-				if(this.numberUtility.areLongValuesMatching(businessQuestion.getId(),businessSubmittedAnswer.getQuestionId()))
+				if(NumberUtility.areLongValuesMatching(businessQuestion.getId(),businessSubmittedAnswer.getQuestionId()))
 				{
 						questionRelatedBusinessSubmittedAnswers.add(businessSubmittedAnswer);
 				}
@@ -129,7 +136,7 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 				List<BusinessSubmittedAnswer> subQuestionRelatedBusinessSubmittedAnswers = new ArrayList<BusinessSubmittedAnswer>();
 				for (BusinessSubmittedAnswer businessSubmittedAnswer : businessSubmittedAnswers) 
 				{
-					if (this.numberUtility.areLongValuesMatching(businessSubQuestion.getId(),businessSubmittedAnswer.getQuestionId())) 
+					if (NumberUtility.areLongValuesMatching(businessSubQuestion.getId(),businessSubmittedAnswer.getQuestionId())) 
 					{
 						subQuestionRelatedBusinessSubmittedAnswers.add(businessSubmittedAnswer);
 					}

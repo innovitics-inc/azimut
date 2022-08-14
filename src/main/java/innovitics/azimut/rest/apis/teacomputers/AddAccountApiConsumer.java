@@ -15,7 +15,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 @Service
 public class AddAccountApiConsumer extends RestTeaComputerApiConsumer<AddAccountRequest, AddAccountResponse, AddAccountInput, AddAccountOutput> {
 
-	public static final String PATH="http://41.187.88.188/FITSAPI/AddCustomer";
+	public static final String PATH="/AddCustomer";
 	
 	@Override
 	public HttpEntity<String> generateRequestFromInput(AddAccountInput input) {
@@ -114,7 +114,7 @@ public class AddAccountApiConsumer extends RestTeaComputerApiConsumer<AddAccount
 	}
 	@Override
 	public String generateURL(String params) {
-		return PATH;
+		return super.generateURL(params)+PATH;
 	}
 
 }

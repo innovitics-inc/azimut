@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import innovitics.azimut.businessmodels.user.AuthenticationRequest;
+import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessFlow;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
@@ -64,10 +65,24 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 
 	public BusinessUser saveUser(BusinessUser businessUser) throws BusinessException
 	{
+		businessUser.concatinate();
 		this.validate(businessUser,addBusinessUserValidator,BusinessUser.class.getName());
 		User user=new User();
 		BusinessUser savedbusinessUser=new BusinessUser();
 		try {
+			if (businessUser.getAzimutAccount()!=null)
+			{
+				AzimutAccount businessAzimutAccount=businessUser.getAzimutAccount();
+				long countryId=businessAzimutAccount.getCountryId();
+				long cityId=businessAzimutAccount.getCityId();
+				
+				businessAzimutAccount.setNationalityId(countryId);				
+				businessAzimutAccount.setCountryId(countryId);
+				businessAzimutAccount.setCityId(cityId);			
+				businessAzimutAccount.setOccupation(StringUtility.OCCUPATION);
+				businessAzimutAccount.setClientAML(StringUtility.CLIENT_AML);
+			}
+			
 			user=userMapper.convertBusinessUnitToBasicUnit(businessUser,true);
 			user.setCreatedAt(DateUtility.getCurrentDate());
 			userService.save(user);
@@ -305,7 +320,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		BusinessUser businessUser=new BusinessUser();		
 		try 
 		{
-			User user=this.userService.findByUserPhoneAndPassword(username,password);
+			User user=this.userService.findByUserPhoneAndPassword(username,this.userUtility.encryptUserPassword(password));
 			this.userUtility.upsertDeviceIdAudit(user, deviceId);
 			businessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(businessUser, user, true);
 		}
@@ -345,12 +360,12 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		return tokenizedBusinessUser;
 	}
 	
-	public BusinessUser updateUserStep(BusinessUser businessUser,UserStep userStep) throws BusinessException
+	public BusinessUser updateUserStep(BusinessUser businessUser,Integer userStep) throws BusinessException
 	{
 		try 
 		{
 			
-			this.editUser(this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, userStep.getStepId()));	
+			this.editUser(this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, userStep));	
 		}
 		catch(Exception exception)
 		{
@@ -416,7 +431,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public void updateUserAtTeaComputers(BusinessUser businessUser) 
 	{
-		this.logger.info("Update User at Tea Computers");
+		logger.info("Update User at Tea Computers");
 	}
 	
 	private User storeFileBlobNameAndGenerateTokenInBusinessUser(BusinessUser businessUser,User user,MultipartFile file,String containerName,String parameter,boolean generateSasToken) throws IOException, BusinessException
@@ -426,16 +441,16 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		String fileName=blobData.getFileName();
 		String filePath=blobData.getSubDirectory();
 		user=this.userMapper.convertBusinessUnitToBasicUnit(businessUser, false);
-		this.logger.info("Parameter::"+parameter);
+		logger.info("Parameter::"+parameter);
 		if(StringUtility.stringsMatch(PROFILE_PICTURE_PARAMETER, parameter))
 		{	
-			this.logger.info("updating Profile Picture");
+			logger.info("updating Profile Picture");
 			user.setProfilePicture(fileName);
 			user.setPicturePath(filePath);									
 		}
 		else if(StringUtility.stringsMatch(SIGNED_PDF_PARAMETER, parameter))
 		{	
-			this.logger.info("updating signed PDF");
+			logger.info("updating signed PDF");
 			user.setSignedPdf(fileName);
 			user.setPdfPath(filePath);
 			user.setChangeNoApproved(false);
@@ -443,13 +458,13 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		user= userService.update(user);
 		if(user.getProfilePicture()!=null&&user.getPicturePath()!=null&&StringUtility.stringsMatch(PROFILE_PICTURE_PARAMETER, parameter))
 		{
-			this.logger.info("Generating Profile Picture URL");
+			logger.info("Generating Profile Picture URL");
 			user.setProfilePicture(blobData.getConcatinated(generateSasToken));
 		}
 		
 		if(user.getSignedPdf()!=null&&user.getPdfPath()!=null&&StringUtility.stringsMatch(SIGNED_PDF_PARAMETER, parameter))
 		{
-			this.logger.info("Generating Signed PDF URL");
+			logger.info("Generating Signed PDF URL");
 			user.setSignedPdf(blobData.getConcatinated(generateSasToken));
 		}
 		

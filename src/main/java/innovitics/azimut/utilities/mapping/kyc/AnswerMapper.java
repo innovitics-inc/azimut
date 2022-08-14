@@ -22,7 +22,6 @@ import innovitics.azimut.utilities.mapping.Mapper;
 public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 	@Autowired protected ListUtility<UserAnswer> userAnswerListUtility;
 	@Autowired protected UserAnswerMapper userAnswerMapper;
-	@Autowired protected NumberUtility longUtility;
 	@Autowired protected UserAnswerSubmissionService  userAnswerSubmissionService;
 	@Autowired protected ExceptionHandler exceptionHandler;
 	@Override
@@ -126,7 +125,7 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 			for(BusinessSubmittedAnswer child:childAnswers)
 			{
 				this.logger.info("Comparing"+" "+child+" and "+parent);
-				if (this.longUtility.areLongValuesMatching(parent.getAnswerId(), child.getParentAnswerId()))
+				if (NumberUtility.areLongValuesMatching(parent.getAnswerId(), child.getParentAnswerId()))
 				{
 					relatedAnswers.add(child);
 				}

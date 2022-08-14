@@ -67,8 +67,26 @@ public class User extends BaseEntity {
 	private String otherUserIdType;
 	private Long otherIdType;
 	private String otherUserId;
-	private String otherNationality; 
+	private String otherNationality;
+	private Long genderId;
 
+	private String teacomputersAddressAr;
+	private String teacomputersAddressEn;
+	
+	private Long teacomputersCityId;
+	private Long teacomputersCountryId;
+	
+	private Long teacomputersIssueCityId;
+	private Long teacomputersIssueCountryId;
+	
+	private Long teacomputersNationalityId;
+	
+	private Long teacomputersClientaml;
+	
+	private String  teacomputersOccupation;
+	
+	private Integer failureNumber;
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -295,6 +313,73 @@ public class User extends BaseEntity {
 	}
 	public void setOtherNationality(String otherNationality) {
 		this.otherNationality = otherNationality;
+	}	
+	public Long getGenderId() {
+		return genderId;
+	}
+	public void setGenderId(Long genderId) {
+		this.genderId = genderId;
+	}
+
+	public String getTeacomputersAddressAr() {
+		return teacomputersAddressAr;
+	}
+	public void setTeacomputersAddressAr(String teacomputersAddressAr) {
+		this.teacomputersAddressAr = teacomputersAddressAr;
+	}
+	public String getTeacomputersAddressEn() {
+		return teacomputersAddressEn;
+	}
+	public void setTeacomputersAddressEn(String teacomputersAddressEn) {
+		this.teacomputersAddressEn = teacomputersAddressEn;
+	}
+	public Long getTeacomputersCityId() {
+		return teacomputersCityId;
+	}
+	public void setTeacomputersCityId(Long teacomputersCityId) {
+		this.teacomputersCityId = teacomputersCityId;
+	}
+	public Long getTeacomputersCountryId() {
+		return teacomputersCountryId;
+	}
+	public void setTeacomputersCountryId(Long teacomputersCountryId) {
+		this.teacomputersCountryId = teacomputersCountryId;
+	}
+	public Long getTeacomputersIssueCityId() {
+		return teacomputersIssueCityId;
+	}
+	public void setTeacomputersIssueCityId(Long teacomputersIssueCityId) {
+		this.teacomputersIssueCityId = teacomputersIssueCityId;
+	}
+	public Long getTeacomputersIssueCountryId() {
+		return teacomputersIssueCountryId;
+	}
+	public void setTeacomputersIssueCountryId(Long teacomputersIssueCountryId) {
+		this.teacomputersIssueCountryId = teacomputersIssueCountryId;
+	}
+	public Long getTeacomputersNationalityId() {
+		return teacomputersNationalityId;
+	}
+	public void setTeacomputersNationalityId(Long teacomputersNationalityId) {
+		this.teacomputersNationalityId = teacomputersNationalityId;
+	}
+	public Long getTeacomputersClientaml() {
+		return teacomputersClientaml;
+	}
+	public void setTeacomputersClientaml(Long teacomputersClientaml) {
+		this.teacomputersClientaml = teacomputersClientaml;
+	}
+	public String getTeacomputersOccupation() {
+		return teacomputersOccupation;
+	}
+	public void setTeacomputersOccupation(String teacomputersOccupation) {
+		this.teacomputersOccupation = teacomputersOccupation;
+	}
+	public Integer getFailureNumber() {
+		return failureNumber;
+	}
+	public void setFailureNumber(Integer failureNumber) {
+		this.failureNumber = failureNumber;
 	}
 	public void concatinate()
 	{
@@ -303,16 +388,18 @@ public class User extends BaseEntity {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", userPhone=" + userPhone + ", password=" + password + ", deviceId=" + deviceId
-				+ ", userId=" + userId + ", userType=" + userType + ", nickName=" + nickName + ", emailAddress="
-				+ emailAddress + ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber
-				+ ", profilePicture=" + profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath
-				+ ", pdfPath=" + pdfPath + ", isChangeNoApproved=" + isChangeNoApproved + ", verificationPercentage="
-				+ verificationPercentage + ", isVerified=" + isVerified + ", migrated=" + migrated + ", createdAt="
-				+ createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + ", countryCode=" + countryCode
-				+ ", lastSolvedPageId=" + lastSolvedPageId + ", nextPageId=" + nextPageId + ", userStep=" + userStep
-				+ ", contractMap=" + contractMap + "]";
+				+ ", userId=" + userId + ", nickName=" + nickName + ", emailAddress=" + emailAddress
+				+ ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber + ", profilePicture="
+				+ profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath + ", pdfPath=" + pdfPath
+				+ ", isChangeNoApproved=" + isChangeNoApproved + ", verificationPercentage=" + verificationPercentage
+				+ ", isVerified=" + isVerified + ", migrated=" + migrated + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", deletedAt=" + deletedAt + ", countryCode=" + countryCode + ", lastSolvedPageId="
+				+ lastSolvedPageId + ", nextPageId=" + nextPageId + ", userStep=" + userStep + ", contractMap="
+				+ contractMap + ", country=" + country + ", city=" + city + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", dateOfBirth=" + dateOfBirth + ", dateOfIdExpiry=" + dateOfIdExpiry
+				+ ", otherUserIdType=" + otherUserIdType + ", otherIdType=" + otherIdType + ", otherUserId="
+				+ otherUserId + ", otherNationality=" + otherNationality + "]";
 	}
-
 
 
 	

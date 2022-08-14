@@ -25,7 +25,6 @@ public abstract class Mapper <S extends BaseEntity, T extends BaseBusinessEntity
 	
 	@Autowired protected ListUtility<S> baseListUtility;
 	@Autowired protected ListUtility<T> businessListUtility;
-	@Autowired protected NumberUtility numberUtility;
 	protected static final Logger logger = LoggerFactory.getLogger(Mapper.class);
 
 	protected  abstract S convertBusinessUnitToBasicUnit(T t , boolean save);

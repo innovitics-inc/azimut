@@ -19,6 +19,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 	
 	public static final String NON_MATHCING_ERROR="5039";
 	public static final String BUNDLE_ERROR="5001";
+	public static final String OCR_ERROR="Please make sure there is no glare, no shadows";
 	
 	@Override
 	public HttpHeaders generateHeaders(String locale,long contentLength) {
@@ -121,7 +122,12 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 				errorCode=ErrorCode.PAYMENT_FAILURE.getCode();
 				errorMessage=ErrorCode.PAYMENT_FAILURE.getMessage();
 			}
-			
+
+			if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(OCR_ERROR))
+			{
+				errorCode=ErrorCode.IMAGES_NOT_ClEAR.getCode();
+				errorMessage=ErrorCode.IMAGES_NOT_ClEAR.getMessage();
+			}
 			IntegrationException integrationException=new IntegrationException(errorCode, new Date(), errorMessage, errorMessage, exception.getStackTrace());
 			return  integrationException;
 		}

@@ -73,6 +73,19 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}
 		
 	}
+	@PostMapping(value="/saveTeacomputersAccountData",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> saveTeaComputersAccountData(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody AzimutAccount azimutAccount) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.saveTeaComputersAccountData(azimutAccount,this.getCurrentRequestHolder(token)),null,null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
 	@PostMapping(value="/addAccount",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> addAccountAtTeaComputers(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody AzimutAccount azimutAccount) throws BusinessException, IOException, IntegrationException {

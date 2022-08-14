@@ -45,8 +45,9 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private Long otherIdType;
 	private String otherUserId;
 	private String otherNationality;
-
-	
+	private Long genderId;
+	private AzimutAccount azimutAccount;
+	private Integer failureNumber;
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -270,6 +271,26 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setOtherNationality(String otherNationality) {
 		this.otherNationality = otherNationality;
+	}	
+	public Long getGenderId() {
+		return genderId;
+	}
+	public void setGenderId(Long genderId) {
+		this.genderId = genderId;
+	}
+	
+	public AzimutAccount getAzimutAccount() {
+		return azimutAccount;
+	}
+	public void setAzimutAccount(AzimutAccount azimutAccount) {
+		this.azimutAccount = azimutAccount;
+	}
+	
+	public Integer getFailureNumber() {
+		return failureNumber;
+	}
+	public void setFailureNumber(Integer failureNumber) {
+		this.failureNumber = failureNumber;
 	}
 	public void concatinate()
 	{
@@ -277,15 +298,18 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	@Override
 	public String toString() {
-		return "BusinessUser [id=" + id + ", userPhone=" + userPhone + ", password=" + password + ", secondPassword="
-				+ secondPassword + ", oldPassword=" + oldPassword + ", newPassword=" + newPassword + ", deviceId="
-				+ deviceId + ", userId=" + userId + ", idType=" + userIdType + ", nickName=" + nickName + ", emailAddress="
-				+ emailAddress + ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber
-				+ ", profilePicture=" + profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath
-				+ ", pdfPath=" + pdfPath + ", isChangeNoApproved=" + isChangeNoApproved + ", verificationPercentage="
-				+ verificationPercentage + ", isVerified=" + isVerified + ", migrated=" + migrated + ", businessFlow="
-				+ businessFlow + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt
-				+ ", flowId=" + flowId + ", countryCode=" + countryCode + ", file=" + file + "]";
+		return "BusinessUser [id=" + id + ", password=" + password + ", secondPassword=" + secondPassword
+				+ ", oldPassword=" + oldPassword + ", newPassword=" + newPassword + ", deviceId=" + deviceId
+				+ ", userId=" + userId + ", userIdType=" + userIdType + ", idType=" + idType + ", nickName=" + nickName
+				+ ", emailAddress=" + emailAddress + ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber="
+				+ phoneNumber + ", profilePicture=" + profilePicture + ", signedPdf=" + signedPdf + ", picturePath="
+				+ picturePath + ", pdfPath=" + pdfPath + ", isChangeNoApproved=" + isChangeNoApproved + ", isVerified="
+				+ isVerified + ", migrated=" + migrated + ", businessFlow=" + businessFlow + ", flowId=" + flowId
+				+ ", countryCode=" + countryCode + ", file=" + file + ", lastSolvedPageId=" + lastSolvedPageId
+				+ ", nextPageId=" + nextPageId + ", nextUserStep=" + nextUserStep + ", contractMap=" + contractMap
+				+ ", userImages=" + userImages + ", otherUserIdType=" + otherUserIdType + ", otherIdType=" + otherIdType
+				+ ", otherUserId=" + otherUserId + ", otherNationality=" + otherNationality + "]";
 	}
-	
+
+
 }

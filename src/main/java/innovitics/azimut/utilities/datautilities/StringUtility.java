@@ -1,5 +1,6 @@
 package innovitics.azimut.utilities.datautilities;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -25,6 +26,8 @@ public final class StringUtility extends ParentUtility{
 	public final static String NATIONAL_ID_DOCUMENT_TYPE="egy_nid";
 	public final static String PASSPORT_DOCUMENT_TYPE="passport";
 	public final static String EGYPT="Egypt";
+	public final static long CLIENT_AML=1L;
+	public final static String OCCUPATION="NULL";
 
 	public static String getClassName(Object object)
 	{
@@ -139,4 +142,12 @@ public final class StringUtility extends ParentUtility{
 		return input.substring(value);
 	}
 
+	public static List<String> splitStringUsingCharacter(String input,String splittingCharacter)
+	{
+		if(isStringPopulated(input)&&isStringPopulated(splittingCharacter))
+			return Arrays.asList(input.split(splittingCharacter));
+		else
+			return null;	
+		
+	}
 }

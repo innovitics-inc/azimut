@@ -5,6 +5,7 @@ import org.springframework.validation.Errors;
 
 import innovitics.azimut.businessmodels.valify.BusinessValify;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.validations.validators.BaseValidator;
 @Component
@@ -25,13 +26,15 @@ public class ValifyFacialImages extends BaseValidator{
 			if (businessValify != null) {
 				if (businessValify.getUserStep() != null) 
 				{
-					if (this.numberUtility.areIntegerValuesMatching(businessValify.getUserStep(),UserStep.STRAIGHT_AND_SMILE.getStepId())) 
+					if (NumberUtility.areIntegerValuesMatching(businessValify.getUserStep(),UserStep.STRAIGHT_AND_SMILE.getStepId())) 
 					{
 						if (!StringUtility.isStringPopulated(businessValify.getStraightFace()))
 							errors.rejectValue("straightFace", "invalidValue");
 						if (!StringUtility.isStringPopulated(businessValify.getSmilingFace()))
 							errors.rejectValue("smilingFace", "invalidValue");
-					} else if (this.numberUtility.areIntegerValuesMatching(businessValify.getUserStep(),UserStep.LEFT_AND_RIGHT.getStepId())) 
+					} 
+					
+					else if (NumberUtility.areIntegerValuesMatching(businessValify.getUserStep(),UserStep.LEFT_AND_RIGHT.getStepId())) 
 					{
 						if (!StringUtility.isStringPopulated(businessValify.getLeftSide()))
 							errors.rejectValue("leftSide", "invalidValue");

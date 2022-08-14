@@ -1,20 +1,17 @@
 package innovitics.azimut.utilities.mapping;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserType;
+import innovitics.azimut.security.AES;
 import innovitics.azimut.utilities.datautilities.DateUtility;
-import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
 @Component
 public class UserMapper extends Mapper<User, BusinessUser>{
-@Autowired RoleMapper roleMapper;
-@Autowired BlobFileUtility blobFileUtility;
-
+public static final long TEACOMPUTERS_CLIENT_AML=1L;
+@Autowired AES aes;
 	@Override
 	public User convertBusinessUnitToBasicUnit(BusinessUser businessUser, boolean save) {
 
@@ -22,13 +19,14 @@ public class UserMapper extends Mapper<User, BusinessUser>{
 		
 		if(businessUser!=null)
 		{
+			this.logger.info("Business User::"+businessUser.toString());
 			//this.convertBusinessDatesToBasicDates(user, businessUser, save);
 			
 			user.setId(businessUser.getId());
 			if(businessUser.getUserPhone()!=null)
 			user.setUserPhone(businessUser.getUserPhone());
 			if(businessUser.getPassword()!=null)
-			user.setPassword(businessUser.getPassword());
+			user.setPassword(aes.encrypt(businessUser.getPassword()));
 			if(businessUser.getCountryPhoneCode()!=null)
 			user.setCountryPhoneCode(businessUser.getCountryPhoneCode());
 			if(businessUser.getPhoneNumber()!=null)
@@ -116,7 +114,44 @@ public class UserMapper extends Mapper<User, BusinessUser>{
 			if(businessUser.getOtherNationality()!=null)
 				user.setOtherNationality(businessUser.getOtherNationality());
 			
+			if(businessUser.getGenderId()!=null)
+				user.setGenderId(businessUser.getGenderId());
+				
+			if(businessUser.getFailureNumber()!=null)
+				user.setFailureNumber(businessUser.getFailureNumber());
+			
+			if(businessUser.getAzimutAccount()!=null)
+			{
+				AzimutAccount azimutAccount=businessUser.getAzimutAccount();
+				
+				if(azimutAccount.getAddressAr()!=null)
+					user.setTeacomputersAddressAr(azimutAccount.getAddressAr());
+				if(azimutAccount.getAddressEn()!=null)
+					user.setTeacomputersAddressEn(azimutAccount.getAddressEn());
+				if(azimutAccount.getCityId()!=null)
+					user.setTeacomputersCityId(azimutAccount.getCityId());
+				if(azimutAccount.getCountryId()!=null)
+					user.setTeacomputersCountryId(azimutAccount.getCountryId());
+				
+				user.setTeacomputersClientaml(TEACOMPUTERS_CLIENT_AML);
+				
+				if(azimutAccount.getiDIssueCountryId()!=null)
+					user.setTeacomputersIssueCountryId(azimutAccount.getiDIssueCountryId());
+				if(azimutAccount.getiDIssueCityId()!=null)
+					user.setTeacomputersIssueCityId(azimutAccount.getiDIssueCityId());
+			
+				if(azimutAccount.getOccupation()!=null)
+					user.setTeacomputersOccupation(azimutAccount.getOccupation());
+				
+				if(azimutAccount.getNationalityId()!=null)
+					user.setTeacomputersNationalityId(azimutAccount.getNationalityId());
+			}
+			
+			
+			
 			user.concatinate();
+			
+			this.logger.info("User::"+user.toString());
 			
 			return user;
 			
@@ -124,9 +159,7 @@ public class UserMapper extends Mapper<User, BusinessUser>{
 			
 
 		}
-		
-		
-		this.logger.info("User::"+user.toString());
+				
 		return user;
 		
 		
@@ -146,7 +179,7 @@ public class UserMapper extends Mapper<User, BusinessUser>{
 			if(user.getUserPhone()!=null)
 			businessUser.setUserPhone(user.getUserPhone());
 			if(user.getPassword()!=null) 
-			businessUser.setPassword(user.getPassword());
+			businessUser.setPassword(aes.decrypt(user.getPassword()));
 		 	if(user.getCountryPhoneCode()!=null)
 			businessUser.setCountryPhoneCode(user.getCountryPhoneCode());
 			if(user.getPhoneNumber()!=null)
@@ -229,14 +262,58 @@ public class UserMapper extends Mapper<User, BusinessUser>{
 
 				if(user.getOtherIdType()!=null)
 					businessUser.setOtherIdType(user.getOtherIdType());
+				else
+					businessUser.setOtherIdType(0L);
+				
 				if(user.getOtherUserId()!=null)
 					businessUser.setOtherUserId(user.getOtherUserId());
 			
 
 				if(user.getOtherNationality()!=null)
 					businessUser.setOtherNationality(user.getOtherNationality());
-
-
+				
+				if(user.getGenderId()!=null)
+					businessUser.setGenderId(user.getGenderId());
+				
+				if(user.getFailureNumber()!=null)
+					businessUser.setFailureNumber(user.getFailureNumber());
+				else
+					businessUser.setFailureNumber(0);
+				
+					AzimutAccount  azimutAccount=new AzimutAccount();
+					
+						
+					if(user.getTeacomputersAddressAr()!=null)
+						azimutAccount.setAddressAr(user.getTeacomputersAddressAr());
+						
+					if(user.getTeacomputersAddressEn()!=null)
+						azimutAccount.setAddressEn(user.getTeacomputersAddressEn());
+					
+					if(user.getTeacomputersCityId()!=null)
+						azimutAccount.setCityId(user.getTeacomputersCityId());
+					
+					if(user.getTeacomputersCountryId()!=null)
+						azimutAccount.setCountryId(user.getTeacomputersCountryId());
+					
+					if(user.getTeacomputersIssueCountryId()!=null)
+						azimutAccount.setiDIssueCountryId(user.getTeacomputersIssueCountryId());
+					
+					if(user.getTeacomputersIssueCityId()!=null)
+						azimutAccount.setiDIssueCityId(user.getTeacomputersIssueCityId());
+					
+					if(user.getTeacomputersClientaml()!=null)
+						azimutAccount.setClientAML(user.getTeacomputersClientaml());
+					
+					if(user.getTeacomputersOccupation()!=null)
+						azimutAccount.setOccupation(user.getTeacomputersOccupation());
+					
+					if(user.getTeacomputersNationalityId()!=null)
+						azimutAccount.setNationalityId(user.getTeacomputersNationalityId());
+					
+			businessUser.setAzimutAccount(azimutAccount);		
+					
+							
+			
 			businessUser.concatinate();
 
 		}
@@ -352,6 +429,9 @@ public class UserMapper extends Mapper<User, BusinessUser>{
 				if(businessUser.getOtherNationality()!=null)
 					oldBusinessUser.setOtherNationality(businessUser.getOtherNationality());
 
+				
+				if(businessUser.getGenderId()!=null)
+					oldBusinessUser.setGenderId(businessUser.getGenderId());
 
 
 		     

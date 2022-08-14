@@ -14,7 +14,6 @@ import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 
 public abstract class GrandParentMapper <S extends BaseEntity, T extends BaseBusinessEntity>{
-	@Autowired protected NumberUtility numberUtility;
 	protected static final Logger logger = LoggerFactory.getLogger(ParentMapper.class);
 
 	protected  abstract S convertBusinessUnitToBasicUnit(T t , boolean save);

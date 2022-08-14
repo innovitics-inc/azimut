@@ -51,7 +51,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> getPageById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessKYCPage businessKYCPage) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessKYCPage.getId()),null, null);
+			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessKYCPage.getId(),businessKYCPage.getDraw()),null, null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -79,7 +79,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 				}
 				
 				
-				businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId());
+				businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),businessKYCPage.getDraw());
 				businessKYCPage.setVerificationPercentage(progress);
 			}
 		  	

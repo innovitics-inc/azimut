@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.validations.RegexPattern;
@@ -24,16 +25,33 @@ public class AddBusinessUserValidator extends BaseValidator{
 	public void validate(Object target, Errors errors) 
 	
 	{
-        //ValidationUtils.rejectIfEmpty(errors, "name", "name.empty");
-        BusinessUser businessUser = (BusinessUser) target;
-		
+
+		BusinessUser businessUser = (BusinessUser) target;
         
-        if (businessUser.getId() < 0)
-			errors.rejectValue("id", "invalidValue");
 		if (!(StringUtility.validateStringValueWithRegexPattern(businessUser.getEmailAddress(),RegexPattern.EMAIL.getPattern(), true)))
 			errors.rejectValue("emailAddress", "invalidValue");
-		if (!(StringUtility.validateStringValueWithRegexPattern(businessUser.getPhoneNumber(),RegexPattern.PHONE_NUMBER.getPattern(), true)))
+		
+		if (!(StringUtility.validateStringValueWithRegexPattern(businessUser.getUserPhone(),RegexPattern.PHONE_NUMBER.getPattern(), true)))
 			errors.rejectValue("phoneNumber", "invalidValue");
+		
+		if (!(StringUtility.validateStringValueWithRegexPattern(businessUser.getPassword(),RegexPattern.PASSWORD.getPattern(), true)))
+			errors.rejectValue("password", "invalidValue");
+		
+		if (!(StringUtility.isStringPopulated(businessUser.getNickName())))
+			errors.rejectValue("nickName", "invalidValue");
+		
+		if(businessUser!=null&&businessUser.getAzimutAccount()!=null)
+		{
+			AzimutAccount businessAzimutAccount=businessUser.getAzimutAccount();
+			
+			if(businessAzimutAccount.getCountryId()==null)
+				errors.rejectValue("azimutAccount", "invalidValue");
+			if(businessAzimutAccount.getCityId()==null)
+				errors.rejectValue("azimutAccount", "invalidValue");
+				
+		}
+		
+		
 
 	}
 }

@@ -30,7 +30,8 @@ public enum ErrorCode {
 	BAD_CREDENTIALS(2117, "Bad credentials."),
 	FAILED_TO_VALIDATE_TOKEN(2118,"Session expired."),
 	INVALID_FIELD_VALUE(2119,"Invalid value"),
-	IMAGES_NOT_SIMIILAR(2120,"The images are different, please retake them.")
+	IMAGES_NOT_SIMIILAR(2120,"The images are different, please retake them."),
+	IMAGES_NOT_ClEAR(2121,"The images are not clear.")
 	
 	;
 	

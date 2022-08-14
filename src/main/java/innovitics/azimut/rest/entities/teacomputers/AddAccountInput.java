@@ -7,9 +7,9 @@ public class AddAccountInput extends TeaComputerInput {
 	private String idDate;
 	private String idMaturityDate;
 	private Long clientAML;
-	private String iDIssueCityId;
-	private String iDIssueCountryId;
-	private String iDIssueDistrictId;
+	private Long iDIssueCityId;
+	private Long iDIssueCountryId;
+	private Long iDIssueDistrictId;
 	private String customerNameAr;
 	private String customerNameEn;
 	private String birthDate;
@@ -56,22 +56,22 @@ public class AddAccountInput extends TeaComputerInput {
 	public void setClientAML(Long clientAML) {
 		this.clientAML = clientAML;
 	}
-	public String getiDIssueCityId() {
+	public Long getiDIssueCityId() {
 		return iDIssueCityId;
 	}
-	public void setiDIssueCityId(String iDIssueCityId) {
+	public void setiDIssueCityId(Long iDIssueCityId) {
 		this.iDIssueCityId = iDIssueCityId;
 	}
-	public String getiDIssueCountryId() {
+	public Long getiDIssueCountryId() {
 		return iDIssueCountryId;
 	}
-	public void setiDIssueCountryId(String iDIssueCountryId) {
+	public void setiDIssueCountryId(Long iDIssueCountryId) {
 		this.iDIssueCountryId = iDIssueCountryId;
 	}
-	public String getiDIssueDistrictId() {
+	public Long getiDIssueDistrictId() {
 		return iDIssueDistrictId;
 	}
-	public void setiDIssueDistrictId(String iDIssueDistrictId) {
+	public void setiDIssueDistrictId(Long iDIssueDistrictId) {
 		this.iDIssueDistrictId = iDIssueDistrictId;
 	}
 	public String getCustomerNameAr() {

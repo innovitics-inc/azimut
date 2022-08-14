@@ -11,6 +11,7 @@ import innovitics.azimut.businessutilities.SearchFilter;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.repositories.user.UserDynamicRepository;
 import innovitics.azimut.repositories.user.UserRepository;
+import innovitics.azimut.security.AES;
 import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
@@ -26,7 +27,7 @@ public class UserService extends AbstractService<User,String>{
 	
 	@Autowired(required = true)
 	private	UserSpecification userSpecification;
-	
+		
 	public List<User> findAll() {
 	
 		return this.userRepository.findAll();

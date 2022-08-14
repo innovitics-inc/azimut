@@ -1,5 +1,6 @@
 package innovitics.azimut.rest.mappers;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import innovitics.azimut.rest.entities.valify.ValifyOCROutput;
 import innovitics.azimut.rest.models.valify.ValifyOCRIdResponse;
 import innovitics.azimut.rest.models.valify.ValifyOCRNationalIdResponse;
 import innovitics.azimut.rest.models.valify.ValifyOCRPassportResponse;
+import innovitics.azimut.utilities.crosslayerenums.UserIdType;
+import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @Component
@@ -70,7 +73,7 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 	@Override
 	BusinessValify createBusinessEntityFromOutput(ValifyOCROutput valifyOCROutput) {
 		BusinessValify businessValify=new BusinessValify();
-		if(valifyOCROutput.isEgyptian())
+		if(valifyOCROutput!=null&&valifyOCROutput.isEgyptian())
 		{
 			businessValify.setFirstName(valifyOCROutput.getFirstName());
 			businessValify.setFullName(valifyOCROutput.getFullName());
@@ -85,9 +88,18 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 			businessValify.setProfession(valifyOCROutput.getProfession());
 			businessValify.setReligion(valifyOCROutput.getReligion());
 			businessValify.setHusbandName(valifyOCROutput.getHusbandName());
-			businessValify.setDateOfBirth(valifyOCROutput.getDateOfBirth());
-			businessValify.setExpiryDate(valifyOCROutput.getExpiryDate());
+			
+			if(StringUtility.isStringPopulated(valifyOCROutput.getDateOfBirth()))
+			businessValify.setDateOfBirth(DateUtility.changeStringDateFormat(valifyOCROutput.getDateOfBirth(), new SimpleDateFormat("yyyy/mm/dd"), new SimpleDateFormat("dd-mm-yyyy")));
+			
+			
+			if(StringUtility.isStringPopulated(valifyOCROutput.getExpiryDate()))
+			businessValify.setExpirationDate(DateUtility.changeStringDateFormat(valifyOCROutput.getExpiryDate()+"/01", new SimpleDateFormat("yyyy/mm/dd"), new SimpleDateFormat("dd-mm-yyyy")));
+			
+			
+			
 			businessValify.setCountry(StringUtility.EGYPT);
+			
 			if(StringUtility.isStringPopulated(valifyOCROutput.getArea()))
 			{
 				businessValify.setCity((valifyOCROutput.getArea().split("-")[1]).trim());
@@ -97,6 +109,8 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 				char space=' ';
 				businessValify.setLastName(StringUtility.generateSubStringStartingFromCertainIndex(valifyOCROutput.getFullName(),valifyOCROutput.getFullName().lastIndexOf(space)).trim());
 			}
+			businessValify.setUserId(valifyOCROutput.getFrontNid());
+			businessValify.setAzIdType(UserIdType.NATIONAL_ID.getTypeId());
 	
 		}
 		else
@@ -109,11 +123,23 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 			
 			businessValify.setLastName(valifyOCROutput.getSurname());
 			businessValify.setPassportNumber(valifyOCROutput.getPassportNumber());
-			businessValify.setExpiryDate(valifyOCROutput.getExpirationDate());
-			businessValify.setDateOfBirth(valifyOCROutput.getDateOfBirth());
+			
+			
+			if(StringUtility.isStringPopulated(valifyOCROutput.getDateOfBirth()))
+				businessValify.setDateOfBirth(DateUtility.changeStringDateFormat(valifyOCROutput.getDateOfBirth().replace("'",""), new SimpleDateFormat("dd/mm/yy"), new SimpleDateFormat("dd-mm-yyyy")));
+				
+				
+			if(StringUtility.isStringPopulated(valifyOCROutput.getExpirationDate()))
+				businessValify.setExpirationDate(DateUtility.changeStringDateFormat(valifyOCROutput.getExpirationDate().replace("'", ""), new SimpleDateFormat("dd/mm/yy"), new SimpleDateFormat("dd-mm-yyyy")));
+				
+				
+			
+			
 			businessValify.setSex(valifyOCROutput.getSex());
 			businessValify.setNationality(valifyOCROutput.getNationality());
 			businessValify.setValidity(valifyOCROutput.getValidity());
+			businessValify.setUserId(valifyOCROutput.getPassportNumber());
+			businessValify.setAzIdType(UserIdType.PASSPORT.getTypeId());
 		}
 		businessValify.setValifyTransactionId(valifyOCROutput.getTransactionId());
 		

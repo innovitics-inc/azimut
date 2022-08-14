@@ -17,7 +17,6 @@ import innovitics.azimut.utilities.kycutilities.AnswerTypeUtility;
 @Component
 public class KYCUtility extends ParentUtility
 {
-	@Autowired NumberUtility numberUtility;
 	@Autowired AnswerTypeUtility answerTypeUtility;
 
 	List<ObjectDrawing>  populateObjectDrawings(List<BusinessQuestion> businessQuestions)
@@ -57,7 +56,7 @@ public class KYCUtility extends ParentUtility
 	 {
 		 if(objectDrawingArray[i]!=null)
 		 {
-			if(!this.numberUtility.areIntegerValuesMatching(objectDrawingArray[i].getWidthId(),ObjectWidthType.WIDTH_100.getTypeId()))
+			if(NumberUtility.areIntegerValuesMatching(objectDrawingArray[i].getWidthId(),ObjectWidthType.WIDTH_100.getTypeId()))
 		  { 
 				 if(objectDrawingArray[i].getPassedValue()!=null&&objectDrawingArray[i].getPassedValue())
 				 {
@@ -69,7 +68,7 @@ public class KYCUtility extends ParentUtility
 				 		{
 							if (objectDrawingArray[i + 1].getWidthId() != null) 
 							{
-								if (this.numberUtility.areIntegerValuesMatching(objectDrawingArray[i + 1].getWidthId(),ObjectWidthType.WIDTH_100.getTypeId())) 
+								if (NumberUtility.areIntegerValuesMatching(objectDrawingArray[i + 1].getWidthId(),ObjectWidthType.WIDTH_100.getTypeId())) 
 								{
 									objectDrawingArray[i].setWidth(value100);
 								}

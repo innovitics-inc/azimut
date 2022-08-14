@@ -16,7 +16,6 @@ import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 @Component
 public class AzimutDataLookupUtility extends ParentUtility {
 
-@Autowired NumberUtility numberUtility; 	
 @Autowired TeaComputerService teaComputerService;
 @Autowired ExceptionHandler exceptionHandler;
 
@@ -24,17 +23,17 @@ public class AzimutDataLookupUtility extends ParentUtility {
 public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzimutDataLookup)
 {
 
-	if(this.numberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.COUNTRY.getTypeId()))
+	if(NumberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.COUNTRY.getTypeId()))
 	{
 		List<Country> countries=this.getTeaComputerCountries();
 		businessAzimutDataLookup.setCountries(countries);
 	}
-	else if(this.numberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.CITY.getTypeId()))
+	else if(NumberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.CITY.getTypeId()))
 	{
 		List<City> cities=this.getTeaComputerCitiesByCountryId(businessAzimutDataLookup.getCountryId());
 		businessAzimutDataLookup.setCities(cities);
 	}
-	else if(this.numberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.NATIONALITY.getTypeId()))
+	else if(NumberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.NATIONALITY.getTypeId()))
 	{
 		List<Nationality> nationalities=this.getTeaComputerNationalities();
 		businessAzimutDataLookup.setNationalities(nationalities);

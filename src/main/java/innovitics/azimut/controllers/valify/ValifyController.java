@@ -51,7 +51,7 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 	protected ResponseEntity<BaseGenericResponse<BusinessValify>> valifyId(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessValify businessValify) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), businessValify,null,null,null,null,null,null),null, null);			
+			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), businessValify,null,null,null,null,null,null,null),null, null);			
 		}		
 		catch(BusinessException businessException)
 		{
@@ -89,11 +89,13 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 			@RequestParam (name="passportImage",required=false) MultipartFile passportImage,
 			Integer userStep,
 			String language,
-			String documentType) throws 
+			String documentType,
+			Boolean incrementFailure
+			) throws 
 	MaxUploadSizeExceededException,IllegalStateException,BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), null,frontImage,backImage,passportImage,userStep,language,documentType),null, null);			
+			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), null,frontImage,backImage,passportImage,userStep,language,documentType,incrementFailure),null, null);			
 		}		
 		catch(BusinessException businessException)
 		{

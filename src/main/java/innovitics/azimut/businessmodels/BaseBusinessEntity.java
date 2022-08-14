@@ -3,11 +3,16 @@ package innovitics.azimut.businessmodels;
 import java.util.Date;
 import java.util.List;
 
-public class BaseBusinessEntity {
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+public class BaseBusinessEntity {
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	protected Date createdAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	protected Date updatedAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	protected Date deletedAt;
+	
 	protected String documentURL;
 	protected String documentName;
 	protected Double documentSize;
@@ -34,7 +39,7 @@ public class BaseBusinessEntity {
 	protected Long [] fieldNames;
 	protected Long firstPageId;
 	protected Long countryId; 
-
+	private Boolean draw;
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -209,6 +214,12 @@ public class BaseBusinessEntity {
 	}
 	public void setCountryId(Long countryId) {
 		this.countryId = countryId;
+	}
+	public Boolean getDraw() {
+		return draw;
+	}
+	public void setDraw(Boolean draw) {
+		this.draw = draw;
 	}
 	
 	

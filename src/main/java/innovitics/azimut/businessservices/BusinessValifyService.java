@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessmodels.valify.BusinessValify;
 import innovitics.azimut.businessutilities.ValifyUtility;
@@ -18,10 +20,12 @@ import innovitics.azimut.rest.mappers.ValifyAccessTokenMapper;
 import innovitics.azimut.rest.mappers.ValifyFacialImageMapper;
 import innovitics.azimut.rest.mappers.ValifyIdMapper;
 import innovitics.azimut.services.kyc.UserImageService;
+import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.utilities.crosslayerenums.UserImageType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.datautilities.UserUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
@@ -41,6 +45,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	@Autowired UserUtility userUtility;
 	@Autowired ListUtility<UserImage> userImageListUtility; 
 	@Autowired BusinessUserService businessUserService;
+	@Autowired GenderService genderService;
 	public BusinessValify valifyFacial (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile straightFace,MultipartFile smilingFace,MultipartFile leftSide,MultipartFile rightSide,Integer userStep,String language) throws BusinessException,IntegrationException, IOException
 	{		
 		//this.validate(businessValify, valifyFacialImages,BusinessValify.class.getName());
@@ -103,7 +108,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		}
 		catch (Exception exception) 
 		{
-			this.handleValifyExceptions(exception);
+			this.handleValifyExceptions(exception,businessUser,false);
 		}
 		this.logger.info("First Page ID::::"+businessUser.getFirstPageId());
 		businessValifyResponse.setFirstPageId(businessUser.getFirstPageId());
@@ -111,7 +116,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	}
 
 	
-	public 	BusinessValify valifyId (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile frontImage,MultipartFile backImage,MultipartFile passportImage,Integer userStep,String language,String documentType) throws BusinessException,IntegrationException, IOException
+	public 	BusinessValify valifyId (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile frontImage,MultipartFile backImage,MultipartFile passportImage,Integer userStep,String language,String documentType,Boolean incrementFailure) throws BusinessException,IntegrationException, IOException
 	{	
 		//this.validate(businessValify, valifyIdImages,BusinessValify.class.getName());
 		List<UserImage> userImages=new ArrayList<UserImage>();
@@ -164,7 +169,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		}
 		catch (Exception exception) 
 		{
-			this.handleValifyExceptions(exception);
+			this.handleValifyExceptions(exception,businessUser,incrementFailure);
 		}
 		this.logger.info("First Page ID::::"+businessUser.getFirstPageId());
 		businessValifyResponse.setFirstPageId(businessUser.getFirstPageId());
@@ -175,14 +180,14 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	
 	BusinessValify determineFacialType(BusinessValify businessValify)
 	{
-		if(businessValify!=null&&this.numberUtility.areIntegerValuesMatching(businessValify.getUserStep(), UserStep.STRAIGHT_AND_SMILE.getStepId()))
+		if(businessValify!=null&&NumberUtility.areIntegerValuesMatching(businessValify.getUserStep(), UserStep.STRAIGHT_AND_SMILE.getStepId()))
 		{
 			this.logger.info("Valify national straight and smiling face images user step");
 			businessValify.setFirstImage(businessValify.getStraightFace());
 			businessValify.setSecondImage(businessValify.getSmilingFace());
 		}
 		
-		else if(businessValify!=null&&this.numberUtility.areIntegerValuesMatching(businessValify.getUserStep(), UserStep.LEFT_AND_RIGHT.getStepId()))
+		else if(businessValify!=null&&NumberUtility.areIntegerValuesMatching(businessValify.getUserStep(), UserStep.LEFT_AND_RIGHT.getStepId()))
 		{
 			this.logger.info("Valify national left and right face images user step");
 			businessValify.setFirstImage(businessValify.getLeftSide());
@@ -192,11 +197,29 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	}
 	
 	
-	void  handleValifyExceptions(Exception exception) throws BusinessException
+	void  handleValifyExceptions(Exception exception,BusinessUser businessUser,boolean incrementFailures) throws BusinessException
 	{
 		exception.printStackTrace();	
 		if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			{
+				if(NumberUtility.areIntegerValuesMatching(((IntegrationException)exception).getErrorCode().intValue(), ErrorCode.IMAGES_NOT_ClEAR.getCode())&&incrementFailures)
+				{
+					
+					if(businessUser.getFailureNumber()!=null)
+					{
+						int oldFailureNumber=businessUser.getFailureNumber();
+						businessUser.setFailureNumber(oldFailureNumber+1);
+					}
+					else
+					{
+						businessUser.setFailureNumber(1);
+					}
+					this.businessUserService.editUser(businessUser);
+
+				}
+				
+				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			}
 			else		
 			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
 	}
@@ -205,13 +228,22 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	{
 		try {
 			businessUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser,businessValify.getUserStep());
-			businessUser.setFirstName(businessValifyResponse.getFirstName());
+			businessUser.setFirstName(StringUtility.isStringPopulated(businessValifyResponse.getFirstName())?businessValifyResponse.getFirstName():businessValifyResponse.getName());
 			businessUser.setLastName(businessValifyResponse.getLastName());
 			businessUser.setCountry(StringUtility.isStringPopulated(businessValifyResponse.getCountry())?businessValifyResponse.getCountry():businessValifyResponse.getNationality());
 			businessUser.setCity(businessValifyResponse.getCity());
-			businessUser.setDateOfBirth(DateUtility.changeStringDateFormat(businessValifyResponse.getDateOfBirth(), new SimpleDateFormat("yyyy-mm-dd"), new SimpleDateFormat("dd-mm-yyyy")));
-			businessUser.setDateOfIdExpiry(DateUtility.changeStringDateFormat(businessValifyResponse.getExpiryDate(), new SimpleDateFormat("yyyy-mm-dd"), new SimpleDateFormat("dd-mm-yyyy")));
+			businessUser.setDateOfBirth(businessValifyResponse.getDateOfBirth());
+			businessUser.setDateOfIdExpiry(businessValifyResponse.getExpirationDate());
+			businessUser.setUserId(businessValifyResponse.getUserId());
+			businessUser.setIdType(businessValifyResponse.getAzIdType());
+			businessUser.setGenderId(this.determineUserGender(businessValifyResponse.getGender()!=null?businessValifyResponse.getGender():businessValifyResponse.getSex()));
 			
+			if(StringUtility.isStringPopulated(businessValifyResponse.getCity())&&StringUtility.isStringPopulated(businessValifyResponse.getStreet()))
+				{
+					AzimutAccount azimutAccount=businessUser.getAzimutAccount();
+					azimutAccount.setAddressAr(businessValifyResponse.getStreet()+","+businessValifyResponse.getCity());
+					azimutAccount.setAddressEn(businessValifyResponse.getStreet()+","+businessValifyResponse.getCity());
+				}
 			
 			businessUserService.editUser(businessUser);
 			this.userUtility.uploadUserImages(userImages,businessValifyResponse,businessUser);
@@ -225,5 +257,15 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		}
 	}
 	
+	
+	Long determineUserGender(String genderType)
+	{
+		if(StringUtility.isStringPopulated(genderType))
+		{
+			return this.genderService.determineGender(genderType);
+		}
+		else
+			return null;
+	}
 	
 }

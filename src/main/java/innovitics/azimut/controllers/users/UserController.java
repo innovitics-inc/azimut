@@ -175,12 +175,12 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 	}
 
-	@GetMapping(value="/logPopup",
+	@PostMapping(value="/logUserStep",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> logPopup(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> logPopup(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserStep(this.getCurrentRequestHolder(token),UserStep.POPUP),null,null);
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserStep(this.getCurrentRequestHolder(token),businessUser.getUserStep()),null,null);
 		}
 		
 		catch(BusinessException businessException)
@@ -223,6 +223,21 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserDetails(this.getCurrentRequestHolder(token),businessUser),null,null);
+		}
+		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+	
+	@PostMapping(value="/saveUserTemporarily",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveUserTemporarily(@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.saveUser(businessUser),null,null);
 		}
 		
 		catch(BusinessException businessException)

@@ -18,6 +18,7 @@ public class BaseEntity {
 	private Date deletedAt;
 	protected String privateUrl;
 	protected MultipartFile file;
+	protected Boolean draw;
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -59,6 +60,12 @@ public class BaseEntity {
 	}
 	public void setFile(MultipartFile file) {
 		this.file = file;
+	}
+	public Boolean getDraw() {
+		return draw;
+	}
+	public void setDraw(Boolean draw) {
+		this.draw = draw;
 	}
 	
 	

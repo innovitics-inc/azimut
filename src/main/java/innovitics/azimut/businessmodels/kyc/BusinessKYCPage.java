@@ -19,6 +19,7 @@ public class BusinessKYCPage extends BaseBusinessEntity{
 	private Long previousId;
 	private Long nextId;
 	private Boolean isAnswered;
+	
 	public Long getId() {
 		return id;
 	}

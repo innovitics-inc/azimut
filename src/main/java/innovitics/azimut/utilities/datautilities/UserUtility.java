@@ -15,7 +15,9 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserDevice;
 import innovitics.azimut.models.user.UserImage;
+import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserImageService;
+import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.services.user.UserDeviceService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.ParentUtility;
@@ -31,7 +33,8 @@ public class UserUtility extends ParentUtility{
 	@Autowired UserImageService userImageService;
 	@Autowired protected ListUtility<UserImage> listUtility;
 	@Autowired protected ExceptionHandler exceptionHandler;
-
+	@Autowired GenderService genderService;
+	@Autowired AES aes;
 	
 
 	public void upsertDeviceIdAudit(User user,String deviceId)
@@ -98,7 +101,7 @@ public class UserUtility extends ParentUtility{
 		}
 		if(tokenizedBusinessUser.getUserStep()!=null)
 		{
-			if(!this.numberUtility.isNewValueLessThanOrEqualOldValue(tokenizedBusinessUser.getUserStep(), newUserStep))
+			if(!NumberUtility.isNewValueLessThanOrEqualOldValue(tokenizedBusinessUser.getUserStep(), newUserStep))
 			{
 				tokenizedBusinessUser.setUserStep(newUserStep);
 			}				
@@ -180,5 +183,9 @@ public class UserUtility extends ParentUtility{
 		}
 	}
 	
+	public String encryptUserPassword(String password)
+	{
+		return this.aes.encrypt(password);
+	}
 
 }

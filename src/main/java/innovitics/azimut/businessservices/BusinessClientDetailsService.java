@@ -48,6 +48,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired AzimutDataLookupUtility azimutDataLookupUtility;
 @Autowired TeaComputerService teaComputerService;
 @Autowired LookUpMapper lookUpMapper;
+@Autowired BusinessUserService businessUserService;
 
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
@@ -121,7 +122,26 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 		return responseBusinessAzimutClient;
 	}
+	public BusinessAzimutClient saveTeaComputersAccountData(AzimutAccount azimutAccount,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	{
+		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+		this.validation.validateUser(azimutAccount.getId(), tokenizedBusinessUser);
+		try 
+		{
+			tokenizedBusinessUser.setAzimutAccount(azimutAccount);
+			this.businessUserService.editUser(tokenizedBusinessUser);
+		}
+		catch(Exception exception)
+		{
+	
+			if(exception instanceof IntegrationException)
+			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			else		
+			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+		}
 
+		return responseBusinessAzimutClient;
+	}
 	public BusinessAzimutClient addAccountAtTeaComputers(AzimutAccount azimutAccount,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
@@ -167,13 +187,41 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
+		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+businessUser.getLastName());
+		azimutAccount.setCustomerNameAr(businessUser.getFirstName()+businessUser.getLastName());
 		azimutAccount.setIdType(businessUser.getIdType());
 		azimutAccount.setUserId(businessUser.getUserId());
 		azimutAccount.setIdMaturityDate(businessUser.getDateOfIdExpiry());
 		azimutAccount.setBirthDate(businessUser.getDateOfBirth());
 		azimutAccount.setEmail(businessUser.getEmailAddress());
-		azimutAccount.setPhone("0"+businessUser.getPhoneNumber());
-		azimutAccount.setClientAML(0L);
+		azimutAccount.setPhoneNumber("0"+businessUser.getPhoneNumber());
+		azimutAccount.setSexId(businessUser.getGenderId());
+		
+		
+		AzimutAccount businessUserAzimutAccount=businessUser.getAzimutAccount();
+		if(businessUserAzimutAccount!=null)
+		{
+				azimutAccount.setAddressAr(businessUserAzimutAccount.getAddressAr());
+				
+				azimutAccount.setAddressEn(businessUserAzimutAccount.getAddressEn());
+			
+				azimutAccount.setCityId(businessUserAzimutAccount.getCityId());
+			
+				azimutAccount.setCountryId(businessUserAzimutAccount.getCountryId());
+			
+				azimutAccount.setiDIssueCountryId(businessUserAzimutAccount.getiDIssueCountryId());
+			
+				azimutAccount.setiDIssueCityId(businessUserAzimutAccount.getiDIssueCityId());
+			
+				azimutAccount.setClientAML(businessUserAzimutAccount.getClientAML());
+			
+				azimutAccount.setOccupation(businessUserAzimutAccount.getOccupation());
+				
+				azimutAccount.setNationalityId(businessUserAzimutAccount.getNationalityId());
+			
+		}
+		
+
 		this.logger.info("Azimut Account:::"+azimutAccount.toString());
 		
 		return azimutAccount;

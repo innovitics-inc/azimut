@@ -49,7 +49,7 @@ public class BusinessValify extends BaseBusinessEntity {
 	private String lastName;
 	private String country;
 	private String valifyTransactionId;
-	
+	private String userId;
 	public String getDocumentType() {
 		return documentType;
 	}
@@ -291,6 +291,13 @@ public class BusinessValify extends BaseBusinessEntity {
 	}
 	public void setValifyTransactionId(String valifyTransactionId) {
 		this.valifyTransactionId = valifyTransactionId;
+	}
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	@Override
 	public String toString() {

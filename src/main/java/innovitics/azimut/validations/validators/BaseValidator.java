@@ -12,7 +12,5 @@ public abstract class BaseValidator implements Validator {
 
 	protected static final Logger logger = LoggerFactory.getLogger(BaseValidator.class);
 	
-	@Autowired 
-	protected NumberUtility numberUtility;
 	
 }
