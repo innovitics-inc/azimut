@@ -2,10 +2,10 @@ package innovitics.azimut.utilities.crosslayerenums;
 
 public enum AzimutEntityType {
 
-	COUNTRY(1L,"Country","GetCountries"),
-	CITY(2L,"City","GetCities"),
+	COUNTRY(1L,"Country","GetCountry"),
+	CITY(2L,"City","GetCity"),
 	ID(3L,"ID","GetCountries"),
-	NATIONALITY(4L,"Nationality","GetNationalities"),
+	NATIONALITY(4L,"Nationality","GetNationality"),
 	DISTRICT(5L,"District","GetCountries"),
 	FUND(6L,"Fund","GetCountries"),
 	SEX(7L,"Sex","GetCountries"),
