@@ -24,6 +24,8 @@ import innovitics.azimut.rest.entities.teacomputers.LookUpOutputs;
 import innovitics.azimut.rest.models.teacomputers.LookupResponse;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
+import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 
 @Component
 public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResponse,BusinessAzimutClient>{
@@ -38,7 +40,13 @@ public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResp
 
 	@Override
 	List<BusinessAzimutClient> consumeListRestService(BusinessAzimutClient businessAzimutDataLookup, String params) throws IntegrationException, HttpClientErrorException, Exception {
-		  return this.createListBusinessEntityFromOutput(this.lookupApiConsumer.invoke(this.createInput(businessAzimutDataLookup),LookupResponse[].class, businessAzimutDataLookup.getParam()));
+		
+		
+		LookUpOutput lookUpOutput=this.lookupApiConsumer.invoke(this.createInput(businessAzimutDataLookup),LookupResponse[].class, businessAzimutDataLookup.getParam());
+		
+		lookUpOutput.setTypeId(businessAzimutDataLookup.getEntityTypeId());
+		
+		return this.createListBusinessEntityFromOutput(lookUpOutput);
 	}
 
 	@Override
@@ -70,11 +78,22 @@ public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResp
 		List<Branch> branches=new ArrayList<Branch> ();
 		List<Currency> currencies=new ArrayList<Currency> ();
 		
+		if(NumberUtility.areLongValuesMatching(lookUpOutput.getTypeId(), AzimutEntityType.COUNTRY.getTypeId()))
 		this.synchronizeCountries(lookUpOutput, countries);
+		
+		if(NumberUtility.areLongValuesMatching(lookUpOutput.getTypeId(), AzimutEntityType.CITY.getTypeId()))
 		this.synchronizeCities(lookUpOutput, cities);
+		
+		if(NumberUtility.areLongValuesMatching(lookUpOutput.getTypeId(), AzimutEntityType.NATIONALITY.getTypeId()))
 		this.synchronizeNationalities(lookUpOutput, nationalities);
+		
+		if(NumberUtility.areLongValuesMatching(lookUpOutput.getTypeId(), AzimutEntityType.BANK.getTypeId()))
 		this.synchronizeBanks(lookUpOutput, banks);
+		
+		if(NumberUtility.areLongValuesMatching(lookUpOutput.getTypeId(), AzimutEntityType.BRANCH.getTypeId()))
 		this.synchronizeBranches(lookUpOutput, branches);
+		
+		if(NumberUtility.areLongValuesMatching(lookUpOutput.getTypeId(), AzimutEntityType.CURRENCY.getTypeId()))
 		this.synchronizeCurrencies(lookUpOutput, currencies);
 		
 		

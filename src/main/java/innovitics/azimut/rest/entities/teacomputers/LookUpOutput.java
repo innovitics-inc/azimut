@@ -6,6 +6,18 @@ public class LookUpOutput extends TeaComputerOutput{
 
 	List<LookUpOutputs> outputs;
 
+	private Long typeId;
+
+	public Long getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
+	}
+
+	
+
 	public List<LookUpOutputs> getOutputs() {
 		return outputs;
 	}
@@ -18,6 +30,7 @@ public class LookUpOutput extends TeaComputerOutput{
 	public String toString() {
 		return "LookUpOutput [outputs=" + outputs + "]";
 	}
+	
 	
 	
 }
