@@ -101,10 +101,10 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	}
 	@PostMapping(value="/getAzimutLookUpData",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutLookupData(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutDataLookup businessAzimutDataLookup) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutLookupData(@RequestBody BusinessAzimutDataLookup businessAzimutDataLookup) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getAzimutLookupData(businessAzimutDataLookup,this.getCurrentRequestHolder(token)),null,null);
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getAzimutLookupData(businessAzimutDataLookup,null),null,null);
 		}		
 		catch(BusinessException businessException)
 		{
