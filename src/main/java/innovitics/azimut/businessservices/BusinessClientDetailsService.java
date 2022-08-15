@@ -1,8 +1,6 @@
 package innovitics.azimut.businessservices;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +14,12 @@ import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
-import innovitics.azimut.models.user.AzimutDataLookup;
-import innovitics.azimut.models.user.AzimutEntity;
 import innovitics.azimut.rest.mappers.AddAccountMapper;
+import innovitics.azimut.rest.mappers.AddClientBankAccountMapper;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.rest.mappers.GetClientBalanceMapper;
 import innovitics.azimut.rest.mappers.GetClientBankAccountsMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
-import innovitics.azimut.rest.mappers.LookUpMapper;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
 import innovitics.azimut.utilities.businessutilities.SortCompare;
@@ -47,8 +43,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired AzimutDataLookUpService azimutDataLookUpService;
 @Autowired AzimutDataLookupUtility azimutDataLookupUtility;
 @Autowired TeaComputerService teaComputerService;
-@Autowired LookUpMapper lookUpMapper;
 @Autowired BusinessUserService businessUserService;
+@Autowired AddClientBankAccountMapper addClientBankAccountMapper;
 
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
@@ -148,7 +144,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		this.validation.validateUser(azimutAccount.getId(), tokenizedBusinessUser);
 		try 
 		{			
-			this.addAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null).getData();	
+			this.addAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null).getData();
+			this.addClientBankAccountMapper.consumeRestServiceInALoop(new BusinessAzimutClient(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)));
 		}
 		catch(Exception exception)
 		{
@@ -168,11 +165,11 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return businessAzimutClient;
 	}
 	
-	public BusinessAzimutClient getTeaComputersLookupData(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	public BusinessAzimutClient synchronizeTeaComputersLookupData(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
 		try 
 		{		
-
+			this.azimutDataLookupUtility.syncTeaComputersData();
 		}
 		catch(Exception exception)
 		{
@@ -184,7 +181,40 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return new BusinessAzimutClient();
 	}
 	
+	public BusinessAzimutClient saveClientBankAccounts(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	{
+		try 
+		{		
+			this.azimutDataLookupUtility.saveAzimutClientBankAccountData(tokenizedBusinessUser,businessAzimutClient.getClientBankAccounts());
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+			}
+		}
+		return new BusinessAzimutClient();
+	}
 	
+	/*
+	public BusinessAzimutClient addClientBankAccountsAtTeaComputers(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	{
+		try 
+		{		
+			this.addClientBankAccountMapper.consumeRestServiceInALoop(businessAzimutClient);
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(exception instanceof IntegrationException)
+				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+				else		
+				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+		}
+		return new BusinessAzimutClient();
+	}
+	*/
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
 		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+businessUser.getLastName());
@@ -194,7 +224,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		azimutAccount.setIdMaturityDate(businessUser.getDateOfIdExpiry());
 		azimutAccount.setBirthDate(businessUser.getDateOfBirth());
 		azimutAccount.setEmail(businessUser.getEmailAddress());
-		azimutAccount.setPhoneNumber("0"+businessUser.getPhoneNumber());
+		azimutAccount.setPhoneNumber(StringUtility.ZERO+businessUser.getPhoneNumber());
 		azimutAccount.setSexId(businessUser.getGenderId());
 		
 		

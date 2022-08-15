@@ -12,6 +12,19 @@ public class LookUpInput extends TeaComputerInput{
 		this.typeId = typeId;
 	}
 
+	
+	
+	public LookUpInput(Long typeId) {
+		super();
+		this.typeId = typeId;
+	}
+	
+	public LookUpInput() 
+	{
+	
+	}
+	
+
 	@Override
 	public String toString() {
 		return "LookUpInput [typeId=" + typeId + "]";

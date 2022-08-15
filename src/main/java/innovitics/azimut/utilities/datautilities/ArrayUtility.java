@@ -29,6 +29,18 @@ public class ArrayUtility extends ParentUtility{
 		}
 		return list;
 	}
+	public Object[] generateObjectArrayFromObjectList(List<Object> dataList)
+	{
+		Object[] objectArray=new Object[dataList.size()];
+		
+		
+			for (int i=0;i<dataList.size();i++)
+			{
+				objectArray[i]=dataList.get(i);
+			}
+		
+		return objectArray;
+	}
 	
 	List<Object> convertSetToList(Set<Object> set)
 	{

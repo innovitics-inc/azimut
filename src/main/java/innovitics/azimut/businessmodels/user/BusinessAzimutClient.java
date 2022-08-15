@@ -6,6 +6,7 @@ import java.util.Map;
 import innovitics.azimut.businessmodels.BusinessTransaction;
 import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.utilities.CustomJsonRootName;
+import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
 @CustomJsonRootName(plural = "azAccounts", singular = "azAccount")
 public class BusinessAzimutClient extends BusinessUser{
 
@@ -21,11 +22,11 @@ public class BusinessAzimutClient extends BusinessUser{
 	private String tPACurrency;
 	private List<AzimutAccount> azimutAccounts;
 	private BusinessAzimutDataLookup lookupData;
-	
+	private BusinessClientBankAccountDetails [] clientBankAccounts;
 	private Long entityTypeId;
 	private String param;
-	
-	
+
+	private AzimutEntityType azimutEntityType;
 	
 	public Double getPendingAmount() {
 		return pendingAmount;
@@ -122,8 +123,6 @@ public class BusinessAzimutClient extends BusinessUser{
 	public void setEntityTypeId(Long entityTypeId) {
 		this.entityTypeId = entityTypeId;
 	}
-	
-
 	public String getParam() {
 		return param;
 	}
@@ -132,14 +131,41 @@ public class BusinessAzimutClient extends BusinessUser{
 		this.param = param;
 	}
 
-	
-	
 	public BusinessAzimutDataLookup getLookupData() {
 		return lookupData;
 	}
 
 	public void setLookupData(BusinessAzimutDataLookup lookupData) {
 		this.lookupData = lookupData;
+	}
+
+	public BusinessClientBankAccountDetails[] getClientBankAccounts() {
+		return clientBankAccounts;
+	}
+
+	public void setClientBankAccounts(BusinessClientBankAccountDetails[] clientBankAccounts) {
+		this.clientBankAccounts = clientBankAccounts;
+	}
+
+	
+	
+	
+	
+
+	public BusinessAzimutClient(BusinessClientBankAccountDetails[] clientBankAccounts) {
+		super();
+		this.clientBankAccounts = clientBankAccounts;
+	}
+
+	public BusinessAzimutClient(AzimutEntityType azimutEntityType) {
+		super();
+		this.entityTypeId=azimutEntityType.getTypeId();
+		this.param=azimutEntityType.getParam();
+	}
+
+	public BusinessAzimutClient() 
+	{
+	
 	}
 
 	@Override

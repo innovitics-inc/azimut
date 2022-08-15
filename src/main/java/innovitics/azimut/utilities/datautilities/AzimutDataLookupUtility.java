@@ -1,14 +1,24 @@
 package innovitics.azimut.utilities.datautilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
+import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
+import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.models.teacomputers.Bank;
+import innovitics.azimut.models.teacomputers.Branch;
 import innovitics.azimut.models.teacomputers.City;
+import innovitics.azimut.models.teacomputers.ClientBankAccount;
 import innovitics.azimut.models.teacomputers.Country;
+import innovitics.azimut.models.teacomputers.Currency;
 import innovitics.azimut.models.teacomputers.Nationality;
+import innovitics.azimut.rest.mappers.LookUpMapper;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
@@ -18,7 +28,94 @@ public class AzimutDataLookupUtility extends ParentUtility {
 
 @Autowired TeaComputerService teaComputerService;
 @Autowired ExceptionHandler exceptionHandler;
+@Autowired LookUpMapper lookUpMapper;
+@Autowired ListUtility<ClientBankAccount> clientBankAccountListUtility;
+@Autowired ListUtility<BusinessClientBankAccountDetails> businessClientBankAccountListUtility ;
+@Autowired ArrayUtility arrayUtility;
 
+
+public void syncTeaComputersData() throws IntegrationException
+{
+	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.BANK), null);
+	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.BRANCH), null);
+	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.CURRENCY), null);
+	
+	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.COUNTRY), null);
+	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.CITY), null);
+	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.NATIONALITY), null);
+}
+
+	public void saveAzimutClientBankAccountData(BusinessUser businessUser,BusinessClientBankAccountDetails [] businessClientBankAccountDetails)
+	{
+		List<ClientBankAccount> clientBankAccounts=new ArrayList<ClientBankAccount>();
+		
+		if(this.arrayUtility.isArrayPopulated(businessClientBankAccountDetails))
+		{
+			for(BusinessClientBankAccountDetails businessClientBankAccountDetailsIterator: businessClientBankAccountDetails)
+			{
+				clientBankAccounts.add(this.convertBusinessClientBankAccountDetailsToClientBankAccount(businessClientBankAccountDetailsIterator, businessUser));
+			}
+		}
+		this.teaComputerService.saveClientBankAccountsTemporarily(clientBankAccounts);	
+	}
+
+	
+	
+	public BusinessClientBankAccountDetails[] getClientBankAccountData(BusinessUser businessUser)
+	{
+		List<ClientBankAccount> clientBankAccounts=new  ArrayList<ClientBankAccount>();
+		try 
+		{
+			clientBankAccounts=this.teaComputerService.getUserClientBankAccounts(businessUser.getId());
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				clientBankAccounts= null;
+			}
+		}
+		
+		if(clientBankAccountListUtility.isListPopulated(clientBankAccounts))
+		{
+			BusinessClientBankAccountDetails[] businessClientBankAccountDetailsArray=new BusinessClientBankAccountDetails[clientBankAccounts.size()];
+			for(int i=0;i<clientBankAccounts.size();i++)
+			{
+				businessClientBankAccountDetailsArray[i].setBankId(clientBankAccounts.get(i).getBankId());
+				businessClientBankAccountDetailsArray[i].setBranchId(clientBankAccounts.get(i).getBranchId());
+				businessClientBankAccountDetailsArray[i].setCurrencyId(clientBankAccounts.get(i).getCurrencyId());
+				businessClientBankAccountDetailsArray[i].setEnglishBankName(clientBankAccounts.get(i).getEnglishBankName());
+				businessClientBankAccountDetailsArray[i].setArabicBankName(clientBankAccounts.get(i).getArabicBankName());
+				businessClientBankAccountDetailsArray[i].setEnglishBranchName(clientBankAccounts.get(i).getEnglishBranchName());
+				businessClientBankAccountDetailsArray[i].setArabicBranchName(clientBankAccounts.get(i).getArabicBranchName());
+				businessClientBankAccountDetailsArray[i].setEnglishCurrencyName(clientBankAccounts.get(i).getEnglishCurrencyName());
+				businessClientBankAccountDetailsArray[i].setArabicCurrencyName(clientBankAccounts.get(i).getArabicCurrencyName());
+			}
+			return businessClientBankAccountDetailsArray;			
+		}
+		
+		return null;
+		
+	}
+
+	
+
+ ClientBankAccount removeClientBankAccount(Long id)
+ {
+	 try {
+		 this.teaComputerService.removeClientBankAccount(id);
+	 }
+	 catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				return null;
+			}
+		}
+		return null;
+ }
 
 public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzimutDataLookup)
 {
@@ -38,69 +135,28 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		List<Nationality> nationalities=this.getTeaComputerNationalities();
 		businessAzimutDataLookup.setNationalities(nationalities);
 	}
-
+	else if(NumberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.CURRENCY.getTypeId()))
+	{
+		List<Currency> currencies=this.getTeaComputerCurrencies();
+		businessAzimutDataLookup.setCurrencies(currencies);
+	}
+	else if(NumberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.BANK.getTypeId()))
+	{
+		List<Bank> banks=this.getTeaComputerBanks();
+		businessAzimutDataLookup.setBanks(banks);
+	}
+	else if(NumberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.BRANCH.getTypeId()))
+	{
+		List<Branch> branchs=this.getTeaComputerBranchesByBankId(businessAzimutDataLookup.getBankId());
+		businessAzimutDataLookup.setBranches(branchs);
+	}
+		
 	
 	
 	return businessAzimutDataLookup;
 }
 
 
-/*	public List<BusinessAzimutDataLookup> assignValuesToMap(List<AzimutEntity> azimutEntities)
-	{
-		List<BusinessAzimutDataLookup> businessAzimutDataLookups=new ArrayList<BusinessAzimutDataLookup>();
-		
-		
-		Set<Long> uniqueEntityTypeIdSet=new HashSet<Long>();
-		for(AzimutEntity azimutEntity:azimutEntities)
-		{
-			uniqueEntityTypeIdSet.add(azimutEntity.getEntityType());
-		}
-		List<Long> typeIdList=this.longListUtility.convertSetToList(uniqueEntityTypeIdSet);
-		for(Long entityTypeId:typeIdList)
-		{
-			businessAzimutDataLookups.add(new BusinessAzimutDataLookup(null, entityTypeId, null));
-		}
-		for(BusinessAzimutDataLookup businessAzimutDataLookup:businessAzimutDataLookups)
-		{
-			List<BusinessEntityValues> designatedValueList=new ArrayList<BusinessEntityValues>();
-			for(AzimutEntity azimutEntity:azimutEntities)
-			{
-				if(this.numberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), azimutEntity.getEntityType()))
-				{
-					designatedValueList.add(this.addToValueList(azimutEntity));
-				}
-			}
-			businessAzimutDataLookup.setEntityValueList(designatedValueList);
-		}
-		
-		
-		return businessAzimutDataLookups;
-	}
-
-	BusinessEntityValues addToValueList(AzimutEntity azimutEntity)
-	{
-		BusinessEntityValues businessEntityValueList=new BusinessEntityValues();
-		
-		List<BusinessAzimutEntityDetail> azimutEntityDetails=new ArrayList<BusinessAzimutEntityDetail>();
-		
-		businessEntityValueList.setEntityId(azimutEntity.getId());
-		for(AzimutDataLookup azimutDataLookup:azimutEntity.getDetails())
-		{
-			azimutEntityDetails.add(this.convertDataLookUpToEntityDetail(azimutDataLookup));
-		}
-		businessEntityValueList.setEntityDetails(azimutEntityDetails);
-		return businessEntityValueList;
-	}
-	
-	BusinessAzimutEntityDetail convertDataLookUpToEntityDetail(AzimutDataLookup azimutDataLookup)
-	{
-		BusinessAzimutEntityDetail businessAzimutEntityDetail=new BusinessAzimutEntityDetail();
-		businessAzimutEntityDetail.setKey(azimutDataLookup.getEntityKey());
-		businessAzimutEntityDetail.setValue(azimutDataLookup.getEntityValue());
-		
-		return businessAzimutEntityDetail;
-	}
-	*/
 
 	List<Country> getTeaComputerCountries()
 	{	
@@ -151,5 +207,75 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		}
 		return null;
 	}
+
+	List<Currency> getTeaComputerCurrencies()
+	{	
+		try 
+		{			
+			return this.teaComputerService.getAllCurrencies();			
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				return null;
+			}
+		}
+		return null;
+	}
+	List<Bank> getTeaComputerBanks()
+	{	
+		try 
+		{			
+			return this.teaComputerService.getAllBanks();			
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				return null;
+			}
+		}
+		return null;
+	}
+	List<Branch> getTeaComputerBranchesByBankId(Long bankId)
+	{	
+		try 
+		{			
+			return this.teaComputerService.getAllBranchesByBankId(bankId);			
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	 ClientBankAccount	convertBusinessClientBankAccountDetailsToClientBankAccount(BusinessClientBankAccountDetails businessClientBankAccountDetails,BusinessUser businessUser)
+		{
+		 ClientBankAccount clientBankAccount=new ClientBankAccount();
+		 
+			clientBankAccount.setUserId(businessUser.getId());
+			clientBankAccount.setIdTypeId(businessUser.getIdType());
+			clientBankAccount.setIdNumber(businessUser.getUserId());			
+			clientBankAccount.setBankId(businessClientBankAccountDetails.getBankId());
+			clientBankAccount.setBranchId(businessClientBankAccountDetails.getBranchId());
+			clientBankAccount.setCurrencyId(businessClientBankAccountDetails.getCurrencyId());			
+			clientBankAccount.setEnglishBankName(businessClientBankAccountDetails.getEnglishBankName());
+			clientBankAccount.setArabicBankName(businessClientBankAccountDetails.getArabicBankName());
+			clientBankAccount.setEnglishBranchName(businessClientBankAccountDetails.getEnglishBranchName());
+			clientBankAccount.setArabicBranchName(businessClientBankAccountDetails.getArabicBranchName());
+			clientBankAccount.setEnglishCurrencyName(businessClientBankAccountDetails.getEnglishCurrencyName());
+			clientBankAccount.setArabicCurrencyName(businessClientBankAccountDetails.getArabicCurrencyName());
+			
+			return clientBankAccount;
+		}	
+		
 
 }

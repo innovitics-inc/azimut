@@ -10,8 +10,11 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.models.teacomputers.Bank;
+import innovitics.azimut.models.teacomputers.Branch;
 import innovitics.azimut.models.teacomputers.City;
 import innovitics.azimut.models.teacomputers.Country;
+import innovitics.azimut.models.teacomputers.Currency;
 import innovitics.azimut.models.teacomputers.Nationality;
 import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.rest.apis.teacomputers.LookupApiConsumer;
@@ -21,7 +24,7 @@ import innovitics.azimut.rest.entities.teacomputers.LookUpOutputs;
 import innovitics.azimut.rest.models.teacomputers.LookupResponse;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
-import innovitics.azimut.utilities.datautilities.StringUtility;
+
 @Component
 public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResponse,BusinessAzimutClient>{
 @Autowired LookupApiConsumer lookupApiConsumer;
@@ -35,7 +38,7 @@ public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResp
 
 	@Override
 	List<BusinessAzimutClient> consumeListRestService(BusinessAzimutClient businessAzimutDataLookup, String params) throws IntegrationException, HttpClientErrorException, Exception {
-		return  this.createListBusinessEntityFromOutput(this.lookupApiConsumer.invoke(this.createInput(businessAzimutDataLookup),LookupResponse[].class, params));
+		  return this.createListBusinessEntityFromOutput(this.lookupApiConsumer.invoke(this.createInput(businessAzimutDataLookup),LookupResponse[].class, businessAzimutDataLookup.getParam()));
 	}
 
 	@Override
@@ -52,12 +55,10 @@ public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResp
 
 	@Override
 	protected List<BusinessAzimutClient> createListBusinessEntityFromOutput(LookUpOutput lookUpOutput) {
+			
+		this.transferData(lookUpOutput);
 		
-		List<AzimutDataLookup> azimutDataLookups=new ArrayList<AzimutDataLookup>();	
-	
-		//this.transferData(lookUpOutput);
-		
-		return null;
+		return new ArrayList<BusinessAzimutClient>();
 	}
 	
 	void transferData(LookUpOutput lookUpOutput)
@@ -65,47 +66,120 @@ public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResp
 		List<Country> countries=new ArrayList<Country>();
 		List<City> cities=new ArrayList<City>();
 		List<Nationality> nationalities=new ArrayList<Nationality> ();
-		if(lookUpOutput!=null&&lookUpOutput.getOutputs()!=null)
-		{
-			for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
-			{
-				Country country=new Country();
-				country.setArabicCountryName(lookUpOutputs.getArabicCountryName());
-				country.setEnglishCountryName(lookUpOutputs.getEnglishCountryName());
-				country.setCountryId(lookUpOutputs.getCountryId());
-				country.setSystemCountryCode(lookUpOutputs.getSystemCountryCode());
-				countries.add(country);
-			}
-			this.teaComputerService.saveAllCountries(countries);
-			for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
-			{
-				City city=new City();
-				city.setArabicCityName(lookUpOutputs.getArabicCityName());
-				city.setEnglishCityName(lookUpOutputs.getEnglishCityName());
-				city.setCountryId(lookUpOutputs.getCountryId());
-				city.setSystemCountryCode(lookUpOutputs.getSystemCountryCode());
-				city.setCityId(lookUpOutputs.getCityId());
-				city.setSystemCityCode(lookUpOutputs.getSystemCityCode());
-				cities.add(city);
-			}
-			this.teaComputerService.saveAllCities(cities);			
-			for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
-			{
-				Nationality nationality=new Nationality();
-				nationality.setArabicNationalityName(lookUpOutputs.getArabicNationalityName());
-				nationality.setEnglishNationalityName(lookUpOutputs.getEnglishNationalityName());
-				nationality.setNationalityId(lookUpOutputs.getNationalityId());
-				nationality.setSystemNationalityCode(lookUpOutputs.getSystemNationalityCode());
-				
-				nationalities.add(nationality);
-			}
-			this.teaComputerService.saveAllNationalities(nationalities);
-
-		}
+		List<Bank> banks=new ArrayList<Bank> ();
+		List<Branch> branches=new ArrayList<Branch> ();
+		List<Currency> currencies=new ArrayList<Currency> ();
 		
+		this.synchronizeCountries(lookUpOutput, countries);
+		this.synchronizeCities(lookUpOutput, cities);
+		this.synchronizeNationalities(lookUpOutput, nationalities);
+		this.synchronizeBanks(lookUpOutput, banks);
+		this.synchronizeBranches(lookUpOutput, branches);
+		this.synchronizeCurrencies(lookUpOutput, currencies);
 		
 		
 
 	}
+	
+	
+	void synchronizeCountries(LookUpOutput lookUpOutput,List<Country> countries)
+	{
+		this.teaComputerService.deleteAllCountries();
+		for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
+		{
+			Country country=new Country();
+			country.setArabicCountryName(lookUpOutputs.getArabicCountryName());
+			country.setEnglishCountryName(lookUpOutputs.getEnglishCountryName());
+			country.setCountryId(lookUpOutputs.getCountryId());
+			country.setSystemCountryCode(lookUpOutputs.getSystemCountryCode());
+			countries.add(country);
+		}
+		this.teaComputerService.saveAllCountries(countries);	
+	}
+	
+	void synchronizeCities(LookUpOutput lookUpOutput,List<City> cities)
+	{
+		this.teaComputerService.deleteAllCities();
+		for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
+		{
+			City city=new City();
+			city.setArabicCityName(lookUpOutputs.getArabicCityName());
+			city.setEnglishCityName(lookUpOutputs.getEnglishCityName());
+			city.setCountryId(lookUpOutputs.getCountryId());
+			city.setSystemCountryCode(lookUpOutputs.getSystemCountryCode());
+			city.setCityId(lookUpOutputs.getCityId());
+			city.setSystemCityCode(lookUpOutputs.getSystemCityCode());
+			cities.add(city);
+		}
+		this.teaComputerService.saveAllCities(cities);			
+	}
+	
+	void synchronizeNationalities(LookUpOutput lookUpOutput,List<Nationality> nationalities)
+	{
+		this.teaComputerService.deleteAllNationalities();
+		for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
+		{
+			Nationality nationality=new Nationality();
+			nationality.setArabicNationalityName(lookUpOutputs.getArabicNationalityName());
+			nationality.setEnglishNationalityName(lookUpOutputs.getEnglishNationalityName());
+			nationality.setNationalityId(lookUpOutputs.getNationalityId());
+			nationality.setSystemNationalityCode(lookUpOutputs.getSystemNationalityCode());
+			
+			nationalities.add(nationality);
+		}
+		this.teaComputerService.saveAllNationalities(nationalities);
+	}
+	
+	void synchronizeBanks(LookUpOutput lookUpOutput,List<Bank> banks)
+	{
+		this.teaComputerService.deleteAllBanks();
+		for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
+		{
+			Bank bank=new Bank();
+			bank.setArabicBankName(lookUpOutputs.getArabicBankName());
+			bank.setEnglishBankName(lookUpOutputs.getEnglishBankName());
+			bank.setBankId(lookUpOutputs.getBankId());
+			bank.setSystemBankCode(lookUpOutputs.getSystemBankCode());
+			
+			banks.add(bank);
+		}
+		this.teaComputerService.saveAllBanks(banks);
+	}
+	
+	void synchronizeBranches(LookUpOutput lookUpOutput,List<Branch> branches)
+	{
+		this.teaComputerService.deleteAllBranches();
+		for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
+		{
+			Branch branch=new Branch();
+			branch.setArabicBranchName(lookUpOutputs.getArabicBranchName());
+			branch.setEnglishBranchName(lookUpOutputs.getEnglishBranchName());
+			branch.setBankId(lookUpOutputs.getBankId());
+			branch.setSystemBankCode(lookUpOutputs.getSystemBankCode());
+			branch.setBranchId(lookUpOutputs.getBranchId());
+			branch.setSystemBranchCode(lookUpOutputs.getSystemBranchCode());
+			
+			branches.add(branch);
+		}
+		this.teaComputerService.saveAllBranches(branches);
+	}
+	
+	void synchronizeCurrencies(LookUpOutput lookUpOutput,List<Currency> currencies)
+	{
+		this.teaComputerService.deleteAllCurrencies();
+		for(LookUpOutputs lookUpOutputs:lookUpOutput.getOutputs())
+		{
+			Currency currency=new Currency();
+			currency.setArabicCurrencyName(lookUpOutputs.getArabicCurrencyName());
+			currency.setEnglishCurrencyName(lookUpOutputs.getEnglishCurrencyName());
+			currency.setCurrencyId(lookUpOutputs.getCurrencyId());
+			currency.setSystemCurrencyCode(lookUpOutputs.getSystemCurrencyCode());
+			
+			currencies.add(currency);
+		}
+		this.teaComputerService.saveAllCurrencies(currencies);
+	}
+	
+	
 
 }

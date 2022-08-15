@@ -3,8 +3,11 @@ package innovitics.azimut.businessmodels.user;
 import java.util.List;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.models.teacomputers.Bank;
+import innovitics.azimut.models.teacomputers.Branch;
 import innovitics.azimut.models.teacomputers.City;
 import innovitics.azimut.models.teacomputers.Country;
+import innovitics.azimut.models.teacomputers.Currency;
 import innovitics.azimut.models.teacomputers.Nationality;
 
 public class BusinessAzimutDataLookup extends BaseBusinessEntity{
@@ -16,7 +19,9 @@ public class BusinessAzimutDataLookup extends BaseBusinessEntity{
 	private List<Country> countries;
 	private List<City> cities;
 	private List<Nationality> nationalities;
-	
+	private List<Currency> currencies;
+	private List<Bank> banks;
+	private List<Branch> branches;
 	
 	
 	public String getEntityType() {
@@ -49,6 +54,24 @@ public class BusinessAzimutDataLookup extends BaseBusinessEntity{
 	}
 	public void setNationalities(List<Nationality> nationalities) {
 		this.nationalities = nationalities;
+	}
+	public List<Currency> getCurrencies() {
+		return currencies;
+	}
+	public void setCurrencies(List<Currency> currencies) {
+		this.currencies = currencies;
+	}
+	public List<Bank> getBanks() {
+		return banks;
+	}
+	public void setBanks(List<Bank> banks) {
+		this.banks = banks;
+	}
+	public List<Branch> getBranches() {
+		return branches;
+	}
+	public void setBranches(List<Branch> branches) {
+		this.branches = branches;
 	}
 	
 	

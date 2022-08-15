@@ -20,6 +20,14 @@ public class BusinessClientBankAccountDetails extends BaseBusinessEntity{
 	private String iban;
 	private Long accountId;
 	private Long accountStatus;
+	private Long currencyId;
+	private String englishBankName;
+	private String arabicBankName;
+    private Long bankId;
+    private String englishBranchName;
+	private String arabicBranchName;
+	private String englishCurrencyName;
+	private String arabicCurrencyName;
 
 	
 	public Long getId() {
@@ -106,6 +114,57 @@ public class BusinessClientBankAccountDetails extends BaseBusinessEntity{
 	}
 	public void setAccountStatus(Long accountStatus) {
 		this.accountStatus = accountStatus;
+	}	
+	public Long getCurrencyId() {
+		return currencyId;
+	}
+	public void setCurrencyId(Long currencyId) {
+		this.currencyId = currencyId;
+	}
+	
+	
+	
+	public String getEnglishBankName() {
+		return englishBankName;
+	}
+	public void setEnglishBankName(String englishBankName) {
+		this.englishBankName = englishBankName;
+	}
+	public String getArabicBankName() {
+		return arabicBankName;
+	}
+	public void setArabicBankName(String arabicBankName) {
+		this.arabicBankName = arabicBankName;
+	}
+	public Long getBankId() {
+		return bankId;
+	}
+	public void setBankId(Long bankId) {
+		this.bankId = bankId;
+	}
+	public String getEnglishBranchName() {
+		return englishBranchName;
+	}
+	public void setEnglishBranchName(String englishBranchName) {
+		this.englishBranchName = englishBranchName;
+	}
+	public String getArabicBranchName() {
+		return arabicBranchName;
+	}
+	public void setArabicBranchName(String arabicBranchName) {
+		this.arabicBranchName = arabicBranchName;
+	}
+	public String getEnglishCurrencyName() {
+		return englishCurrencyName;
+	}
+	public void setEnglishCurrencyName(String englishCurrencyName) {
+		this.englishCurrencyName = englishCurrencyName;
+	}
+	public String getArabicCurrencyName() {
+		return arabicCurrencyName;
+	}
+	public void setArabicCurrencyName(String arabicCurrencyName) {
+		this.arabicCurrencyName = arabicCurrencyName;
 	}
 	@Override
 	public String toString() {

@@ -3,13 +3,11 @@ package innovitics.azimut.rest.models.teacomputers;
 public class LookupResponse extends TeaComputerResponse{
 	
 
-	//Country
 	private Long sytemCountryCode;
 	private Long countryId;
 	private String englishCountryName;
 	private String arabicCountryName;
 	
-	//City
 	
 	private Long sytemCityCode;
 	private Long cityId;
@@ -22,7 +20,20 @@ public class LookupResponse extends TeaComputerResponse{
 	private String englishNationalityName;
 	private String arabicNationalityName;
 
+	private Long bankId;
+	private Long systemBankCode;
+	private String englishBankName;
+	private String arabicBankName;
 	
+	private Long branchId;
+	private Long systemBranchCode;
+	private String englishBranchName;
+	private String arabicBranchName;
+	
+	private Long  systemCurrencyCode;
+	private Long  currencyId;
+	private String englishCurrencyName;
+	private String arabicCurrencyName;
 	
 	public Long getSytemCountryCode() {
 		return sytemCountryCode;
@@ -98,5 +109,79 @@ public class LookupResponse extends TeaComputerResponse{
 	public void setArabicNationalityName(String arabicNationalityName) {
 		this.arabicNationalityName = arabicNationalityName;
 	}
+	public Long getBankId() {
+		return bankId;
+	}
+	public void setBankId(Long bankId) {
+		this.bankId = bankId;
+	}
+	public Long getSystemBankCode() {
+		return systemBankCode;
+	}
+	public void setSystemBankCode(Long systemBankCode) {
+		this.systemBankCode = systemBankCode;
+	}
+	public String getEnglishBankName() {
+		return englishBankName;
+	}
+	public void setEnglishBankName(String englishBankName) {
+		this.englishBankName = englishBankName;
+	}
+	public String getArabicBankName() {
+		return arabicBankName;
+	}
+	public void setArabicBankName(String arabicBankName) {
+		this.arabicBankName = arabicBankName;
+	}
+	public Long getBranchId() {
+		return branchId;
+	}
+	public void setBranchId(Long branchId) {
+		this.branchId = branchId;
+	}
+	public Long getSystemBranchCode() {
+		return systemBranchCode;
+	}
+	public void setSystemBranchCode(Long systemBranchCode) {
+		this.systemBranchCode = systemBranchCode;
+	}
+	public String getEnglishBranchName() {
+		return englishBranchName;
+	}
+	public void setEnglishBranchName(String englishBranchName) {
+		this.englishBranchName = englishBranchName;
+	}
+	public String getArabicBranchName() {
+		return arabicBranchName;
+	}
+	public void setArabicBranchName(String arabicBranchName) {
+		this.arabicBranchName = arabicBranchName;
+	}
+	public Long getSystemCurrencyCode() {
+		return systemCurrencyCode;
+	}
+	public void setSystemCurrencyCode(Long systemCurrencyCode) {
+		this.systemCurrencyCode = systemCurrencyCode;
+	}
+	public Long getCurrencyId() {
+		return currencyId;
+	}
+	public void setCurrencyId(Long currencyId) {
+		this.currencyId = currencyId;
+	}
+	public String getEnglishCurrencyName() {
+		return englishCurrencyName;
+	}
+	public void setEnglishCurrencyName(String englishCurrencyName) {
+		this.englishCurrencyName = englishCurrencyName;
+	}
+	public String getArabicCurrencyName() {
+		return arabicCurrencyName;
+	}
+	public void setArabicCurrencyName(String arabicCurrencyName) {
+		this.arabicCurrencyName = arabicCurrencyName;
+	}
+	
+	
 	
 }
