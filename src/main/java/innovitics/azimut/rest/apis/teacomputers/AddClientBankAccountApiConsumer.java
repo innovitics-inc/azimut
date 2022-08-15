@@ -3,6 +3,7 @@ package innovitics.azimut.rest.apis.teacomputers;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.entities.teacomputers.AddClientBankAccountInput;
@@ -12,7 +13,7 @@ import innovitics.azimut.rest.models.teacomputers.AddClientBankAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.AddClientBankAccountResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-
+@Service
 public class AddClientBankAccountApiConsumer extends RestTeaComputerApiConsumer<AddClientBankAccountRequest, AddClientBankAccountResponse, AddClientBankAccountInput, AddClientBankAccountOutput>{
 
 	public static final String PATH="/AddClienBankAcc";
