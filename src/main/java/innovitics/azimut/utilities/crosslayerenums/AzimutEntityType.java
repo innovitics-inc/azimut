@@ -13,8 +13,8 @@ public enum AzimutEntityType {
 	CLIENT_STATUS(9L,"Client Status","GetCountries"),
 	CLIENT_TYPE(10L,"Client Type","GetCountries"),
 	CURRENCY(11L,"Currency Type","GetCurrencies"),
-	BANK(11L,"Currency Type","GetBanks"),
-	BRANCH(11L,"Currency Type","GetBranches")
+	BANK(12L,"Currency Type","GetBanks"),
+	BRANCH(13L,"Currency Type","GetBranches")
 
 	
 	;
