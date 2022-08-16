@@ -80,18 +80,32 @@ public void syncTeaComputersData() throws IntegrationException
 		if(clientBankAccountListUtility.isListPopulated(clientBankAccounts))
 		{
 			BusinessClientBankAccountDetails[] businessClientBankAccountDetailsArray=new BusinessClientBankAccountDetails[clientBankAccounts.size()];
-			for(int i=0;i<clientBankAccounts.size();i++)
+			List<BusinessClientBankAccountDetails> businessClientBankAccountDetailsList=new ArrayList<BusinessClientBankAccountDetails>();
+			
+			
+			for(ClientBankAccount clientBankAccount:clientBankAccounts)
 			{
-				businessClientBankAccountDetailsArray[i].setBankId(clientBankAccounts.get(i).getBankId());
-				businessClientBankAccountDetailsArray[i].setBranchId(clientBankAccounts.get(i).getBranchId());
-				businessClientBankAccountDetailsArray[i].setCurrencyId(clientBankAccounts.get(i).getCurrencyId());
-				businessClientBankAccountDetailsArray[i].setEnglishBankName(clientBankAccounts.get(i).getEnglishBankName());
-				businessClientBankAccountDetailsArray[i].setArabicBankName(clientBankAccounts.get(i).getArabicBankName());
-				businessClientBankAccountDetailsArray[i].setEnglishBranchName(clientBankAccounts.get(i).getEnglishBranchName());
-				businessClientBankAccountDetailsArray[i].setArabicBranchName(clientBankAccounts.get(i).getArabicBranchName());
-				businessClientBankAccountDetailsArray[i].setEnglishCurrencyName(clientBankAccounts.get(i).getEnglishCurrencyName());
-				businessClientBankAccountDetailsArray[i].setArabicCurrencyName(clientBankAccounts.get(i).getArabicCurrencyName());
+				if(clientBankAccount!=null)
+				{
+					BusinessClientBankAccountDetails businessClientBankAccountDetails=new BusinessClientBankAccountDetails();
+					businessClientBankAccountDetails.setBankId(clientBankAccount.getBankId());
+					businessClientBankAccountDetails.setBranchId(clientBankAccount.getBranchId());
+					businessClientBankAccountDetails.setCurrencyId(clientBankAccount.getCurrencyId());
+					businessClientBankAccountDetails.setIban(clientBankAccount.getIban());
+					businessClientBankAccountDetails.setSwiftCode(clientBankAccount.getSwiftCode());
+					businessClientBankAccountDetails.setAccountNumber(clientBankAccount.getAccountNo());
+					businessClientBankAccountDetails.setEnglishBankName(clientBankAccount.getEnglishBankName());
+					businessClientBankAccountDetails.setArabicBankName(clientBankAccount.getArabicBankName());
+					businessClientBankAccountDetails.setEnglishBranchName(clientBankAccount.getEnglishBranchName());
+					businessClientBankAccountDetails.setArabicBranchName(clientBankAccount.getArabicBranchName());
+					businessClientBankAccountDetails.setEnglishCurrencyName(clientBankAccount.getEnglishCurrencyName());
+					businessClientBankAccountDetails.setArabicCurrencyName(clientBankAccount.getArabicCurrencyName());
+					businessClientBankAccountDetailsList.add(businessClientBankAccountDetails);
+				}
 			}
+			
+			businessClientBankAccountDetailsList.toArray(businessClientBankAccountDetailsArray);
+			
 			return businessClientBankAccountDetailsArray;			
 		}
 		
@@ -166,11 +180,7 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		}
 		catch(Exception exception)
 		{
-			exception.printStackTrace();
-			if(this.exceptionHandler.isABusinessException(exception))
-			{
-				return null;
-			}
+			this.getNullIfNonExistent(exception);
 		}
 		return null;
 	}
@@ -183,11 +193,7 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		}
 		catch(Exception exception)
 		{
-			exception.printStackTrace();
-			if(this.exceptionHandler.isABusinessException(exception))
-			{
-				return null;
-			}
+			this.getNullIfNonExistent(exception);
 		}
 		return null;
 	}
@@ -199,11 +205,7 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		}
 		catch(Exception exception)
 		{
-			exception.printStackTrace();
-			if(this.exceptionHandler.isABusinessException(exception))
-			{
-				return null;
-			}
+			this.getNullIfNonExistent(exception);
 		}
 		return null;
 	}
@@ -216,11 +218,7 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		}
 		catch(Exception exception)
 		{
-			exception.printStackTrace();
-			if(this.exceptionHandler.isABusinessException(exception))
-			{
-				return null;
-			}
+			this.getNullIfNonExistent(exception);
 		}
 		return null;
 	}
@@ -232,11 +230,7 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		}
 		catch(Exception exception)
 		{
-			exception.printStackTrace();
-			if(this.exceptionHandler.isABusinessException(exception))
-			{
-				return null;
-			}
+			this.getNullIfNonExistent(exception);
 		}
 		return null;
 	}
@@ -248,11 +242,7 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		}
 		catch(Exception exception)
 		{
-			exception.printStackTrace();
-			if(this.exceptionHandler.isABusinessException(exception))
-			{
-				return null;
-			}
+			this.getNullIfNonExistent(exception);
 		}
 		return null;
 	}
@@ -273,9 +263,20 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 			clientBankAccount.setArabicBranchName(businessClientBankAccountDetails.getArabicBranchName());
 			clientBankAccount.setEnglishCurrencyName(businessClientBankAccountDetails.getEnglishCurrencyName());
 			clientBankAccount.setArabicCurrencyName(businessClientBankAccountDetails.getArabicCurrencyName());
-			
+			clientBankAccount.setIban(businessClientBankAccountDetails.getIban());
+			clientBankAccount.setAccountNo(businessClientBankAccountDetails.getAccountNumber());
+			clientBankAccount.setSwiftCode(businessClientBankAccountDetails.getSwiftCode());
 			return clientBankAccount;
 		}	
 		
+	Object getNullIfNonExistent(Exception exception)
+	 {
+		 exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				return null;
+			}
+			return null;
+	 }
 
 }

@@ -16,7 +16,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 @Service
 public class AddClientBankAccountApiConsumer extends RestTeaComputerApiConsumer<AddClientBankAccountRequest, AddClientBankAccountResponse, AddClientBankAccountInput, AddClientBankAccountOutput>{
 
-	public static final String PATH="/AddClienBankAcc";
+	public static final String PATH="/AddClientBankAcc";
 
 	@Override
 	public HttpEntity<String> generateRequestFromInput(AddClientBankAccountInput input) {
@@ -68,7 +68,7 @@ public class AddClientBankAccountApiConsumer extends RestTeaComputerApiConsumer<
 
 	@Override
 	protected String generateSignature(AddClientBankAccountRequest addClientBankAccountRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature("",addClientBankAccountRequest.getIdTypeId().toString(),addClientBankAccountRequest.getIdNumber(),this.configProperties.getTeaComputersKey());
+		return this.teaComputersSignatureGenerator.generateSignature("",addClientBankAccountRequest.getIdTypeId()!=null?addClientBankAccountRequest.getIdTypeId().toString():null,addClientBankAccountRequest.getIdNumber(),this.configProperties.getTeaComputersKey());
 
 	}
 

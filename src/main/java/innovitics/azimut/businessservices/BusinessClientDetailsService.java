@@ -25,6 +25,7 @@ import innovitics.azimut.services.user.AzimutDataLookUpService;
 import innovitics.azimut.utilities.businessutilities.SortCompare;
 import innovitics.azimut.utilities.businessutilities.Sorting;
 import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
+import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
@@ -145,7 +146,10 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		try 
 		{			
 			this.addAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null).getData();
-			this.addClientBankAccountMapper.consumeRestServiceInALoop(new BusinessAzimutClient(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)));
+			tokenizedBusinessUser.setIsVerified(true);
+			this.businessUserService.editUser(tokenizedBusinessUser);
+			this.addClientBankAccountMapper.consumeRestServiceInALoop(new BusinessAzimutClient(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)),tokenizedBusinessUser);
+			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
 		}
 		catch(Exception exception)
 		{
@@ -186,6 +190,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		try 
 		{		
 			this.azimutDataLookupUtility.saveAzimutClientBankAccountData(tokenizedBusinessUser,businessAzimutClient.getClientBankAccounts());
+			tokenizedBusinessUser.setUserStep(UserStep.BANK_REFERENCES_SHOW.getStepId());
+			this.businessUserService.editUser(tokenizedBusinessUser);
 		}
 		catch(Exception exception)
 		{

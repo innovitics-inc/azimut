@@ -82,7 +82,7 @@ public class KYCPage  extends BaseEntity implements Serializable{
     //CUSTOM SETTER
 
 
-	
+	private Integer weight;
     
 	
 public Long getId() {
@@ -165,4 +165,12 @@ public Long getPreviousPageId() {
 public void setPreviousPageId(Long previousPageId) {
 	this.previousPageId = previousPageId;
 }
+public Integer getWeight() {
+	return weight;
+}
+public void setWeight(Integer weight) {
+	this.weight = weight;
+}
+
+
 }

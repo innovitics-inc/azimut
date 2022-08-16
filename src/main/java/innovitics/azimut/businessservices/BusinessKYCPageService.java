@@ -104,4 +104,20 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 	}
 	
 	
+	public int adjustProgress(BusinessKYCPage businessKYCPage,BusinessUser businessUser)
+	{
+		int progress=0;
+		
+		if(businessUser!=null&&businessUser.getVerificationPercentage()!=null)
+		{
+			progress=businessUser.getVerificationPercentage().intValue();
+		}
+		if(businessKYCPage!=null&&businessKYCPage.getVerificationPercentage()!=null)
+		{
+			progress=progress+businessKYCPage.getVerificationPercentage().intValue();
+		}
+		
+		return progress;
+	}
+	
 }

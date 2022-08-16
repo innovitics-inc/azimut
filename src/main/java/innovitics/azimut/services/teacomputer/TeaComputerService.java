@@ -108,27 +108,27 @@ public class TeaComputerService extends AbstractService<Country, String> {
 	
 	public void deleteAllCountries()
 	{
-		this.countryDynamicRepository.deleteAll();
+		this.countryDynamicRepository.deleteAllInBatch();
 	}
 	public void deleteAllCities()
 	{
-		this.cityDynamicRepository.deleteAll();
+		this.cityDynamicRepository.deleteAllInBatch();
 	}
 	public void deleteAllNationalities()
 	{
-		this.nationalityDynamicRepository.deleteAll();
+		this.nationalityDynamicRepository.deleteAllInBatch();
 	}
 	public void deleteAllBanks()
 	{
-		this.bankDynamicRepository.deleteAll();
+		this.bankDynamicRepository.deleteAllInBatch();
 	}
 	public void deleteAllBranches()
 	{
-		this.branchDynamicRepository.deleteAll();
+		this.branchDynamicRepository.deleteAllInBatch();
 	}
 	public void deleteAllCurrencies()
 	{
-		this.currencyDynamicRepository.deleteAll();
+		this.currencyDynamicRepository.deleteAllInBatch();
 	}
 	
 	public List<ClientBankAccount> getUserClientBankAccounts(Long userId)

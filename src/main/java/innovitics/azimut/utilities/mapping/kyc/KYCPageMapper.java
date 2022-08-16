@@ -64,6 +64,10 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 		{
 			businessKYCPage.setNextId(kycPage.getId());
 		}
+		if(kycPage.getWeight()!=null)
+		{
+			businessKYCPage.setVerificationPercentage(kycPage.getWeight());
+		}
 		
 		
 		if(this.baseListUtility.isSetPopulated(kycPage.getQuestions()))

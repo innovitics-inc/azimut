@@ -139,4 +139,14 @@ public class ExceptionHandler extends ParentUtility{
 			this.logger.info("Handling Exception as Is"+exception.getMessage());
 			return this.handleAsBusinessException(exception, errorCode);
 	}
+	
+	Object getNullIfNonExistent(Exception exception)
+	 {
+		 exception.printStackTrace();
+			if(this.isABusinessException(exception))
+			{
+				return null;
+			}
+			return null;
+	 }
 }

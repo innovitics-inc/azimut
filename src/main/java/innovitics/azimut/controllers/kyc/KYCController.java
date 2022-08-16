@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import innovitics.azimut.businessmodels.kyc.BusinessKYCPage;
 import innovitics.azimut.businessmodels.kyc.BusinessUserAnswerSubmission;
 import innovitics.azimut.businessmodels.kyc.BusinessUserType;
+import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
+import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.businessservices.BusinessClientDetailsService;
 import innovitics.azimut.businessservices.BusinessKYCPageService;
 import innovitics.azimut.businessservices.BusinessUserAnswerSubmissionService;
 import innovitics.azimut.businessservices.BusinessUserService;
@@ -31,6 +34,8 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 
 	@Autowired BusinessKYCPageService businessKYCPageService;
 	@Autowired BusinessUserAnswerSubmissionService businessUserAnswerSubmissionService;
+	@Autowired BusinessClientDetailsService businessClientDetailsService;
+
 	
 	@PostMapping(value="/getPagesByUserType",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
@@ -72,17 +77,10 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			
 			if(businessUserAnswerSubmission.getNextPageId()!=null)
 			{
-				int progress=0;
-				if(businessKYCPage!=null&&businessKYCPage.getVerificationPercentage()!=null)
-				{
-					progress=businessKYCPage.getVerificationPercentage().intValue();
-				}
-				
-				
-				businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),businessKYCPage.getDraw());
-				businessKYCPage.setVerificationPercentage(progress);
+			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),businessKYCPage.getDraw());
 			}
 		  	
+			businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(businessKYCPage,this.getCurrentRequestHolder(token)));
 		}		
 		catch(BusinessException businessException)
 		{
@@ -91,6 +89,34 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);
 		
 	}
+	
+	
+	
+	@PostMapping(value="/saveClientBankAccountDetailsTemporarily",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> saveClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+		
+			this.businessClientDetailsService.saveClientBankAccounts(businessAzimutClient, this.getCurrentRequestHolder(token));
+			BusinessUser businessUser=this.getCurrentRequestHolder(token);
+			
+			BusinessKYCPage	businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser.getId(),businessUser.getFirstPageId(),false);
+			businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(businessKYCPage, businessUser));
+			return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);
+
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+	}
+
+	
+	
+	
+	
+	
 	
 	
 	@PostMapping(value="/uploadFile",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},

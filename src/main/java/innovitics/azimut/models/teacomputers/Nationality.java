@@ -16,6 +16,7 @@ import innovitics.azimut.models.BaseEntity;
 
 public class Nationality extends BaseEntity{
 	@Id
+	
 	@GeneratedValue(strategy=GenerationType.AUTO)
 
 	private Long id;

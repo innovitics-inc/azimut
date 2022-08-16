@@ -8,6 +8,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
+import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.AddClientBankAccountApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.AddClientBankAccountInput;
@@ -19,10 +20,12 @@ public class AddClientBankAccountMapper extends RestMapper<AddClientBankAccountI
 	@Autowired AddClientBankAccountApiConsumer addClientBankAccountApiConsumer;
 
 	
-	public void consumeRestServiceInALoop(BusinessAzimutClient businessAzimutClient) throws HttpClientErrorException, IntegrationException, Exception
+	public void consumeRestServiceInALoop(BusinessAzimutClient businessAzimutClient,BusinessUser businessUser) throws HttpClientErrorException, IntegrationException, Exception
 	{
 		for(BusinessClientBankAccountDetails businessClientBankAccountDetails:businessAzimutClient.getClientBankAccounts())
 		{ 
+			businessClientBankAccountDetails.setAzId(businessUser.getUserId());
+			businessClientBankAccountDetails.setAzIdType(businessUser.getIdType());
 			this.consumeRestService(businessClientBankAccountDetails, null);
 		}
 	}
