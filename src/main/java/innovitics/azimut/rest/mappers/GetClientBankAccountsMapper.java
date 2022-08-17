@@ -68,7 +68,11 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 			{
 				businessClientBankAccountsDetails.add(this.getConversion(clientBankAccountOutput));
 			}
-		}		
+		}
+		else
+		{
+			return new ArrayList<BusinessClientBankAccountDetails>();
+		}
 		return businessClientBankAccountsDetails;
 	}
 	

@@ -23,6 +23,7 @@ import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.utilities.crosslayerenums.UserImageType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
@@ -122,7 +123,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		List<UserImage> userImages=new ArrayList<UserImage>();
 		BusinessValify businessValify=new BusinessValify();
 		BusinessValify businessValifyResponse=new BusinessValify();
-
+		this.validation.validateImagesTaken(businessUser,frontImage,backImage,passportImage,userStep,language,documentType,incrementFailure);
 		this.userUtility.removeImagesFromBlobAndDb(businessUser, true);		
 		businessValify.setToken(valifyUtility.getToken(0L));
 		
@@ -169,7 +170,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		}
 		catch (Exception exception) 
 		{
-			this.handleValifyExceptions(exception,businessUser,incrementFailure);
+			this.handleValifyExceptions(exception,businessUser,BooleanUtility.isTrue(incrementFailure));
 		}
 		this.logger.info("First Page ID::::"+businessUser.getFirstPageId());
 		businessValifyResponse.setFirstPageId(businessUser.getFirstPageId());

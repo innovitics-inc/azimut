@@ -7,7 +7,7 @@ public enum ErrorCode {
 	INTEGRATION_TEST_FAILED(998,"Integration Test Failed."),
 	FAILED_TO_INTEGRATE(999,"Operation Could not be performed."),
 	OPERATION_NOT_PERFORMED(1000,"Operation Could not be performed."),
-	NO_DATA_FOUND(1001,"No data found."),
+	NO_DATA_FOUND(1001,"User Account not found."),
 	COPY_FAILURE(2102,"Could not upload the file."),
 	UPLOAD_FAILURE(2103,"Could not upload the file."),
 	FILE_TOO_BIG(2104,"File size too big."),
@@ -31,7 +31,8 @@ public enum ErrorCode {
 	FAILED_TO_VALIDATE_TOKEN(2118,"Session expired."),
 	INVALID_FIELD_VALUE(2119,"Invalid value"),
 	IMAGES_NOT_SIMIILAR(2120,"The images are different, please retake them."),
-	IMAGES_NOT_ClEAR(2121,"The images are not clear.")
+	IMAGES_NOT_ClEAR(2121,"The images are not clear."),
+	USE_MOBILE(2121,"Please use the mobile app to take the pictures for a better experience.")
 	
 	;
 	

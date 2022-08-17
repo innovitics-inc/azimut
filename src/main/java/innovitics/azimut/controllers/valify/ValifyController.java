@@ -87,15 +87,15 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 			@RequestParam (name="frontImage",required=false) MultipartFile frontImage,
 			@RequestParam (name="backImage",required=false)MultipartFile backImage,
 			@RequestParam (name="passportImage",required=false) MultipartFile passportImage,
-			Integer userStep,
-			String language,
-			String documentType,
-			Boolean incrementFailure
+			@RequestParam (name="userStep",required=false)Integer userStep,
+			@RequestParam (name="language",required=false)String language,
+			@RequestParam (name="documentType",required=false)String documentType,
+			@RequestParam (name="isWeb",required=false) Boolean isWeb
 			) throws 
 	MaxUploadSizeExceededException,IllegalStateException,BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), null,frontImage,backImage,passportImage,userStep,language,documentType,incrementFailure),null, null);			
+			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), null,frontImage,backImage,passportImage,userStep,language,documentType,isWeb),null, null);			
 		}		
 		catch(BusinessException businessException)
 		{

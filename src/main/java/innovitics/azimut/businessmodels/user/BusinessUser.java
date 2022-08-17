@@ -48,6 +48,9 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private Long genderId;
 	private AzimutAccount azimutAccount;
 	private Integer failureNumber;
+	
+	private BusinessClientBankAccountDetails[] clientBankAccounts;
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -291,6 +294,13 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setFailureNumber(Integer failureNumber) {
 		this.failureNumber = failureNumber;
+	}
+
+	public BusinessClientBankAccountDetails[] getClientBankAccounts() {
+		return clientBankAccounts;
+	}
+	public void setClientBankAccounts(BusinessClientBankAccountDetails[] clientBankAccounts) {
+		this.clientBankAccounts = clientBankAccounts;
 	}
 	public void concatinate()
 	{

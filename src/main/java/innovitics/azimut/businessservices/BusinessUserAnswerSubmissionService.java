@@ -228,10 +228,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		}
 		catch(Exception exception)
 		{
-			if(this.exceptionHandler.isABusinessException(exception))
-			{
-				return null;
-			}
+			this.exceptionHandler.getNullIfNonExistent(exception);
 		}
 		return null;
 	}

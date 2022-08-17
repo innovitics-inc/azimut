@@ -34,6 +34,21 @@ public class AzimutDataLookupUtility extends ParentUtility {
 @Autowired ArrayUtility arrayUtility;
 
 
+
+
+	public	List<Long> getAzimutEntityTypeIds()
+	{
+		List<Long> ids=new ArrayList<Long>();
+		for(AzimutEntityType azimutEntityType:AzimutEntityType.values())
+		{
+			ids.add(azimutEntityType.getTypeId());
+		}
+		return ids;
+	}
+
+
+
+
 public void syncTeaComputersData() throws IntegrationException
 {
 	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.BANK), null);

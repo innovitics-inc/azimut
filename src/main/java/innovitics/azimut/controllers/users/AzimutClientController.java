@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
+import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.businessservices.BusinessClientDetailsService;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
@@ -48,10 +49,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		{
 			this.logger.info("SearchBusinessAzmiutClient::"+searchBusinessAzimutClient);
 			Long accountId=(searchBusinessAzimutClient!=null&&searchBusinessAzimutClient.getAccountId()!=null)?searchBusinessAzimutClient.getAccountId().longValue():null;
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,
-					this.businessClientDetailsService.getBankAccountsWithDetails(searchBusinessAzimutClient,this.getCurrentRequestHolder(token),accountId==null),
-					null,
-					null);
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBankAccountsWithDetails(searchBusinessAzimutClient,this.getCurrentRequestHolder(token),accountId==null),null,null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -133,6 +131,20 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.saveClientBankAccounts(businessAzimutClient, this.getCurrentRequestHolder(token)),null,null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+	
+	@PostMapping(value="/removeClientBankAccount",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> removeClientBankAccount(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessClientBankAccountDetails businessClientBankAccountDetails) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.removeClientBankAccount(businessClientBankAccountDetails),null,null);
 		}		
 		catch(BusinessException businessException)
 		{

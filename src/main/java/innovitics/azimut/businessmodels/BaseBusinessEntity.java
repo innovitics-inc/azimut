@@ -40,6 +40,9 @@ public class BaseBusinessEntity {
 	protected Long firstPageId;
 	protected Long countryId; 
 	private Boolean draw;
+	private Boolean isMobile;
+	private Boolean isWeb;
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -221,6 +224,19 @@ public class BaseBusinessEntity {
 	public void setDraw(Boolean draw) {
 		this.draw = draw;
 	}
+	public Boolean getIsMobile() {
+		return isMobile;
+	}
+	public void setIsMobile(Boolean isMobile) {
+		this.isMobile = isMobile;
+	}
+	public Boolean getIsWeb() {
+		return isWeb;
+	}
+	public void setIsWeb(Boolean isWeb) {
+		this.isWeb = isWeb;
+	}
+	
 	
 	
 }

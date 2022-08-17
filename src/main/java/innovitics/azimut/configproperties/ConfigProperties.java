@@ -108,6 +108,9 @@ public class ConfigProperties {
     @Value("${valify.bundle.key}")
     private String valifyBundleKey;
     
+    @Value("${valify.number.of.trials}")
+    private String valifyTrialCount;
+    
 	public String getBlobConnectionString() {
 		return blobConnectionString;
 	}
@@ -208,6 +211,9 @@ public class ConfigProperties {
 	}
 	public String getSasDocumentTokenDurationInMinutes() {
 		return sasDocumentTokenDurationInMinutes;
+	}
+	public String getValifyTrialCount() {
+		return valifyTrialCount;
 	}
     
     

@@ -140,7 +140,7 @@ public class ExceptionHandler extends ParentUtility{
 			return this.handleAsBusinessException(exception, errorCode);
 	}
 	
-	Object getNullIfNonExistent(Exception exception)
+	public Object getNullIfNonExistent(Exception exception)
 	 {
 		 exception.printStackTrace();
 			if(this.isABusinessException(exception))

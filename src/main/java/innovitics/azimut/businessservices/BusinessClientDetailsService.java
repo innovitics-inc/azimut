@@ -30,7 +30,11 @@ import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.validations.validators.azimutclient.GetAzimutEntityLookup;
 import innovitics.azimut.validations.validators.azimutclient.GetBalanceAndTransactions;
+import innovitics.azimut.validations.validators.azimutclient.RemoveClientBankAccount;
+import innovitics.azimut.validations.validators.azimutclient.SaveClientBankAccountTemporarily;
+import innovitics.azimut.validations.validators.azimutclient.SaveClientBankAccountsTemporarily;
 @Service
 public class BusinessClientDetailsService extends AbstractBusinessService<BusinessAzimutClient> {
 @Autowired GetClientBalanceMapper getClientBalanceMapper;
@@ -46,6 +50,10 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired TeaComputerService teaComputerService;
 @Autowired BusinessUserService businessUserService;
 @Autowired AddClientBankAccountMapper addClientBankAccountMapper;
+@Autowired SaveClientBankAccountsTemporarily saveClientBankAccountsTemporarily;
+@Autowired SaveClientBankAccountTemporarily saveClientBankAccountTemporarily;
+@Autowired RemoveClientBankAccount removeClientBankAccount;
+@Autowired GetAzimutEntityLookup getAzimutEntityLookup;
 
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
@@ -86,10 +94,16 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		catch(Exception exception)
 		{
 	
+
 			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			{
+				this.logger.info("Detecting the exception type in the checkAccountAtTeaComputers method:::");
+				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			}
+			else
+			{
+				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			}
 		}
 
 		return responseBusinessAzimutClient;
@@ -162,11 +176,20 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 		return responseBusinessAzimutClient;
 	}
-	public BusinessAzimutClient getAzimutLookupData(BusinessAzimutDataLookup businessAzimutDataLookup ,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	public BusinessAzimutClient getAzimutLookupData(BusinessAzimutDataLookup businessAzimutDataLookup ,BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
-		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
-		businessAzimutClient.setLookupData(this.azimutDataLookupUtility.getLookups(businessAzimutDataLookup));
-		return businessAzimutClient;
+		this.validation.validate(businessAzimutDataLookup, getAzimutEntityLookup, BusinessAzimutDataLookup.class.getName());
+		try 
+		{
+			BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
+			businessAzimutClient.setLookupData(this.azimutDataLookupUtility.getLookups(businessAzimutDataLookup));
+			return businessAzimutClient;
+		}
+		catch(Exception exception)
+		{
+			this.exceptionHandler.getNullIfNonExistent(exception);
+		}
+		return null;
 	}
 	
 	public BusinessAzimutClient synchronizeTeaComputersLookupData(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
@@ -187,8 +210,16 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	public BusinessAzimutClient saveClientBankAccounts(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
+		this.validation.validate(businessAzimutClient, saveClientBankAccountsTemporarily, BusinessAzimutClient.class.getName());
+		
+		for(BusinessClientBankAccountDetails businessClientBankAccountDetails:businessAzimutClient.getClientBankAccounts())
+		{			
+			this.validation.validate(businessClientBankAccountDetails, saveClientBankAccountTemporarily, BusinessClientBankAccountDetails.class.getName());
+		}
+		
 		try 
-		{		
+		{	
+			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
 			this.azimutDataLookupUtility.saveAzimutClientBankAccountData(tokenizedBusinessUser,businessAzimutClient.getClientBankAccounts());
 			tokenizedBusinessUser.setUserStep(UserStep.BANK_REFERENCES_SHOW.getStepId());
 			this.businessUserService.editUser(tokenizedBusinessUser);
@@ -203,24 +234,21 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return new BusinessAzimutClient();
 	}
 	
-	/*
-	public BusinessAzimutClient addClientBankAccountsAtTeaComputers(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	public BusinessAzimutClient removeClientBankAccount(BusinessClientBankAccountDetails businessClientBankAccountDetails) throws BusinessException
 	{
-		try 
-		{		
-			this.addClientBankAccountMapper.consumeRestServiceInALoop(businessAzimutClient);
-		}
+		this.validation.validate(businessClientBankAccountDetails, removeClientBankAccount, BusinessClientBankAccountDetails.class.getName());
+		try {
+				this.teaComputerService.removeClientBankAccount(businessClientBankAccountDetails.getId());
+			}
 		catch(Exception exception)
 		{
-			exception.printStackTrace();
-			if(exception instanceof IntegrationException)
-				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-				else		
-				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			this.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
 		}
+		
 		return new BusinessAzimutClient();
 	}
-	*/
+	
+	
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
 		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+businessUser.getLastName());

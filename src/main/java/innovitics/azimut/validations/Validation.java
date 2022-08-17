@@ -20,6 +20,7 @@ import innovitics.azimut.businessmodels.kyc.BusinessUserAnswerSubmission;
 import innovitics.azimut.businessmodels.kyc.BusinessUserSubmittedAnswer;
 import innovitics.azimut.businessmodels.user.AuthenticationRequest;
 import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.ChangePhoneNumberRequest;
 import innovitics.azimut.models.user.User;
@@ -29,7 +30,9 @@ import innovitics.azimut.services.kyc.QuestionService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.crosslayerenums.AnswerType;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ChangePhoneNumberRequestUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.FileUtility;
@@ -47,8 +50,37 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 @Autowired ArrayUtility arrayUtility;
 @Autowired QuestionService questionService;
 @Autowired FileUtility fileUtility;
+@Autowired ConfigProperties configProperties;
 
 	public void validate(T data,Validator validator,String objectName) throws BusinessException
+	{
+		BeanPropertyBindingResult result = new BeanPropertyBindingResult(data, objectName);
+		
+		validator.validate(data,result);
+		
+		if(result.hasErrors())
+		{
+
+			String field=""; 
+			String value="";
+			  
+			  if(result.hasErrors()) 
+			  { 
+				  if(result!=null&&result.getFieldError()!=null)
+				  field=result.getFieldError().getField();
+				  if(result!=null&&result.getFieldError()!=null&&result.getFieldError().getRejectedValue()!=null)
+				  value=result.getFieldError().getRejectedValue().toString(); 
+			  }
+			  
+			  
+			  this.logger.info("Invalid value " +value + " for field "+ field);
+			  
+			  throw  this.populateInavlidFieldValueBusinessException(value, field);
+			 
+		}
+	}
+	
+	public void validate(Object data,Validator validator,String objectName) throws BusinessException
 	{
 		BeanPropertyBindingResult result = new BeanPropertyBindingResult(data, objectName);
 		
@@ -78,6 +110,52 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 			  throw  businessException;
 			 
 		}
+	}
+	
+
+	public void validateImagesTaken(BusinessUser businessUser,MultipartFile frontImage,MultipartFile backImage,MultipartFile passportImage,Integer userStep,String language,String documentType,Boolean incrementFailure) throws BusinessException
+	{
+		
+		if(BooleanUtility.isTrue(incrementFailure))
+		{
+			if(businessUser!=null&&businessUser.getFailureNumber()!=null&&Integer.valueOf(this.configProperties.getValifyTrialCount())>=businessUser.getFailureNumber().intValue())
+			{
+				throw new BusinessException(ErrorCode.USE_MOBILE);
+			}
+		}
+		
+		if((!StringUtility.isStringPopulated(documentType))||(StringUtility.isStringPopulated(documentType)&&StringUtility.stringsDontMatch(StringUtility.NATIONAL_ID_DOCUMENT_TYPE, documentType)&&StringUtility.stringsDontMatch(StringUtility.PASSPORT_DOCUMENT_TYPE, documentType)))
+		{
+			throw populateInavlidFieldValueBusinessException("", "documentType");
+		}
+		if(!StringUtility.isStringPopulated(language))
+		{
+			throw populateInavlidFieldValueBusinessException("", "language");
+		}
+		if(StringUtility.isStringPopulated(documentType)&&StringUtility.stringsMatch(StringUtility.NATIONAL_ID_DOCUMENT_TYPE, documentType))
+		{
+			if(frontImage==null)
+			{
+				throw populateInavlidFieldValueBusinessException("", "frontImage");
+			}
+			if(backImage==null)
+			{
+				throw populateInavlidFieldValueBusinessException("", "backImage");
+			}
+		}
+		if(StringUtility.isStringPopulated(documentType)&&StringUtility.stringsMatch(StringUtility.PASSPORT_DOCUMENT_TYPE, documentType))
+		{
+			if(passportImage==null)
+			{
+				throw populateInavlidFieldValueBusinessException("", "passportImage");
+			}
+			
+		}
+		if(userStep==null||userStep.intValue()==0)
+		{	
+			throw populateInavlidFieldValueBusinessException("", "userStep");
+		}
+
 	}
 	
 	public void validateTwoPasswords(String password1,String password2) throws BusinessException
@@ -353,5 +431,14 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 		return errorMessage;
 	}
 
+	
+	BusinessException populateInavlidFieldValueBusinessException(String value,String field)
+	{
+		 BusinessException businessException=new BusinessException(ErrorCode.INVALID_FIELD_VALUE);
+		  
+		  businessException.setErrorMessage("Invalid value " +value + " for field "+ field);
+		  
+		  return businessException;
+	}
 
 }

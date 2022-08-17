@@ -26,6 +26,7 @@ import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
@@ -56,7 +57,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> getPageById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessKYCPage businessKYCPage) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessKYCPage.getId(),businessKYCPage.getDraw()),null, null);
+			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessKYCPage.getId(),businessKYCPage.getIsWeb()),null, null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -77,10 +78,10 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			
 			if(businessUserAnswerSubmission.getNextPageId()!=null)
 			{
-			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),businessKYCPage.getDraw());
+			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),false);
 			}
 		  	
-			businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(businessKYCPage,this.getCurrentRequestHolder(token)));
+			
 		}		
 		catch(BusinessException businessException)
 		{
@@ -97,12 +98,18 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> saveClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-		
-			this.businessClientDetailsService.saveClientBankAccounts(businessAzimutClient, this.getCurrentRequestHolder(token));
 			BusinessUser businessUser=this.getCurrentRequestHolder(token);
+			BusinessKYCPage	businessKYCPage=new BusinessKYCPage();
+
+			this.businessClientDetailsService.saveClientBankAccounts(businessAzimutClient,businessUser);
 			
-			BusinessKYCPage	businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser.getId(),businessUser.getFirstPageId(),false);
-			businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(businessKYCPage, businessUser));
+			if(BooleanUtility.isTrue(businessAzimutClient.getIsMobile()))
+			{
+				businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser.getId(),businessUser.getFirstPageId(),false);
+				businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(businessKYCPage, businessUser));
+			}
+			
+			
 			return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);
 
 		}		
@@ -112,12 +119,6 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}
 	}
 
-	
-	
-	
-	
-	
-	
 	
 	@PostMapping(value="/uploadFile",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 

@@ -16,8 +16,11 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.services.kyc.UserImageService;
+import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
+import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ChangePhoneNumberRequestUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
@@ -43,7 +46,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	@Autowired ChangePhoneNumber changePhoneNumber;
 	@Autowired ChangePhoneNumberRequestUtility changePhoneNumberRequestUtility;
 	@Autowired UserImageService userImageService;
-	
+	@Autowired AzimutDataLookupUtility azimutDataLookupUtility;
 	public static final String PROFILE_PICTURE_PARAMETER="profilePicture";
 	public static final String SIGNED_PDF_PARAMETER="signedPdf";
 	
@@ -390,13 +393,18 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			tokenizedBusinessUser.setOtherIdType(businessUser.getOtherIdType());
 			tokenizedBusinessUser.setOtherUserId(businessUser.getOtherUserId());	
 			tokenizedBusinessUser.setOtherNationality(businessUser.getOtherNationality());
-			this.editUser(tokenizedBusinessUser);	
+			this.editUser(tokenizedBusinessUser);
+			if(BooleanUtility.isTrue(businessUser.getIsMobile()))
+			{
+				businessUser.setClientBankAccounts(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser));
+			}
+			
 		}
 		catch(Exception exception)
 		{
 			throw this.handleBusinessException(exception,ErrorCode.USER_NOT_UPDATED);
 		}
-		return new BusinessUser();
+		return businessUser;
 	}
 	
 	public BusinessUser getUserImages(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException

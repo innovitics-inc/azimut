@@ -13,6 +13,7 @@ import innovitics.azimut.businessmodels.kyc.BusinessSubmittedAnswer;
 import innovitics.azimut.businessutilities.KYCUtility;
 import innovitics.azimut.models.kyc.KYCPage;
 import innovitics.azimut.models.kyc.Question;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.mapping.GrandParentMapper;
@@ -93,7 +94,7 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 			
 			this.matchAndAssign(businessKYCPage,businessQuestions,businessSubQuestions,kycPage.getId(), kycPage.getAppUserId());
 			
-			if(kycPage!=null&&kycPage.getDraw()!=null&&kycPage.getDraw())
+			if(kycPage!=null&&BooleanUtility.isTrue(kycPage.getDraw()))
 			
 				businessKYCPage.setQuestions(this.kycUtility.populateTheObjectsWidth(businessQuestions));
 			
