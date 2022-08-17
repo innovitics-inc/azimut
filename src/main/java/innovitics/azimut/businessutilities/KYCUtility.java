@@ -56,7 +56,7 @@ public class KYCUtility extends ParentUtility
 	 {
 		 if(objectDrawingArray[i]!=null)
 		 {
-			if(NumberUtility.areIntegerValuesMatching(objectDrawingArray[i].getWidthId(),ObjectWidthType.WIDTH_100.getTypeId()))
+			if(NumberUtility.areIntegerValuesMatching(objectDrawingArray[i].getWidthId(),ObjectWidthType.WIDTH_50OR100.getTypeId()))
 		  { 
 				 if(objectDrawingArray[i].getPassedValue()!=null&&objectDrawingArray[i].getPassedValue())
 				 {

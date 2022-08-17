@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -41,6 +42,20 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}
 		
 	}
+	@GetMapping(value="/getTemporaryAzimutClientBankAccounts",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getTemporaryAzimutClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getTemporaryClientBankAccountDetails(this.getCurrentRequestHolder(token)),null,null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+	
 	
 	@PostMapping(value="/getAzimutClientBankAccounts",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 

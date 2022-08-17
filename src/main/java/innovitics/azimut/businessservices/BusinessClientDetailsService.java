@@ -248,6 +248,20 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return new BusinessAzimutClient();
 	}
 	
+	public BusinessAzimutClient getTemporaryClientBankAccountDetails(BusinessUser businessUser) throws BusinessException
+	{
+		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
+		try {
+				businessAzimutClient.setClientBankAccounts(this.azimutDataLookupUtility.getClientBankAccountData(businessUser));
+			}
+		catch(Exception exception)
+		{
+			this.exceptionHandler.getNullIfNonExistent(exception);
+			businessAzimutClient.setClientBankAccounts(new BusinessClientBankAccountDetails[0]);
+		}
+		return businessAzimutClient;
+	}
+	
 	
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
