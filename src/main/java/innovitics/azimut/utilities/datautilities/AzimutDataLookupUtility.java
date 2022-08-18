@@ -85,13 +85,15 @@ public void syncTeaComputersData() throws IntegrationException
 		try 
 		{
 			clientBankAccounts=this.teaComputerService.getUserClientBankAccounts(businessUser.getId());
+
 		}
 		catch(Exception exception)
 		{
 			exception.printStackTrace();
 			if(this.exceptionHandler.isABusinessException(exception))
 			{
-				clientBankAccounts= null;
+				BusinessClientBankAccountDetails[] empty= {};
+				return empty;
 			}
 		}
 		
@@ -126,9 +128,12 @@ public void syncTeaComputersData() throws IntegrationException
 			
 			return businessClientBankAccountDetailsArray;			
 		}
-		
-		return null;
-		
+		else
+		{
+			BusinessClientBankAccountDetails[] empty= {};
+			return empty;
+		}
+				
 	}
 
 	

@@ -15,13 +15,16 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserDevice;
 import innovitics.azimut.models.user.UserImage;
+import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.services.user.UserDeviceService;
+import innovitics.azimut.services.user.UserLocationService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.crosslayerenums.UserImageType;
+import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
@@ -32,10 +35,11 @@ public class UserUtility extends ParentUtility{
 	@Autowired BlobFileUtility blobFileUtility;	
 	@Autowired UserImageService userImageService;
 	@Autowired protected ListUtility<UserImage> listUtility;
+	@Autowired protected ListUtility<UserLocation> userLocationListUtility;
 	@Autowired protected ExceptionHandler exceptionHandler;
 	@Autowired GenderService genderService;
 	@Autowired AES aes;
-	
+	@Autowired UserLocationService userLocationService;
 
 	public void upsertDeviceIdAudit(User user,String deviceId)
 	{
@@ -187,5 +191,36 @@ public class UserUtility extends ParentUtility{
 	{
 		return this.aes.encrypt(password);
 	}
-
+	
+	public BusinessUser findUserLocation(BusinessUser tokenizedBusinessUser)
+	{
+		try 
+		{
+			List<UserLocation> userLocations= this.userLocationService.findByUserId(tokenizedBusinessUser.getId());
+			if(userLocationListUtility.isListPopulated(userLocations)&&userLocations.size()>1)
+			{
+				throw new  BusinessException(ErrorCode.TOO_MANY_USER_LOCATIONS);
+			}
+			tokenizedBusinessUser.setUserLocation(userLocations.get(0));
+			return tokenizedBusinessUser;
+				
+		} 
+		catch (Exception exception) 
+		{
+			return (BusinessUser)this.exceptionHandler.getNullIfNonExistent(exception);
+			
+		}
+	}
+	
+	public void addUserLocation(BusinessUser tokenizedBusinessUser,UserLocation userLocation) throws BusinessException
+	{
+		try 
+		{
+			this.userLocationService.addUserLocation(userLocation);
+		} 
+		catch (Exception exception) 
+		{
+			throw this.exceptionHandler.handleBusinessException(exception,ErrorCode.USER_LOCATION_NOT_SAVED);
+		}
+	}
 }

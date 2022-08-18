@@ -32,8 +32,9 @@ public enum ErrorCode {
 	INVALID_FIELD_VALUE(2119,"Invalid value"),
 	IMAGES_NOT_SIMIILAR(2120,"The images are different, please retake them."),
 	IMAGES_NOT_ClEAR(2121,"The images are not clear."),
-	USE_MOBILE(2121,"Please use the mobile app to take the pictures for a better experience.")
-	
+	USE_MOBILE(2122,"Please use the mobile app to take the pictures for a better experience."),
+	TOO_MANY_USER_LOCATIONS(2123,"More than one user was found having this phone."),
+	USER_LOCATION_NOT_SAVED(2124,"Could not save the user location."),
 	;
 	
 	private final int code;

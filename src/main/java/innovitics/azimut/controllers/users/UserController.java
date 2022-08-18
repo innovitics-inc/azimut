@@ -25,6 +25,7 @@ import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
@@ -238,6 +239,21 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.saveUser(businessUser),null,null);
+		}
+		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+	
+	@PostMapping(value="/saveUserLocation",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveUserLocation(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody UserLocation userLocation) throws BusinessException, IOException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.addUserLocation(userLocation,this.getCurrentRequestHolder(token)),null,null);
 		}
 		
 		catch(BusinessException businessException)

@@ -15,6 +15,7 @@ import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserImage;
+import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.UserService;
@@ -383,6 +384,18 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		return 0;
 	}
 	
+	public BusinessUser addUserLocation(UserLocation userLocation,BusinessUser tokenizedBusinessUser)
+	{
+		try 
+		{
+			this.userUtility.addUserLocation(tokenizedBusinessUser, userLocation);
+		}
+		catch (Exception exception)
+		{
+			return (BusinessUser)this.exceptionHandler.getNullIfNonExistent(exception);
+		}
+		return new BusinessUser();
+	}
 	
 	public BusinessUser updateUserDetails(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException
 	{

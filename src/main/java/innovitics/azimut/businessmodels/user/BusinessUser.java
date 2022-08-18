@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
 import innovitics.azimut.models.user.UserImage;
+import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.utilities.CustomJsonRootName;
 @CustomJsonRootName(plural = "users", singular = "user")
 public class BusinessUser  extends BaseBusinessEntity{
@@ -50,6 +51,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private Integer failureNumber;
 	private Boolean isInstitutional;
 	private Long azimutIdTypeId;
+	private UserLocation userLocation;
 	
 	private BusinessClientBankAccountDetails[] clientBankAccounts;
 	
@@ -317,6 +319,12 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setAzimutIdTypeId(Long azimutIdTypeId) {
 		this.azimutIdTypeId = azimutIdTypeId;
+	}
+	public UserLocation getUserLocation() {
+		return userLocation;
+	}
+	public void setUserLocation(UserLocation userLocation) {
+		this.userLocation = userLocation;
 	}
 	public void concatinate()
 	{

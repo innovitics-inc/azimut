@@ -1,6 +1,8 @@
 package innovitics.azimut.businessservices;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -280,8 +282,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			}
 		catch(Exception exception)
 		{
-			this.exceptionHandler.getNullIfNonExistent(exception);
-			businessAzimutClient.setClientBankAccounts(new BusinessClientBankAccountDetails[0]);
+			this.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
+
 		}
 		return businessAzimutClient;
 	}

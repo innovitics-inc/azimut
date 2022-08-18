@@ -26,7 +26,6 @@ public class BusinessAzimutClient extends BusinessUser{
 	private Long entityTypeId;
 	private String param;
 
-	private AzimutEntityType azimutEntityType;
 	
 	public Double getPendingAmount() {
 		return pendingAmount;
