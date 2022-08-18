@@ -262,5 +262,19 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}
 		
 	}
+	@GetMapping(value="/getUserLocation",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getUserLocation(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.getUserLocation(this.getCurrentRequestHolder(token)),null,null);
+		}
+		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
 
 }

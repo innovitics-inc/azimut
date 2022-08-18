@@ -288,6 +288,20 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return businessAzimutClient;
 	}
 	
+	public BusinessAzimutClient getAzimutDetails() throws BusinessException
+	{
+		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
+		try {
+				businessAzimutClient.setAzimutDetails(this.azimutDataLookUpService.getAzimutDetails());
+			}
+		catch(Exception exception)
+		{
+			this.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
+
+		}
+		return businessAzimutClient;
+	}
+	
 	
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{

@@ -33,6 +33,7 @@ public class UserType extends BaseEntity{
 	private Date deletedAt;
 	private Long firstPageId;
 	private Long azimutIdTypeId;
+	private String idTypeAr;
 	
 
 	public Long getId() {
@@ -91,6 +92,13 @@ public class UserType extends BaseEntity{
 	}
 	public void setAzimutIdTypeId(Long azimutIdTypeId) {
 		this.azimutIdTypeId = azimutIdTypeId;
+	}
+	
+	public String getIdTypeAr() {
+		return idTypeAr;
+	}
+	public void setIdTypeAr(String idTypeAr) {
+		this.idTypeAr = idTypeAr;
 	}
 	@Override
 	public String toString() {

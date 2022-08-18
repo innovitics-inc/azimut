@@ -1,5 +1,7 @@
 package innovitics.azimut.models.user;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +30,12 @@ public class UserLocation extends BaseEntity{
 	private String countryCode;
 	private String countryPhoneCode;
 	private String phoneNumber;
+	private String longt;
+	private String lat;
+	private Date createdAt;
+	private Date updatedAt;
+	private Date deletedAt;
+
 	
 	public Long getId() {
 		return id;
@@ -89,6 +97,36 @@ public class UserLocation extends BaseEntity{
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	public String getLongt() {
+		return longt;
+	}
+	public void setLongt(String longt) {
+		this.longt = longt;
+	}
+	public String getLat() {
+		return lat;
+	}
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 	
 	

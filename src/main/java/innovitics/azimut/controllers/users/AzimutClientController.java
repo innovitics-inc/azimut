@@ -167,4 +167,18 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}
 		
 	}
+	
+	@GetMapping(value="/getAzimutDetails",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutDetails(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getAzimutDetails(),null,null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
 }

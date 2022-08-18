@@ -18,11 +18,12 @@ public class UserLocationService extends AbstractService<UserLocation, String>{
 	@Autowired UserLocationsDynamicRepository  userLocationsDynamicRepository; 
 	@Autowired UserLocationDynamicSpecification userLocationDynamicSpecification;
 	
-	public List<UserLocation> findByUserId (Long userId)
+	public UserLocation findByUserId (Long userId)
 	{
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
 		searchCriteriaList.add(new SearchCriteria("userId", userId,SearchOperation.EQUAL, null));
-		return this.userLocationsDynamicRepository.findAll(userLocationDynamicSpecification.findByCriteria(searchCriteriaList));
+		searchCriteriaList.add(new SearchCriteria("deletedAt", "",SearchOperation.IS_NULL, null));
+		return this.userLocationsDynamicRepository.findOne(userLocationDynamicSpecification.findByCriteria(searchCriteriaList)).get();
 		
 	}
 	public UserLocation addUserLocation(UserLocation userLocation)
@@ -30,4 +31,8 @@ public class UserLocationService extends AbstractService<UserLocation, String>{
 		return this.userLocationsDynamicRepository.save(userLocation);
 	}
 
+	public void softdeleteOldUserLocations(Long userId)
+	{
+		this.userLocationsDynamicRepository.deleteOldUserLocations(userId);
+	}
 }

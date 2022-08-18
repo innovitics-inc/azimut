@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import innovitics.azimut.businessmodels.BusinessTransaction;
+import innovitics.azimut.models.azimutdetails.AzimutDetails;
 import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.utilities.CustomJsonRootName;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
@@ -25,6 +26,7 @@ public class BusinessAzimutClient extends BusinessUser{
 	private BusinessClientBankAccountDetails [] clientBankAccounts;
 	private Long entityTypeId;
 	private String param;
+	private AzimutDetails azimutDetails;
 
 	
 	public Double getPendingAmount() {
@@ -146,10 +148,15 @@ public class BusinessAzimutClient extends BusinessUser{
 		this.clientBankAccounts = clientBankAccounts;
 	}
 
-	
-	
-	
-	
+
+
+	public AzimutDetails getAzimutDetails() {
+		return azimutDetails;
+	}
+
+	public void setAzimutDetails(AzimutDetails azimutDetails) {
+		this.azimutDetails = azimutDetails;
+	}
 
 	public BusinessAzimutClient(BusinessClientBankAccountDetails[] clientBankAccounts) {
 		super();
@@ -161,8 +168,14 @@ public class BusinessAzimutClient extends BusinessUser{
 		this.entityTypeId=azimutEntityType.getTypeId();
 		this.param=azimutEntityType.getParam();
 	}
+	
+	
+		public BusinessAzimutClient(AzimutDetails azimutDetails) {
+		super();
+		this.azimutDetails = azimutDetails;
+	}
 
-	public BusinessAzimutClient() 
+		public BusinessAzimutClient() 
 	{
 	
 	}

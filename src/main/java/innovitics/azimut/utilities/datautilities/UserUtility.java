@@ -191,36 +191,31 @@ public class UserUtility extends ParentUtility{
 	{
 		return this.aes.encrypt(password);
 	}
-	
-	public BusinessUser findUserLocation(BusinessUser tokenizedBusinessUser)
-	{
-		try 
-		{
-			List<UserLocation> userLocations= this.userLocationService.findByUserId(tokenizedBusinessUser.getId());
-			if(userLocationListUtility.isListPopulated(userLocations)&&userLocations.size()>1)
-			{
-				throw new  BusinessException(ErrorCode.TOO_MANY_USER_LOCATIONS);
-			}
-			tokenizedBusinessUser.setUserLocation(userLocations.get(0));
-			return tokenizedBusinessUser;
-				
-		} 
-		catch (Exception exception) 
-		{
-			return (BusinessUser)this.exceptionHandler.getNullIfNonExistent(exception);
-			
-		}
-	}
-	
+
 	public void addUserLocation(BusinessUser tokenizedBusinessUser,UserLocation userLocation) throws BusinessException
 	{
+
 		try 
 		{
+			this.userLocationService.softdeleteOldUserLocations(tokenizedBusinessUser.getId());
+			userLocation.setUserId(tokenizedBusinessUser.getId());
+			userLocation.setCreatedAt(new Date());
 			this.userLocationService.addUserLocation(userLocation);
 		} 
 		catch (Exception exception) 
 		{
 			throw this.exceptionHandler.handleBusinessException(exception,ErrorCode.USER_LOCATION_NOT_SAVED);
+		}
+	}
+	public UserLocation getUserLocation(BusinessUser tokenizedBusinessUser) throws BusinessException
+	{
+		try 
+		{
+			return this.userLocationService.findByUserId(tokenizedBusinessUser.getId());
+		} 
+		catch (Exception exception) 
+		{
+			return (UserLocation)this.exceptionHandler.getNullIfNonExistent(exception);
 		}
 	}
 }

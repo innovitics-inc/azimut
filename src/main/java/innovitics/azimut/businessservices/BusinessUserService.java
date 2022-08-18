@@ -396,6 +396,20 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		}
 		return new BusinessUser();
 	}
+	public BusinessUser getUserLocation(BusinessUser tokenizedBusinessUser)
+	{
+		BusinessUser businessUser=new BusinessUser();
+
+		try 
+		{
+			businessUser.setUserLocation(this.userUtility.getUserLocation(tokenizedBusinessUser));
+		}
+		catch (Exception exception)
+		{
+			return (BusinessUser)this.exceptionHandler.getNullIfNonExistent(exception);
+		}
+		return businessUser;
+	}
 	
 	public BusinessUser updateUserDetails(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException
 	{

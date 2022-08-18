@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphType;
 import com.cosium.spring.data.jpa.entity.graph.domain.NamedEntityGraph;
 
+import innovitics.azimut.models.azimutdetails.AzimutDetails;
 import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.models.user.AzimutEntity;
 import innovitics.azimut.repositories.user.AzimutDataLookupDynamicRepository;
+import innovitics.azimut.repositories.user.AzimutDetailsDynamicRepository;
 import innovitics.azimut.repositories.user.AzimutEntityDynamicRepository;
 import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
@@ -29,7 +31,7 @@ public class AzimutDataLookUpService extends AbstractService<AzimutDataLookup, S
 	@Autowired AzimutEntitySepcification azimutEntitySepcification;
 	@Autowired AzimutEntityDynamicRepository azimutEntityDynamicRepository;
 	
-	
+	@Autowired AzimutDetailsDynamicRepository azimutDetailsDynamicRepository;
 	
 	public List<AzimutDataLookup> getFieldValues(Long [] entityTypes)
 	{
@@ -69,6 +71,11 @@ public class AzimutDataLookUpService extends AbstractService<AzimutDataLookup, S
 	public void saveAll(List<AzimutDataLookup> azimutdataLookUps)
 	{
 		this.azimutDataLookupDynamicRepository.saveAll(azimutdataLookUps);
+	}
+	
+	public AzimutDetails getAzimutDetails()
+	{
+		return this.azimutDetailsDynamicRepository.findAll().get(0);
 	}
 	
 }
