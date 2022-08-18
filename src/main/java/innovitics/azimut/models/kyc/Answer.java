@@ -46,9 +46,11 @@ private Question question;
 private String answerType;
 private String answerOrder;
 private String answerOption;
+private String answerOptionAr;
 private String answerPlaceHolder;
 private Boolean isRelatedAnswerMandatory;
 private String relatedQuestionText;
+private String relatedQuestionTextAr;
 @ManyToOne(fetch = FetchType.EAGER)
 @JoinColumn(name="parent_answer_id")
 private Answer parentAnswer;
@@ -67,7 +69,7 @@ private Date updatedAt;
 private Date deletedAt;
 
 private Boolean isAnswerMandatory;
-
+private String answerPlaceHolderAr;
 
 public Long getId() {
 	return id;
@@ -161,6 +163,24 @@ public Boolean getIsAnswerMandatory() {
 }
 public void setIsAnswerMandatory(Boolean isAnswerMandatory) {
 	this.isAnswerMandatory = isAnswerMandatory;
+}
+public String getAnswerOptionAr() {
+	return answerOptionAr;
+}
+public void setAnswerOptionAr(String answerOptionAr) {
+	this.answerOptionAr = answerOptionAr;
+}
+public String getRelatedQuestionTextAr() {
+	return relatedQuestionTextAr;
+}
+public void setRelatedQuestionTextAr(String relatedQuestionTextAr) {
+	this.relatedQuestionTextAr = relatedQuestionTextAr;
+}
+public String getAnswerPlaceHolderAr() {
+	return answerPlaceHolderAr;
+}
+public void setAnswerPlaceHolderAr(String answerPlaceHolderAr) {
+	this.answerPlaceHolderAr = answerPlaceHolderAr;
 }
 
 

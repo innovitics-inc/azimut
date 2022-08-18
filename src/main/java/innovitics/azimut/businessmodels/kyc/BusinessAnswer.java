@@ -18,7 +18,9 @@ public class BusinessAnswer extends BaseBusinessEntity{
 	private Boolean isAnswerMandatory;
 	private List<BusinessSubmittedAnswer> businessSubmittedAnswers;
 	private List<BusinessSubmittedAnswer> childBusinessSubmittedAnswers;
-	
+	private String answerOptionAr;
+	private String relatedQuestionTextAr;
+	private String answerPlaceHolderAr;
 	public Long getId() {
 		return id;
 	}
@@ -86,6 +88,24 @@ public class BusinessAnswer extends BaseBusinessEntity{
 	}
 	public void setIsAnswerMandatory(Boolean isAnswerMandatory) {
 		this.isAnswerMandatory = isAnswerMandatory;
+	}
+	public String getAnswerOptionAr() {
+		return answerOptionAr;
+	}
+	public void setAnswerOptionAr(String answerOptionAr) {
+		this.answerOptionAr = answerOptionAr;
+	}
+	public String getRelatedQuestionTextAr() {
+		return relatedQuestionTextAr;
+	}
+	public void setRelatedQuestionTextAr(String relatedQuestionTextAr) {
+		this.relatedQuestionTextAr = relatedQuestionTextAr;
+	}
+	public String getAnswerPlaceHolderAr() {
+		return answerPlaceHolderAr;
+	}
+	public void setAnswerPlaceHolderAr(String answerPlaceHolderAr) {
+		this.answerPlaceHolderAr = answerPlaceHolderAr;
 	}
 
 	

@@ -11,7 +11,7 @@ public enum AzimutEntityType {
 	SEX(7L,"Sex","GetCountries"),
 	ORDER_TYPE(8L,"Order Type","GetCountries"),
 	CLIENT_STATUS(9L,"Client Status","GetCountries"),
-	CLIENT_TYPE(10L,"Client Type","GetCountries"),
+	USER_TYPE(10L,"User Type","GetCountries"),
 	CURRENCY(11L,"Currency Type","GetCurrencies"),
 	BANK(12L,"Currency Type","GetBanks"),
 	BRANCH(13L,"Currency Type","GetBranches")

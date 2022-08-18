@@ -87,6 +87,8 @@ public class User extends BaseEntity {
 	
 	private Integer failureNumber;
 	
+	private Boolean isInstitutional;
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -381,6 +383,12 @@ public class User extends BaseEntity {
 	public void setFailureNumber(Integer failureNumber) {
 		this.failureNumber = failureNumber;
 	}
+	public Boolean getIsInstitutional() {
+		return isInstitutional;
+	}
+	public void setIsInstitutional(Boolean isInstitutional) {
+		this.isInstitutional = isInstitutional;
+	}
 	public void concatinate()
 	{
 		this.setUserPhone(this.getCountryPhoneCode()+this.getPhoneNumber());
@@ -388,18 +396,26 @@ public class User extends BaseEntity {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", userPhone=" + userPhone + ", password=" + password + ", deviceId=" + deviceId
-				+ ", userId=" + userId + ", nickName=" + nickName + ", emailAddress=" + emailAddress
-				+ ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber + ", profilePicture="
-				+ profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath + ", pdfPath=" + pdfPath
-				+ ", isChangeNoApproved=" + isChangeNoApproved + ", verificationPercentage=" + verificationPercentage
-				+ ", isVerified=" + isVerified + ", migrated=" + migrated + ", createdAt=" + createdAt + ", updatedAt="
-				+ updatedAt + ", deletedAt=" + deletedAt + ", countryCode=" + countryCode + ", lastSolvedPageId="
-				+ lastSolvedPageId + ", nextPageId=" + nextPageId + ", userStep=" + userStep + ", contractMap="
-				+ contractMap + ", country=" + country + ", city=" + city + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", dateOfBirth=" + dateOfBirth + ", dateOfIdExpiry=" + dateOfIdExpiry
-				+ ", otherUserIdType=" + otherUserIdType + ", otherIdType=" + otherIdType + ", otherUserId="
-				+ otherUserId + ", otherNationality=" + otherNationality + "]";
+				+ ", userId=" + userId + ", userType=" + userType + ", nickName=" + nickName + ", emailAddress="
+				+ emailAddress + ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber
+				+ ", profilePicture=" + profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath
+				+ ", pdfPath=" + pdfPath + ", isChangeNoApproved=" + isChangeNoApproved + ", verificationPercentage="
+				+ verificationPercentage + ", isVerified=" + isVerified + ", migrated=" + migrated + ", createdAt="
+				+ createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + ", countryCode=" + countryCode
+				+ ", lastSolvedPageId=" + lastSolvedPageId + ", nextPageId=" + nextPageId + ", userStep=" + userStep
+				+ ", contractMap=" + contractMap + ", country=" + country + ", city=" + city + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", dateOfIdExpiry="
+				+ dateOfIdExpiry + ", otherUserIdType=" + otherUserIdType + ", otherIdType=" + otherIdType
+				+ ", otherUserId=" + otherUserId + ", otherNationality=" + otherNationality + ", genderId=" + genderId
+				+ ", teacomputersAddressAr=" + teacomputersAddressAr + ", teacomputersAddressEn="
+				+ teacomputersAddressEn + ", teacomputersCityId=" + teacomputersCityId + ", teacomputersCountryId="
+				+ teacomputersCountryId + ", teacomputersIssueCityId=" + teacomputersIssueCityId
+				+ ", teacomputersIssueCountryId=" + teacomputersIssueCountryId + ", teacomputersNationalityId="
+				+ teacomputersNationalityId + ", teacomputersClientaml=" + teacomputersClientaml
+				+ ", teacomputersOccupation=" + teacomputersOccupation + ", failureNumber=" + failureNumber
+				+ ", isInstitutional=" + isInstitutional + "]";
 	}
+
 
 
 	

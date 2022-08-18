@@ -9,6 +9,7 @@ import innovitics.azimut.models.teacomputers.City;
 import innovitics.azimut.models.teacomputers.Country;
 import innovitics.azimut.models.teacomputers.Currency;
 import innovitics.azimut.models.teacomputers.Nationality;
+import innovitics.azimut.models.user.UserType;
 
 public class BusinessAzimutDataLookup extends BaseBusinessEntity{
 
@@ -22,6 +23,7 @@ public class BusinessAzimutDataLookup extends BaseBusinessEntity{
 	private List<Currency> currencies;
 	private List<Bank> banks;
 	private List<Branch> branches;
+	private List<UserType> userTypes;
 	
 	
 	public String getEntityType() {
@@ -72,6 +74,12 @@ public class BusinessAzimutDataLookup extends BaseBusinessEntity{
 	}
 	public void setBranches(List<Branch> branches) {
 		this.branches = branches;
+	}
+	public List<UserType> getUserTypes() {
+		return userTypes;
+	}
+	public void setUserTypes(List<UserType> userTypes) {
+		this.userTypes = userTypes;
 	}
 	
 	

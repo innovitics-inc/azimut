@@ -19,7 +19,10 @@ public class BusinessKYCPage extends BaseBusinessEntity{
 	private Long previousId;
 	private Long nextId;
 	private Boolean isAnswered;
-	
+	protected String titleAr;
+	protected String pageDetailsAr;
+	protected String pageDisclaimerAr;
+
 	public Long getId() {
 		return id;
 	}
@@ -87,6 +90,24 @@ public class BusinessKYCPage extends BaseBusinessEntity{
 	}
 	public void setIsAnswered(Boolean isAnswered) {
 		this.isAnswered = isAnswered;
+	}
+	public String getTitleAr() {
+		return titleAr;
+	}
+	public void setTitleAr(String titleAr) {
+		this.titleAr = titleAr;
+	}
+	public String getPageDetailsAr() {
+		return pageDetailsAr;
+	}
+	public void setPageDetailsAr(String pageDetailsAr) {
+		this.pageDetailsAr = pageDetailsAr;
+	}
+	public String getPageDisclaimerAr() {
+		return pageDisclaimerAr;
+	}
+	public void setPageDisclaimerAr(String pageDisclaimerAr) {
+		this.pageDisclaimerAr = pageDisclaimerAr;
 	}
 	@Override
 	public String toString() {

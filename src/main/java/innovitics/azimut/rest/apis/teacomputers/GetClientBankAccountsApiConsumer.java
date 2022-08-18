@@ -24,14 +24,15 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 	
 	public static final String PATH="/GetClientBankAcc";
 	public static final String ACCOUNT_NOT_EXISTING="185";
-	public static final String ACTIVE_ACCOUNT_STATUS="1";
+	public static final String ACTIVE_ACCOUNT_STATUS="2";
 	
 	@Override
 	public HttpEntity<String> generateRequestFromInput(GetClientBankAccountsInput input) {
 		GetClientBankAccountsRequest request= new GetClientBankAccountsRequest();
 		this.populateCredentials(request);
 		request.setIdNumber(input.getIdNumber());
-		request.setIdTypeId(input.getIdTypeId());	
+		request.setIdTypeId(input.getIdTypeId());
+		request.setAccountID(input.getAccountId());
 		request.setSignature(this.generateSignature(request));
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getLocale(), this.getContentLength(request)));			
 		return httpEntity;

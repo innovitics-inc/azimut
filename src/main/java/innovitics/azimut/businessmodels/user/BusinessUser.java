@@ -48,6 +48,8 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private Long genderId;
 	private AzimutAccount azimutAccount;
 	private Integer failureNumber;
+	private Boolean isInstitutional;
+	private Long azimutIdTypeId;
 	
 	private BusinessClientBankAccountDetails[] clientBankAccounts;
 	
@@ -301,6 +303,20 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setClientBankAccounts(BusinessClientBankAccountDetails[] clientBankAccounts) {
 		this.clientBankAccounts = clientBankAccounts;
+	}
+	
+	public Boolean getIsInstitutional() {
+		return isInstitutional;
+	}
+	public void setIsInstitutional(Boolean isInstitutional) {
+		this.isInstitutional = isInstitutional;
+	}
+	
+	public Long getAzimutIdTypeId() {
+		return azimutIdTypeId;
+	}
+	public void setAzimutIdTypeId(Long azimutIdTypeId) {
+		this.azimutIdTypeId = azimutIdTypeId;
 	}
 	public void concatinate()
 	{

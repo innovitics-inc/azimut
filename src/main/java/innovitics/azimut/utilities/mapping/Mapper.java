@@ -30,6 +30,8 @@ public abstract class Mapper <S extends BaseEntity, T extends BaseBusinessEntity
 	protected  abstract S convertBusinessUnitToBasicUnit(T t , boolean save);
 	
 	protected  abstract T convertBasicUnitToBusinessUnit(S s);
+	protected  abstract T convertBasicUnitToBusinessUnit(S s,String language);
+
 	
 	/*
 	public T convertBusinessDatesToBasicDates(S baseEntity,T baseBusinessEntity,boolean save)

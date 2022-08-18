@@ -18,7 +18,9 @@ import innovitics.azimut.models.teacomputers.ClientBankAccount;
 import innovitics.azimut.models.teacomputers.Country;
 import innovitics.azimut.models.teacomputers.Currency;
 import innovitics.azimut.models.teacomputers.Nationality;
+import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.rest.mappers.LookUpMapper;
+import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
@@ -32,6 +34,7 @@ public class AzimutDataLookupUtility extends ParentUtility {
 @Autowired ListUtility<ClientBankAccount> clientBankAccountListUtility;
 @Autowired ListUtility<BusinessClientBankAccountDetails> businessClientBankAccountListUtility ;
 @Autowired ArrayUtility arrayUtility;
+@Autowired UserTypeService userTypeService;
 
 
 
@@ -180,7 +183,11 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		businessAzimutDataLookup.setBranches(branchs);
 	}
 		
-	
+	else if(NumberUtility.areLongValuesMatching(businessAzimutDataLookup.getEntityTypeId(), AzimutEntityType.USER_TYPE.getTypeId()))
+	{
+		List<UserType> userTypes=this.userTypeService.findAll();
+		businessAzimutDataLookup.setUserTypes(userTypes);
+	}	
 	
 	return businessAzimutDataLookup;
 }

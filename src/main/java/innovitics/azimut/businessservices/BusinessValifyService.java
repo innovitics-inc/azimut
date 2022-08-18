@@ -105,7 +105,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		try 
 		{
 		  businessValifyResponse=this.valifyFacialImageMapper.consumeRestService(this.determineFacialType(businessValify), null);
-		  updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages);
+		  updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages,null);
 		}
 		catch (Exception exception) 
 		{
@@ -126,7 +126,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		this.validation.validateImagesTaken(businessUser,frontImage,backImage,passportImage,userStep,language,documentType,incrementFailure);
 		this.userUtility.removeImagesFromBlobAndDb(businessUser, true);		
 		businessValify.setToken(valifyUtility.getToken(0L));
-		
+		boolean isEgyptian=true;
 		try 
 		{
 			if(frontImage!=null&&backImage!=null)
@@ -142,6 +142,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 			UserImage backUserImage=this.userUtility.createUserImageRecord(businessUser, backImage, UserImageType.BACK_IMAGE);
 			userImages.add(backUserImage);
 			businessValifyResponse.setBackImage(backUserImage.getPrivateUrl());
+			isEgyptian=true;
 			}
 			
 		if(passportImage!=null)
@@ -151,6 +152,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 			UserImage passportUserImage=this.userUtility.createUserImageRecord(businessUser, passportImage, UserImageType.PASSPORT_IMAGE);
 			userImages.add(passportUserImage);
 			businessValifyResponse.setPassportImage(passportUserImage.getPrivateUrl());
+			isEgyptian=false;
 			}
 		}
 		catch(Exception exception)
@@ -165,7 +167,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		try 
 		{
 			businessValifyResponse=this.valifyIdMapper.consumeRestService(businessValify, null);
-			updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages);
+			updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages,isEgyptian);
 			
 		}
 		catch (Exception exception) 
@@ -225,7 +227,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
 	}
 	
-	void updateUserDetailsAndSaveUserImages(BusinessUser businessUser,BusinessValify businessValify,BusinessValify businessValifyResponse,List<UserImage> userImages) throws BusinessException
+	void updateUserDetailsAndSaveUserImages(BusinessUser businessUser,BusinessValify businessValify,BusinessValify businessValifyResponse,List<UserImage> userImages,Boolean isEgyptian) throws BusinessException
 	{
 		try {
 			businessUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser,businessValify.getUserStep());

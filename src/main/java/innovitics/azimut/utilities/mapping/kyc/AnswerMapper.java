@@ -16,6 +16,7 @@ import innovitics.azimut.models.kyc.UserAnswer;
 import innovitics.azimut.services.kyc.UserAnswerSubmissionService;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.mapping.Mapper;
 @Component
@@ -38,20 +39,49 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 	}
 
 	@Override
-	public BusinessAnswer convertBasicUnitToBusinessUnit(Answer answer) {
-		
+	protected BusinessAnswer convertBasicUnitToBusinessUnit(Answer answer, String language) 
+	{
 		List<BusinessSubmittedAnswer> parentAnswers=new LinkedList<BusinessSubmittedAnswer>();
 		List<BusinessSubmittedAnswer> childAnswers=new LinkedList<BusinessSubmittedAnswer>();
 
 
-		BusinessAnswer businessAnswer =this.convertAnswerToBusinessAnswer(answer,null,null);
+		BusinessAnswer businessAnswer =this.convertAnswerToBusinessAnswer(answer,null,null,language);
 		if(this.baseListUtility.isSetPopulated(answer.getRelatedAnswers()))
 		{
 			LinkedList<BusinessAnswer> businessRelatedAnswers=new LinkedList<BusinessAnswer>(); 
 			for(Answer relatedAnswer:answer.getRelatedAnswers())
 			{
 				relatedAnswer.setAppUserId(answer.getAppUserId());
-				businessRelatedAnswers.add(this.convertAnswerToBusinessAnswer(relatedAnswer,null,null));				
+				businessRelatedAnswers.add(this.convertAnswerToBusinessAnswer(relatedAnswer,null,null,language));				
+			}
+			businessAnswer.setRelatedAnswers(businessRelatedAnswers);
+		}
+		this.logger.info("The answers were retrieved successfully::::::");
+		//this.populateUserAnswers(parentAnswers, childAnswers,answer.getPageId(),answer.getAppUserId());
+		
+		//businessAnswer.setBusinessSubmittedAnswers(parentAnswers);
+		this.logger.info("Business Answer, business submitted answer list::::"+businessAnswer.getBusinessSubmittedAnswers());		
+		return businessAnswer;
+	}
+
+	
+	
+	
+	@Override
+	public BusinessAnswer convertBasicUnitToBusinessUnit(Answer answer) {
+		
+		List<BusinessSubmittedAnswer> parentAnswers=new LinkedList<BusinessSubmittedAnswer>();
+		List<BusinessSubmittedAnswer> childAnswers=new LinkedList<BusinessSubmittedAnswer>();
+
+
+		BusinessAnswer businessAnswer =this.convertAnswerToBusinessAnswer(answer,null,null,null);
+		if(this.baseListUtility.isSetPopulated(answer.getRelatedAnswers()))
+		{
+			LinkedList<BusinessAnswer> businessRelatedAnswers=new LinkedList<BusinessAnswer>(); 
+			for(Answer relatedAnswer:answer.getRelatedAnswers())
+			{
+				relatedAnswer.setAppUserId(answer.getAppUserId());
+				businessRelatedAnswers.add(this.convertAnswerToBusinessAnswer(relatedAnswer,null,null,null));				
 			}
 			businessAnswer.setRelatedAnswers(businessRelatedAnswers);
 		}
@@ -63,20 +93,30 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 		return businessAnswer;
 	}
 	
-	private BusinessAnswer convertAnswerToBusinessAnswer(Answer answer,List<BusinessSubmittedAnswer> parentAnswers,List<BusinessSubmittedAnswer> childAnswers)
+	private BusinessAnswer convertAnswerToBusinessAnswer(Answer answer,List<BusinessSubmittedAnswer> parentAnswers,List<BusinessSubmittedAnswer> childAnswers,String language)
 	{	
 		BusinessAnswer businessAnswer =new BusinessAnswer();
 		businessAnswer.setId(answer.getId());
 		businessAnswer.setAnswerOrder(answer.getAnswerOrder());
 		businessAnswer.setAnswerType(answer.getAnswerType());
 		businessAnswer.setIsRelatedAnswerMandatory(answer.getIsRelatedAnswerMandatory());
-		businessAnswer.setAnswerPlaceHolder(answer.getAnswerPlaceHolder());
+
 		businessAnswer.setAnswerOption(answer.getAnswerOption());
 		businessAnswer.setCreatedAt(answer.getCreatedAt());
 		businessAnswer.setUpdatedAt(answer.getUpdatedAt());
 		businessAnswer.setDeletedAt(answer.getDeletedAt());
-		businessAnswer.setRelatedQuestionText(answer.getRelatedQuestionText());
-		businessAnswer.setIsAnswerMandatory(answer.getIsAnswerMandatory());		
+		businessAnswer.setIsAnswerMandatory(answer.getIsAnswerMandatory());
+		
+		if(StringUtility.stringsMatch(language,StringUtility.ENGLISH)||!StringUtility.isStringPopulated(language))
+		{
+			businessAnswer.setRelatedQuestionText(answer.getRelatedQuestionText());
+			businessAnswer.setAnswerPlaceHolder(answer.getAnswerPlaceHolder());
+		}
+		else
+		{
+			businessAnswer.setRelatedQuestionText(answer.getRelatedQuestionTextAr());
+			businessAnswer.setAnswerPlaceHolder(answer.getAnswerPlaceHolderAr());
+		}
 		//this.populateUserAnswers(answer, parentAnswers, childAnswers);
 		/*if(this.userAnswerListUtility.isSetPopulated(answer.getUserAnswers()))
 		{		
@@ -237,5 +277,5 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 
 	}
 
-	
+
 }

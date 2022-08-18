@@ -54,10 +54,14 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 
 	@PostMapping(value="/getPageById",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> getPageById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessKYCPage businessKYCPage) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> getPageById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessKYCPage businessKYCPage) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessKYCPage.getId(),businessKYCPage.getIsWeb()),null, null);
+			this.logger.info("Language Param::"+StringUtility.LANGUAGE);
+			this.logger.info("Language Value::"+language);
+			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessKYCPage.getId(),businessKYCPage.getIsWeb(),language),null, null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -68,7 +72,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	
 	@PostMapping(value="/submitAnswers",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> submitAnswer(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> submitAnswer(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException, IOException, IntegrationException {
 	
 		BusinessKYCPage businessKYCPage=new BusinessKYCPage();
 		
@@ -78,7 +84,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			
 			if(businessUserAnswerSubmission.getNextPageId()!=null)
 			{
-			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),false);
+			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),false,language);
 			}
 		  	
 			
@@ -95,7 +101,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	
 	@PostMapping(value="/saveClientBankAccountDetailsTemporarily",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> saveClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> saveClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			BusinessUser businessUser=this.getCurrentRequestHolder(token);
@@ -105,7 +113,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			
 			if(BooleanUtility.isTrue(businessAzimutClient.getIsMobile()))
 			{
-				businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser.getId(),businessUser.getFirstPageId(),false);
+				businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser.getId(),businessUser.getFirstPageId(),false,language);
 				businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(businessKYCPage, businessUser));
 			}
 			

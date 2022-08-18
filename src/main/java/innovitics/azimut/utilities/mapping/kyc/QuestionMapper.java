@@ -15,6 +15,7 @@ import innovitics.azimut.models.kyc.Question;
 import innovitics.azimut.models.kyc.UserAnswer;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.mapping.ParentMapper;
 @Component
 public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
@@ -40,7 +41,7 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 
 	@Override
 	public BusinessQuestion convertBasicUnitToBusinessUnit(Question question) {
-		BusinessQuestion businessQuestion=convertBasicQuestionToBusinessQuestion(question);
+		BusinessQuestion businessQuestion=convertBasicQuestionToBusinessQuestion(question,null);
 		
 		if(this.baseListUtility.isSetPopulated(question.getSubQuestions()))
 		{
@@ -49,7 +50,26 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 			{
 				subQuestion.setAppUserId(question.getAppUserId());
 				subQuestion.setPageId(question.getPageId());
-				businessSubQuestions.add(this.convertBasicQuestionToBusinessQuestion(subQuestion));
+				businessSubQuestions.add(this.convertBasicQuestionToBusinessQuestion(subQuestion,null));
+			}
+			businessQuestion.setSubQuestions(businessSubQuestions);
+		}
+		
+		return businessQuestion;
+	}
+	
+	@Override
+	protected BusinessQuestion convertBasicUnitToBusinessUnit(Question question, String language) {
+		BusinessQuestion businessQuestion=convertBasicQuestionToBusinessQuestion(question,language);
+		
+		if(this.baseListUtility.isSetPopulated(question.getSubQuestions()))
+		{
+			LinkedList<BusinessQuestion> businessSubQuestions=new LinkedList<BusinessQuestion>();
+			for(Question subQuestion:question.getSubQuestions())
+			{
+				subQuestion.setAppUserId(question.getAppUserId());
+				subQuestion.setPageId(question.getPageId());
+				businessSubQuestions.add(this.convertBasicQuestionToBusinessQuestion(subQuestion,language));
 			}
 			businessQuestion.setSubQuestions(businessSubQuestions);
 		}
@@ -58,15 +78,26 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 	}
 	
 	
-	private BusinessQuestion convertBasicQuestionToBusinessQuestion(Question question) 
+	private BusinessQuestion convertBasicQuestionToBusinessQuestion(Question question,String language) 
 	{
 		BusinessQuestion businessQuestion=new BusinessQuestion();
 		businessQuestion.setId(question.getId());
-		businessQuestion.setQuestionText(question.getQuestionText());
 		businessQuestion.setIsAnswerMandatory(question.getIsAnswerMandatory());
 		businessQuestion.setAnswerType(question.getAnswerType());
 		businessQuestion.setQuestionOrder(question.getQuestionOrder());
-		businessQuestion.setQuestionPlaceHolder(question.getQuestionPlaceHolder());
+		
+		if(StringUtility.stringsMatch(language,StringUtility.ENGLISH)||!StringUtility.isStringPopulated(language))
+		{
+			businessQuestion.setQuestionText(question.getQuestionText());
+			businessQuestion.setQuestionPlaceHolder(question.getQuestionPlaceHolder());
+		}
+		else
+		{
+			businessQuestion.setQuestionText(question.getQuestionTextAr());
+			businessQuestion.setQuestionPlaceHolder(question.getQuestionPlaceHolderAr());
+		}
+		
+		
 		if(this.baseChildListUtility.isSetPopulated(question.getAnswers()))
 		{
 			LinkedList<BusinessAnswer> businessAnswers=new LinkedList<BusinessAnswer>();
@@ -74,7 +105,7 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 			{
 				answer.setPageId(question.getPageId());
 				answer.setAppUserId(question.getAppUserId());
-				BusinessAnswer businessAnswer=this.answerMapper.convertBasicUnitToBusinessUnit(answer);
+				BusinessAnswer businessAnswer=this.answerMapper.convertBasicUnitToBusinessUnit(answer,language);
 					if(this.businessSubmittedAnswerListUtility.isListPopulated(businessAnswer.getBusinessSubmittedAnswers()))
 					{
 						this.logger.info("The business answer in the Question Mapper::::");
@@ -90,6 +121,7 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 		return businessQuestion;
 	
 	}
+
 	
 	
 

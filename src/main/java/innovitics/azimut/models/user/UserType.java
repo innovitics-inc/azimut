@@ -27,11 +27,12 @@ public class UserType extends BaseEntity{
 	private Long id;
 	private String idType;
 	private int noOfKYCPages;
-	private int valifyImageCount;
+	private Integer valifyImageCount;
 	private  Date createdAt;
 	private Date updatedAt;
 	private Date deletedAt;
 	private Long firstPageId;
+	private Long azimutIdTypeId;
 	
 
 	public Long getId() {
@@ -53,10 +54,10 @@ public class UserType extends BaseEntity{
 	public void setNoOfKYCPages(int noOfKYCPages) {
 		this.noOfKYCPages = noOfKYCPages;
 	}
-	public int getValifyImageCount() {
+	public Integer getValifyImageCount() {
 		return valifyImageCount;
 	}
-	public void setValifyImageCount(int valifyImageCount) {
+	public void setValifyImageCount(Integer valifyImageCount) {
 		this.valifyImageCount = valifyImageCount;
 	}
 	public Date getCreatedAt() {
@@ -83,6 +84,13 @@ public class UserType extends BaseEntity{
 	}
 	public void setFirstPageId(Long firstPageId) {
 		this.firstPageId = firstPageId;
+	}
+	
+	public Long getAzimutIdTypeId() {
+		return azimutIdTypeId;
+	}
+	public void setAzimutIdTypeId(Long azimutIdTypeId) {
+		this.azimutIdTypeId = azimutIdTypeId;
 	}
 	@Override
 	public String toString() {

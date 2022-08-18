@@ -118,7 +118,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 		
 		if(BooleanUtility.isTrue(incrementFailure))
 		{
-			if(businessUser!=null&&businessUser.getFailureNumber()!=null&&Integer.valueOf(this.configProperties.getValifyTrialCount())>=businessUser.getFailureNumber().intValue())
+			if(businessUser!=null&&businessUser.getFailureNumber()!=null&&Integer.valueOf(this.configProperties.getValifyTrialCount())<=businessUser.getFailureNumber().intValue())
 			{
 				throw new BusinessException(ErrorCode.USE_MOBILE);
 			}

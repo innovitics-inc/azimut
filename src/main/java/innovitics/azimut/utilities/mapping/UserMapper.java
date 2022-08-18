@@ -7,11 +7,18 @@ import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.security.AES;
+import innovitics.azimut.services.kyc.UserTypeService;
+import innovitics.azimut.utilities.crosslayerenums.UserIdType;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
+import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 @Component
 public class UserMapper extends Mapper<User, BusinessUser>{
 public static final long TEACOMPUTERS_CLIENT_AML=1L;
 @Autowired AES aes;
+@Autowired UserTypeService userTypeService;
+@Autowired ExceptionHandler exceptionHandler;
 	@Override
 	public User convertBusinessUnitToBasicUnit(BusinessUser businessUser, boolean save) {
 
@@ -43,13 +50,20 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			user.setUserId(businessUser.getUserId());
 			
 			if(businessUser.getIdType()!=null)
-			{
-				UserType userType=new UserType();
-				userType.setId(businessUser.getIdType());
-				user.setUserType(userType);
+			{				
+				if(NumberUtility.areLongValuesMatching(businessUser.getIdType(),UserIdType.INSTITUTIONAL.getTypeId()))
+				{
+					user.setIsInstitutional(true);
+				}
+				else
+				{
+					UserType userType=new UserType();
+					userType.setId(businessUser.getIdType());
+					user.setUserType(userType);
+				}
+
 			}
-			
-			
+
 			if(businessUser.getSignedPdf()!=null)
 			user.setSignedPdf(businessUser.getSignedPdf());
 			if(businessUser.getPicturePath()!=null)
@@ -98,14 +112,6 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 				user.setDateOfIdExpiry(businessUser.getDateOfIdExpiry());
 			
 			
-			if(businessUser.getIdType()!=null)
-			{
-				UserType userType=new UserType();
-				userType.setId(businessUser.getIdType());
-				user.setUserType(userType);
-			}
-			
-			
 			if(businessUser.getOtherIdType()!=null)
 				user.setOtherIdType(businessUser.getOtherIdType());
 			if(businessUser.getOtherUserId()!=null)
@@ -147,7 +153,8 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 					user.setTeacomputersNationalityId(azimutAccount.getNationalityId());
 			}
 			
-			
+			if(BooleanUtility.isTrue(businessUser.getIsInstitutional()))
+				user.setIsInstitutional(true);
 			
 			user.concatinate();
 			
@@ -196,10 +203,17 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			businessUser.setUserId(user.getUserId());
 			if(user.getUserType()!=null)
 			{
-				businessUser.setUserIdType(user.getUserType().getIdType());
-				businessUser.setIdType(user.getUserType().getId());
-				businessUser.setFirstPageId(user.getUserType().getFirstPageId());
+			   businessUser.setUserIdType(user.getUserType().getIdType());
+			   businessUser.setIdType(user.getUserType().getId());
+			   businessUser.setAzimutIdTypeId(user.getUserType().getAzimutIdTypeId());
+			   businessUser.setFirstPageId(user.getUserType().getFirstPageId());   
 			}
+			if(BooleanUtility.isTrue(user.getIsInstitutional()))
+			{
+				businessUser.setFirstPageId(this.getInstitutionalFirstPageId());
+				businessUser.setIsInstitutional(true);
+			}
+			
 			if(user.getProfilePicture()!=null)
 			businessUser.setProfilePicture(user.getProfilePicture());
 			if(user.getSignedPdf()!=null)
@@ -443,5 +457,23 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 		
 	}
 
+	@Override
+	protected BusinessUser convertBasicUnitToBusinessUnit(User s, String language) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Long getInstitutionalFirstPageId()
+	{
+		try
+		{
+			return userTypeService.getUserTypeById(UserIdType.INSTITUTIONAL.getTypeId()).getFirstPageId();
+		}
+		catch(Exception exception)
+		{
+			this.exceptionHandler.getNullIfNonExistent(exception);
+			return null;
+		}
+	}
 
 }

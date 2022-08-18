@@ -83,7 +83,10 @@ public class KYCPage  extends BaseEntity implements Serializable{
 
 
 	private Integer weight;
-    
+	protected String titleAr;
+	protected String pageDetailsAr;
+	protected String pageDisclaimerAr;
+	
 	
 public Long getId() {
 	return id;
@@ -170,6 +173,24 @@ public Integer getWeight() {
 }
 public void setWeight(Integer weight) {
 	this.weight = weight;
+}
+public String getTitleAr() {
+	return titleAr;
+}
+public void setTitleAr(String titleAr) {
+	this.titleAr = titleAr;
+}
+public String getPageDetailsAr() {
+	return pageDetailsAr;
+}
+public void setPageDetailsAr(String pageDetailsAr) {
+	this.pageDetailsAr = pageDetailsAr;
+}
+public String getPageDisclaimerAr() {
+	return pageDisclaimerAr;
+}
+public void setPageDisclaimerAr(String pageDisclaimerAr) {
+	this.pageDisclaimerAr = pageDisclaimerAr;
 }
 
 

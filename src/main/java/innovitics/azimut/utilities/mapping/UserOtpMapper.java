@@ -37,4 +37,10 @@ public class UserOtpMapper extends Mapper<UserOTP, BusinessUserOTP>{
 		return businessUserOTP;
 	}
 
+	@Override
+	protected BusinessUserOTP convertBasicUnitToBusinessUnit(UserOTP s, String language) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

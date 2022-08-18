@@ -23,6 +23,7 @@ import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.BaseEntity;
+import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
@@ -51,7 +52,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> {
 	@Autowired protected ConfigProperties configProperties;
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected UserUtility userUtility;
-
+	@Autowired protected UserTypeService userTypeService;
 
 	protected  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
 	{

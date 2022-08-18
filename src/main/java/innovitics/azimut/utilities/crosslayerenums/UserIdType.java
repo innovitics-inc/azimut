@@ -5,7 +5,7 @@ public enum UserIdType {
 
 	NATIONAL_ID(1,"National Id"),
 	PASSPORT(3,"passport"),
-	OTHER(4,"Othee")
+	INSTITUTIONAL(5,"Institutional")
 	;
 
 	UserIdType(long typeId, String type) {

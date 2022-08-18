@@ -69,6 +69,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	public BusinessUser saveUser(BusinessUser businessUser) throws BusinessException
 	{
 		businessUser.concatinate();
+		this.validation.validateNewPhoneNumberAvailability(businessUser);
 		this.validate(businessUser,addBusinessUserValidator,BusinessUser.class.getName());
 		User user=new User();
 		BusinessUser savedbusinessUser=new BusinessUser();

@@ -22,12 +22,16 @@ public class UserTypeService extends AbstractService<UserType, String>{
 	
 	public UserType getUserTypeById(Long id)
 	{
+		this.logger.info("Fetching user type for ID:::"+id);
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
-		searchCriteriaList.add(new SearchCriteria("id", id.toString(),SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("id", id,SearchOperation.EQUAL,null));
 		UserType userType= this.userTypeDynamicRepository.findOne(this.userTypeSpecification.findByCriteria(searchCriteriaList)).get();
 		return userType;
 	}
 	
-	
+	public List<UserType> findAll()
+	{
+		return this.userTypeDynamicRepository.findAll();
+	}
 	
 }

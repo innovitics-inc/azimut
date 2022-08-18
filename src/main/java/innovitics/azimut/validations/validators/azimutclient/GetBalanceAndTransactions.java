@@ -21,14 +21,17 @@ public class GetBalanceAndTransactions extends BaseValidator{
 	public void validate(Object target, Errors errors) {
 		BusinessAzimutClient businessAzimutClient=(BusinessAzimutClient) target;
 		
-		if (!StringUtility.isStringPopulated(businessAzimutClient.getAzId()))
-			{
-			errors.rejectValue("azId", "invalidValue");
-			}
-		if (businessAzimutClient.getAzIdType()!=null&&!StringUtility.isStringPopulated(businessAzimutClient.getAzIdType().toString()))
-			{
-			errors.rejectValue("azIdType", "invalidValue");
-			}
+		/*
+		  if (!StringUtility.isStringPopulated(businessAzimutClient.getAzId())) 
+		  {
+		  errors.rejectValue("azId", "invalidValue"); 
+		  } 
+		  if
+		  (businessAzimutClient.getAzIdType()!=null&&!StringUtility.isStringPopulated(businessAzimutClient.getAzIdType().toString())) 
+		  {
+		  errors.rejectValue("azIdType", "invalidValue"); 
+		  }
+		 */
 		if (!StringUtility.validateStringValueWithRegexPattern(businessAzimutClient.getSearchFromDate(),RegexPattern.YEAR.getPattern(),false))
 			{
 			errors.rejectValue("searchFromDate", "invalidValue");

@@ -40,6 +40,7 @@ public class Question extends BaseEntity{
 	@GeneratedValue(strategy=GenerationType.AUTO)	
 	protected Long id;
 	protected String questionText;
+	protected String questionTextAr;
 	protected String answerType;
 	protected Integer questionOrder;
 	protected Boolean isAnswerMandatory;
@@ -66,6 +67,7 @@ public class Question extends BaseEntity{
 	private Set<Question> subQuestions;
 		
 	private String  questionPlaceHolder;
+	private String  questionPlaceHolderAr;
 	
 	/*
 	@OneToMany(mappedBy="question")
@@ -160,6 +162,18 @@ public class Question extends BaseEntity{
 	}	
 	
 
+	public String getQuestionTextAr() {
+		return questionTextAr;
+	}
+	public void setQuestionTextAr(String questionTextAr) {
+		this.questionTextAr = questionTextAr;
+	}
+	public String getQuestionPlaceHolderAr() {
+		return questionPlaceHolderAr;
+	}
+	public void setQuestionPlaceHolderAr(String questionPlaceHolderAr) {
+		this.questionPlaceHolderAr = questionPlaceHolderAr;
+	}
 	@Override
 	public String toString() {
 		return "Question [id=" + id + ", questionText=" + questionText + ", answerType=" + answerType

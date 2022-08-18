@@ -49,7 +49,7 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 		GetClientBankAccountsInput input=new  GetClientBankAccountsInput();
 		input.setIdNumber(businessClientBankAccountDetails.getAzId());
 		input.setIdTypeId(businessClientBankAccountDetails.getAzIdType());
-		input.setBankId(businessClientBankAccountDetails.getBankId());
+		input.setAccountId(businessClientBankAccountDetails.getAccountId());
 		return input;
 	}
 

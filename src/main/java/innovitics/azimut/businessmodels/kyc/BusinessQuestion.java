@@ -19,6 +19,9 @@ public class BusinessQuestion extends BaseBusinessEntity{
 	private Integer objectType;
 	private Integer width;
 	private String questionPlaceHolder;
+	private String questionPlaceHolderAr;
+	private String questionTextAr;
+
 	public Long getId() {
 		return id;
 	}
@@ -92,6 +95,19 @@ public class BusinessQuestion extends BaseBusinessEntity{
 	}
 	public void setQuestionPlaceHolder(String questionPlaceHolder) {
 		this.questionPlaceHolder = questionPlaceHolder;
+	}
+	
+	public String getQuestionPlaceHolderAr() {
+		return questionPlaceHolderAr;
+	}
+	public void setQuestionPlaceHolderAr(String questionPlaceHolderAr) {
+		this.questionPlaceHolderAr = questionPlaceHolderAr;
+	}
+	public String getQuestionTextAr() {
+		return questionTextAr;
+	}
+	public void setQuestionTextAr(String questionTextAr) {
+		this.questionTextAr = questionTextAr;
 	}
 	@Override
 	public String toString() {

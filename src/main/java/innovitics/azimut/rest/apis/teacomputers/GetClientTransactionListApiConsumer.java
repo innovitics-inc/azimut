@@ -32,7 +32,7 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 		request.setIdNumber(input.getIdNumber());
 		request.setFromDate(input.getFromDate());
 		request.setToDate(input.getToDate());
-		request.setSignature(/*this.generateSignature(request)*/"5YjQzpxvgTpI4wH8a1tGjopFtZVadA42iKH1SxopW7k=");
+		request.setSignature(this.generateSignature(request));
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getLocale(), this.getContentLength(request)));
 		return httpEntity;
 	}

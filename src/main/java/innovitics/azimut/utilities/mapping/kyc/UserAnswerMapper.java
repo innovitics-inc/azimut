@@ -209,6 +209,14 @@ public List<UserAnswersIntermediary> convertBusinessUserAnswerSubmissionToUserAn
 		return null;
 	}
 
+
+
+	@Override
+	protected BusinessSubmittedAnswer convertBasicUnitToBusinessUnit(UserAnswer s, String language) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 	

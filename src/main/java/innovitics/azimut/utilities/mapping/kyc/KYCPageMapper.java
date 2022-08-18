@@ -16,6 +16,7 @@ import innovitics.azimut.models.kyc.Question;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.mapping.GrandParentMapper;
 @Component
 public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
@@ -155,6 +156,77 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 		else
 			businessKYCPage.setIsAnswered(false);
 		
-	}	
+	}
 
-}
+	@Override
+	public BusinessKYCPage convertBasicUnitToBusinessUnit(KYCPage kycPage, String language) 
+	{
+		BusinessKYCPage  businessKYCPage=new BusinessKYCPage();
+		
+		businessKYCPage.setId(kycPage.getId());
+		businessKYCPage.setPageOrder(kycPage.getPageOrder());
+		businessKYCPage.setNoOfQuestions(kycPage.getNoOfQuestions());
+		
+		if(StringUtility.stringsMatch(language,StringUtility.ENGLISH)||!StringUtility.isStringPopulated(language))
+		{
+			businessKYCPage.setTitle(kycPage.getTitle());
+			businessKYCPage.setPageDetails(kycPage.getPageDetails());
+			businessKYCPage.setPageDisclaimer(kycPage.getPageDisclaimer());
+		}
+		else 
+		{
+			businessKYCPage.setTitle(kycPage.getTitleAr());
+			businessKYCPage.setPageDetails(kycPage.getPageDetailsAr());
+			businessKYCPage.setPageDisclaimer(kycPage.getPageDisclaimerAr());
+		}
+		
+		
+		businessKYCPage.setPreviousId(kycPage.getPreviousPageId());
+		businessKYCPage.setNextId(kycPage.getNextPageId());
+		
+		if(kycPage!=null&&kycPage.getPreviousPageId()==null)
+		{
+			businessKYCPage.setPreviousId(kycPage.getId());
+		}
+		if(kycPage!=null&&kycPage.getNextPageId()==null)
+		{
+			businessKYCPage.setNextId(kycPage.getId());
+		}
+		if(kycPage.getWeight()!=null)
+		{
+			businessKYCPage.setVerificationPercentage(kycPage.getWeight());
+		}
+		
+		
+		if(this.baseListUtility.isSetPopulated(kycPage.getQuestions()))
+		{
+
+			LinkedList<BusinessQuestion> businessQuestions=new LinkedList<BusinessQuestion>();
+			
+			LinkedList<BusinessQuestion> businessSubQuestions=new LinkedList<BusinessQuestion>();
+			
+			for(Question question:kycPage.getQuestions())
+			{
+				BusinessQuestion businessQuestion=new BusinessQuestion();
+				question.setAppUserId(kycPage.getAppUserId());
+				question.setPageId(kycPage.getId());
+				businessQuestion=this.questionMapper.convertBasicUnitToBusinessUnit(question,language);
+				businessQuestions.add(businessQuestion);
+				if(this.businessListUtility.isListPopulated(businessQuestion.getSubQuestions()))
+				{
+					businessSubQuestions.addAll(businessQuestion.getSubQuestions());
+				}
+				
+			}
+			
+			this.matchAndAssign(businessKYCPage,businessQuestions,businessSubQuestions,kycPage.getId(), kycPage.getAppUserId());
+			
+			if(kycPage!=null&&BooleanUtility.isTrue(kycPage.getDraw()))
+			
+				businessKYCPage.setQuestions(this.kycUtility.populateTheObjectsWidth(businessQuestions));	
+			else
+				businessKYCPage.setQuestions(businessQuestions);
+			}
+		return businessKYCPage;
+		}	
+	}

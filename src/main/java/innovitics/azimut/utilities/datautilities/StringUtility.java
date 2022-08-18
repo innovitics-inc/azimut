@@ -29,6 +29,10 @@ public final class StringUtility extends ParentUtility{
 	public final static long CLIENT_AML=1L;
 	public final static String OCCUPATION="NULL";
 	public final static String ZERO="0";
+	public final static String ENGLISH="EN";
+	public final static String ARABIC="AR";
+	public final static String LANGUAGE="lang";
+	
 	public static String getClassName(Object object)
 	{
 		return object.getClass().getName();

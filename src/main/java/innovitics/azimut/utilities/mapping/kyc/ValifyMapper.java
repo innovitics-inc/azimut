@@ -56,4 +56,10 @@ public class ValifyMapper extends Mapper<Valify, BusinessValify> {
 		return destination;
 	}
 
+	@Override
+	protected BusinessValify convertBasicUnitToBusinessUnit(Valify s, String language) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

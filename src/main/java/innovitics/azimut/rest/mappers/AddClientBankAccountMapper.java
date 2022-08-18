@@ -20,12 +20,12 @@ public class AddClientBankAccountMapper extends RestMapper<AddClientBankAccountI
 	@Autowired AddClientBankAccountApiConsumer addClientBankAccountApiConsumer;
 
 	
-	public void consumeRestServiceInALoop(BusinessAzimutClient businessAzimutClient,BusinessUser businessUser) throws HttpClientErrorException, IntegrationException, Exception
+	public void consumeRestServiceInALoop(BusinessAzimutClient businessAzimutClient,String azId,Long azIdType) throws HttpClientErrorException, IntegrationException, Exception
 	{
 		for(BusinessClientBankAccountDetails businessClientBankAccountDetails:businessAzimutClient.getClientBankAccounts())
 		{ 
-			businessClientBankAccountDetails.setAzId(businessUser.getUserId());
-			businessClientBankAccountDetails.setAzIdType(businessUser.getIdType());
+			businessClientBankAccountDetails.setAzId(azId);
+			businessClientBankAccountDetails.setAzIdType(azIdType);
 			this.consumeRestService(businessClientBankAccountDetails, null);
 		}
 	}
