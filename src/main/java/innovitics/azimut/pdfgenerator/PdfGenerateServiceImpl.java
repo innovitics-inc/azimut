@@ -36,9 +36,6 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
     private TemplateEngine templateEngine;
     @Autowired BlobFileUtility blobFileUtility;
 
-    @Value("${pdf.directory}")
-    private String pdfDirectory;
-
     @Override
     public void generatePdfFile(String templateName, Map<String, Object> data, String pdfFileName) {
         Context context = new Context();
