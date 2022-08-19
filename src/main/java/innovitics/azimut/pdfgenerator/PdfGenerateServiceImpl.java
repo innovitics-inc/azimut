@@ -39,7 +39,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
         String htmlContent = templateEngine.process(templateName, context);
         try {
         	this.logger.info("generating the PDF file:::::::::::::::::::::::");
-            FileOutputStream fileOutputStream = new FileOutputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName+"1");            
+            FileOutputStream fileOutputStream = new FileOutputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);            
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(htmlContent);
             renderer.layout();
@@ -47,10 +47,10 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             renderer.finishPDF();
             
             File file=new File("//home//site//wwwroot//webapps"+"//"+ pdfFileName);
-            FileInputStream fin=new FileInputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName+"1");
+            FileInputStream fin=new FileInputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);
             
             try {
-				this.blobFileUtility.uploadFileToBlob(fin, pdfFileName+"1", file.getTotalSpace(), true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear());
+				this.blobFileUtility.uploadFileToBlob(fin, pdfFileName, file.getTotalSpace(), true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear());
 			} catch (BusinessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
