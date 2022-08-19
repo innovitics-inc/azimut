@@ -50,7 +50,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             FileInputStream fin=new FileInputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);
             
             try {
-				this.blobFileUtility.uploadFileToBlob(fin, pdfFileName, file.getTotalSpace(), true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear());
+				this.blobFileUtility.uploadFileToBlob(fin, pdfFileName, file.length(), true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear());
 			} catch (BusinessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
