@@ -42,8 +42,9 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 			this.validation.validateAuthenticationCredentials(authenticationRequest);
 			businessUser=this.businessUserService.beautifyUser(this.businessUserService.getByUserPhoneAndPassword(authenticationRequest.getCountryPhoneCode()+authenticationRequest.getPhoneNumber(),authenticationRequest.getPassword(),authenticationRequest.getDeviceId()));
 			
+			this.logger.info("Going to the executor:::::");
 			executor.execute();
-			
+			this.logger.info("After the executor:::::");
 			return this.generateBaseGenericResponse(AuthenticationResponse.class, new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);
 			
 		} 

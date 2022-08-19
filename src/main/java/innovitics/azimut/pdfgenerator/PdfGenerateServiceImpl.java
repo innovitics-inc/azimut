@@ -43,7 +43,8 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 
         String htmlContent = templateEngine.process(templateName, context);
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(this.configProperties.getLogFilePath() + pdfFileName);            
+        	this.logger.info("generating the PDF file:::::::::::::::::::::::");
+            FileOutputStream fileOutputStream = new FileOutputStream(this.configProperties.getLogFilePath()+"\\"+ pdfFileName);            
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(htmlContent);
             renderer.layout();
@@ -52,8 +53,12 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage(), e);
+            this.logger.info("Failed to generate::::");
+            e.printStackTrace();
         } catch (DocumentException e) {
             logger.error(e.getMessage(), e);
+            this.logger.info("Failed to generate::::");
+            e.printStackTrace();
         }
        
     }
