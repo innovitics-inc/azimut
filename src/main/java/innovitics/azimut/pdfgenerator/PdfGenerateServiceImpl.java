@@ -48,6 +48,8 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             
             File file=new File("//home//site//wwwroot//webapps"+"//"+ pdfFileName);
             FileInputStream fin=new FileInputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);
+            file.delete();
+            
             
             try {
 				this.blobFileUtility.uploadFileToBlob(fin, pdfFileName, file.length(), true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear());
