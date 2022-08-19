@@ -44,7 +44,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
         String htmlContent = templateEngine.process(templateName, context);
         try {
         	this.logger.info("generating the PDF file:::::::::::::::::::::::");
-            FileOutputStream fileOutputStream = new FileOutputStream(this.configProperties.getLogFilePath()+"\\"+ pdfFileName);            
+            FileOutputStream fileOutputStream = new FileOutputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);            
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(htmlContent);
             renderer.layout();
