@@ -1,5 +1,6 @@
 package innovitics.azimut.utilities.fileutilities;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.OffsetDateTime;
@@ -173,6 +174,30 @@ public class BlobFileUtility extends ParentUtility{
 		this.logger.info("Blob URL::::::: "+blobData.getBlobClient().getBlobUrl());
 		return blobData;
 	}
-	
+	public BlobData uploadFileToBlob(InputStream inputStream,String fileName,Long fileSize,boolean generateSasToken,String containerName,String subDirectory) throws IOException, BusinessException 
+	{	
+		BlobData blobData=new BlobData();
+		if(!StringUtility.isStringPopulated(subDirectory))
+		subDirectory=DateUtility.getCurrentYearMonth();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();
+		try 
+		{
+		blobClient.upload(inputStream,fileSize);
+		blobData.setUrl(blobClient.getBlobUrl());
+		blobData.setFileName(fileName);
+		blobData.setFileSize(fileUtility.getApproximatedFileSizeInMegabytes(fileSize));
+		blobData.setSubDirectory(subDirectory);
+		if (generateSasToken) 
+			blobData.setToken(this.generateSasTokenString(blobClient));		
+		this.logger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
+		}
+		catch(Exception exception)
+		{
+			this.logger.info("Could not upload the file.");
+			exception.printStackTrace();
+			throw new BusinessException(ErrorCode.UPLOAD_FAILURE);
+		}
+		return blobData;
+	}
 
 }

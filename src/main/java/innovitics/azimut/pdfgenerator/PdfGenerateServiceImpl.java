@@ -1,7 +1,5 @@
 package innovitics.azimut.pdfgenerator;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,14 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -25,6 +19,7 @@ import com.lowagie.text.DocumentException;
 
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
 
 @Service
@@ -44,12 +39,28 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
         String htmlContent = templateEngine.process(templateName, context);
         try {
         	this.logger.info("generating the PDF file:::::::::::::::::::::::");
-            FileOutputStream fileOutputStream = new FileOutputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);            
+            FileOutputStream fileOutputStream = new FileOutputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName+"1");            
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(htmlContent);
             renderer.layout();
             renderer.createPDF(fileOutputStream, false);
             renderer.finishPDF();
+            
+            File file=new File("//home//site//wwwroot//webapps"+"//"+ pdfFileName);
+            FileInputStream fin=new FileInputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName+"1");
+            
+            try {
+				this.blobFileUtility.uploadFileToBlob(fin, pdfFileName+"1", file.getTotalSpace(), true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear());
+			} catch (BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            
+            
             
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage(), e);
