@@ -173,7 +173,6 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutDetails(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			this.logger.info("add log");
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getAzimutDetails(),null,null);
 		}		
 		catch(BusinessException businessException)
