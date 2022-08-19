@@ -1,6 +1,7 @@
 package innovitics.azimut.utilities.fileutilities;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -56,24 +57,6 @@ public class BlobFileUtility extends ParentUtility{
 		}
 		return blobData;
 	}
-	/*public BlobData uploadFileToBlob(MultipartFile file,boolean generateSasToken,String containerName,String subDirectory) throws IOException {
-		String fileName= file!=null?file.getOriginalFilename():this.generateRandomName(null);
-		BlobData blobData=new BlobData();
-		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();
-		blobClient.upload(file.getInputStream(), file.getSize(), true);
-		
-		blobData.setUrl(blobClient.getBlobUrl());
-		blobData.setFileName(fileName);
-		blobData.setFileSize(fileUtility.getApproximatedFileSizeInMegabytes(file.getSize()));
-		blobData.setSubDirectory(subDirectory);
-		if (generateSasToken) 
-			blobData.setToken(this.generateSasTokenString(blobClient));		
-		this.logger.info("Generated URL:::"+blobData.getUrl());
-		return blobData;
-	}*/
-
-	
-	
 	
 		private BlobData generateBlobClientAndFileName(String path,String fileName,BlobData blobData)
 		{
@@ -190,4 +173,6 @@ public class BlobFileUtility extends ParentUtility{
 		this.logger.info("Blob URL::::::: "+blobData.getBlobClient().getBlobUrl());
 		return blobData;
 	}
+	
+
 }

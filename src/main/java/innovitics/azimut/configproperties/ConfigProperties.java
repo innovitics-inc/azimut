@@ -111,6 +111,11 @@ public class ConfigProperties {
     @Value("${valify.number.of.trials}")
     private String valifyTrialCount;
     
+    
+    @Value("${log.file.path}")
+    private String logFilePath;
+    
+    
 	public String getBlobConnectionString() {
 		return blobConnectionString;
 	}
@@ -214,6 +219,9 @@ public class ConfigProperties {
 	}
 	public String getValifyTrialCount() {
 		return valifyTrialCount;
+	}
+	public String getLogFilePath() {
+		return logFilePath;
 	}
     
     

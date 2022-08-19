@@ -19,6 +19,7 @@ import innovitics.azimut.businessservices.BusinessUserService;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.pdfgenerator.Executor;
 import innovitics.azimut.utilities.businessutilities.EmailUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
@@ -30,6 +31,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 
 	@Autowired BusinessUserService  businessUserService;
 	@Autowired EmailUtility emailUtility;
+	@Autowired Executor executor;
 
 	@RequestMapping(value="/authenticate", method=RequestMethod.POST)
 	public ResponseEntity<BaseGenericResponse<AuthenticationResponse>> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception, BusinessException
@@ -39,6 +41,8 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 			this.logger.info("Authentication Request:::"+authenticationRequest.toString());
 			this.validation.validateAuthenticationCredentials(authenticationRequest);
 			businessUser=this.businessUserService.beautifyUser(this.businessUserService.getByUserPhoneAndPassword(authenticationRequest.getCountryPhoneCode()+authenticationRequest.getPhoneNumber(),authenticationRequest.getPassword(),authenticationRequest.getDeviceId()));
+			
+			executor.execute();
 			
 			return this.generateBaseGenericResponse(AuthenticationResponse.class, new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);
 			
