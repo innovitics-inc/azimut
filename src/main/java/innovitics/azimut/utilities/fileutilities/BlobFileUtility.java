@@ -91,7 +91,11 @@ public class BlobFileUtility extends ParentUtility{
 		UUID uuid=UUID.randomUUID();
 		return uuid.toString()+extension;
 	}
-	
+	String 	generateRandomName(String extension)
+	{
+		UUID uuid=UUID.randomUUID();
+		return uuid.toString()+"."+extension;
+	}
 	public String generateFileRetrievalUrl(String path,String fileName,String subDirectory,boolean generateWithToken) throws IOException
 	{
 		BlobData blobData=new BlobData();
@@ -178,12 +182,12 @@ public class BlobFileUtility extends ParentUtility{
 		this.logger.info("Blob URL::::::: "+blobData.getBlobClient().getBlobUrl());
 		return blobData;
 	}
-	public BlobData uploadFileToBlob(InputStream inputStream,boolean generateSasToken,String containerName,String subDirectory) throws IOException, BusinessException 
+	public BlobData uploadFileToBlob(InputStream inputStream,boolean generateSasToken,String containerName,String subDirectory,String extension) throws IOException, BusinessException 
 	{	
 		BlobData blobData=new BlobData();
 		if(!StringUtility.isStringPopulated(subDirectory))
 		subDirectory=DateUtility.getCurrentYearMonth();
-		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,this.generateRandomName(null),blobData).getBlobClient();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,this.generateRandomName(extension),blobData).getBlobClient();
 		try 
 		{
 		blobClient.upload(BinaryData.fromStream(inputStream));
