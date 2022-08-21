@@ -3,13 +3,17 @@ package innovitics.azimut.utilities.fileutilities;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.WritableResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.azure.core.management.Resource;
+import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
@@ -24,7 +28,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 @Component
 public class BlobFileUtility extends ParentUtility{
  @Autowired FileUtility fileUtility;
-	
+ private Resource blobFile;
 	public BlobData uploadFileToBlob(MultipartFile file,boolean generateSasToken,String containerName,String subDirectory,boolean useOriginalFileName) throws IOException, BusinessException {
 		String fileName="";
 		BlobData blobData=new BlobData();
@@ -174,18 +178,16 @@ public class BlobFileUtility extends ParentUtility{
 		this.logger.info("Blob URL::::::: "+blobData.getBlobClient().getBlobUrl());
 		return blobData;
 	}
-	public BlobData uploadFileToBlob(InputStream inputStream,String fileName,Long fileSize,boolean generateSasToken,String containerName,String subDirectory) throws IOException, BusinessException 
+	public BlobData uploadFileToBlob(InputStream inputStream,boolean generateSasToken,String containerName,String subDirectory) throws IOException, BusinessException 
 	{	
 		BlobData blobData=new BlobData();
 		if(!StringUtility.isStringPopulated(subDirectory))
 		subDirectory=DateUtility.getCurrentYearMonth();
-		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,this.generateRandomName(null),blobData).getBlobClient();
 		try 
 		{
-		blobClient.upload(inputStream,fileSize);
+		blobClient.upload(BinaryData.fromStream(inputStream));
 		blobData.setUrl(blobClient.getBlobUrl());
-		blobData.setFileName(fileName);
-		blobData.setFileSize(fileUtility.getApproximatedFileSizeInMegabytes(fileSize));
 		blobData.setSubDirectory(subDirectory);
 		if (generateSasToken) 
 			blobData.setToken(this.generateSasTokenString(blobClient));		
@@ -199,5 +201,5 @@ public class BlobFileUtility extends ParentUtility{
 		}
 		return blobData;
 	}
-
+	
 }

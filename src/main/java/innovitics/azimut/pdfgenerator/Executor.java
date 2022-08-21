@@ -1,5 +1,6 @@
 package innovitics.azimut.pdfgenerator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class Executor {
 	  @Autowired
 	    private PdfGenerateService pdfGenerateService;
-	public void execute () {
+	public void execute () throws IOException {
 		  Map<String, Object> data = new HashMap<>();
 	        Customer customer = new Customer();
 	        customer.setCompanyName("Simple Solution");
