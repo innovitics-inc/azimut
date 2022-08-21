@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +55,33 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             file.delete();
             */
             
-            PipedOutputStream pipedOutputStream = new PipedOutputStream();
-            PipedInputStream pipedInputStream = new PipedInputStream(pipedOutputStream);
-            this.read(pipedInputStream,pipedOutputStream);
+           // PipedOutputStream pipedOutputStream = new PipedOutputStream();
+           // PipedInputStream pipedInputStream = new PipedInputStream(pipedOutputStream);
+            
+           
+           
+            
+            //this.read(pipedInputStream,pipedOutputStream);
+            
+            
+			/*
+			  PipedInputStream pipedInputStream = new PipedInputStream(); PipedOutputStream
+			  pipedOutputStream = new PipedOutputStream(pipedInputStream ); 
+			  new Thread( new
+			  	Runnable()
+			  		{ 
+			  			public void run()
+			  			{
+			  				class1.putDataOnOutputStream(pipedOutputStream); 
+			  			}	
+			   		} 
+			   ).start();
+			  class2.processDataFromInputStream(pipedInputStream);
+			 */
             
             try {
-				this.blobFileUtility.uploadFileToBlob(pipedInputStream, true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear(),".pdf");
+				this.blobFileUtility.uploadFileToBlob(null, true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear(),".pdf");
+				
 			} catch (BusinessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
