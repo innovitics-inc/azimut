@@ -90,8 +90,8 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> saveUserTemporarily(@RequestBody BusinessUser businessUser) throws BusinessException {
 		try
 		{
-			BusinessUser resoonseBusinessUser=this.businessUserService.saveUser(businessUser);
-			return this.generateBaseGenericResponse(AuthenticationResponse.class,new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(resoonseBusinessUser),resoonseBusinessUser),null,null);
+			BusinessUser responseBusinessUser=this.businessUserService.saveUser(businessUser);
+			return this.generateBaseGenericResponse(AuthenticationResponse.class,new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(responseBusinessUser),responseBusinessUser),null,null);
 		}
 		
 		catch(BusinessException businessException)
