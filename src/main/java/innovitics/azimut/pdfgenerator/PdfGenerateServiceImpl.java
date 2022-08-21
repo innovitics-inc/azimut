@@ -49,38 +49,13 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             renderer.layout();
             renderer.createPDF(fileOutputStream, false);
             renderer.finishPDF();
-            /*
+            
             File file=new File("//home//site//wwwroot//webapps"+"//"+ pdfFileName);
-            FileInputStream fin=new FileInputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);            
+            FileInputStream fileInputStream=new FileInputStream("//home//site//wwwroot//webapps"+"//"+ pdfFileName);            
             file.delete();
-            */
-            
-           // PipedOutputStream pipedOutputStream = new PipedOutputStream();
-           // PipedInputStream pipedInputStream = new PipedInputStream(pipedOutputStream);
-            
-           
-           
-            
-            //this.read(pipedInputStream,pipedOutputStream);
-            
-            
-			/*
-			  PipedInputStream pipedInputStream = new PipedInputStream(); PipedOutputStream
-			  pipedOutputStream = new PipedOutputStream(pipedInputStream ); 
-			  new Thread( new
-			  	Runnable()
-			  		{ 
-			  			public void run()
-			  			{
-			  				class1.putDataOnOutputStream(pipedOutputStream); 
-			  			}	
-			   		} 
-			   ).start();
-			  class2.processDataFromInputStream(pipedInputStream);
-			 */
             
             try {
-				this.blobFileUtility.uploadFileToBlob(null, true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear(),".pdf");
+				this.blobFileUtility.uploadFileToBlob(fileInputStream, true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear(),".pdf");
 				
 			} catch (BusinessException e) {
 				// TODO Auto-generated catch block
@@ -103,42 +78,6 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             e.printStackTrace();
         }
        
-    }
-    
-    void read(PipedInputStream pipedInputStream,PipedOutputStream pipedOutputStream)
-    {
-    	
-         Thread thread2 = new Thread(new Runnable() {
-             @Override
-             public void run() {
-                 try {
-                     int data = pipedInputStream.read();
-                     System.out.print("Reading data using pipedInputStream:");
-                     while (data != -1) {
-                         System.out.print((char) data);
-                         data = pipedInputStream.read();
-                     }
-                 } catch (IOException e) {
-
-                 } finally {
-                     // Closing the streams
-                     if (pipedOutputStream != null)
-                         try {
-                             pipedOutputStream.close();
-                         } catch (IOException e) {
-                             e.printStackTrace();
-                         }
-                     if (pipedInputStream != null) {
-                         try {
-                             pipedInputStream.close();
-                         } catch (IOException e) {
-                             e.printStackTrace();
-                         }
-                     }
-                 }
-             }
-         });
-         thread2.start();
     }
  
 }

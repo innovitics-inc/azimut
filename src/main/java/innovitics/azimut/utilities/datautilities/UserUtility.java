@@ -215,7 +215,9 @@ public class UserUtility extends ParentUtility{
 		} 
 		catch (Exception exception) 
 		{
-			return (UserLocation)this.exceptionHandler.getNullIfNonExistent(exception);
+			this.exceptionHandler.getNullIfNonExistent(exception);
+			return new UserLocation();
 		}
+		
 	}
 }
