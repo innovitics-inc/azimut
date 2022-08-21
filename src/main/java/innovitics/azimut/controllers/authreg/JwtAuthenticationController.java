@@ -31,7 +31,6 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 
 	@Autowired BusinessUserService  businessUserService;
 	@Autowired EmailUtility emailUtility;
-	@Autowired Executor executor;
 
 	@RequestMapping(value="/authenticate", method=RequestMethod.POST)
 	public ResponseEntity<BaseGenericResponse<AuthenticationResponse>> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception, BusinessException
@@ -42,9 +41,6 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 			this.validation.validateAuthenticationCredentials(authenticationRequest);
 			businessUser=this.businessUserService.beautifyUser(this.businessUserService.getByUserPhoneAndPassword(authenticationRequest.getCountryPhoneCode()+authenticationRequest.getPhoneNumber(),authenticationRequest.getPassword(),authenticationRequest.getDeviceId()));
 			
-			this.logger.info("Going to the executor:::::");
-			executor.execute();
-			this.logger.info("After the executor:::::");
 			return this.generateBaseGenericResponse(AuthenticationResponse.class, new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);
 			
 		} 
@@ -70,8 +66,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 		
 	
 	}
-	
-	
+		
 	@PostMapping(value="/forgotPassword",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
@@ -80,6 +75,23 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 		{
 			BusinessUser businessUser=this.businessUserService.beautifyUser(this.businessUserService.forgotUserPassword(authenticationRequest));
 			return this.generateBaseGenericResponse(AuthenticationResponse.class,new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);
+		}
+		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+	
+	@PostMapping(value="/saveUserTemporarily",
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> saveUserTemporarily(@RequestBody BusinessUser businessUser) throws BusinessException {
+		try
+		{
+			BusinessUser resoonseBusinessUser=this.businessUserService.saveUser(businessUser);
+			return this.generateBaseGenericResponse(AuthenticationResponse.class,new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(resoonseBusinessUser),resoonseBusinessUser),null,null);
 		}
 		
 		catch(BusinessException businessException)
