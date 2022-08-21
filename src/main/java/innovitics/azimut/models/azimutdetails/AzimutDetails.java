@@ -21,7 +21,9 @@ public class AzimutDetails extends BaseEntity{
 	private String getDirections;
 	private String contactUs;
 	private String workingDays;
-
+	private String longt;
+	private String lat;
+	
 	
 	
 	public Long getId() {
@@ -47,6 +49,18 @@ public class AzimutDetails extends BaseEntity{
 	}
 	public void setWorkingDays(String workingDays) {
 		this.workingDays = workingDays;
+	}
+	public String getLongt() {
+		return longt;
+	}
+	public void setLongt(String longt) {
+		this.longt = longt;
+	}
+	public String getLat() {
+		return lat;
+	}
+	public void setLat(String lat) {
+		this.lat = lat;
 	}
 	
 	

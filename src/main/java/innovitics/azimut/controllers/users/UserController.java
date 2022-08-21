@@ -26,6 +26,7 @@ import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.user.UserLocation;
+import innovitics.azimut.pdfgenerator.Executor;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
@@ -36,7 +37,7 @@ import org.springframework.web.multipart.MultipartException;
 public class UserController extends BaseGenericRestController<BusinessUser,String> {
 
 	@Autowired BusinessUserService businessUserService;
-
+	@Autowired Executor executor;
 	@PostMapping(value="/getById",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
@@ -274,6 +275,14 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		{
 			return this.handleBaseGenericResponseException(businessException);
 		}
+		
+	}
+	
+	@GetMapping(value="/execute",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> execute(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException {
+		this.executor.execute();
+		return null;
 		
 	}
 
