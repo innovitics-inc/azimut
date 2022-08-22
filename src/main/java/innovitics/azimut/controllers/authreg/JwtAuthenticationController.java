@@ -40,7 +40,9 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 			this.logger.info("Authentication Request:::"+authenticationRequest.toString());
 			this.validation.validateAuthenticationCredentials(authenticationRequest);
 			businessUser=this.businessUserService.beautifyUser(this.businessUserService.getByUserPhoneAndPassword(authenticationRequest.getCountryPhoneCode()+authenticationRequest.getPhoneNumber(),authenticationRequest.getPassword(),authenticationRequest.getDeviceId()));
-			
+			String tmpdir = System.getProperty("java.io.tmpdir");
+			this.logger.info("Temp file path: " + tmpdir);
+			businessUser.setTempDirectory(tmpdir);
 			return this.generateBaseGenericResponse(AuthenticationResponse.class, new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);
 			
 		} 

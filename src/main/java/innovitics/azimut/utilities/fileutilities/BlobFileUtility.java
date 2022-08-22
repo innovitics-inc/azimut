@@ -1,6 +1,7 @@
 package innovitics.azimut.utilities.fileutilities;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.WritableResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.azure.core.management.Resource;
 import com.azure.core.util.BinaryData;
@@ -205,5 +207,19 @@ public class BlobFileUtility extends ParentUtility{
 		}
 		return blobData;
 	}
+	
+	public String downloadFileToBlob(String containerName,String subDirectory,String fileName) throws IOException, BusinessException 
+	{	
+		BlobData blobData=new BlobData();
+		if(!StringUtility.isStringPopulated(subDirectory))
+		subDirectory=DateUtility.getCurrentYearMonth();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();
+		File outputFile=new File("E:\\Backend Team\\Azimut\\"+fileName);
+		FileOutputStream fileOutputStream = new FileOutputStream(outputFile);            
+		blobClient.downloadStream(fileOutputStream);
+		fileOutputStream.close();
+		return "E:\\Backend Team\\Azimut\\"+fileName;
+	}
+	
 	
 }

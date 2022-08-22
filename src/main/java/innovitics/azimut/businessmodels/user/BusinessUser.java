@@ -52,7 +52,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private Boolean isInstitutional;
 	private Long azimutIdTypeId;
 	private UserLocation userLocation;
-	
+	private String tempDirectory;
 	private BusinessClientBankAccountDetails[] clientBankAccounts;
 	
 	public Date getCreatedAt() {
@@ -325,6 +325,13 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setUserLocation(UserLocation userLocation) {
 		this.userLocation = userLocation;
+	}
+	
+	public String getTempDirectory() {
+		return tempDirectory;
+	}
+	public void setTempDirectory(String tempDirectory) {
+		this.tempDirectory = tempDirectory;
 	}
 	public void concatinate()
 	{

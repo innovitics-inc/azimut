@@ -48,4 +48,10 @@ public class Executor {
 	        pdfGenerateService.generatePdfFile("quotation", data, "quotation.pdf");
 		
 	}
+	
+	public void download() 
+	{
+		pdfGenerateService.download();
+	}
+	
 }
