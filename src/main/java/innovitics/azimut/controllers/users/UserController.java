@@ -287,8 +287,8 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	}
 	@GetMapping(value="/download",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> download(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException {
-		this.executor.download();
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> download(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+		this.executor.downloadLoop();
 		return null;
 		
 	}

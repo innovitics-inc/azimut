@@ -1,5 +1,6 @@
 package innovitics.azimut.utilities.fileutilities;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -208,6 +209,29 @@ public class BlobFileUtility extends ParentUtility{
 		return blobData;
 	}
 	
+	public BlobData uploadFileToBlob(byte [] bytesArray,boolean generateSasToken,String containerName,String subDirectory,String extension) throws IOException, BusinessException 
+	{	
+		BlobData blobData=new BlobData();
+		if(!StringUtility.isStringPopulated(subDirectory))
+		subDirectory=DateUtility.getCurrentYearMonth();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,this.generateRandomName(extension),blobData).getBlobClient();
+		try 
+		{
+		blobClient.upload(BinaryData.fromBytes(bytesArray));
+		blobData.setUrl(blobClient.getBlobUrl());
+		blobData.setSubDirectory(subDirectory);
+		if (generateSasToken) 
+			blobData.setToken(this.generateSasTokenString(blobClient));		
+		this.logger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
+		}
+		catch(Exception exception)
+		{
+			this.logger.info("Could not upload the file.");
+			exception.printStackTrace();
+			throw new BusinessException(ErrorCode.UPLOAD_FAILURE);
+		}
+		return blobData;
+	}
 	public String downloadFileToBlob(String containerName,String subDirectory,String fileName) throws IOException, BusinessException 
 	{	
 		BlobData blobData=new BlobData();
@@ -219,6 +243,18 @@ public class BlobFileUtility extends ParentUtility{
 		blobClient.downloadStream(fileOutputStream);
 		fileOutputStream.close();
 		return "E:\\Backend Team\\Azimut\\"+fileName;
+	}
+	public ByteArrayOutputStream downloadStreamFromBlob(String containerName,String subDirectory,String fileName) throws IOException, BusinessException 
+	{	
+		BlobData blobData=new BlobData();
+		if(!StringUtility.isStringPopulated(subDirectory))
+		subDirectory=DateUtility.getCurrentYearMonth();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();
+		
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();            
+		blobClient.downloadStream(byteArrayOutputStream);
+		byteArrayOutputStream.close();
+		return byteArrayOutputStream;
 	}
 	
 	

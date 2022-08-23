@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import innovitics.azimut.exceptions.BusinessException;
 @Service
 public class Executor {
 	  @Autowired
@@ -51,7 +53,10 @@ public class Executor {
 	
 	public void download() 
 	{
-		pdfGenerateService.download();
+		pdfGenerateService.downloadAndMerge();
 	}
-	
+	public void downloadLoop() throws BusinessException, IOException 
+	{
+		pdfGenerateService.downloadAndMergeLoop();
+	}
 }

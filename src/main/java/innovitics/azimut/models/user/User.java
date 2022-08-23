@@ -88,6 +88,7 @@ public class User extends BaseEntity {
 	private Integer failureNumber;
 	
 	private Boolean isInstitutional;
+	private Boolean livenessChecked;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -388,6 +389,13 @@ public class User extends BaseEntity {
 	}
 	public void setIsInstitutional(Boolean isInstitutional) {
 		this.isInstitutional = isInstitutional;
+	}
+	
+	public Boolean getLivenessChecked() {
+		return livenessChecked;
+	}
+	public void setLivenessChecked(Boolean livenessChecked) {
+		this.livenessChecked = livenessChecked;
 	}
 	public void concatinate()
 	{

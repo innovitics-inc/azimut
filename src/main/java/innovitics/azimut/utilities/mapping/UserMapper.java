@@ -9,6 +9,7 @@ import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.crosslayerenums.UserIdType;
+import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
@@ -153,6 +154,9 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 					user.setTeacomputersNationalityId(azimutAccount.getNationalityId());
 			}
 			
+			if(BooleanUtility.isTrue(businessUser.getLivenessChecked()))
+				user.setLivenessChecked(true);
+			
 			if(BooleanUtility.isTrue(businessUser.getIsInstitutional()))
 				user.setIsInstitutional(true);
 			
@@ -243,7 +247,14 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			if(user.getUserStep()!=null)
 			{
 				businessUser.setUserStep(user.getUserStep().intValue());
+				
+				if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.CLIENT_DATA.getStepId()))
+				businessUser.setNextUserStep(user.getUserStep().intValue()+2);
+				
+				else
 				businessUser.setNextUserStep(user.getUserStep().intValue()+1);
+				
+				
 			}
 			else if(user.getUserStep()==null)
 			{
@@ -325,7 +336,9 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 						azimutAccount.setNationalityId(user.getTeacomputersNationalityId());
 					
 			businessUser.setAzimutAccount(azimutAccount);		
-					
+			
+			if(user.getLivenessChecked()!=null)
+			businessUser.setLivenessChecked(user.getLivenessChecked());
 							
 			
 			businessUser.concatinate();
@@ -447,8 +460,9 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 				if(businessUser.getGenderId()!=null)
 					oldBusinessUser.setGenderId(businessUser.getGenderId());
 
-
-		     
+				if(businessUser.getLivenessChecked()!=null)
+					oldBusinessUser.setLivenessChecked(businessUser.getLivenessChecked());
+					
 			businessUser.concatinate();
 			oldBusinessUser.concatinate();
 

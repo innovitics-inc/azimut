@@ -35,6 +35,7 @@ public enum ErrorCode {
 	USE_MOBILE(2122,"Please use the mobile app to take the pictures for a better experience."),
 	TOO_MANY_USER_LOCATIONS(2123,"More than one user was found having this phone."),
 	USER_LOCATION_NOT_SAVED(2124,"Could not save the user location."),
+	INVALID_USER_STEP(2125,"Invalid userStep")
 	;
 	
 	private final int code;

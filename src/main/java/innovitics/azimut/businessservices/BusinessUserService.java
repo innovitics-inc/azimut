@@ -24,6 +24,7 @@ import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ChangePhoneNumberRequestUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.datautilities.UserUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
@@ -369,6 +370,17 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	{
 		try 
 		{
+		
+			if(NumberUtility.areIntegerValuesMatching(userStep, UserStep.STRAIGHT_AND_SMILE.getStepId()))
+			{
+				throw new BusinessException(ErrorCode.INVALID_USER_STEP);
+			}
+			
+			if(NumberUtility.areIntegerValuesMatching(userStep, UserStep.LEFT_AND_RIGHT.getStepId()))
+			{
+				businessUser.setLivenessChecked(true);
+			}
+			
 			
 			this.editUser(this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, userStep));	
 		}

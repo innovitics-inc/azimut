@@ -53,6 +53,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private Long azimutIdTypeId;
 	private UserLocation userLocation;
 	private String tempDirectory;
+	private Boolean livenessChecked;
 	private BusinessClientBankAccountDetails[] clientBankAccounts;
 	
 	public Date getCreatedAt() {
@@ -332,6 +333,13 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setTempDirectory(String tempDirectory) {
 		this.tempDirectory = tempDirectory;
+	}
+	
+	public Boolean getLivenessChecked() {
+		return livenessChecked;
+	}
+	public void setLivenessChecked(Boolean livenessChecked) {
+		this.livenessChecked = livenessChecked;
 	}
 	public void concatinate()
 	{
