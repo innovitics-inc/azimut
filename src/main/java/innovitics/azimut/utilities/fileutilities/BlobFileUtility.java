@@ -5,21 +5,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.WritableResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.management.Resource;
 import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
+import com.azure.storage.blob.models.BlobItem;
 import com.azure.storage.blob.sas.BlobSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
 
@@ -152,6 +153,58 @@ public class BlobFileUtility extends ParentUtility{
 		
 	}
 	
+	public void deleteAllFilesFromBlob(String containerName,String subDirectory) throws IOException {
+		this.logger.info("accessing delete all");
+		try 
+		{
+		
+			this.deleteAtLocation(containerName,subDirectory);
+			
+		}
+		catch(Exception exception)
+		{
+			this.logger.info("Could not delete the directory");
+			exception.printStackTrace();
+		}
+		
+	}
+	
+	
+	public  void deleteAtLocation(String container, String historical) 
+	{
+		BlobContainerClient  blobContainerClient = new BlobContainerClientBuilder()
+				.connectionString(this.configProperties.getBlobConnectionString())
+				.containerName(container).buildClient();
+		
+		if (checkIfPathExists(blobContainerClient, historical)) 
+		   {
+		        List<BlobItem> collect = blobContainerClient.listBlobsByHierarchy(historical).stream().collect(Collectors.toList());
+		        for (BlobItem blobItem : collect) 
+		        {
+		            String name = blobItem.getName();
+		            this.logger.info("Blob Item Name:::"+name);
+		            if (name.endsWith("/")) 
+		            {
+		              this.logger.info("Accessing Folder");		              
+		              deleteAtLocation(container, name);
+		            } 
+		            else 
+		            {
+		            	this.logger.info("Accessing File");
+		            	blobContainerClient.getBlobClient(name).delete();
+		            }
+		        }
+		        
+		    }
+	}
+
+	public  boolean checkIfPathExists(BlobContainerClient blobContainerClient, String filePath) 
+	{
+	    this.logger.info("path exists? :::::"+blobContainerClient.exists());
+		return blobContainerClient.exists();
+	}
+	
+	
 	public void copyBlobFile(String sourceContainerName,String destinationContainerName,String subDirectory,String fileName,boolean generateSasToken) throws IOException {
 		this.logger.info("accessing read");
 		try 
@@ -209,12 +262,12 @@ public class BlobFileUtility extends ParentUtility{
 		return blobData;
 	}
 	
-	public BlobData uploadFileToBlob(byte [] bytesArray,boolean generateSasToken,String containerName,String subDirectory,String extension) throws IOException, BusinessException 
+	public BlobData uploadFileToBlob(byte [] bytesArray,boolean generateSasToken,String containerName,String subDirectory,String fileName,String extension) throws IOException, BusinessException 
 	{	
 		BlobData blobData=new BlobData();
 		if(!StringUtility.isStringPopulated(subDirectory))
 		subDirectory=DateUtility.getCurrentYearMonth();
-		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,this.generateRandomName(extension),blobData).getBlobClient();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName+"."+extension,blobData).getBlobClient();
 		try 
 		{
 		blobClient.upload(BinaryData.fromBytes(bytesArray));

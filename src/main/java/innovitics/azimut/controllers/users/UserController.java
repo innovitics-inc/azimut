@@ -38,6 +38,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 
 	@Autowired BusinessUserService businessUserService;
 	@Autowired Executor executor;
+	@Autowired BlobFileUtility blobFileUtility;
 	@PostMapping(value="/getById",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
@@ -292,5 +293,13 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		return null;
 		
 	}
+	@GetMapping(value="/deleteAll",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> deleteAll(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+		this.blobFileUtility.deleteAllFilesFromBlob(this.configProperties.getBlobKYCDocumentsContainer(),"Users");
+		return null;
+		
+	}
 
 }
+

@@ -32,6 +32,7 @@ public final class StringUtility extends ParentUtility{
 	public final static String ENGLISH="en";
 	public final static String ARABIC="ar";
 	public final static String LANGUAGE="lang";
+	public final static String PAGE_NUMBER="page-";
 	
 	public static String getClassName(Object object)
 	{

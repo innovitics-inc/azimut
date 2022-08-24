@@ -40,6 +40,9 @@ public class ConfigProperties {
     @Value("${blob.container.name.kyc.documents.temp}")
     private String blobKYCDocumentsTemp;
     
+    @Value("${blob.container.name.kyc.documents.container}")
+    private String blobKYCDocumentsContainer;
+    
     @Value("${blob.temp.deletion.hours}")
     private String blobTempDeletionInHours;
     
@@ -148,6 +151,9 @@ public class ConfigProperties {
 		return blobKYCDocumentsTemp;
 	}
 	
+	public String getBlobKYCDocumentsContainer() {
+		return blobKYCDocumentsContainer;
+	}
 	public String getBlobTempDeletionInHours() {
 		return blobTempDeletionInHours;
 	}

@@ -11,7 +11,7 @@ public class BusinessKYCPage extends BaseBusinessEntity{
 	private Long id;
 	private UserType userType;
 	private String title;
-	private int pageOrder;
+	private Integer pageOrder;
 	private String pageDetails;
 	private String pageDisclaimer;
 	private int noOfQuestions;
@@ -41,10 +41,10 @@ public class BusinessKYCPage extends BaseBusinessEntity{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public int getPageOrder() {
+	public Integer getPageOrder() {
 		return pageOrder;
 	}
-	public void setPageOrder(int pageOrder) {
+	public void setPageOrder(Integer pageOrder) {
 		this.pageOrder = pageOrder;
 	}
 	public String getPageDetails() {

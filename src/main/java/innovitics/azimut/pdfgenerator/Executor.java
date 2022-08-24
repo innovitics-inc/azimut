@@ -47,7 +47,7 @@ public class Executor {
 	        quoteItems.add(quoteItem3);
 
 	        data.put("quoteItems", quoteItems);
-	        pdfGenerateService.generatePdfFile("quotation", data, "quotation.pdf");
+	        //pdfGenerateService.generatePdfFile("quotation", data, "quotation.pdf");
 		
 	}
 	

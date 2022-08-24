@@ -1,27 +1,39 @@
 package innovitics.azimut.businessservices;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import innovitics.azimut.businessmodels.kyc.BusinessKYCPage;
+import innovitics.azimut.businessmodels.kyc.BusinessQuestion;
+import innovitics.azimut.businessmodels.kyc.BusinessSubmittedAnswer;
 import innovitics.azimut.businessmodels.kyc.BusinessUserAnswerSubmission;
+import innovitics.azimut.businessmodels.kyc.BusinessUserSubmittedAnswer;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.models.kyc.KYCPage;
+import innovitics.azimut.models.kyc.Question;
 import innovitics.azimut.models.kyc.UserAnswer;
+import innovitics.azimut.pdfgenerator.PdfGenerateService;
 import innovitics.azimut.services.kyc.KYCPageService;
 import innovitics.azimut.services.kyc.UserAnswerSubmissionService;
 import innovitics.azimut.utilities.crosslayerenums.AnswerType;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.kycutilities.AnswerTypeUtility;
+import innovitics.azimut.utilities.mapping.kyc.KYCPageMapper;
 import innovitics.azimut.utilities.mapping.kyc.UserAnswerMapper;
 import innovitics.azimut.utilities.mapping.kyc.UserAnswersIntermediary;
 @Service
@@ -33,7 +45,9 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	@Autowired AnswerTypeUtility  answerTypeUtility;
 	@Autowired BusinessUserService businessUserService;
 	@Autowired KYCPageService kycPageService;
-
+	@Autowired PdfGenerateService pdfGenerateService;
+	@Autowired ListUtility<BusinessQuestion> questionListUtility;
+	@Autowired KYCPageMapper kycPageMapper;
 	public BusinessKYCPage submitAnswers(BusinessUser businessUser,BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException
 	{
 		
@@ -48,6 +62,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 				businessUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, businessUserAnswerSubmission.getUserStep());
 				businessKYCPage.setVerificationPercentage(this.updateUserProgress(businessUser, this.findPageWeight(businessUserAnswerSubmission.getPageId())));	
 				this.businessUserService.editUser(businessUser);
+				this.generatePdf(this.kycPageMapper.convertBasicUnitToBusinessUnit(this.kycPageService.getById(businessUserAnswerSubmission.getPageId()), businessUserAnswerSubmission.getLanguage(), false),businessUserAnswerSubmission,businessUser);
 		} 
 		catch (Exception exception) 
 		{			
@@ -60,6 +75,22 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	
 	
 	
+	private void generatePdf(BusinessKYCPage businessKYCPage,BusinessUserAnswerSubmission businessUserAnswerSubmission,BusinessUser businessUser) throws IOException 
+	{
+		this.pdfGenerateService.generatePdfFile("quotation", this.populateMapWithPageDetails(businessKYCPage,businessUserAnswerSubmission), StringUtility.PAGE_NUMBER+((businessKYCPage!=null&&businessKYCPage.getPageOrder()!=null)?businessKYCPage.getPageOrder():null),businessUser);
+	}
+
+
+
+	private Map<String, Object> populateMapWithPageDetails(BusinessKYCPage businessKYCPage,BusinessUserAnswerSubmission businessUserAnswerSubmission) {
+		this.matchAndAssign(businessKYCPage, businessUserAnswerSubmission.getUserAnswers());
+		Map<String, Object> map=new HashMap<String,Object>();
+		map.put("page", businessKYCPage);
+		return map;
+	}
+
+
+
 	public void processAndSaveAnswers(Long userId,BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException
 	{
 		
@@ -232,4 +263,30 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		}
 		return null;
 	}
+	
+	private void matchAndAssign(BusinessKYCPage businessKYCPage,BusinessUserSubmittedAnswer[] userAnswers)
+	{
+		if(arrayUtility.isArrayPopulated(userAnswers)&&this.questionListUtility.isListPopulated(businessKYCPage.getQuestions()))
+		{
+			for(BusinessQuestion businessQuestion:businessKYCPage.getQuestions())
+			{
+				List<BusinessSubmittedAnswer> businessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
+				
+				for(BusinessUserSubmittedAnswer businessUserSubmittedAnswer:userAnswers)
+				{
+					if(NumberUtility.areLongValuesMatching(businessQuestion.getId(), businessUserSubmittedAnswer.getQuestionId()))
+					{
+						List<BusinessSubmittedAnswer> relevantBusinessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
+					    Collections.addAll(relevantBusinessSubmittedAnswers, businessUserSubmittedAnswer.getAnswers());
+						businessSubmittedAnswers.addAll(relevantBusinessSubmittedAnswers);
+					}
+				}
+				
+				businessQuestion.setUserAnswers(businessSubmittedAnswers);
+			}
+			
+		}
+	}
+	
+	
 }

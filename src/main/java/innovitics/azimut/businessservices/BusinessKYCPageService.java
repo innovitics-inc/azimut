@@ -37,7 +37,7 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 				kycPage.setAppUserId(userId);
 				kycPage.setDraw(draw);
 				
-				return this.generateUrls(this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language));
+				return this.generateUrls(this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language,true));
 		
 			}
 		catch (Exception exception) 

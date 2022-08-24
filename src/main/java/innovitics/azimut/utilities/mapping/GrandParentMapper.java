@@ -19,7 +19,7 @@ public abstract class GrandParentMapper <S extends BaseEntity, T extends BaseBus
 	protected  abstract S convertBusinessUnitToBasicUnit(T t , boolean save);
 	
 	protected  abstract T convertBasicUnitToBusinessUnit(S s);
-	protected  abstract T convertBasicUnitToBusinessUnit(S s,String language);
+	protected  abstract T convertBasicUnitToBusinessUnit(S s,String language,boolean answered);
 	
 	public T convertBusinessDatesToBasicDates(S baseEntity,T baseBusinessEntity,boolean save)
 	{

@@ -53,7 +53,7 @@ public class KYCPage  extends BaseEntity implements Serializable{
 	@JoinColumn(name="USER_ID_TYPE")
 	private UserType userType;
 	protected String title;
-	protected int pageOrder;
+	protected Integer pageOrder;
 	protected String pageDetails;
 	protected String pageDisclaimer;
 	protected int noOfQuestions;
@@ -106,10 +106,10 @@ public String getTitle() {
 public void setTitle(String title) {
 	this.title = title;
 }
-public int getPageOrder() {
+public Integer getPageOrder() {
 	return pageOrder;
 }
-public void setPageOrder(int pageOrder) {
+public void setPageOrder(Integer pageOrder) {
 	this.pageOrder = pageOrder;
 }
 public String getPageDetails() {

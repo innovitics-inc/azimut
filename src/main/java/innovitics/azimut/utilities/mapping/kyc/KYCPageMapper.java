@@ -159,7 +159,7 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 	}
 
 	@Override
-	public BusinessKYCPage convertBasicUnitToBusinessUnit(KYCPage kycPage, String language) 
+	public BusinessKYCPage convertBasicUnitToBusinessUnit(KYCPage kycPage, String language,boolean answered) 
 	{
 		BusinessKYCPage  businessKYCPage=new BusinessKYCPage();
 		
@@ -218,8 +218,10 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 				}
 				
 			}
-			
-			this.matchAndAssign(businessKYCPage,businessQuestions,businessSubQuestions,kycPage.getId(), kycPage.getAppUserId());
+			if(answered)
+			{
+				this.matchAndAssign(businessKYCPage,businessQuestions,businessSubQuestions,kycPage.getId(), kycPage.getAppUserId());
+			}
 			
 			if(kycPage!=null&&BooleanUtility.isTrue(kycPage.getDraw()))
 			
