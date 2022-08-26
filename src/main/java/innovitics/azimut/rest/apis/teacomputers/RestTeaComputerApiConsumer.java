@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import innovitics.azimut.rest.models.teacomputers.TeaComputerResponse;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.security.TeaComputersSignatureGenerator;
