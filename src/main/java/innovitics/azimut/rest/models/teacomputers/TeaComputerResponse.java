@@ -5,34 +5,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import innovitics.azimut.rest.models.BaseRestResponse;
 
 public class TeaComputerResponse extends BaseRestResponse{
-	protected String Signature;
+	protected String signature;
 
-	protected String Message;
+	protected String message;
 
-	protected String ErrorCode;
+	protected String errorCode;
 
 	public String getSignature() {
-		return Signature;
+		return signature;
 	}
 
 	public void setSignature(String signature) {
-		Signature = signature;
+		this.signature = signature;
 	}
 
 	public String getMessage() {
-		return Message;
+		return message;
 	}
 
 	public void setMessage(String message) {
-		Message = message;
+		this.message = message;
 	}
 
 	public String getErrorCode() {
-		return ErrorCode;
+		return errorCode;
 	}
 
 	public void setErrorCode(String errorCode) {
-		ErrorCode = errorCode;
+		this.errorCode = errorCode;
 	}
 
 	
