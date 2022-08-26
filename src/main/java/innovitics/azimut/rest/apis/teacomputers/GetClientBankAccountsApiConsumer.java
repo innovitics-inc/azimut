@@ -128,7 +128,7 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 
 	@Override
 	protected String generateSignature(GetClientBankAccountsRequest getClientBankAccountsRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature("",getClientBankAccountsRequest.getIdTypeId().toString(),getClientBankAccountsRequest.getIdNumber(),this.configProperties.getTeaComputersKey());
+		return this.teaComputersSignatureGenerator.generateSignature("",getClientBankAccountsRequest.getIdTypeId().toString(),getClientBankAccountsRequest.getIdNumber());
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 				if(clientBankAccountResponse!=null)
 				{
 					if((StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",clientBankAccountResponse.getBankId().toString(),
-							clientBankAccountResponse.getAccountNo(),this.configProperties.getTeaComputersKey()),clientBankAccountResponse.getSignature()!=null?clientBankAccountResponse.getSignature():null))
+							clientBankAccountResponse.getAccountNo()),clientBankAccountResponse.getSignature()!=null?clientBankAccountResponse.getSignature():null))
 							||!StringUtility.isStringPopulated(clientBankAccountResponse.getSignature()))
 					{
 						throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);

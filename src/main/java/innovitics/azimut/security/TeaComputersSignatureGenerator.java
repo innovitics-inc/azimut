@@ -9,12 +9,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import java.util.Base64;
 @Component
 public class TeaComputersSignatureGenerator {
 	@Autowired ArrayUtility arrayUtility;
+	@Autowired ConfigProperties configProperties;
 	protected static final Logger logger = LogManager.getLogger(TeaComputersSignatureGenerator.class);
 	public String generateSignature(String... params)
 	{
@@ -27,7 +29,7 @@ public class TeaComputersSignatureGenerator {
 				logger.info(params[i]);
 				stringBuffer.append(params.clone()[i]);				
 			}
-			
+			stringBuffer.append(this.configProperties.getTeaComputersKey());
 			 String hashedString = digest(StringUtility.SHA_256_ALGORITHM,stringBuffer.toString());
 			
 			 String encodedString = Base64.getEncoder().encodeToString(hashedString.getBytes());

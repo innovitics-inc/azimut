@@ -91,7 +91,7 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 
 	@Override
 	protected String generateSignature(GetTransactionsRequest getTransactionsRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature("",getTransactionsRequest.getIdTypeId().toString(),getTransactionsRequest.getIdNumber(),this.configProperties.getTeaComputersKey());
+		return this.teaComputersSignatureGenerator.generateSignature("",getTransactionsRequest.getIdTypeId().toString(),getTransactionsRequest.getIdNumber());
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 				if(transactionResponse!=null)
 				{
 					if((StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",transactionResponse.getTransValue().toString(),
-							transactionResponse.getNetValue(),this.configProperties.getTeaComputersKey()), transactionResponse.getSignature()))
+							transactionResponse.getNetValue()), transactionResponse.getSignature()))
 							||!StringUtility.isStringPopulated(transactionResponse.getSignature()))
 					{
 						throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);

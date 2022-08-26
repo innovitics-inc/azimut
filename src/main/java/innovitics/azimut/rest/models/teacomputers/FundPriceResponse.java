@@ -26,10 +26,10 @@ public class FundPriceResponse extends TeaComputerResponse{
 	@Override
 	public String toString() {
 		return "FundPriceResponse [fundID=" + fundID + ", tradePrice=" + tradePrice + ", priceDate=" + priceDate
-				+ ", signature=" + signature + ", message=" + message + ", errorCode=" + errorCode + ", status="
-				+ status + "]";
-	} 
-    
+				+ ", Signature=" + Signature + ", Message=" + Message + ", ErrorCode=" + ErrorCode + ", status="
+				+ status + ", message=" + message + "]";
+	}
+
     
      
 }

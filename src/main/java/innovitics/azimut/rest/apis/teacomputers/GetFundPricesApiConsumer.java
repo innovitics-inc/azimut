@@ -85,7 +85,7 @@ public class GetFundPricesApiConsumer extends RestTeaComputerApiConsumer<GetFund
 
 	@Override
 	protected String generateSignature(GetFundsPricesRequest getFundsPricesRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature("",getFundsPricesRequest.getFromDate(),getFundsPricesRequest.getToDate(),this.configProperties.getTeaComputersKey());
+		return this.teaComputersSignatureGenerator.generateSignature("",getFundsPricesRequest.getFromDate(),getFundsPricesRequest.getToDate());
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class GetFundPricesApiConsumer extends RestTeaComputerApiConsumer<GetFund
 				if(fundPriceResponse!=null)
 				{
 					if((StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",fundPriceResponse!=null&&fundPriceResponse.getFundID()!=null?fundPriceResponse.getFundID().toString():null
-							,this.configProperties.getTeaComputersKey()),fundPriceResponse!=null?fundPriceResponse.getSignature():null))
+							),fundPriceResponse!=null?fundPriceResponse.getSignature():null))
 							||!StringUtility.isStringPopulated(fundPriceResponse!=null?fundPriceResponse.getSignature():null))
 					{
 						throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);

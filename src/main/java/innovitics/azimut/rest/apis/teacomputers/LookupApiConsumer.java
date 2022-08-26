@@ -124,27 +124,27 @@ public class LookupApiConsumer  extends RestTeaComputerApiConsumer<LookupRequest
 		{
 			if(request.getTypeId().longValue()==AzimutEntityType.COUNTRY.getTypeId())
 			{
-				return	this.teaComputersSignatureGenerator.generateSignature("Country",this.configProperties.getTeaComputersKey());
+				return	this.teaComputersSignatureGenerator.generateSignature("Country");
 			}
 			else if(request.getTypeId().longValue()==AzimutEntityType.CITY.getTypeId())
 			{
-				return this.teaComputersSignatureGenerator.generateSignature("City",this.configProperties.getTeaComputersKey());
+				return this.teaComputersSignatureGenerator.generateSignature("City");
 			}
 			else if(request.getTypeId().longValue()==AzimutEntityType.NATIONALITY.getTypeId())
 			{
-				return this.teaComputersSignatureGenerator.generateSignature("Nationality",this.configProperties.getTeaComputersKey());
+				return this.teaComputersSignatureGenerator.generateSignature("Nationality");
 			}
 			else if(request.getTypeId().longValue()==AzimutEntityType.BRANCH.getTypeId())
 			{
-				return	this.teaComputersSignatureGenerator.generateSignature("Branches",this.configProperties.getTeaComputersKey());
+				return	this.teaComputersSignatureGenerator.generateSignature("Branches");
 			}
 			else if(request.getTypeId().longValue()==AzimutEntityType.BANK.getTypeId())
 			{
-				return this.teaComputersSignatureGenerator.generateSignature("Banks",this.configProperties.getTeaComputersKey());
+				return this.teaComputersSignatureGenerator.generateSignature("Banks");
 			}
 			else if(request.getTypeId().longValue()==AzimutEntityType.CURRENCY.getTypeId())
 			{
-				return this.teaComputersSignatureGenerator.generateSignature("Currencies",this.configProperties.getTeaComputersKey());
+				return this.teaComputersSignatureGenerator.generateSignature("Currencies");
 			}
 		}
 		return null;

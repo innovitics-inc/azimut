@@ -69,7 +69,7 @@ public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<
 
 	@Override
 	protected String generateSignature(GetClientCashBalanceRequest getClientCashBalanceRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature("",getClientCashBalanceRequest.getIdTypeId().toString(),getClientCashBalanceRequest.getIdNumber(),this.configProperties.getTeaComputersKey());
+		return this.teaComputersSignatureGenerator.generateSignature("",getClientCashBalanceRequest.getIdTypeId().toString(),getClientCashBalanceRequest.getIdNumber());
 	}
 
 	@Override
@@ -77,8 +77,7 @@ public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<
 		
 		if(StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",
 				getClientCashBalanceResponse!=null&&getClientCashBalanceResponse.getCurrencyID()!=null?getClientCashBalanceResponse.getCurrencyID().toString():null
-				,getClientCashBalanceResponse!=null&&getClientCashBalanceResponse.getBalance()!=null?getClientCashBalanceResponse.getBalance().toString():null,
-						this.configProperties.getTeaComputersKey()), getClientCashBalanceResponse.getSignature())||!StringUtility.isStringPopulated(getClientCashBalanceResponse!=null?getClientCashBalanceResponse.getSignature():null))
+				,getClientCashBalanceResponse!=null&&getClientCashBalanceResponse.getBalance()!=null?getClientCashBalanceResponse.getBalance().toString():null), getClientCashBalanceResponse.getSignature())||!StringUtility.isStringPopulated(getClientCashBalanceResponse!=null?getClientCashBalanceResponse.getSignature():null))
 		{
 			throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);
 		}

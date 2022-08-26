@@ -87,7 +87,7 @@ public class AddAccountApiConsumer extends RestTeaComputerApiConsumer<AddAccount
 	protected String generateSignature(AddAccountRequest request) {
 		if(request!=null&&StringUtility.isStringPopulated(request.getIdNumber())&&request.getIdTypeId()!=null&&StringUtility.isStringPopulated(request.getIdTypeId().toString()))
 		{
-			return this.teaComputersSignatureGenerator.generateSignature(request.getIdTypeId()!=null?request.getIdTypeId().toString():null,request.getIdNumber(),request.getMobile(),this.configProperties.getTeaComputersKey());
+			return this.teaComputersSignatureGenerator.generateSignature(request.getIdTypeId()!=null?request.getIdTypeId().toString():null,request.getIdNumber(),request.getMobile());
 		}
 		return null;
 	}
@@ -97,8 +97,7 @@ public class AddAccountApiConsumer extends RestTeaComputerApiConsumer<AddAccount
 	{
 				if(response!=null)
 				{
-					if((StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",response.getMessage(),
-							this.configProperties.getTeaComputersKey()), response.getSignature()))
+					if((StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",response.getMessage()), response.getSignature()))
 							||!StringUtility.isStringPopulated(response.getSignature()))
 					{
 						throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);
