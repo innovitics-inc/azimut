@@ -32,7 +32,10 @@ public final class StringUtility extends ParentUtility{
 	public final static String ENGLISH="en";
 	public final static String ARABIC="ar";
 	public final static String LANGUAGE="lang";
+	public final static String PDF_TEMPLATE="quotation2-copy";
 	public final static String PAGE_NUMBER="page-";
+	public final static String CONTRACTS_SUBDIRECTORY="userContracts";
+	public final static String CONTRACT_DOCUMENT_NAME="contract";
 	
 	public static String getClassName(Object object)
 	{

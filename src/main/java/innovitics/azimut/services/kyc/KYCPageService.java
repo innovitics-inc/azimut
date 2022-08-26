@@ -42,6 +42,12 @@ public class KYCPageService extends  AbstractService<KYCPage, String>{
 		searchCriteriaList.add(new SearchCriteria("id", id.toString(),SearchOperation.EQUAL,null));
 		return kycPageDynamicRepository.findOne(kycPageSpecification.findByCriteria(searchCriteriaList), new NamedEntityGraph(EntityGraphType.FETCH, "KYCPage.details")).get();
 	}
+	public Long countPagesByUserType(Long userTypeId)
+	{
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("id", userTypeId.toString(),SearchOperation.PARENT_EQUAL,"userType"));
+		return kycPageDynamicRepository.count(kycPageSpecification.findByCriteria(searchCriteriaList));
+	}
 	
 	public Page<KYCPage> getPaginatedKYCPageById(Long userTypId)
 	{
@@ -53,9 +59,11 @@ public class KYCPageService extends  AbstractService<KYCPage, String>{
 		return this.enhancedKYCPageRepository.getEnhanced2(userTypId);	
 	}
 	
-	public Integer findPageWeightById(Long id)
+	public KYCPage findPageDetailsById(Long id)
 	{
-		return this.kycPageDynamicRepository.findPageWeightById(id);
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("id", id.toString(),SearchOperation.EQUAL,null));
+		return kycPageDynamicRepository.findOne(kycPageSpecification.findByCriteria(searchCriteriaList), new NamedEntityGraph(EntityGraphType.FETCH, "KYCPage.compact")).get();
 	}
 
 	

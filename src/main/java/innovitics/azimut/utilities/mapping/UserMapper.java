@@ -160,6 +160,9 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			if(BooleanUtility.isTrue(businessUser.getIsInstitutional()))
 				user.setIsInstitutional(true);
 			
+			if(businessUser.getSolvedPages()!=null)
+				user.setSolvedPages(businessUser.getSolvedPages());
+			
 			user.concatinate();
 			
 			this.logger.info("User::"+user.toString());
@@ -248,7 +251,8 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			{
 				businessUser.setUserStep(user.getUserStep().intValue());
 				
-				if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.CLIENT_DATA.getStepId()))
+				if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.CLIENT_DATA.getStepId())
+						||NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.BANK_REFERENCES_IGNORE.getStepId()))
 				businessUser.setNextUserStep(user.getUserStep().intValue()+2);
 				
 				else
@@ -339,7 +343,10 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			
 			if(user.getLivenessChecked()!=null)
 			businessUser.setLivenessChecked(user.getLivenessChecked());
-							
+			
+			if(user.getSolvedPages()!=null)
+				businessUser.setSolvedPages(user.getSolvedPages());
+
 			
 			businessUser.concatinate();
 
@@ -463,6 +470,9 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 				if(businessUser.getLivenessChecked()!=null)
 					oldBusinessUser.setLivenessChecked(businessUser.getLivenessChecked());
 					
+				if(businessUser.getSolvedPages()!=null)
+					oldBusinessUser.setSolvedPages(oldBusinessUser.getSolvedPages());
+				
 			businessUser.concatinate();
 			oldBusinessUser.concatinate();
 

@@ -59,9 +59,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			@RequestBody BusinessKYCPage businessKYCPage) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			this.logger.info("Language Param::"+StringUtility.LANGUAGE);
-			this.logger.info("Language Value::"+language);
-			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessKYCPage.getId(),businessKYCPage.getIsWeb(),language),null, null);
+			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token),businessKYCPage.getId(),businessKYCPage.getIsWeb(),language),null, null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -84,16 +82,21 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			
 			if(businessUserAnswerSubmission.getNextPageId()!=null)
 			{
-			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token).getId(),businessUserAnswerSubmission.getNextPageId(),false,language);
+				
+			  int verificationPercentage=businessKYCPage!=null&&businessKYCPage.getVerificationPercentage()!=null?businessKYCPage.getVerificationPercentage().intValue():0;
+			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token),businessUserAnswerSubmission.getNextPageId(),false,language);
+			  businessKYCPage.setVerificationPercentage(verificationPercentage);
 			}
-		  	
+			
+			
+			
+			return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);
 			
 		}		
 		catch(BusinessException businessException)
 		{
 			return this.handleBaseGenericResponseException(businessException);
 		}
-		return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);
 		
 	}
 	
@@ -113,7 +116,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			
 			if(BooleanUtility.isTrue(businessAzimutClient.getIsMobile()))
 			{
-				businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser.getId(),businessUser.getFirstPageId(),false,language);
+				businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser,businessUser.getFirstPageId(),false,language);
 				businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(businessKYCPage, businessUser));
 			}
 			

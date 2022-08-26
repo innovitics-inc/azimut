@@ -2,6 +2,7 @@ package innovitics.azimut.validations;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -439,6 +440,47 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 		  businessException.setErrorMessage("Invalid value " +value + " for field "+ field);
 		  
 		  return businessException;
+	}
+
+	public List<String> validateKYCFormCompletion(BusinessUser businessUser,Long pageCount) throws BusinessException 
+	{
+		this.logger.info("Page Count:::"+pageCount);
+		List<String> solvedPageOrders=new ArrayList<String>();
+		if(businessUser!=null)
+		{
+			if(StringUtility.isStringPopulated(businessUser.getSolvedPages()))
+			{
+				solvedPageOrders = Arrays.asList(businessUser.getSolvedPages().split(","));
+				for(String solvedPage:solvedPageOrders)
+				{
+					this.logger.info("Page Order:::"+solvedPage);
+				}
+			}
+			else
+			{
+				throw new BusinessException(ErrorCode.KYC_INCOMPLETE);
+			}
+		}
+	
+		else
+		{
+			this.logger.info("KYC Incomplete");
+			throw new BusinessException(ErrorCode.OPERATION_NOT_PERFORMED);
+		}
+		if(pageCount!=null&&solvedPageOrders!=null&&!solvedPageOrders.isEmpty())
+		{
+			Long solvedPageCount=Long.valueOf(solvedPageOrders.size());
+			this.logger.info("Solved Page Count:::"+solvedPageCount);
+			
+			if(solvedPageCount.longValue()<pageCount.longValue())
+			{
+				
+				throw new BusinessException(ErrorCode.KYC_INCOMPLETE);
+			}
+			
+		}
+		
+		return solvedPageOrders;
 	}
 
 }

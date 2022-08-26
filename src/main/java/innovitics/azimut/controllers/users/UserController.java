@@ -180,7 +180,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 
 	@PostMapping(value="/logUserStep",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> logPopup(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> logUserStep(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserStep(this.getCurrentRequestHolder(token),businessUser.getUserStep()),null,null);
@@ -278,6 +278,20 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}
 		
 	}
+	@GetMapping(value="/downloadContract",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> downloadContract(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.downloadUserContract(this.getCurrentRequestHolder(token)),null,null);
+		}
+		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
 	
 	@GetMapping(value="/execute",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
@@ -301,5 +315,12 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 	}
 
+	@GetMapping(value="/listBlobs",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> listBlobs(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+		this.executor.listBlobs();
+		return null;
+		
+	}
 }
 

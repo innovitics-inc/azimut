@@ -6,17 +6,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.azure.storage.blob.models.BlobItem;
+
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.rest.BaseRestConsumer;
 @Service
 public class Executor {
+	public final static Logger logger = LogManager.getLogger(Executor.class.getName());
+
 	  @Autowired
 	    private PdfGenerateService pdfGenerateService;
 	public void execute () throws IOException {
 		  Map<String, Object> data = new HashMap<>();
-	        Customer customer = new Customer();
+	       
+		  	Customer customer = new Customer();
 	        customer.setCompanyName("Simple Solution");
 	        customer.setContactName("John Doe");
 	        customer.setAddress("123, Simple Street");
@@ -40,23 +48,34 @@ public class Executor {
 	        quoteItems.add(quoteItem2);
 
 	        QuoteItem quoteItem3 = new QuoteItem();
-	        quoteItem3.setDescription("Test Quote Item 3");
+	        quoteItem3.setDescription("Test Quote Item 4");
 	        quoteItem3.setQuantity(2);
 	        quoteItem3.setUnitPrice(200.0);
 	        quoteItem3.setTotal(400.0);
 	        quoteItems.add(quoteItem3);
 
 	        data.put("quoteItems", quoteItems);
-	        //pdfGenerateService.generatePdfFile("quotation", data, "quotation.pdf");
+	        pdfGenerateService.generatePdfFile("quotation2-copy", data, "quotation");
 		
 	}
 	
-	public void download() 
+	public void download() throws BusinessException, IOException 
 	{
-		pdfGenerateService.downloadAndMerge();
+		pdfGenerateService.downloadAndMergeLoop();
 	}
 	public void downloadLoop() throws BusinessException, IOException 
 	{
 		pdfGenerateService.downloadAndMergeLoop();
+	}
+	public List<BlobItem> listBlobs() throws BusinessException, IOException 
+	{	List<BlobItem> blobItems=pdfGenerateService.listBlobItems();
+		
+		for(BlobItem blobItem:blobItems)
+		{
+			this.logger.info("Blob Item name::"+blobItem.getName());
+			this.logger.info("Blob Item properties::"+blobItem.getProperties());
+		}
+	
+		return blobItems ;
 	}
 }

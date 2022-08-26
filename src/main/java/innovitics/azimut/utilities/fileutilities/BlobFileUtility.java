@@ -78,6 +78,14 @@ public class BlobFileUtility extends ParentUtility{
 			return blobData;
 		}
 		
+		public BlobContainerClient  generateBlobClient(String container)
+		{
+			BlobContainerClient  blobContainerClient = new BlobContainerClientBuilder()
+					.connectionString(this.configProperties.getBlobConnectionString())
+					.containerName(container).buildClient();
+			return blobContainerClient;
+		}
+		
 	private  String generateSasTokenString(BlobClient blobClient) {
 		BlobSasPermission blobSasPermission = new BlobSasPermission().setReadPermission(true);
 		OffsetDateTime expiryTime = OffsetDateTime.now()
@@ -172,13 +180,10 @@ public class BlobFileUtility extends ParentUtility{
 	
 	public  void deleteAtLocation(String container, String historical) 
 	{
-		BlobContainerClient  blobContainerClient = new BlobContainerClientBuilder()
-				.connectionString(this.configProperties.getBlobConnectionString())
-				.containerName(container).buildClient();
-		
+		BlobContainerClient blobContainerClient=this.generateBlobClient(container);
 		if (checkIfPathExists(blobContainerClient, historical)) 
 		   {
-		        List<BlobItem> collect = blobContainerClient.listBlobsByHierarchy(historical).stream().collect(Collectors.toList());
+		        List<BlobItem> collect =this.listBlobItemsInFolder(blobContainerClient, historical);
 		        for (BlobItem blobItem : collect) 
 		        {
 		            String name = blobItem.getName();
@@ -198,6 +203,13 @@ public class BlobFileUtility extends ParentUtility{
 		    }
 	}
 
+	
+	public List<BlobItem> listBlobItemsInFolder(BlobContainerClient blobContainerClient,String subDirectory)
+	{
+		 List<BlobItem> collect = blobContainerClient.listBlobsByHierarchy(subDirectory).stream().collect(Collectors.toList());
+		 
+		 return collect;
+	}
 	public  boolean checkIfPathExists(BlobContainerClient blobContainerClient, String filePath) 
 	{
 	    this.logger.info("path exists? :::::"+blobContainerClient.exists());
@@ -285,7 +297,7 @@ public class BlobFileUtility extends ParentUtility{
 		}
 		return blobData;
 	}
-	public String downloadFileToBlob(String containerName,String subDirectory,String fileName) throws IOException, BusinessException 
+	public String downloadBlobToFile(String containerName,String subDirectory,String fileName) throws IOException, BusinessException 
 	{	
 		BlobData blobData=new BlobData();
 		if(!StringUtility.isStringPopulated(subDirectory))

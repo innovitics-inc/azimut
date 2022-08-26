@@ -47,6 +47,16 @@ public class UserAnswerSubmissionService extends AbstractService<UserAnswer, Str
 		return userAnswers;
 	}
 	
+	public List<UserAnswer> getUserAnswersByUserIdAndAnswerType(Long userId,String answerType)
+	{
+		List<UserAnswer> userAnswers=new ArrayList<UserAnswer>();
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("userId", userId.toString(),SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("answerType", answerType,SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("deletedAt", "",SearchOperation.IS_NULL,null));
+		userAnswers= this.userAnswerDynamicRepository.findAll(this.userAnwerSpecification.findByCriteria(searchCriteriaList),new NamedEntityGraph(EntityGraphType.FETCH, "UserAnswer.details"));
+		return userAnswers;
+	}
 	public UserAnswer updateAnswer(UserAnswer userAnswer)
 	{
 		return this.userAnswerDynamicRepository.save(userAnswer);
@@ -56,7 +66,15 @@ public class UserAnswerSubmissionService extends AbstractService<UserAnswer, Str
 	{
 		this.userAnswerDynamicRepository.deleteOldUserAnswersForThePage(pageId,userId);
 	}
-	
+	public boolean checkOldAnswerExistence(Long pageId,Long userId)
+	{
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("pageId", pageId.toString(),SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("userId", userId.toString(),SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("deletedAt", "",SearchOperation.IS_NULL,null));
+		long count=this.userAnswerDynamicRepository.count(this.userAnwerSpecification.findByCriteria(searchCriteriaList));
+		return count>0l;
+	}
 	
 
 }

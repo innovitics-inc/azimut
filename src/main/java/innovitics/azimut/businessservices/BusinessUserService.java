@@ -16,9 +16,13 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
+import innovitics.azimut.pdfgenerator.PdfGenerateService;
+import innovitics.azimut.services.kyc.KYCPageService;
+import innovitics.azimut.services.kyc.UserAnswerSubmissionService;
 import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.UserService;
+import innovitics.azimut.utilities.crosslayerenums.AnswerType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
@@ -49,6 +53,10 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	@Autowired ChangePhoneNumberRequestUtility changePhoneNumberRequestUtility;
 	@Autowired UserImageService userImageService;
 	@Autowired AzimutDataLookupUtility azimutDataLookupUtility;
+	@Autowired PdfGenerateService pdfGenerateService;
+	@Autowired UserAnswerSubmissionService userAnswerSubmissionService;
+	@Autowired KYCPageService kycPageService;
+	
 	public static final String PROFILE_PICTURE_PARAMETER="profilePicture";
 	public static final String SIGNED_PDF_PARAMETER="signedPdf";
 	
@@ -481,6 +489,22 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	{
 		logger.info("Update User at Tea Computers");
 	}
+	
+	public BusinessUser downloadUserContract(BusinessUser businessUser) throws BusinessException
+	{
+		List<String> solvedPages=this.validation.validateKYCFormCompletion(businessUser,this.kycPageService.countPagesByUserType(businessUser.getIdType()));
+		try 
+		{
+		businessUser.setDocumentURL(this.pdfGenerateService.downloadContract(this.userAnswerSubmissionService.getUserAnswersByUserIdAndAnswerType(businessUser.getId(), AnswerType.DOCUMENT.getType()), businessUser,solvedPages));
+		}
+		catch (BusinessException | IOException e) 
+		{
+			e.printStackTrace();
+			throw this.exceptionHandler.handleBusinessException(e,ErrorCode.CONTRACT_DOWNLOAD_FAILED);
+		}
+		return businessUser;
+	}
+	
 	
 	private User storeFileBlobNameAndGenerateTokenInBusinessUser(BusinessUser businessUser,User user,MultipartFile file,String containerName,String parameter,boolean generateSasToken) throws IOException, BusinessException
 	{

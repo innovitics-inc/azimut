@@ -43,6 +43,15 @@ import innovitics.azimut.models.user.UserType;
 				
 		}
 )
+@NamedEntityGraph(name = "KYCPage.compact"
+,attributeNodes = {
+		@NamedAttributeNode(value="title"),
+		@NamedAttributeNode(value="pageOrder"),
+		@NamedAttributeNode(value="pageDetails"),
+		@NamedAttributeNode(value="pageDisclaimer"),
+		}
+
+)
 @Table(name="kyc_pages")
 public class KYCPage  extends BaseEntity implements Serializable{
 	private static final long serialVersionUID = -5692495211725567689L;

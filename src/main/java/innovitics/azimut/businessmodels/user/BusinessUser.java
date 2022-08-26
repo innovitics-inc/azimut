@@ -55,6 +55,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private String tempDirectory;
 	private Boolean livenessChecked;
 	private BusinessClientBankAccountDetails[] clientBankAccounts;
+	private String solvedPages;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -340,6 +341,12 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setLivenessChecked(Boolean livenessChecked) {
 		this.livenessChecked = livenessChecked;
+	}
+	public String getSolvedPages() {
+		return solvedPages;
+	}
+	public void setSolvedPages(String solvedPages) {
+		this.solvedPages = solvedPages;
 	}
 	public void concatinate()
 	{

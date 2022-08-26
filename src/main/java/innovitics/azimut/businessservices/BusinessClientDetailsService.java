@@ -227,8 +227,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		{	
 			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
 			this.azimutDataLookupUtility.saveAzimutClientBankAccountData(tokenizedBusinessUser,businessAzimutClient.getClientBankAccounts());
-			tokenizedBusinessUser.setUserStep(UserStep.BANK_REFERENCES_SHOW.getStepId());
-			this.businessUserService.editUser(tokenizedBusinessUser);
+			this.businessUserService.editUser(this.userUtility.isOldUserStepGreaterThanNewUserStep(tokenizedBusinessUser, UserStep.BANK_REFERENCES_SHOW.getStepId()));
 		}
 		catch(Exception exception)
 		{

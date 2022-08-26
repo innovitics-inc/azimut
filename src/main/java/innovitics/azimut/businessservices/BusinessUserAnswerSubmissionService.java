@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lowagie.text.DocumentException;
+
 import innovitics.azimut.businessmodels.kyc.BusinessKYCPage;
 import innovitics.azimut.businessmodels.kyc.BusinessQuestion;
 import innovitics.azimut.businessmodels.kyc.BusinessSubmittedAnswer;
@@ -26,6 +28,7 @@ import innovitics.azimut.pdfgenerator.PdfGenerateService;
 import innovitics.azimut.services.kyc.KYCPageService;
 import innovitics.azimut.services.kyc.UserAnswerSubmissionService;
 import innovitics.azimut.utilities.crosslayerenums.AnswerType;
+import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
@@ -55,19 +58,36 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		this.validation.checkUserAnswersValidity(businessUserAnswerSubmission);
 		try 
 		{
-				this.userAnswerSubmissionService.deleteOldUserAnswers(businessUserAnswerSubmission.getPageId(),businessUser.getId());
-				this.processAndSaveAnswers(businessUser.getId(),businessUserAnswerSubmission);
-				businessUser.setLastSolvedPageId(businessUserAnswerSubmission.getPageId());
-				businessUser.setNextPageId(businessUserAnswerSubmission.getNextPageId());
-				businessUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, businessUserAnswerSubmission.getUserStep());
-				businessKYCPage.setVerificationPercentage(this.updateUserProgress(businessUser, this.findPageWeight(businessUserAnswerSubmission.getPageId())));	
+			KYCPage  pageDetails=this.kycPageService.getById(businessUserAnswerSubmission.getPageId());
+			
+					if(!this.userAnswerSubmissionService.checkOldAnswerExistence(businessUserAnswerSubmission.getPageId(), businessUser.getId()))
+					{
+						int weight=0;
+						int order=0;						
+						weight=pageDetails.getWeight().intValue();
+						order=pageDetails.getPageOrder().intValue();
+						businessUser.setLastSolvedPageId(businessUserAnswerSubmission.getPageId());
+						businessUser.setNextPageId(businessUserAnswerSubmission.getNextPageId());
+						StringBuffer stringBuffer=new StringBuffer(businessUser!=null&&StringUtility.isStringPopulated(businessUser.getSolvedPages())?businessUser.getSolvedPages():"");
+						businessUser.setSolvedPages(stringBuffer.append(String.valueOf(order)+",").toString());
+						businessKYCPage.setVerificationPercentage(this.updateUserProgress(businessUser,weight));						
+					}	
+					else
+					{
+						businessKYCPage.setVerificationPercentage(businessUser.getVerificationPercentage());
+					}	
+					this.userAnswerSubmissionService.deleteOldUserAnswers(businessUserAnswerSubmission.getPageId(),businessUser.getId());
+					this.generatePdf(this.kycPageMapper.convertBasicUnitToBusinessUnit(pageDetails, businessUserAnswerSubmission.getLanguage(), false),businessUserAnswerSubmission,businessUser);
+					this.processAndSaveAnswers(businessUser.getId(),businessUserAnswerSubmission);					
+					//businessUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, businessUserAnswerSubmission.getUserStep());
+					businessUser.setUserStep(UserStep.KYC.getStepId());
 				this.businessUserService.editUser(businessUser);
-				this.generatePdf(this.kycPageMapper.convertBasicUnitToBusinessUnit(this.kycPageService.getById(businessUserAnswerSubmission.getPageId()), businessUserAnswerSubmission.getLanguage(), false),businessUserAnswerSubmission,businessUser);
+				
 		} 
 		catch (Exception exception) 
 		{			
 			this.logger.info("Could not submit the user answers.");	
-			this.handleBusinessException(exception, ErrorCode.ANSWER_SUBMISSION_FAILED);
+			throw handleBusinessException(exception, ErrorCode.ANSWER_SUBMISSION_FAILED);
 		}
 		
 		return businessKYCPage;
@@ -75,9 +95,9 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	
 	
 	
-	private void generatePdf(BusinessKYCPage businessKYCPage,BusinessUserAnswerSubmission businessUserAnswerSubmission,BusinessUser businessUser) throws IOException 
+	private void generatePdf(BusinessKYCPage businessKYCPage,BusinessUserAnswerSubmission businessUserAnswerSubmission,BusinessUser businessUser) throws IOException, DocumentException, BusinessException 
 	{
-		this.pdfGenerateService.generatePdfFile("quotation", this.populateMapWithPageDetails(businessKYCPage,businessUserAnswerSubmission), StringUtility.PAGE_NUMBER+((businessKYCPage!=null&&businessKYCPage.getPageOrder()!=null)?businessKYCPage.getPageOrder():null),businessUser);
+		this.pdfGenerateService.generatePdfFile(StringUtility.PDF_TEMPLATE, this.populateMapWithPageDetails(businessKYCPage,businessUserAnswerSubmission),(businessKYCPage!=null&&businessKYCPage.getPageOrder()!=null)?String.valueOf(businessKYCPage.getPageOrder()):null,businessUser);
 	}
 
 
@@ -85,7 +105,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	private Map<String, Object> populateMapWithPageDetails(BusinessKYCPage businessKYCPage,BusinessUserAnswerSubmission businessUserAnswerSubmission) {
 		this.matchAndAssign(businessKYCPage, businessUserAnswerSubmission.getUserAnswers());
 		Map<String, Object> map=new HashMap<String,Object>();
-		map.put("page", businessKYCPage);
+		map.put("questions", businessKYCPage.getQuestions());
 		return map;
 	}
 
@@ -251,11 +271,11 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		return businessUser.getVerificationPercentage();
 	}
 	
-	Integer findPageWeight(Long id)
+	KYCPage findPageDetails(Long id)
 	{
 		try 
 		{
-			return this.kycPageService.findPageWeightById(id);
+			return this.kycPageService.findPageDetailsById(id);
 		}
 		catch(Exception exception)
 		{
@@ -266,8 +286,10 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	
 	private void matchAndAssign(BusinessKYCPage businessKYCPage,BusinessUserSubmittedAnswer[] userAnswers)
 	{
+		
 		if(arrayUtility.isArrayPopulated(userAnswers)&&this.questionListUtility.isListPopulated(businessKYCPage.getQuestions()))
 		{
+			this.logger.info("User Answers and Questions are populated::::::::");
 			for(BusinessQuestion businessQuestion:businessKYCPage.getQuestions())
 			{
 				List<BusinessSubmittedAnswer> businessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
@@ -281,6 +303,8 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 						businessSubmittedAnswers.addAll(relevantBusinessSubmittedAnswers);
 					}
 				}
+				
+				businessQuestion.setAnswers(null);
 				
 				businessQuestion.setUserAnswers(businessSubmittedAnswers);
 			}

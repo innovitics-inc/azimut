@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -25,12 +27,19 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobItem;
 import com.lowagie.text.DocumentException;
 
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.models.kyc.UserAnswer;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
 
@@ -40,15 +49,15 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 
     @Autowired ConfigProperties  configProperties;
     @Autowired private TemplateEngine templateEngine;
-    @Autowired BlobFileUtility blobFileUtility;
+    @Autowired private  BlobFileUtility blobFileUtility;
+    @Autowired private ListUtility<BlobItem> blobItemListUtility; 
 
     @Override
-    public void generatePdfFile(String templateName, Map<String, Object> data, String pdfFileName,BusinessUser businessUser) throws IOException {
+    public void generatePdfFile(String templateName, Map<String, Object> data, String pdfFileName,BusinessUser businessUser) throws IOException, DocumentException, BusinessException {
         Context context = new Context();
         context.setVariables(data);
 
         String htmlContent = templateEngine.process(templateName, context);
-
         	
 /*        	final File outputFile = File.createTempFile(pdfFileName,".pdf");
             FileOutputStream fileOutputStream = new FileOutputStream(outputFile);            
@@ -62,64 +71,71 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             ByteArrayOutputStream baos=new ByteArrayOutputStream (); 
             outputFile.delete();
 */           
-        
-         	try {
-            	ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream (); 
+             	ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream (); 
                 ITextRenderer renderer = new ITextRenderer();
                 renderer.setDocumentFromString(htmlContent);
                 renderer.layout(); 
     			renderer.createPDF(byteArrayOutputStream, false);
-    		    renderer.finishPDF();   
-				this.blobFileUtility.uploadFileToBlob(byteArrayOutputStream.toByteArray(), true, this.configProperties.getBlobKYCDocuments(), "userContracts/"+businessUser.getUserId(),pdfFileName, "pdf");
-			} catch (BusinessException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (DocumentException e) {
-				e.printStackTrace();
-			}
-            
-            	
-        	
-        
-        
-    }
-	@Override
-	public void downloadAndMerge() {
-		try 
-		
-		{
-			 /*
-			 
-			 PDFMergerUtility ut = new PDFMergerUtility();
-			 ut.addSource(this.blobFileUtility.downloadFileToBlob(this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear(), "8421e66b-2ffb-4b9d-a73f-7974a5d9479a.pdf"));
-			 ut.addSource(this.blobFileUtility.downloadFileToBlob(this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear(), "57df0465-60cb-420d-af2a-ca028a62217c.pdf"));
-			 ut.setDestinationFileName("E:\\Backend Team\\Azimut\\new");
-			 ut.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());			 			 			
-			 */
+    		    renderer.finishPDF();
+    		    /*
+    		    List<BlobItem> blobItems=this.listBlobItems(this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId());
 
-			ByteArrayOutputStream byteArrayOutputStream1=this.blobFileUtility.downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(), "userAnswers/"+"21-8-2022", "8421e66b-2ffb-4b9d-a73f-7974a5d9479a.pdf");
-			ByteArrayOutputStream byteArrayOutputStream2=this.blobFileUtility.downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(), "userAnswers/"+"21-8-2022", "57df0465-60cb-420d-af2a-ca028a62217c.pdf");
-			ByteArrayOutputStream byteArrayOutputStream3=new ByteArrayOutputStream();
-			PDFMergerUtility pdfMergerUtility=new PDFMergerUtility();
-			pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream1.toByteArray()));
-			pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream2.toByteArray()));
-			pdfMergerUtility.setDestinationStream(byteArrayOutputStream3);
-			pdfMergerUtility.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
-			this.blobFileUtility.uploadFileToBlob(byteArrayOutputStream3.toByteArray(), true, this.configProperties.getBlobKYCDocuments(), "userAnswers/"+DateUtility.getCurrentDayMonthYear(),"contract", "pdf");
-			byteArrayOutputStream3.close();
-	        
-		} 
-		catch (BusinessException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		} 
-		
-	}
+    		    if(this.blobItemListUtility.isListPopulated(blobItems))
+    		    {
+    		    	for(BlobItem blobItem:blobItems)
+    		    	{
+    		    		if(blobItem!=null&&StringUtility.stringsMatch(blobItem.getName(), pdfFileName))
+    		    		{
+    		    			this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(),  StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(), pdfFileName, true);
+    		    		}
+    		    		if(blobItem!=null&&StringUtility.stringsMatch(blobItem.getName(), StringUtility.CONTRACT_DOCUMENT_NAME+".pdf"))
+    		    		{
+    		    			this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(),  StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(), StringUtility.CONTRACT_DOCUMENT_NAME+".pdf", true);
+    		    		}
+    		    	}
+    		    }
+    		   */
+    		    this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(), StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(), pdfFileName+".pdf", false);
+				
+    		    this.blobFileUtility.uploadFileToBlob(byteArrayOutputStream.toByteArray(), true, this.configProperties.getBlobKYCDocuments(), StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),pdfFileName, "pdf");
+			
+    }
+
+    
+    ByteArrayOutputStream populateUserDetailsPDFInByteArrayOutputStream(BusinessUser businessUser) throws BusinessException
+    {
+    	Map<String, Object> map=new HashMap<String,Object>();
+		map.put("userDetails", businessUser);
+    	return this.populateGenericPDF("userDetails", map); 
+    }
+    
+    ByteArrayOutputStream populateSignaturePDFInByteArrayOutputStream(BusinessUser businessUser) throws BusinessException
+    {
+    	Map<String, Object> map=new HashMap<String,Object>();
+		map.put("signature", businessUser);
+		return this.populateGenericPDF("signature", map);
+    }
+    
+    ByteArrayOutputStream populateGenericPDF(String templateName,Map<String, Object> data) throws BusinessException
+    {
+    	Context context = new Context();
+        context.setVariables(data);
+        String htmlContent = templateEngine.process(templateName, context);
+    	ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream (); 
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(htmlContent);
+        renderer.layout(); 
+		try {
+			renderer.createPDF(byteArrayOutputStream, false);
+		} catch (DocumentException exception) {
+			exception.printStackTrace();
+			throw new BusinessException(ErrorCode.PDF_GENERATION_FAILED);
+		}
+	    renderer.finishPDF();
+		return byteArrayOutputStream;    	
+    }
+    
+    
 	@Override
 	public void downloadAndMergeLoop() throws BusinessException, IOException {
 		PDFMergerUtility pdfMergerUtility=new PDFMergerUtility();
@@ -136,6 +152,115 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 		byteArrayOutputStream3.close();
 		
 	}
+	@Override
+	public String downloadContract(List<UserAnswer> userAnswers,BusinessUser businessUser,List<String> solvedPages) throws BusinessException, IOException 
+	{
+		
+	try {
+		
+		this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(), StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),StringUtility.CONTRACT_DOCUMENT_NAME +".pdf", false);
+		PDFMergerUtility pdfMergerUtility=new PDFMergerUtility();
+		ByteArrayOutputStream mergingByteArrayOutputStream=new ByteArrayOutputStream();
+		pdfMergerUtility.setDestinationStream(mergingByteArrayOutputStream);
+
+		/*
+		ByteArrayOutputStream userDetailsByteArrayOutputStream=this.populateUserDetailsPDFInByteArrayOutputStream(businessUser);
+		
+		pdfMergerUtility.addSource(new ByteArrayInputStream(userDetailsByteArrayOutputStream.toByteArray()));
+		
+		 List<BlobItem> blobItems = this.blobFileUtility.
+				 listBlobItemsInFolder(this.blobFileUtility.generateBlobClient(this.configProperties.getBlobKYCDocumentsContainer()),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId());
 	
+		 
+		 for(BlobItem blobItem:blobItems)
+		 {
+			 ByteArrayOutputStream byteArrayOutputStream=this.blobFileUtility.
+					 downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),blobItem.getName());
+			pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+		 }
+		 
+		 
+		 for(UserAnswer userAnswer:userAnswers)
+		 {
+				ByteArrayOutputStream byteArrayOutputStream=this.blobFileUtility.
+						downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(), userAnswer.getDocumentSubDirectory(),userAnswer.getDocumentName());
+				pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+		}
+			
+		ByteArrayOutputStream signatureByteArrayOutputStream=this.populateSignaturePDFInByteArrayOutputStream(businessUser);
+			
+		pdfMergerUtility.addSource(new ByteArrayInputStream(signatureByteArrayOutputStream.toByteArray()));
+		*/	
+		
+		/*
+		 List<BlobItem> blobItems = this.blobFileUtility.
+				 listBlobItemsInFolder(this.blobFileUtility.generateBlobClient(this.configProperties.getBlobKYCDocuments()),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId());
+		 */
+		 
+		 
+		 for(String pageOrder:solvedPages)
+		 {
+			 ByteArrayOutputStream byteArrayOutputStream=this.blobFileUtility.
+					 downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),pageOrder+".pdf");
+			pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+		 }
+
+		pdfMergerUtility.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
+
+		BlobData blobData= this.blobFileUtility.
+		uploadFileToBlob(mergingByteArrayOutputStream.toByteArray(), true, this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),StringUtility.CONTRACT_DOCUMENT_NAME, "pdf");
+		
+		mergingByteArrayOutputStream.close();
+		return blobData.getConcatinated(true);
+		
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			throw new BusinessException(ErrorCode.CONTRACT_DOWNLOAD_FAILED);
+		}
+	}
+
+
+	@Override
+	public void generatePdfFile(String templateName, Map<String, Object> data, String pdfFileName) throws IOException {
+		  Context context = new Context();
+	        context.setVariables(data);
+
+	        String htmlContent = templateEngine.process(templateName, context);
+    			  
+	        try {
+		            	ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream (); 
+		                ITextRenderer renderer = new ITextRenderer();
+		                renderer.setDocumentFromString(htmlContent);
+		                renderer.layout(); 
+		    			renderer.createPDF(byteArrayOutputStream, false);
+		    		    renderer.finishPDF();   
+						this.blobFileUtility.uploadFileToBlob(byteArrayOutputStream.toByteArray(), true, this.configProperties.getBlobKYCDocuments(), "userContracts/"+DateUtility.getCurrentDayMonthYear(),pdfFileName, "pdf");
+					} catch (BusinessException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (DocumentException e) {
+						e.printStackTrace();
+					}
+		
+	}
+	
+	
+	public List<BlobItem> listBlobItems(String container,String subDirectory)
+	{
+		return this.blobFileUtility.
+		 listBlobItemsInFolder(this.blobFileUtility.generateBlobClient(container),subDirectory);	
+	}
+
+
+	@Override
+	public List<BlobItem> listBlobItems() {
+		BlobContainerClient blobContainerClient=this.blobFileUtility.generateBlobClient(this.configProperties.getBlobKYCDocumentsContainer()+"/Users/userContracts");
+		
+		return this.blobFileUtility.
+				 listBlobItemsInFolder(this.blobFileUtility.generateBlobClient(this.configProperties.getBlobKYCDocumentsContainer()+"/Users/userContracts"),"29101012103956");	
+	}
  
 }

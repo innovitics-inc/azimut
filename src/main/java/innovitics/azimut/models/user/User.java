@@ -90,6 +90,9 @@ public class User extends BaseEntity {
 	private Boolean isInstitutional;
 	private Boolean livenessChecked;
 	
+	private String solvedPages;
+	
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -396,6 +399,12 @@ public class User extends BaseEntity {
 	}
 	public void setLivenessChecked(Boolean livenessChecked) {
 		this.livenessChecked = livenessChecked;
+	}
+	public String getSolvedPages() {
+		return solvedPages;
+	}
+	public void setSolvedPages(String solvedPages) {
+		this.solvedPages = solvedPages;
 	}
 	public void concatinate()
 	{

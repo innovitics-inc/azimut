@@ -173,7 +173,7 @@ public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResp
 			Branch branch=new Branch();
 			branch.setArabicBranchName(lookUpOutputs.getArabicBranchName());
 			branch.setEnglishBranchName(lookUpOutputs.getEnglishBranchName());
-			branch.setBankId(lookUpOutputs.getBankId());
+			branch.setBankId(lookUpOutputs.getSystemBankCode());
 			branch.setSystemBankCode(lookUpOutputs.getSystemBankCode());
 			branch.setBranchId(lookUpOutputs.getBranchId());
 			branch.setSystemBranchCode(lookUpOutputs.getSystemBranchCode());

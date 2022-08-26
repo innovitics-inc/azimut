@@ -24,6 +24,7 @@ import innovitics.azimut.services.user.UserLocationService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.crosslayerenums.UserImageType;
+import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobData;
@@ -107,7 +108,22 @@ public class UserUtility extends ParentUtility{
 		{
 			if(!NumberUtility.isNewValueLessThanOrEqualOldValue(tokenizedBusinessUser.getUserStep(), newUserStep))
 			{
+				if(tokenizedBusinessUser!=null)
+				{
+					if(tokenizedBusinessUser.getVerificationPercentage()!=null)
+					{
+						int oldVerificationPercentage=tokenizedBusinessUser.getVerificationPercentage();
+						tokenizedBusinessUser.setVerificationPercentage(oldVerificationPercentage+UserStep.findWeightById(newUserStep));
+					}
+					else
+					{
+						tokenizedBusinessUser.setVerificationPercentage(UserStep.findWeightById(newUserStep));
+				
+					}
+				}
+				
 				tokenizedBusinessUser.setUserStep(newUserStep);
+				
 			}				
 		}
 		return tokenizedBusinessUser;

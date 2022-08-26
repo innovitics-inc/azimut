@@ -37,11 +37,15 @@ public class ConfigProperties {
     @Value("${blob.container.name.kyc.documents}")
     private String blobKYCDocuments;
 
+
+    @Value("${blob.container.name.kyc.documents.container}")
+    private String blobKYCDocumentsContainer;
+    
     @Value("${blob.container.name.kyc.documents.temp}")
     private String blobKYCDocumentsTemp;
     
-    @Value("${blob.container.name.kyc.documents.container}")
-    private String blobKYCDocumentsContainer;
+    @Value("${blob.container.name.kyc.documents.temp.container}")
+    private String blobKYCDocumentsTempContainer;
     
     @Value("${blob.temp.deletion.hours}")
     private String blobTempDeletionInHours;

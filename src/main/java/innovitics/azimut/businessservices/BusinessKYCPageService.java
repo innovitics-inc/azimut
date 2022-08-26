@@ -28,16 +28,17 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 	@Autowired ListUtility<BusinessQuestion> childListUtility;
 	@Autowired ListUtility<BusinessSubmittedAnswer> grandChildListUtility;
 	
-	public BusinessKYCPage getKycPagebyId(Long userId,Long id,Boolean draw,String language) throws BusinessException
+	public BusinessKYCPage getKycPagebyId(BusinessUser businessUser,Long id,Boolean draw,String language) throws BusinessException
 	{
 
 		try 
 			{
 				KYCPage kycPage=this.kycPageService.getById(id);
-				kycPage.setAppUserId(userId);
+				kycPage.setAppUserId(businessUser.getId());
 				kycPage.setDraw(draw);
-				
-				return this.generateUrls(this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language,true));
+				BusinessKYCPage businessKYCPage=this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language,true);
+				businessKYCPage.setVerificationPercentage(businessUser.getVerificationPercentage());
+				return this.generateUrls(businessKYCPage);
 		
 			}
 		catch (Exception exception) 
