@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import innovitics.azimut.rest.models.BaseRestResponse;
 
 public class TeaComputerResponse extends BaseRestResponse{
+	@JsonProperty("Signature")
 	protected String signature;
-
+	@JsonProperty("Message")
 	protected String message;
-
+	@JsonProperty("ErrorCode")
 	protected String errorCode;
 
 	public String getSignature() {
