@@ -126,7 +126,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 	
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
 		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
-		int errorCode=0;
+		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
 		String errorMessage="";
 		innovitics.azimut.rest.models.teacomputers.TeaComputerResponse  teaComputerResponse=new innovitics.azimut.rest.models.teacomputers.TeaComputerResponse() ;
 		ObjectMapper mapper = new ObjectMapper();
