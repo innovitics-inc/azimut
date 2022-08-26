@@ -36,6 +36,12 @@ public class TeaComputerResponse extends BaseRestResponse{
 		this.ErrorCode = ErrorCode;
 	}
 
+	@Override
+	public String toString() {
+		return "TeaComputerResponse [Signature=" + Signature + ", Message=" + Message + ", ErrorCode=" + ErrorCode
+				+ "]";
+	}
+
 	
 	
 
