@@ -4,7 +4,7 @@ import innovitics.azimut.rest.models.BaseRestResponse;
 
 public class ValifyResponse extends BaseRestResponse {
 
-	  private String   transaction_id; 
+	  protected String   transaction_id; 
 	  private int      trials_remaining;
 	  private String error_code;
 	  protected String status;

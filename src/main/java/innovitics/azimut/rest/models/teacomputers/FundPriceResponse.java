@@ -23,12 +23,5 @@ public class FundPriceResponse extends TeaComputerResponse{
 	public void setPriceDate(String priceDate) {
 		this.priceDate = priceDate;
 	}
-	@Override
-	public String toString() {
-		return "FundPriceResponse [fundID=" + fundID + ", tradePrice=" + tradePrice + ", priceDate=" + priceDate
-				+ ", signature=" + signature + ", message=" + message + ", errorCode=" + errorCode + "]";
-	}
-
-    
      
 }

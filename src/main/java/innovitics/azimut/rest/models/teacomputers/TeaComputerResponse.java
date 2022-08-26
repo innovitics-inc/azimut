@@ -6,34 +6,34 @@ import innovitics.azimut.rest.models.BaseRestResponse;
 
 public class TeaComputerResponse extends BaseRestResponse{
 	@JsonProperty("Signature")
-	protected String signature;
+	protected String Signature;
 	@JsonProperty("Message")
-	protected String message;
+	protected String Message;
 	@JsonProperty("ErrorCode")
-	protected String errorCode;
+	protected String ErrorCode;
 
 	public String getSignature() {
-		return signature;
+		return Signature;
 	}
 
-	public void setSignature(String signature) {
-		this.signature = signature;
+	public void setSignature(String Signature) {
+		this.Signature = Signature;
 	}
 
 	public String getMessage() {
-		return message;
+		return Message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessage(String Message) {
+		this.Message = Message;
 	}
 
 	public String getErrorCode() {
-		return errorCode;
+		return ErrorCode;
 	}
 
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
+	public void setErrorCode(String ErrorCode) {
+		this.ErrorCode = ErrorCode;
 	}
 
 	

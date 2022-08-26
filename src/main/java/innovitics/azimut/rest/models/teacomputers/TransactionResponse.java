@@ -63,14 +63,5 @@ public class TransactionResponse extends TeaComputerResponse {
 	public void setCurrencyName(String currencyName) {
 		this.currencyName = currencyName;
 	}
-	@Override
-	public String toString() {
-		return "TransactionResponse [transDate=" + transDate + ", transTypeName=" + transTypeName + ", orderTypeName="
-				+ orderTypeName + ", transStatusName=" + transStatusName + ", transValue=" + transValue + ", netValue="
-				+ netValue + ", currencyId=" + currencyId + ", currencyName=" + currencyName + ", signature="
-				+ signature + ", message=" + message + ", errorCode=" + errorCode + "]";
-	}
-
-
 
 }
