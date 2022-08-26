@@ -133,6 +133,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		try 
 		{
 			this.logger.info("Parsing the exception to the teaComputerResponse:::");
+			this.logger.info("httpClientErrorException.getResponseBodyAsString():::"+httpClientErrorException.getResponseBodyAsString());
 			teaComputerResponse = mapper.readValue(httpClientErrorException.getResponseBodyAsString(), innovitics.azimut.rest.models.teacomputers.TeaComputerResponse.class);
 			errorMessage=teaComputerResponse.getMessage();
 			errorCode=Integer.valueOf(teaComputerResponse.getErrorCode());
