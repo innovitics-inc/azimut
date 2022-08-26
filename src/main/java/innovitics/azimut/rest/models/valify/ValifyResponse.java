@@ -7,7 +7,21 @@ public class ValifyResponse extends BaseRestResponse {
 	  private String   transaction_id; 
 	  private int      trials_remaining;
 	  private String error_code;
-	
+	  protected String status;
+	  protected String message;
+	  public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
+		}
+		public String getMessage() {
+			return message;
+		}
+		public void setMessage(String message) {
+			this.message = message;
+		}
+		
 	  public String getTransaction_id() {
 		return transaction_id;
 	}

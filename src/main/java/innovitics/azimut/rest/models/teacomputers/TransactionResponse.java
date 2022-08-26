@@ -68,9 +68,9 @@ public class TransactionResponse extends TeaComputerResponse {
 		return "TransactionResponse [transDate=" + transDate + ", transTypeName=" + transTypeName + ", orderTypeName="
 				+ orderTypeName + ", transStatusName=" + transStatusName + ", transValue=" + transValue + ", netValue="
 				+ netValue + ", currencyId=" + currencyId + ", currencyName=" + currencyName + ", Signature="
-				+ Signature + ", Message=" + Message + ", ErrorCode=" + ErrorCode + ", status=" + status + ", message="
-				+ message + "]";
+				+ Signature + ", Message=" + Message + ", ErrorCode=" + ErrorCode + "]";
 	}
+
 
 
 }

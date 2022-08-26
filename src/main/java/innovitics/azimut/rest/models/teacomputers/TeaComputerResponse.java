@@ -11,8 +11,6 @@ public class TeaComputerResponse extends BaseRestResponse{
 
 	protected String ErrorCode;
 
-	
-	
 	public String getSignature() {
 		return Signature;
 	}
@@ -37,7 +35,8 @@ public class TeaComputerResponse extends BaseRestResponse{
 		ErrorCode = errorCode;
 	}
 
-
+	
+	
 
 
 	
