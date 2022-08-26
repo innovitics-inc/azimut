@@ -44,12 +44,10 @@ public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<
 	@Override
 	public void validateResponse(ResponseEntity<GetClientCashBalanceResponse> responseEntity)
 			throws IntegrationException {
-			if(!this.validateResponseStatus(responseEntity))
+			if(this.validateResponseStatus(responseEntity))
 			{
-			throw	this.handleTeaComputerError(responseEntity.getBody().getMessage(),responseEntity.getBody().getErrorCode());
+				this.generateResponseSignature(responseEntity.getBody());
 			}
-			this.generateResponseSignature(responseEntity.getBody());
-		
 	}
 
 	@Override

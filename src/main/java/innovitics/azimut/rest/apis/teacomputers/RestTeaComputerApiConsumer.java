@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
@@ -20,9 +21,14 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.security.TeaComputersSignatureGenerator;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.rest.models.teacomputers.TeaComputerRequest; 
 
@@ -68,20 +74,16 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		catch(HttpClientErrorException clientErrorException)
 		{
 			this.logger.info("An integration exception was caught:::");
-			throw this.handleTeaComputerError(clientErrorException.getMessage(), clientErrorException.getStatusCode().toString());
+			throw this.handleTeaComputerError(clientErrorException);
 		}
 			
 	}
 	
 	
 	
-	protected IntegrationException handleTeaComputerError(String errorMessage,String errorCode) throws IntegrationException
+	protected IntegrationException handleTeaComputerError(HttpClientErrorException clientErrorException) throws IntegrationException
 	{
-			this.logger.info("Error Message:::"+ errorMessage);
-			this.logger.info("Error Code:::"+ errorCode);
-			IntegrationException integrationException =new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
-			integrationException.setErrorMessage(errorMessage);
-			return integrationException;		
+		return this.handleError(clientErrorException);		
 	}
 	
 
@@ -121,6 +123,28 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 	  
 	
 	}
+	
+	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
+		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
+		int errorCode=0;
+		String errorMessage="";
+		innovitics.azimut.rest.models.teacomputers.TeaComputerResponse  teaComputerResponse=new innovitics.azimut.rest.models.teacomputers.TeaComputerResponse() ;
+		ObjectMapper mapper = new ObjectMapper();
+		try 
+		{
+			
+			teaComputerResponse = mapper.readValue(httpClientErrorException.getResponseBodyAsString(), innovitics.azimut.rest.models.teacomputers.TeaComputerResponse.class);
+			errorMessage=teaComputerResponse.getMessage();
+			errorCode=Integer.valueOf(teaComputerResponse.getErrorCode());
+			this.logger.info("teaComputerResponse:::"+teaComputerResponse.toString());
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
+		}
+		
+		IntegrationException integrationException=new IntegrationException(errorCode, new Date(), errorMessage, errorMessage,httpClientErrorException.getStackTrace());
+		return  integrationException; 
+}
 	
 	
 }

@@ -34,4 +34,5 @@ import innovitics.azimut.exceptions.IntegrationException;
 	
 	HttpMethod chooseHttpMethod();
 	
+	IntegrationException handleError(HttpClientErrorException httpClientErrorException) throws IntegrationException;
 }

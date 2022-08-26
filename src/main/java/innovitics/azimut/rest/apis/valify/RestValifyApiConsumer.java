@@ -9,8 +9,12 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.AbstractBaseRestConsumer;
+import innovitics.azimut.rest.models.valify.ValifyResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
@@ -108,27 +112,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 		if(exception instanceof HttpClientErrorException)
 		{
 			
-			String errorMessage=exception.getMessage();
-			int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
-			
-			if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(NON_MATHCING_ERROR))
-			{
-				errorCode=ErrorCode.IMAGES_NOT_SIMIILAR.getCode();
-				errorMessage=ErrorCode.IMAGES_NOT_SIMIILAR.getMessage();
-			}
-			
-			if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(BUNDLE_ERROR))
-			{
-				errorCode=ErrorCode.PAYMENT_FAILURE.getCode();
-				errorMessage=ErrorCode.PAYMENT_FAILURE.getMessage();
-			}
-
-			if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(OCR_ERROR))
-			{
-				errorCode=ErrorCode.IMAGES_NOT_ClEAR.getCode();
-				errorMessage=ErrorCode.IMAGES_NOT_ClEAR.getMessage();
-			}
-			IntegrationException integrationException=new IntegrationException(errorCode, new Date(), errorMessage, errorMessage, exception.getStackTrace());
+			IntegrationException integrationException=this.handleError((HttpClientErrorException)exception);			
 			return  integrationException;
 		}
 		
@@ -136,4 +120,41 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 		return  new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
 	
 	}
+	
+	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
+		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
+		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
+		String errorMessage="";
+		innovitics.azimut.rest.models.valify.ValifyResponse  valifyResponse=new innovitics.azimut.rest.models.valify.ValifyResponse();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			valifyResponse = mapper.readValue(httpClientErrorException.getResponseBodyAsString(), innovitics.azimut.rest.models.valify.ValifyResponse.class);
+			errorMessage=valifyResponse.getMessage();
+			
+			if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(BUNDLE_ERROR))
+			{
+				errorCode=ErrorCode.PAYMENT_FAILURE.getCode();
+				errorMessage=ErrorCode.PAYMENT_FAILURE.getMessage();
+			}
+
+			else if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(OCR_ERROR))
+			{
+				errorCode=ErrorCode.IMAGES_NOT_ClEAR.getCode();								
+			}
+			else
+			{
+				errorCode=Integer.valueOf(valifyResponse.getError_code());
+				errorMessage=valifyResponse.getMessage();
+			}
+
+			this.logger.info("valifyResponse:::"+valifyResponse.toString());
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
+		}
+		
+		IntegrationException integrationException=new IntegrationException(errorCode, new Date(), errorMessage, errorMessage,httpClientErrorException.getStackTrace());
+		return  integrationException; 
+}
+	
 }

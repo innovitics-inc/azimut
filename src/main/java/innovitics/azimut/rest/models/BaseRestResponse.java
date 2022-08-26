@@ -1,6 +1,7 @@
 package innovitics.azimut.rest.models;
+import org.springframework.http.client.ClientHttpResponse;
 
-public class BaseRestResponse {
+public class BaseRestResponse  {
 
 	protected String status;
 	protected String message;

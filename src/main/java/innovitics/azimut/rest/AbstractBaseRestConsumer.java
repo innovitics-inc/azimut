@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.errorhandling.RestErrorHandler;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 
@@ -38,11 +40,11 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	@Autowired protected ConfigProperties configProperties;
 	@Autowired protected ExceptionHandler exceptionHandler;
 	@Autowired protected ArrayUtility arrayUtility;
-	
+	@Autowired protected RestErrorHandler restErrorHandler;
 
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
 		logger.info("Input::" + input);
-		
+		ResponseEntity<RES> responseEntity=null;
 		try {
 
 			HttpEntity<String> httpEntity= this.generateRequestFromInput(input);
@@ -57,7 +59,11 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				logger.info("URL:::"+url);
 				
 				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), );
-				ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
+				
+				
+				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
+				responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
+				
 				logger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
 				
 				this.validateResponse(responseEntity);
@@ -73,8 +79,8 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				
 				logger.info("URL:::"+url);
 				
-				ResponseEntity<RES> responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params);
-				
+				//ResponseEntity<RES> responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params);
+				responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params);
 				logger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
 				
 				this.validateResponse(responseEntity);
@@ -88,8 +94,10 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 			
 			return null;
 			
-		} catch (Exception exception) {
-			
+		} 
+		
+		catch (Exception exception) 
+		{
 			throw this.handleException(exception);
 			
 		}

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import innovitics.azimut.models.BaseEntity;
@@ -36,8 +37,11 @@ public class UserAnswer  extends BaseEntity{
 	private String documentSize;
 	private String documentUrl;
 	private String documentSubDirectory;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date createdAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date updatedAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date deletedAt;
 	private String countryCode;
 	private Long pageId;

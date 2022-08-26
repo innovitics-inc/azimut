@@ -26,6 +26,13 @@ public class ValifyResponse extends BaseRestResponse {
 	public void setError_code(String error_code) {
 		this.error_code = error_code;
 	}
+	@Override
+	public String toString() {
+		return "ValifyResponse [transaction_id=" + transaction_id + ", trials_remaining=" + trials_remaining
+				+ ", error_code=" + error_code + ", status=" + status + ", message=" + message + "]";
+	}
+
+	
   	 
 
 }

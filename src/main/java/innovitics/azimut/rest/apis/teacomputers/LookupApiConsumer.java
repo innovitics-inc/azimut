@@ -91,25 +91,6 @@ public class LookupApiConsumer  extends RestTeaComputerApiConsumer<LookupRequest
 	}
 	
 	@Override
-	protected IntegrationException handleTeaComputerError(String errorMessage,String errorCode) throws IntegrationException
-	{
-			this.logger.info("Error Message:::"+ errorMessage);
-			this.logger.info("Error Code:::"+ errorCode);
-			if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(""))
-			{
-				return new IntegrationException(ErrorCode.NO_DATA_FOUND);
-			}
-			
-			else
-			{
-				IntegrationException integrationException =new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
-				integrationException.setErrorMessage(errorMessage);			
-				return integrationException;		
-			}
-	}
-
-
-	@Override
 	public IntegrationException handleException(Exception exception) {
 		this.logger.info("Handling the Exception in the Check Account API:::");
 		if(exception instanceof IntegrationException)

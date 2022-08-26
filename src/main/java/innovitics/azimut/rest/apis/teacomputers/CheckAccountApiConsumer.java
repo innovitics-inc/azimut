@@ -58,53 +58,14 @@ public class CheckAccountApiConsumer extends RestTeaComputerApiConsumer<GetClien
 	@Override
 	public void validateResponse(ResponseEntity<ClientAccountResponse[]> responseEntity) throws IntegrationException 
 	{
-		if(!this.validateResponseStatus(responseEntity))
+		if(this.validateResponseStatus(responseEntity))
 		{
-			if(responseEntity!=null&&responseEntity.getStatusCode()!=null&&responseEntity.getStatusCode().equals(HttpStatus.BAD_REQUEST))
-			{
-				if(responseEntity.getBody()!=null)
-				{
-					//this.validateResponse((ResponseEntity<TeaComputerResponse> responseEntity)responseEntity,true);
-				}
-			}
+			this.generateResponseListSignature(responseEntity.getBody());	
 		}
 
-		this.generateResponseListSignature(responseEntity.getBody());
+		
 	}
 	
-	public void validateResponse(ResponseEntity<TeaComputerResponse> responseEntity,boolean custom) throws IntegrationException 
-	{
-
-			if(responseEntity!=null&&responseEntity.getStatusCode()!=null&&responseEntity.getStatusCode().equals(HttpStatus.BAD_REQUEST))
-			{
-				if(responseEntity.getBody()!=null&&StringUtility.isStringPopulated(responseEntity.getBody().getErrorCode())&&
-						StringUtility.stringsMatch(responseEntity.getBody().getErrorCode(),MOBILE_NUMBER_NOT_EXISTING_CODE))
-				{
-					throw new IntegrationException(ErrorCode.NO_DATA_FOUND);
-				}
-			}
-		
-
-
-	}
-	@Override
-	protected IntegrationException handleTeaComputerError(String errorMessage,String errorCode) throws IntegrationException
-	{
-			this.logger.info("Error Message:::"+ errorMessage);
-			this.logger.info("Error Code:::"+ errorCode);
-			if(StringUtility.isStringPopulated(errorMessage)&&errorMessage.contains(MOBILE_NUMBER_NOT_EXISTING_CODE))
-			{
-				return new IntegrationException(ErrorCode.NO_DATA_FOUND);
-			}
-			
-			else
-			{
-				IntegrationException integrationException =new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
-				integrationException.setErrorMessage(errorMessage);			
-				return integrationException;		
-			}
-	}
-
 	@Override
 	public IntegrationException handleException(Exception exception) 
 	{

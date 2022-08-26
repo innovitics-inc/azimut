@@ -490,9 +490,10 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		logger.info("Update User at Tea Computers");
 	}
 	
-	public BusinessUser downloadUserContract(BusinessUser businessUser) throws BusinessException
+	public BusinessUser downloadUserContract(BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
-		List<String> solvedPages=this.validation.validateKYCFormCompletion(businessUser,this.kycPageService.countPagesByUserType(businessUser.getIdType()));
+		List<String> solvedPages=this.validation.validateKYCFormCompletion(tokenizedBusinessUser,this.kycPageService.countPagesByUserType(tokenizedBusinessUser.getIdType()));
+		BusinessUser businessUser=new BusinessUser();
 		try 
 		{
 		businessUser.setDocumentURL(this.pdfGenerateService.downloadContract(this.userAnswerSubmissionService.getUserAnswersByUserIdAndAnswerType(businessUser.getId(), AnswerType.DOCUMENT.getType()), businessUser,solvedPages));
