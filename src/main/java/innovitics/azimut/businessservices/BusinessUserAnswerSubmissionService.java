@@ -293,7 +293,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 			for(BusinessQuestion businessQuestion:businessKYCPage.getQuestions())
 			{
 				List<BusinessSubmittedAnswer> businessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
-				
+				List<BusinessSubmittedAnswer> businessSubmittedSubQuestionAnswers=new ArrayList<BusinessSubmittedAnswer>();
 				for(BusinessUserSubmittedAnswer businessUserSubmittedAnswer:userAnswers)
 				{
 					if(NumberUtility.areLongValuesMatching(businessQuestion.getId(), businessUserSubmittedAnswer.getQuestionId()))
@@ -307,9 +307,25 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 				businessQuestion.setAnswers(null);
 				
 				businessQuestion.setUserAnswers(businessSubmittedAnswers);
+				
+				for(BusinessQuestion businessSubQuestion:businessQuestion.getSubQuestions())
+				{
+					for(BusinessUserSubmittedAnswer businessUserSubmittedAnswer:userAnswers)
+					{
+						if(NumberUtility.areLongValuesMatching(businessSubQuestion.getId(), businessUserSubmittedAnswer.getQuestionId()))
+						{
+							List<BusinessSubmittedAnswer> relevantBusinessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
+						    Collections.addAll(relevantBusinessSubmittedAnswers, businessUserSubmittedAnswer.getAnswers());
+						    businessSubmittedSubQuestionAnswers.addAll(relevantBusinessSubmittedAnswers);
+						}
+					}
+					businessSubQuestion.setAnswers(null);
+					businessSubQuestion.setUserAnswers(businessSubmittedSubQuestionAnswers);					
+				}
 			}
 			
 		}
+		
 	}
 	
 	
