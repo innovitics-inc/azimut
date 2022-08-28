@@ -307,20 +307,22 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 				businessQuestion.setAnswers(null);
 				
 				businessQuestion.setUserAnswers(businessSubmittedAnswers);
-				
-				for(BusinessQuestion businessSubQuestion:businessQuestion.getSubQuestions())
+				if(this.questionListUtility.isListPopulated(businessQuestion.getSubQuestions()))
 				{
-					for(BusinessUserSubmittedAnswer businessUserSubmittedAnswer:userAnswers)
+					for(BusinessQuestion businessSubQuestion:businessQuestion.getSubQuestions())
 					{
-						if(NumberUtility.areLongValuesMatching(businessSubQuestion.getId(), businessUserSubmittedAnswer.getQuestionId()))
+						for(BusinessUserSubmittedAnswer businessUserSubmittedAnswer:userAnswers)
 						{
-							List<BusinessSubmittedAnswer> relevantBusinessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
-						    Collections.addAll(relevantBusinessSubmittedAnswers, businessUserSubmittedAnswer.getAnswers());
-						    businessSubmittedSubQuestionAnswers.addAll(relevantBusinessSubmittedAnswers);
+							if(NumberUtility.areLongValuesMatching(businessSubQuestion.getId(), businessUserSubmittedAnswer.getQuestionId()))
+							{
+								List<BusinessSubmittedAnswer> relevantBusinessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
+								Collections.addAll(relevantBusinessSubmittedAnswers, businessUserSubmittedAnswer.getAnswers());
+								businessSubmittedSubQuestionAnswers.addAll(relevantBusinessSubmittedAnswers);
+							}
 						}
+						businessSubQuestion.setAnswers(null);
+						businessSubQuestion.setUserAnswers(businessSubmittedSubQuestionAnswers);					
 					}
-					businessSubQuestion.setAnswers(null);
-					businessSubQuestion.setUserAnswers(businessSubmittedSubQuestionAnswers);					
 				}
 			}
 			
