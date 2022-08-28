@@ -168,10 +168,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 		
 		pdfMergerUtility.addSource(new ByteArrayInputStream(userDetailsByteArrayOutputStream.toByteArray()));
 		
-		 List<BlobItem> blobItems = this.blobFileUtility.
-				 listBlobItemsInFolder(this.blobFileUtility.generateBlobClient(this.configProperties.getBlobKYCDocumentsContainer()),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId());
-	
-		 
+			 
 		 for(BlobItem blobItem:blobItems)
 		 {
 			 ByteArrayOutputStream byteArrayOutputStream=this.blobFileUtility.
@@ -204,6 +201,14 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 					 downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),pageOrder+".pdf");
 			pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
 		 }
+		 
+		 for(UserAnswer userAnswer:userAnswers)
+		 {
+				ByteArrayOutputStream byteArrayOutputStream=this.blobFileUtility.
+						downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(), userAnswer.getDocumentSubDirectory(),userAnswer.getDocumentName());
+				pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+		}
+	
 
 		pdfMergerUtility.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
 
