@@ -47,6 +47,15 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	@Autowired ListUtility<UserImage> userImageListUtility; 
 	@Autowired BusinessUserService businessUserService;
 	@Autowired GenderService genderService;
+	
+	public BusinessValify getValifyToken() throws BusinessException, IntegrationException
+	{
+		String token=this.valifyUtility.getToken(0l);
+		BusinessValify businessValify=new BusinessValify();
+		businessValify.setToken(token);
+		return businessValify;
+	}
+	
 	public BusinessValify valifyFacial (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile straightFace,MultipartFile smilingFace,MultipartFile leftSide,MultipartFile rightSide,Integer userStep,String language) throws BusinessException,IntegrationException, IOException
 	{		
 		//this.validate(businessValify, valifyFacialImages,BusinessValify.class.getName());

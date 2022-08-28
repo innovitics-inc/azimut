@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -97,6 +98,22 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 		{
 			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), null,frontImage,backImage,passportImage,userStep,language,documentType,isWeb),null, null);			
 		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+	
+	
+	@GetMapping(value="/getToken",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessValify>> downloadContract(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.getValifyToken(),null,null);
+		}
+		
 		catch(BusinessException businessException)
 		{
 			return this.handleBaseGenericResponseException(businessException);
