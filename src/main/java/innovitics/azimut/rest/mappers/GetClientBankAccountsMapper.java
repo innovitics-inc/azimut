@@ -17,6 +17,7 @@ import innovitics.azimut.rest.models.teacomputers.ClientBankAccountResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientBankAccountsResponse;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 @Component
 public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccountsInput, GetClientBankAccountsOutput, GetClientBankAccountsResponse, BusinessClientBankAccountDetails>{
@@ -30,12 +31,12 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 		businessClientBankAccountsDetails=this.createListBusinessEntityFromOutput(this.getClientBankAccountsApiConsumer.invoke(this.createInput(businessClientBankAccountDetails),ClientBankAccountResponse[].class, params));
 		for(BusinessClientBankAccountDetails iterator:businessClientBankAccountsDetails)
 		{
-			if(iterator!=null&&iterator.getId().longValue()==businessClientBankAccountDetails.getId().longValue())
+			if(iterator!=null&&NumberUtility.areLongValuesMatching(iterator.getAccountId(), businessClientBankAccountDetails.getAccountId()))
 			{
 				return iterator;
 			}
 		}		
-		return null;
+		return new BusinessClientBankAccountDetails();
 	}
 
 	@Override
