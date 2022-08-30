@@ -75,7 +75,15 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		return this.exceptionHandler.handleAsIntegrationException(exception, ErrorCode.FAILED_TO_INTEGRATE);	
+		this.logger.info("Handling the Exception in the Get Client Transactions API:::");
+		if(exception instanceof IntegrationException)
+		{
+			IntegrationException integrationException=(IntegrationException)exception;			
+			return integrationException;
+		}
+		else
+		return this.exceptionHandler.handleAsIntegrationException(exception, ErrorCode.FAILED_TO_INTEGRATE);
+
 		
 		}
 

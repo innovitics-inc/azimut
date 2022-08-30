@@ -57,6 +57,7 @@ private Answer parentAnswer;
 
 @OneToMany(mappedBy="parentAnswer")
 @Fetch(FetchMode.JOIN)
+@OrderBy("answerOrder ASC")
 private Set<Answer> relatedAnswers;
 
 /*

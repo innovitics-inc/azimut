@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import innovitics.azimut.businessmodels.BusinessTransaction;
+import innovitics.azimut.businessmodels.funds.BusinessClientFund;
+import innovitics.azimut.businessmodels.funds.BusinessFundPrice;
 import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
@@ -21,6 +23,8 @@ import innovitics.azimut.rest.mappers.AddClientBankAccountMapper;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.rest.mappers.GetClientBalanceMapper;
 import innovitics.azimut.rest.mappers.GetClientBankAccountsMapper;
+import innovitics.azimut.rest.mappers.GetClientFundsMapper;
+import innovitics.azimut.rest.mappers.GetFundPricesMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
@@ -30,6 +34,7 @@ import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.validations.validators.azimutclient.GetAzimutEntityLookup;
@@ -46,8 +51,11 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired AddClientBankAccountMapper addClientBankAccountMapper;
 @Autowired CheckAccountMapper checkAccountMapper;
 @Autowired AddAccountMapper addAccountMapper;
-
+@Autowired  GetClientFundsMapper getClientFundsMapper;
+@Autowired  GetFundPricesMapper getFundPricesMapper;
 @Autowired ListUtility<BusinessTransaction>listUtility;
+@Autowired ListUtility<BusinessFundPrice> fundPricesListUtility;
+@Autowired ListUtility<BusinessClientFund> clientFundListUtility ;
 @Autowired SortCompare sortCompare;
 @Autowired GetBalanceAndTransactions getBalanceAndTransactions;
 @Autowired AzimutDataLookUpService azimutDataLookUpService;
@@ -302,6 +310,25 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	}
 	
 	
+	public BusinessAzimutClient getClientFunds(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
+	{
+		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+
+		List<BusinessClientFund> businessClientFunds=this.getClientFundsMapper.wrapBaseBusinessEntity(true, this.prepareClientFundInputs(tokenizedBusinessUser), null).getDataList();
+		
+		List<BusinessFundPrice> businessFundPrices= this.getFundPricesMapper.wrapBaseBusinessEntity(true, this.prepareFundPriceSearchInputs(businessAzimutClient), null).getDataList();
+		
+		BusinessClientCashBalance businessClientCashBalance=this.getClientBalanceMapper.wrapBaseBusinessEntity(false,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();
+
+		this.beautifyBusinessClientFunds(responseBusinessAzimutClient,businessClientFunds, businessFundPrices, businessClientCashBalance);
+		
+	
+		
+		return responseBusinessAzimutClient;
+	}
+	
+	
+	
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
 		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+businessUser.getLastName());
@@ -369,9 +396,26 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessClientBankAccountDetails searchBusinessClientBankAccountDetails=new BusinessClientBankAccountDetails();
 		searchBusinessClientBankAccountDetails.setAzId(tokenizedBusinessUser.getUserId());
 		searchBusinessClientBankAccountDetails.setAzIdType(/*businessAzimutClient.getAzIdType()*/this.getAzimutUserTypeId(tokenizedBusinessUser));	
-		searchBusinessClientBankAccountDetails.setBankId(businessAzimutClient.getBankId());
+		searchBusinessClientBankAccountDetails.setAccountId(businessAzimutClient.getAccountId());
 		return searchBusinessClientBankAccountDetails;
 	}
+	
+	BusinessClientFund prepareClientFundInputs(BusinessUser tokenizedBusinessUser)
+	{
+		BusinessClientFund searchBusinessClientFund=new BusinessClientFund();
+		searchBusinessClientFund.setAzId(tokenizedBusinessUser.getUserId());
+		searchBusinessClientFund.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));	
+		return searchBusinessClientFund;
+	}
+	BusinessFundPrice prepareFundPriceSearchInputs(BusinessAzimutClient businessAzimutClient)
+	{
+		BusinessFundPrice searchBusinessFundPrice=new BusinessFundPrice();
+		searchBusinessFundPrice.setSearchFromDate(businessAzimutClient.getSearchFromDate());
+		searchBusinessFundPrice.setSearchToDate(businessAzimutClient.getSearchToDate());
+		this.logger.info("SearchBusinessFundPrice:"+ searchBusinessFundPrice.toString());
+		return searchBusinessFundPrice;
+	}
+	
 	public BusinessAzimutClient beautifyBalanceAndTransactionsBusinessAzimutClient(BusinessAzimutClient businessAzimutClient)
 	{
 		double pendingAmount=0;
@@ -441,6 +485,28 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	  }
   }
   
-  
+  private void beautifyBusinessClientFunds(BusinessAzimutClient responseBusinessAzimutClient,List<BusinessClientFund> businessClientFunds,List<BusinessFundPrice> businessFundPrices,BusinessClientCashBalance businessClientCashBalance)
+  {
+	  if(this.clientFundListUtility.isListPopulated(businessClientFunds)&&this.fundPricesListUtility.isListPopulated(businessFundPrices))
+	  {
+		  for(BusinessClientFund businessClientFund:businessClientFunds)
+		  {
+			  for(BusinessFundPrice businessFundPrice:businessFundPrices)
+			  {
+				  if(NumberUtility.areLongValuesMatching(businessClientFund.getFundId(), businessFundPrice.getFundId()))
+				  {
+					  businessClientFund.setLastPriceUpdateDate(businessFundPrice.getPriceDate());
+				  }
+			  }
+		  }
+	  }
+	  
+	  if(businessClientCashBalance!=null&businessClientCashBalance.getBalance()!=null)
+		{
+			responseBusinessAzimutClient.setBalance(businessClientCashBalance.getBalance());
+		}
+	  
+	  responseBusinessAzimutClient.setBusinessClientFunds(businessClientFunds);
+  }
   
 }
