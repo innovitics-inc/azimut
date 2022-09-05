@@ -11,6 +11,8 @@ public class BusinessFundPrice extends BaseBusinessEntity {
 	private Double nav;
 	private Double tradePrice;
 	private String priceDate;
+	private Long teacomputerId;
+	private String logo;
 	
 	
 	
@@ -59,6 +61,27 @@ public class BusinessFundPrice extends BaseBusinessEntity {
 	public void setPriceDate(String priceDate) {
 		this.priceDate = priceDate;
 	}
+	
+	public Long getTeacomputerId() {
+		return teacomputerId;
+	}
+
+
+	public void setTeacomputerId(Long teacomputerId) {
+		this.teacomputerId = teacomputerId;
+	}
+
+
+	public String getLogo() {
+		return logo;
+	}
+
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+
 	@Override
 	public String toString() {
 		return "BusinessFundPrice [fundId=" + fundId + ", id=" + id + ", nav=" + nav + ", tradePrice=" + tradePrice

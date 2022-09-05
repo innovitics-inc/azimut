@@ -42,6 +42,7 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 		
 		clientFundsInput.setIdTypeId(businessClientFund.getAzIdType());
 		clientFundsInput.setIdNumber(businessClientFund.getAzId());
+		clientFundsInput.setFundId(businessClientFund.getFundId());
 		
 		return clientFundsInput;
 	}
@@ -66,7 +67,9 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 					businessClientFund.setFundType(clientFundOutput.getAssetClass());
 					businessClientFund.setFundName(clientFundOutput.getCertificateName());
 					businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
+					businessClientFund.setCurrencyRate(clientFundOutput.getCurrencyRate());
 					businessClientFund.setTradePrice(clientFundOutput.getTradePrice());
+					businessClientFund.setQuantity(clientFundOutput.getQuantity());
 					if(clientFundOutput!=null&&StringUtility.isStringPopulated(clientFundOutput.getTradePrice())&&clientFundOutput.getQuantity()!=null)
 					{	
 						double totalAmount=clientFundOutput.getQuantity().doubleValue()*Double.valueOf(clientFundOutput.getTradePrice());
@@ -77,7 +80,10 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 						businessClientFund.setTotalAmount(0d);
 					}
 					
+					businessClientFunds.add(businessClientFund);
+					
 				}
+			return businessClientFunds;
 		}		
 				return null;
 	}

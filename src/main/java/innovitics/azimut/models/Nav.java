@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
-@Table(name="navs2")
+@Table(name="navs")
 public class Nav extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)

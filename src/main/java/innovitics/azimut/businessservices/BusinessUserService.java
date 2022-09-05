@@ -10,13 +10,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import innovitics.azimut.businessmodels.user.AuthenticationRequest;
 import innovitics.azimut.businessmodels.user.AzimutAccount;
+import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessFlow;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.pdfgenerator.PdfGenerateService;
+import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.services.kyc.KYCPageService;
 import innovitics.azimut.services.kyc.UserAnswerSubmissionService;
 import innovitics.azimut.services.kyc.UserImageService;
@@ -28,12 +31,14 @@ import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ChangePhoneNumberRequestUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.datautilities.UserUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.mapping.UserMapper;
+import innovitics.azimut.validations.validators.azimutclient.SaveUserLocation;
 import innovitics.azimut.validations.validators.user.AddBusinessUserValidator;
 import innovitics.azimut.validations.validators.user.ChangePhoneNumber;
 import innovitics.azimut.validations.validators.user.ChangeUserPassword;
@@ -42,6 +47,7 @@ import innovitics.azimut.validations.validators.user.FindUserByUserPhone;
 import innovitics.azimut.validations.validators.user.ForgottenUserPassword;
 @Service
 public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
+	@Autowired CheckAccountMapper checkAccountMapper;
 	@Autowired UserMapper userMapper;
 	@Autowired UserService userService;
 	@Autowired EditUserProfile editUserProfile;
@@ -56,6 +62,8 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	@Autowired PdfGenerateService pdfGenerateService;
 	@Autowired UserAnswerSubmissionService userAnswerSubmissionService;
 	@Autowired KYCPageService kycPageService;
+	@Autowired ListUtility<AzimutAccount> azimutAccountListUtility;
+	@Autowired SaveUserLocation saveUserLocation;
 	
 	public static final String PROFILE_PICTURE_PARAMETER="profilePicture";
 	public static final String SIGNED_PDF_PARAMETER="signedPdf";
@@ -299,49 +307,62 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		
 	}
 	
-	public BusinessUser verifyUserExistence(BusinessUser businessUser) throws BusinessException
+	public BusinessUser verifyUserExistence(BusinessUser businessUser) throws BusinessException, IntegrationException
 	{
 		this.validate(businessUser, findUserByUserPhone, BusinessUser.class.getName());
-		BusinessUser foundBusinessUser=new BusinessUser();
+		BusinessUser searchedForBusinessUser=new BusinessUser();
 		try 
 		{
-			foundBusinessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(foundBusinessUser, this.userService.findByUserPhone(businessUser.getCountryPhoneCode()+businessUser.getPhoneNumber()), false);
-			if(foundBusinessUser!=null)
+			searchedForBusinessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(searchedForBusinessUser, this.userService.findByUserPhone(businessUser.getCountryPhoneCode()+businessUser.getPhoneNumber()), false);
+			if(searchedForBusinessUser!=null)
 			{
-				if(StringUtility.isStringPopulated(foundBusinessUser.getPassword()))
+				if(StringUtility.isStringPopulated(searchedForBusinessUser.getPassword()))
 				{
-					foundBusinessUser.setBusinessFlow(BusinessFlow.VERIFY_PASSWORD);
+					searchedForBusinessUser.setBusinessFlow(BusinessFlow.VERIFY_PASSWORD);
 				}
-				else if(!StringUtility.isStringPopulated(foundBusinessUser.getPassword()))
-				{
-					foundBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);
-				}
-
 			}
-			
+					
 		}
 		catch(Exception exception)
 		{
-			this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);
-			foundBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);					
+			this.logger.info("Enter Excepton Handling");
+			this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);			
+			//searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
+			
+			searchedForBusinessUser=new BusinessUser();
+			List<AzimutAccount> azimutAccounts=this.checkAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
+			
+			if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
+			{
+				searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);
+			}
+			
+			else
+			{
+				searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
+			}
+			
+			
 		}
 		
-		return foundBusinessUser;
+		return searchedForBusinessUser;
 	}
 
 	public BusinessUser getByUserPhoneAndPassword(String username,String password,String deviceId) throws BusinessException
 	{
-		BusinessUser businessUser=new BusinessUser();		
+		BusinessUser businessUser=new BusinessUser();
+		User user=new User();
 		try 
 		{
-			User user=this.userService.findByUserPhoneAndPassword(username,this.userUtility.encryptUserPassword(password));
-			this.userUtility.upsertDeviceIdAudit(user, deviceId);
+			user=this.userService.findByUserPhoneAndPassword(username,this.userUtility.encryptUserPassword(password));
+			
 			businessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(businessUser, user, true);
 		}
 		catch(Exception exception)
 		{
 			throw this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);
 		}
+		//this.userUtility.allowUserToLogin(user, deviceId);
 		return businessUser;
 		
 	}
@@ -376,6 +397,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public BusinessUser updateUserStep(BusinessUser businessUser,Integer userStep) throws BusinessException
 	{
+		BusinessUser editedUser=new BusinessUser();
 		try 
 		{
 		
@@ -388,15 +410,15 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			{
 				businessUser.setLivenessChecked(true);
 			}
-			
-			
-			this.editUser(this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, userStep));	
+						
+			editedUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, userStep);
+			this.editUser(editedUser);
 		}
 		catch(Exception exception)
 		{
 			throw this.handleBusinessException(exception,ErrorCode.USER_NOT_UPDATED);
 		}
-		return new BusinessUser();
+		return editedUser;
 	}
 	
 	public int userStepCheck(Integer oldUserStep,Integer newUserStep)
@@ -404,8 +426,9 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		return 0;
 	}
 	
-	public BusinessUser addUserLocation(UserLocation userLocation,BusinessUser tokenizedBusinessUser)
+	public BusinessUser addUserLocation(UserLocation userLocation,BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
+		this.validation.validate(userLocation, saveUserLocation, UserLocation.class.getName());
 		try 
 		{
 			this.userUtility.addUserLocation(tokenizedBusinessUser, userLocation);
@@ -445,6 +468,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			if(BooleanUtility.isTrue(businessUser.getIsMobile()))
 			{
 				businessUser.setClientBankAccounts(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser));
+				businessUser.setVerificationPercentage(tokenizedBusinessUser.getVerificationPercentage());
 			}
 			
 		}
@@ -496,7 +520,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		BusinessUser businessUser=new BusinessUser();
 		try 
 		{
-		businessUser.setDocumentURL(this.pdfGenerateService.downloadContract(this.userAnswerSubmissionService.getUserAnswersByUserIdAndAnswerType(businessUser.getId(), AnswerType.DOCUMENT.getType()), businessUser,solvedPages));
+		businessUser.setDocumentURL(this.pdfGenerateService.downloadContract(this.userAnswerSubmissionService.getUserAnswersByUserIdAndAnswerType(tokenizedBusinessUser.getId(), AnswerType.DOCUMENT.getType()), tokenizedBusinessUser,solvedPages));
 		}
 		catch (BusinessException | IOException e) 
 		{
@@ -505,7 +529,50 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		}
 		return businessUser;
 	}
+	public BusinessAzimutClient checkAccountAtTeaComputers(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	{
+		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
+		try 
+		{			
+			responseBusinessAzimutClient.setAzimutAccounts(this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());	
+		}
+		catch(Exception exception)
+		{
 	
+			if(exception instanceof IntegrationException)
+			{
+				this.logger.info("Detecting the exception type in the checkAccountAtTeaComputers method:::");
+				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			}
+			else
+			{
+				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			}
+		}
+
+		return responseBusinessAzimutClient;
+	}
+	  AzimutAccount	prepareAccountRetrievalInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser)
+	  {
+		  AzimutAccount azimutAccount=new AzimutAccount();
+		  azimutAccount.setPhoneNumber(businessAzimutClient.getUserPhone());
+		  azimutAccount.setUserId(businessAzimutClient.getUserId());
+		  azimutAccount.setIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+		  return azimutAccount;
+	  }	
+	  Long getAzimutUserTypeId(BusinessUser businessUser)
+	  {
+		  try 
+		  {
+			  return businessUser.getAzimutIdTypeId();
+		  }
+		  catch(Exception exception)
+		  {
+			  this.exceptionHandler.getNullIfNonExistent(exception);
+			  return null;
+		  }
+	  }
 	
 	private User storeFileBlobNameAndGenerateTokenInBusinessUser(BusinessUser businessUser,User user,MultipartFile file,String containerName,String parameter,boolean generateSasToken) throws IOException, BusinessException
 	{

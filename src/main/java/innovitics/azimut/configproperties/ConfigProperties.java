@@ -85,6 +85,9 @@ public class ConfigProperties {
     @Value("${azimut.url}")
     private String azimutUrl;
 
+    @Value("${azimut.fund.images.url}")
+    private String azimutFundImagesUrl;
+
     @Value("${tea.computers.url}")
     private String teaComputersUrl;
     
@@ -193,6 +196,10 @@ public class ConfigProperties {
 	}
 	public String getAzimutUrl() {
 		return azimutUrl;
+	}
+	
+	public String getAzimutFundImagesUrl() {
+		return azimutFundImagesUrl;
 	}
 	public String getTeaComputersUrl() {
 		return teaComputersUrl;

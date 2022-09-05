@@ -74,12 +74,14 @@ public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<
 
 	@Override
 	protected void generateResponseSignature(GetClientCashBalanceResponse getClientCashBalanceResponse) throws IntegrationException {
-		
-		if(StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",
+		if(getClientCashBalanceResponse!=null)
+		{
+				if(StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",
 				getClientCashBalanceResponse!=null&&getClientCashBalanceResponse.getCurrencyID()!=null?getClientCashBalanceResponse.getCurrencyID().toString():null
 				,getClientCashBalanceResponse!=null&&getClientCashBalanceResponse.getBalance()!=null?getClientCashBalanceResponse.getBalance().toString():null), getClientCashBalanceResponse.getSignature())||!StringUtility.isStringPopulated(getClientCashBalanceResponse!=null?getClientCashBalanceResponse.getSignature():null))
-		{
-			throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);
+			{
+				throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);
+			}
 		}
 	}
 

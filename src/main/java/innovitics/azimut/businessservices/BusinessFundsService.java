@@ -1,5 +1,6 @@
 package innovitics.azimut.businessservices;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 	
 	
 	
-	public List<BusinessFundPrice> updateFundPrices(List<BusinessFundPrice> businessFundPrices3) throws IntegrationException, BusinessException {
+	public List<BusinessFundPrice> updateFundPrices(/*List<BusinessFundPrice> inputBusinessFundPrices*/) throws IntegrationException, BusinessException {
 		List<BusinessFundPrice> businessFundPrices = new ArrayList<BusinessFundPrice>();
 		List<Fund> fundsWithoutNavs=new ArrayList<Fund>();
 		List<Nav> insertedNavs=new ArrayList<Nav>();
@@ -88,7 +89,7 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 							&& nav.getNav().doubleValue() == businessFundPrice.getNav().doubleValue()) {
 						if (nav.getDate() != null && StringUtility.isStringPopulated(businessFundPrice.getPriceDate())
 								&& DateUtility.areDatesDifferent(nav.getDate(),
-										DateUtility.changeStringDateToDate(businessFundPrice.getPriceDate()))) {
+										DateUtility.changeStringDateToDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(),new SimpleDateFormat("dd-mm-yyyy"),new SimpleDateFormat("yyyy-mm-dd"))))) {
 							this.logger.info("Inserting due to same price on a different date.");
 							insertedNavs.add(this.generateNavFromNavAndBusinessFund(nav.getFundId(), businessFundPrice));
 							}

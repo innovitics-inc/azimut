@@ -16,7 +16,7 @@ public class FundRepositoryImpl extends AbstractRepository<Fund>  implements Fun
 
 	@Override
 	public List<Fund> getFundsWithoutNavs() {
-		return this.generateQuery("select * from funds f  WHERE not EXISTS (SELECT * from navs2 n where n.fund_id=f.id)", Fund.class, null).getResultList();
+		return this.generateQuery("select * from funds f  WHERE not EXISTS (SELECT * from navs n where n.fund_id=f.id)", Fund.class, null).getResultList();
 	}
 
 }

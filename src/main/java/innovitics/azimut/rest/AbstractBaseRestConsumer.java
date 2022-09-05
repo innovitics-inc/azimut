@@ -24,6 +24,7 @@ import org.springframework.util.SerializationUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -185,6 +186,10 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 		String json ="";
 	    try 
 	    {
+			objectMapper.setSerializationInclusion(Include.NON_NULL);
+			objectMapper.setSerializationInclusion(Include.NON_ABSENT);
+			objectMapper.setSerializationInclusion(Include.NON_EMPTY);
+
 			json = objectMapper.writeValueAsString(request);
 			//this.logger.info("Json:::::"+json);
 		} catch (JsonProcessingException e) 

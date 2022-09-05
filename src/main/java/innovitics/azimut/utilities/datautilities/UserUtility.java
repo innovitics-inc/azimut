@@ -1,7 +1,9 @@
 package innovitics.azimut.utilities.datautilities;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,35 +38,87 @@ public class UserUtility extends ParentUtility{
 	@Autowired BlobFileUtility blobFileUtility;	
 	@Autowired UserImageService userImageService;
 	@Autowired protected ListUtility<UserImage> listUtility;
+	@Autowired protected ListUtility<UserDevice> userDeviceListUtility;
 	@Autowired protected ListUtility<UserLocation> userLocationListUtility;
 	@Autowired protected ExceptionHandler exceptionHandler;
 	@Autowired GenderService genderService;
 	@Autowired AES aes;
 	@Autowired UserLocationService userLocationService;
 
-	public void upsertDeviceIdAudit(User user,String deviceId)
+	public void upsertDeviceIdAudit(User user,String deviceId,UserDevice updatedUserDevice)
 	{
-		if(user!=null&&StringUtility.isStringPopulated(deviceId))
-		{			
-				if (StringUtility.stringsDontMatch(user.getDeviceId(), deviceId)) 
-				{
-					UserDevice userDevice=new UserDevice();
-					userDevice.setDeviceId(deviceId);
-					userDevice.setCreatedAt(new Date());
-					userDevice.setUser(user);
-					userDevice.setUserPhone(user.getUserPhone());
-					userDevice.setUpdatedAt(new Date());
-					userDevice.setUserId(user.getUserId());
-					user.setDeviceId(deviceId);
-					
-					
-					this.userDeviceService.addUserDevice(userDevice);
-					this.userService.update(user);
-				}
-
+			if(updatedUserDevice!=null)
+			{
+				
+				updatedUserDevice.setUpdatedAt(new Date());
+				updatedUserDevice.setUser(user);
+				this.userDeviceService.updateUserDevice(updatedUserDevice);
+			}
+			else
+			{
+				UserDevice userDevice=new UserDevice();
+				userDevice.setCreatedAt(new Date());
+				userDevice.setUpdatedAt(new Date());
+				userDevice.setDeviceId(deviceId);
+				userDevice.setUser(user);
+				userDevice.setUserPhone(user.getUserPhone());
+				userDevice.setUserId(user.getUserId());
+				this.userDeviceService.updateUserDevice(userDevice);
+			}
 			
-		}
 	}
+	
+	public void allowUserToLogin(User user,String deviceId) throws BusinessException
+	{	
+		if(!StringUtility.isStringPopulated(deviceId))
+		{	
+			this.logger.info("deviceId empty");
+			deviceId=aes.encrypt(user.getId().toString()+StringUtility.WEB_DEVICE);
+			this.logger.info("deviceId:::::"+deviceId);
+		}
+		
+		List<UserDevice> userDevices=this.userDeviceService.getUserDevicesWithUserId(user.getId());
+		
+		
+		
+		if(userDeviceListUtility.isListPopulated(userDevices))
+			{
+			List<String> deviceIds=new ArrayList<String>();
+			
+			
+			
+			Timestamp current=new Timestamp(System.currentTimeMillis());		
+		    Calendar cal = Calendar.getInstance();
+		    cal.setTimeInMillis(current.getTime());	    
+			int tokenExpiryMinutes=Integer.valueOf(this.configProperties.getJwTokenDurationInMinutes());
+		    cal.add(Calendar.MINUTE, -tokenExpiryMinutes);
+		    Timestamp currentMinusTokenExpiry = new Timestamp(cal.getTime().getTime());
+		    
+		    for(UserDevice userDevice:userDevices)
+		    {
+		    	if(currentMinusTokenExpiry.before(userDevice.getUpdatedAt()))
+		    	{
+		    		throw new BusinessException(ErrorCode.MULTIPLE_LOGINS);
+		    	}
+		    	if(userDevice!=null&&StringUtility.isStringPopulated(userDevice.getDeviceId())&&StringUtility.stringsMatch(userDevice.getDeviceId(), deviceId))
+		    	{
+		    		this.logger.info("UserDevice:::"+userDevice.toString());
+		    		this.upsertDeviceIdAudit(user, deviceId,userDevice);
+		    	}
+		    	deviceIds.add(userDevice.getDeviceId());
+		    }
+		    if(!deviceIds.contains(deviceId))
+		    {
+		    	this.upsertDeviceIdAudit(user, deviceId,null);
+		    }
+		}
+		else
+		{
+			this.upsertDeviceIdAudit(user, deviceId,null);
+		}
+		
+	}	
+
 
 	public UserImage createUserImageRecord(BusinessUser businessUser,MultipartFile file,UserImageType userImageType) throws IOException, BusinessException
 	{
@@ -236,4 +290,7 @@ public class UserUtility extends ParentUtility{
 		}
 		
 	}
+	
+	
+	
 }

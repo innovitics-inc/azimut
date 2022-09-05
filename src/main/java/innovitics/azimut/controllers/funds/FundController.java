@@ -11,15 +11,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import innovitics.azimut.businessmodels.funds.BusinessFundPrice;
+import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessservices.BusinessFundsService;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.services.FundService;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
 @RequestMapping("/api/fund")
@@ -27,14 +31,15 @@ public class FundController extends BaseGenericRestController<BusinessFundPrice,
 
 	@Autowired BusinessFundsService businessFundsService;
 	
-	@PostMapping(value="/updateFundPrices",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+	@GetMapping(value="/updateFundPrices",
+			
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessFundPrice>> updateFundPrices(@RequestBody BusinessFundPrice[] businessFundPrices) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessFundPrice>> updateFundPrices() throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			List<BusinessFundPrice> business=new ArrayList<BusinessFundPrice>();
-			 Collections.addAll(business, businessFundPrices);
-			return this.generateBaseGenericResponse(BusinessFundPrice.class, null, this.businessFundsService.updateFundPrices(business), null);
+			/*List<BusinessFundPrice> business=new ArrayList<BusinessFundPrice>();
+			 Collections.addAll(business, businessFundPrices);*/
+			return this.generateBaseGenericResponse(BusinessFundPrice.class, null, this.businessFundsService.updateFundPrices(), null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -42,9 +47,6 @@ public class FundController extends BaseGenericRestController<BusinessFundPrice,
 		}
 		
 	}
-
-	
-	
 	
 	
 }

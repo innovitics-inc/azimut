@@ -27,6 +27,8 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.pdfgenerator.Executor;
+import innovitics.azimut.services.FundService;
+import innovitics.azimut.services.user.UserDeviceService;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
@@ -39,6 +41,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	@Autowired BusinessUserService businessUserService;
 	@Autowired Executor executor;
 	@Autowired BlobFileUtility blobFileUtility;
+	@Autowired FundService fundService;
+	@Autowired UserDeviceService userDeviceService;
+
 	@PostMapping(value="/getById",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
@@ -56,7 +61,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	
 	@PostMapping(value="/getByUserPhone",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getByUserPhone(@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getByUserPhone(@RequestBody BusinessUser businessUser) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			
@@ -322,5 +327,21 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		return null;
 		
 	}
+	
+	
+
+	@GetMapping(value="/getPrices",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+		protected ResponseEntity<BaseGenericResponse<BusinessUser>> getFundPrices(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+		
+		BusinessUser businessUser=new BusinessUser();
+		
+		//businessUser.setFundPrices(this.fundService.getAllFundPrices());
+		
+		return this.generateBaseGenericResponse(BusinessUser.class, businessUser,null, null);
+		
+		
+	}
+	
 }
 

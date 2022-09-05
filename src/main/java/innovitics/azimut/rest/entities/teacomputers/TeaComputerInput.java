@@ -10,6 +10,7 @@ public class TeaComputerInput extends BaseInput{
 	protected String username;
 	protected String password;
 	protected Long bankId;
+	protected Long fundId;
 
 	public String getLocale() {
 		return locale;
@@ -57,6 +58,14 @@ public class TeaComputerInput extends BaseInput{
 
 	public void setBankId(Long bankId) {
 		this.bankId = bankId;
+	}
+
+	public Long getFundId() {
+		return fundId;
+	}
+
+	public void setFundId(Long fundId) {
+		this.fundId = fundId;
 	}
 	
 	

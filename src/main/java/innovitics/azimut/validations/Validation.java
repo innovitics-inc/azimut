@@ -288,7 +288,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 				catch(Exception exception)
 				{
 					exception.printStackTrace();
-					throw new BusinessException(ErrorCode.NO_DATA_FOUND);
+					throw new BusinessException(ErrorCode.ANSWER_SUBMISSION_FAILED);
 				}
 				
 				

@@ -10,7 +10,7 @@ public class TeaComputerRequest extends BaseRestRequest{
 	 protected String IdNumber;
 	 protected String UserName;
 	 protected String Password;
-	 protected String FundId;
+	 protected Long FundId;
 	 
 
 	public String getSignature() {
@@ -71,13 +71,13 @@ public class TeaComputerRequest extends BaseRestRequest{
 		Password = password;
 	}
 
-	public String getFundId() {
+	public Long getFundId() {
 		return FundId;
 	}
 
 
 
-	public void setFundId(String fundId) {
+	public void setFundId(Long fundId) {
 		FundId = fundId;
 	}
 

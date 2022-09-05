@@ -60,9 +60,9 @@ public class AddAccountApiConsumer extends RestTeaComputerApiConsumer<AddAccount
 
 	@Override
 	public void validateResponse(ResponseEntity<AddAccountResponse> responseEntity) throws IntegrationException {
-		if (!this.validateResponseStatus(responseEntity)) 
+		if (this.validateResponseStatus(responseEntity)) 
 		{
-			throw new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
+			this.generateResponseSignature(responseEntity.getBody());
 		}
 		if (responseEntity.getBody() == null) 
 		{
@@ -103,7 +103,11 @@ public class AddAccountApiConsumer extends RestTeaComputerApiConsumer<AddAccount
 						throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);
 					}
 					
-				}	
+				}
+				else 
+				{
+					throw new IntegrationException(ErrorCode.NO_DATA_FOUND);
+				}
 		
 	}
 

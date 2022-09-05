@@ -28,6 +28,7 @@ public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetCli
 		this.populateCredentials(request);
 		request.setIdTypeId(input.getIdTypeId());
 		request.setIdNumber(input.getIdNumber());
+		request.setFundId(input.getFundId());
 		request.setSignature(this.generateSignature(request));
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getLocale(), this.getContentLength(request)));
 		return httpEntity;
@@ -111,7 +112,14 @@ public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetCli
 	
 	@Override
 	protected String generateSignature(GetClientFundsRequest getClientFundsRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature(getClientFundsRequest.getIdTypeId().toString(),getClientFundsRequest.getIdNumber());
+		if(getClientFundsRequest.getFundId()!=null)
+		{
+			return this.teaComputersSignatureGenerator.generateSignature(getClientFundsRequest.getIdTypeId().toString(),getClientFundsRequest.getIdNumber(),getClientFundsRequest.getFundId().toString());	
+		}
+		else
+		{
+			return this.teaComputersSignatureGenerator.generateSignature(getClientFundsRequest.getIdTypeId().toString(),getClientFundsRequest.getIdNumber());
+		}
 	}
 
 

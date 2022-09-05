@@ -18,8 +18,8 @@ public class NavRepositoryImpl extends AbstractRepository<Nav>  implements NavRe
 
 	@Override
 	public List<Nav> getByJoinedTeacomputerIds() {
-		return (List<Nav>)this.generateQuery("select n.* from navs2 n  inner join"
-				+ "(select fund_id,teacomputer_id ,max(created_at) max_date from navs2 group by fund_id,teacomputer_id)x"
+		return (List<Nav>)this.generateQuery("select n.* from navs n  inner join"
+				+ "(select fund_id,teacomputer_id ,max(created_at) max_date from navs group by fund_id,teacomputer_id)x"
 				+ " on n.fund_id=x.fund_id"
 				+ " and n.teacomputer_id=x.teacomputer_id"
 				+ " and n.created_at = x.max_date"

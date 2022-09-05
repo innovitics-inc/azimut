@@ -82,32 +82,20 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 	@Override
 	public void validateResponse(ResponseEntity<ClientBankAccountResponse[]> responseEntity)
 			throws IntegrationException {
-		if(!this.validateResponseStatus(responseEntity))
+		if(this.validateResponseStatus(responseEntity))
 		{
-			if(responseEntity!=null&&responseEntity.getStatusCode()!=null&&responseEntity.getStatusCode().equals(HttpStatus.BAD_REQUEST))
-			{
-				if(responseEntity.getBody()!=null)
-				{
-					//this.validateResponse((ResponseEntity<TeaComputerResponse> responseEntity)responseEntity,true);
-				}
-			}
+			this.generateResponseListSignature(responseEntity.getBody());
 		}
 		
-		if(responseEntity.getBody()!=null)
-		this.generateResponseListSignature(responseEntity.getBody());
+		
+		
 	}
 	
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Get Client Bank Account API:::");
 		if(exception instanceof IntegrationException)
 		{
-			this.logger.info("The exception was found to be an integration exception:::");
-			IntegrationException integrationException=(IntegrationException)exception;
-			
-			this.logger.info("Check Account API Integration Exception error Code:::"+integrationException.getErrorCode());
-			this.logger.info("Check Account API Integration Exception error message:::"+integrationException.getErrorMessage());
-			
+			IntegrationException integrationException=(IntegrationException)exception;			
 			return integrationException;
 		}
 		else

@@ -1,5 +1,6 @@
 package innovitics.azimut.utilities.datautilities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,7 +37,7 @@ public final class StringUtility extends ParentUtility{
 	public final static String PAGE_NUMBER="page-";
 	public final static String CONTRACTS_SUBDIRECTORY="userContracts";
 	public final static String CONTRACT_DOCUMENT_NAME="contract";
-	
+	public final static String WEB_DEVICE="WEB";
 	public static String getClassName(Object object)
 	{
 		return object.getClass().getName();
@@ -154,6 +155,26 @@ public final class StringUtility extends ParentUtility{
 	{
 		if(isStringPopulated(input)&&isStringPopulated(splittingCharacter))
 			return Arrays.asList(input.split(splittingCharacter));
+		else
+			return null;	
+		
+	}
+	
+	public static List<Integer> splitStringUsingCharacterToIntegerArray(String input,String splittingCharacter)
+	{
+		
+		
+		if(isStringPopulated(input)&&isStringPopulated(splittingCharacter))
+		{
+			List<Integer> integerArray=new ArrayList<Integer>();
+			List<String> stringArray= Arrays.asList(input.split(splittingCharacter));
+			for(String string:stringArray)
+			{
+				integerArray.add(Integer.valueOf(string));
+			}
+			
+			return integerArray;
+		}
 		else
 			return null;	
 		

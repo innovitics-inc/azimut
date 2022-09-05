@@ -1,7 +1,6 @@
 package innovitics.azimut.models.user;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -10,16 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import innovitics.azimut.models.BaseEntity;
-import innovitics.azimut.models.kyc.UserAnswer;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
@@ -48,8 +43,11 @@ public class User extends BaseEntity {
 	private Integer verificationPercentage;
 	private Boolean isVerified;
 	private Boolean migrated;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date createdAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date updatedAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date deletedAt;
 	private String countryCode;
 	private Long lastSolvedPageId;

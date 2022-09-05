@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 
 import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.businessutilities.SearchFilter;
+import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
@@ -29,7 +30,8 @@ import innovitics.azimut.utilities.dbutilities.specifications.child.UserSpecific
 		protected static final Logger logger = LogManager.getLogger(AbstractService.class);
 		@Autowired
 		protected ArrayUtility arrayUtility;
-		
+		@Autowired  
+		protected ConfigProperties configProperties;
 		PaginatedEntity<T> createPaginatedEntity(List<T> dataList,Integer pageNumber, Integer pageSize)
 		{
 			PagedListHolder<T> pages = new PagedListHolder<T>(dataList);

@@ -5,7 +5,7 @@ import innovitics.azimut.businessmodels.BaseBusinessEntity;
 public class BusinessClientFund extends BaseBusinessEntity {
 	
 
-	private Long  quantity;
+	private Double  quantity;
 	private Double avgcost;
 	private String tradePrice;
 	private Double availableToBuy;
@@ -18,11 +18,12 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	private Double currencyRate;
 	private Double totalAmount;
 	private String lastPriceUpdateDate;
+	private String logo;
 	
-	public Long getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(Long quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 	public Double getAvgcost() {
@@ -97,6 +98,12 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	}
 	public void setLastPriceUpdateDate(String lastPriceUpdateDate) {
 		this.lastPriceUpdateDate = lastPriceUpdateDate;
+	}
+	public String getLogo() {
+		return logo;
+	}
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 	
 	

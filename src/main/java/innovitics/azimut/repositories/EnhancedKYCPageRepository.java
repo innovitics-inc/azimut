@@ -12,12 +12,14 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
+import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.models.kyc.Answer;
 import innovitics.azimut.models.kyc.KYCPage;
 import innovitics.azimut.models.kyc.Question;
@@ -222,5 +224,6 @@ public class EnhancedKYCPageRepository extends AbstractRepository<KYCPage>{
 		return pages;
 		
 	}
+
 	
 }

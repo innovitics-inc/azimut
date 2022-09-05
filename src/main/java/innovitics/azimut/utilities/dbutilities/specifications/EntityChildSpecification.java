@@ -1,10 +1,12 @@
 package innovitics.azimut.utilities.dbutilities.specifications;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -15,7 +17,7 @@ import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 
 @Component
-public class EntityChildSpecification  <T extends BaseEntity> implements Specification<T> {
+public class EntityChildSpecification  <T extends BaseEntity> extends BaseSpecification implements Specification<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -86,6 +88,20 @@ public class EntityChildSpecification  <T extends BaseEntity> implements Specifi
 								criteriaBuilder.isNotNull(root.get(searchCriteria.getKey())));
 						break;
 
+					 case BETWEEN: 
+					       Path<Date> entityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.between(entityDate, getComparingDates(searchCriteria.getRangeFrom(), 0), getComparingDates(searchCriteria.getRangeTo(), 1)));
+						break;
+					 case BEFORE: 
+					       Path<Date> beforeEntityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.lessThan(beforeEntityDate, getComparingDates((String)searchCriteria.getValue(), 0)));
+						break;
+					 case AFTER: 
+					       Path<Date> afterEntityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.greaterThan(afterEntityDate, getComparingDates((String)searchCriteria.getValue(), 0)));
+						break;
+					 	case GROUP_BY:				 	  
+					 		query.multiselect(root.get(searchCriteria.getKey()),criteriaBuilder.count(root)).groupBy(root.get(searchCriteria.getKey()));
 
 					default:
 						break;

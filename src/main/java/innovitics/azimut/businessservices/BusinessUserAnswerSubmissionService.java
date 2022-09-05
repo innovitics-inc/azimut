@@ -51,6 +51,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	@Autowired PdfGenerateService pdfGenerateService;
 	@Autowired ListUtility<BusinessQuestion> questionListUtility;
 	@Autowired KYCPageMapper kycPageMapper;
+	@Autowired ListUtility<Integer> integerListUtility;
 	public BusinessKYCPage submitAnswers(BusinessUser businessUser,BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException
 	{
 		
@@ -69,7 +70,8 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 						businessUser.setLastSolvedPageId(businessUserAnswerSubmission.getPageId());
 						businessUser.setNextPageId(businessUserAnswerSubmission.getNextPageId());
 						StringBuffer stringBuffer=new StringBuffer(businessUser!=null&&StringUtility.isStringPopulated(businessUser.getSolvedPages())?businessUser.getSolvedPages():"");
-						businessUser.setSolvedPages(stringBuffer.append(String.valueOf(order)+",").toString());
+						//businessUser.setSolvedPages(stringBuffer.append(String.valueOf(order)+",").toString());
+						businessUser.setSolvedPages(addSolvedPageOrder(order,stringBuffer));
 						businessKYCPage.setVerificationPercentage(this.updateUserProgress(businessUser,weight));						
 					}	
 					else
@@ -93,7 +95,20 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		return businessKYCPage;
 	}
 	
-	
+	String addSolvedPageOrder(int order,StringBuffer stringBuffer)
+	{				
+		List<Integer> pageOrders = StringUtility.splitStringUsingCharacterToIntegerArray(stringBuffer.toString(), ",");
+		if (integerListUtility.isListPopulated(pageOrders)&&pageOrders.contains(order)) 
+		{
+			return "";
+		} 
+		else 
+		{
+			return stringBuffer.append(String.valueOf(order) + ",").toString();
+		}
+
+		
+	}
 	
 	private void generatePdf(BusinessKYCPage businessKYCPage,BusinessUserAnswerSubmission businessUserAnswerSubmission,BusinessUser businessUser) throws IOException, DocumentException, BusinessException 
 	{

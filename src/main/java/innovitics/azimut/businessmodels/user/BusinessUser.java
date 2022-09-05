@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.models.azimutdetails.FundPrice;
+import innovitics.azimut.models.user.UserDevice;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.utilities.CustomJsonRootName;
@@ -56,6 +58,10 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private Boolean livenessChecked;
 	private BusinessClientBankAccountDetails[] clientBankAccounts;
 	private String solvedPages;
+	private List<AzimutAccount> azimutAccounts;
+	private List<UserDevice> userDevices;
+	private String[] dates;
+	
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -347,6 +353,26 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setSolvedPages(String solvedPages) {
 		this.solvedPages = solvedPages;
+	}
+	
+	public List<AzimutAccount> getAzimutAccounts() {
+		return azimutAccounts;
+	}
+	public void setAzimutAccounts(List<AzimutAccount> azimutAccounts) {
+		this.azimutAccounts = azimutAccounts;
+	}
+	public List<UserDevice> getUserDevices() {
+		return userDevices;
+	}
+	public void setUserDevices(List<UserDevice> userDevices) {
+		this.userDevices = userDevices;
+	}
+	
+	public String[] getDates() {
+		return dates;
+	}
+	public void setDates(String[] dates) {
+		this.dates = dates;
 	}
 	public void concatinate()
 	{

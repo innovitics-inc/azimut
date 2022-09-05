@@ -2,8 +2,14 @@ package innovitics.azimut.repositories.user;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.springframework.data.jpa.repository.Query;
 
+import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.repositories.AbstractRepository;
 

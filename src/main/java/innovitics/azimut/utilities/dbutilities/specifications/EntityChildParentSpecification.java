@@ -1,20 +1,32 @@
 package innovitics.azimut.utilities.dbutilities.specifications;
+import java.sql.Date;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import innovitics.azimut.models.BaseEntity;
+import innovitics.azimut.rest.BaseRestConsumer;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 @Component
-public class EntityChildParentSpecification <T extends BaseEntity,P extends BaseEntity> implements Specification<T> {
-
+public class EntityChildParentSpecification <T extends BaseEntity,P extends BaseEntity> extends BaseSpecification implements Specification<T>  {
+	public final static Logger logger = LogManager.getLogger(EntityChildParentSpecification.class.getName());
+	
 	private static final long serialVersionUID = 1L;
 
 	public EntityChildParentSpecification<T,P> findByCriteria(List<SearchCriteria> searchCriteriaList) {
@@ -83,6 +95,19 @@ public class EntityChildParentSpecification <T extends BaseEntity,P extends Base
 						predicates.add(
 								criteriaBuilder.isNotNull(root.get(searchCriteria.getKey())));
 						break;
+						
+					 case BETWEEN: 
+					       Path<Date> entityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.between(entityDate, getComparingDates(searchCriteria.getRangeFrom(), 0), getComparingDates(searchCriteria.getRangeTo(), 1)));
+						break;
+					 case BEFORE: 
+					       Path<Date> beforeEntityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.lessThan(beforeEntityDate, getComparingDates((String)searchCriteria.getValue(), 0)));
+						break;
+					 case AFTER: 
+					       Path<Date> afterEntityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.greaterThan(afterEntityDate, getComparingDates((String)searchCriteria.getValue(), 0)));
+						break;
 					case PARENT_GREATER_THAN:
 						Join<T, P> joinParentGreaterThan = root.join(searchCriteria.getJoiningColumn());
 						predicates.add(criteriaBuilder.greaterThan(joinParentGreaterThan.get(searchCriteria.getKey()),
@@ -148,6 +173,19 @@ public class EntityChildParentSpecification <T extends BaseEntity,P extends Base
 						predicates.add(
 								criteriaBuilder.isNotNull(joinParentIsNotNull.get(searchCriteria.getKey())));
 						break;
+					 case PARENT_BETWEEN: 
+						   Join<T, P> joinParentIsBetween= root.join(searchCriteria.getJoiningColumn());
+					       Path<Date> parentEntityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.between(parentEntityDate, getComparingDates(searchCriteria.getRangeFrom(), 0), getComparingDates(searchCriteria.getRangeTo(), 1)));
+						break;
+					 case PARENT_BEFORE: 
+					       Path<Date> beforeParentEntityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.lessThan(beforeParentEntityDate, getComparingDates((String)searchCriteria.getValue(), 0)));
+						break;
+					 case PARENT_AFTER: 
+					       Path<Date> afterParentEntityDate = root.get(searchCriteria.getKey());
+					       predicates.add(criteriaBuilder.greaterThan(afterParentEntityDate, getComparingDates((String)searchCriteria.getValue(), 0)));
+						break;
 
 					default:
 						break;
@@ -164,5 +202,4 @@ public class EntityChildParentSpecification <T extends BaseEntity,P extends Base
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

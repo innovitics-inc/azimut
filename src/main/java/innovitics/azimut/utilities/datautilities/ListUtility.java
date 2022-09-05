@@ -13,7 +13,7 @@ public class ListUtility<T> extends ParentUtility{
 
 	public boolean isListPopulated(List<T> dataList)
 	{
-		return (dataList!=null&&!dataList.isEmpty());
+		return (dataList!=null&&!dataList.isEmpty()&&dataList.size()>0);
 	}
 	
 	public boolean isSetPopulated(Set<T> dataList)

@@ -7,23 +7,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 
+import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
+import innovitics.azimut.utilities.dbutilities.SearchOperation;
 
-public class AbstractRepository<T extends BaseEntity>{
+public abstract class AbstractRepository<T extends BaseEntity>{
 	protected static final Logger logger = LogManager.getLogger(AbstractRepository.class);	
 	@PersistenceContext
 	public EntityManager entityManager;
 	@Autowired ListUtility<T> listUtility;
 	@Autowired ArrayUtility arrayUtility;
+	@Autowired protected ConfigProperties configProperties;
 	protected Query generateQuery(String queryString,Class<T> clazz,String... params)
 	{
 		logger.info("Query String:::"+queryString);
@@ -120,6 +130,46 @@ public class AbstractRepository<T extends BaseEntity>{
 		
 	}
 	
+	protected List<Object[]>  grouping (Class<T> clazz,String searchKey,String searchValue,String aggregatedKey,String aggregatorField,String aggregatorFieldValue)
+	{
+		CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();  
+		CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);  
+		Root<? extends BaseEntity> root = criteriaQuery.from(clazz);
+		
+		criteriaQuery.multiselect(root.get(aggregatedKey),criteriaBuilder.max(root.get(aggregatedKey))).groupBy(root.get(aggregatorField));
+		
+		criteriaQuery.where(criteriaBuilder.equal(root.get(searchKey), searchValue));
+		
+		List<Object[]> list = this.entityManager.createQuery(criteriaQuery).getResultList();
+		for(Object[] objectArray:list)
+		{
+			this.logger.info("Value1::"+objectArray[0].toString());
+			this.logger.info("Value2::"+objectArray[1].toString());
+		}
+		
+		return list;  
+	}
+	protected List<Object[]>  grouping (Class<T> clazz,String searchKey,String searchValue,String aggregatedKey,String aggregatorField,String aggregatorFieldValue,String joiningColumn,String[] selectedValues)
+	{
+		CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();  
+		CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);  
+		Root<? extends BaseEntity> root = criteriaQuery.from(clazz);
+		Join<T, T> join = root.join(joiningColumn);
+		criteriaBuilder.equal(join.get(searchKey),searchValue);
+		this.setSelectedValues(criteriaBuilder,criteriaQuery);
+		this.setWhereConditions(criteriaBuilder, criteriaQuery,searchKey,searchValue);
+		List<Object[]> list = this.entityManager.createQuery(criteriaQuery).getResultList();
+		
+		return list;  
+	}
+
+	protected void setSelectedValues(CriteriaBuilder criteriaBuilder,CriteriaQuery<Object[]> criteriaQuery) {
+		
+	}
+	protected void setWhereConditions(CriteriaBuilder criteriaBuilder,CriteriaQuery<Object[]> criteriaQuery,String searchKey,String searchValue)
+	{
+		
+	}
 	
-	
+
 }

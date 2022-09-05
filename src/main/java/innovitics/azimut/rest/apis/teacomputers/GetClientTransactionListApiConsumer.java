@@ -63,14 +63,11 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 
 	@Override
 	public void validateResponse(ResponseEntity<TransactionResponse[]> responseEntity) throws IntegrationException {
-		if (!this.validateResponseStatus(responseEntity)) {
-			throw new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
+		if (this.validateResponseStatus(responseEntity)) 
+		{
+			this.generateResponseListSignature(responseEntity.getBody());
 		}
-		if (responseEntity.getBody() == null) {
-			throw new IntegrationException(ErrorCode.NO_DATA_FOUND);
-		} 
-
-		this.generateResponseListSignature(responseEntity.getBody());
+		
 	}
 
 	@Override

@@ -251,12 +251,14 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			{
 				businessUser.setUserStep(user.getUserStep().intValue());
 				
+				
 				if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.CLIENT_DATA.getStepId())
 						||NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.BANK_REFERENCES_IGNORE.getStepId()))
 				businessUser.setNextUserStep(user.getUserStep().intValue()+2);
 				
 				else
 				businessUser.setNextUserStep(user.getUserStep().intValue()+1);
+				
 				
 				
 			}
@@ -343,6 +345,8 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			
 			if(user.getLivenessChecked()!=null)
 			businessUser.setLivenessChecked(user.getLivenessChecked());
+			else
+			businessUser.setLivenessChecked(false);
 			
 			if(user.getSolvedPages()!=null)
 				businessUser.setSolvedPages(user.getSolvedPages());

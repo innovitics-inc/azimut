@@ -6,7 +6,6 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 
 	private Long idType;
 	private String idNumber;
-	private String fundId;
 	
 	private Long currencyID;
     private String currencyName;
@@ -26,13 +25,6 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 	public void setIdNumber(String idNumber) {
 		this.idNumber = idNumber;
 	}
-	public String getFundId() {
-		return fundId;
-	}
-	public void setFundId(String fundId) {
-		this.fundId = fundId;
-	}
-	
 	
 	public Long getCurrencyID() {
 		return currencyID;

@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import innovitics.azimut.models.BaseEntity;
@@ -27,8 +28,11 @@ public class UserDevice extends BaseEntity {
 	private Long id;
 	private String userId;
 	private String 	userPhone;
-	private String deviceId; 
+	private String deviceId;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date	createdAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
+	private Date	updatedAt;
 	
 	@ManyToOne
 	@JoinColumn(name="app_user_id",foreignKey = @javax.persistence.ForeignKey(name="none",value = ConstraintMode.NO_CONSTRAINT))
@@ -72,6 +76,14 @@ public class UserDevice extends BaseEntity {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	
+	
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 	@Override
 	public String toString() {
