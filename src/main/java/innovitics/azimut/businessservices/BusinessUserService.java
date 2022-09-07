@@ -357,6 +357,14 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			user=this.userService.findByUserPhoneAndPassword(username,this.userUtility.encryptUserPassword(password));
 			
 			businessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(businessUser, user, true);
+			
+			if(StringUtility.isStringPopulated(deviceId)&&BooleanUtility.isTrue(businessUser.getLivenessChecked())&&businessUser.getUserStep()!=null
+					&&businessUser.getUserStep().intValue()>UserStep.LEFT_AND_RIGHT.getStepId())
+			{
+				businessUser.setNextUserStep(UserStep.LEFT_AND_RIGHT.getStepId());
+			}
+			
+			
 		}
 		catch(Exception exception)
 		{

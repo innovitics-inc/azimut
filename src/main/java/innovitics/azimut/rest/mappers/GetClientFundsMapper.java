@@ -26,13 +26,13 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 	@Override
 	BusinessClientFund consumeRestService(BusinessClientFund businessClientFund, String params) throws IntegrationException, HttpClientErrorException, Exception 
 	{
-		return null;
+		return this.createBusinessEntityFromOutput(this.getClientFundsApiConsumer.invoke(this.createInput(businessClientFund),ClientFundResponse[].class, params));
 	}
 
 	@Override
 	List<BusinessClientFund> consumeListRestService(BusinessClientFund businessClientFund, String params) throws IntegrationException, HttpClientErrorException, Exception 
 	{
-		return  this.createListBusinessEntityFromOutput(this.getClientFundsApiConsumer.invoke(this.createInput(businessClientFund),ClientFundResponse[].class, params));
+		return this.createListBusinessEntityFromOutput(this.getClientFundsApiConsumer.invoke(this.createInput(businessClientFund),ClientFundResponse[].class, params));
 	}
 
 	@Override
@@ -49,7 +49,10 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 
 	@Override
 	BusinessClientFund createBusinessEntityFromOutput(GetClientFundsOutput getClientFundsOutput) {
-		// TODO Auto-generated method stub
+		if(getClientFundsOutput!=null&&getClientFundsOutput.getClientFundOutputs()!=null&&getClientFundsOutput.getClientFundOutputs().get(0)!=null)
+		{
+			return this.changeUnit(getClientFundsOutput.getClientFundOutputs().get(0));
+		}
 		return null;
 	}
 
@@ -63,29 +66,33 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 		{
 			for(ClientFundOutput clientFundOutput:getClientFundsOutput.getClientFundOutputs()) 
 				{
-					BusinessClientFund  businessClientFund=new BusinessClientFund();
-					businessClientFund.setFundType(clientFundOutput.getAssetClass());
-					businessClientFund.setFundName(clientFundOutput.getCertificateName());
-					businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
-					businessClientFund.setCurrencyRate(clientFundOutput.getCurrencyRate());
-					businessClientFund.setTradePrice(clientFundOutput.getTradePrice());
-					businessClientFund.setQuantity(clientFundOutput.getQuantity());
-					if(clientFundOutput!=null&&StringUtility.isStringPopulated(clientFundOutput.getTradePrice())&&clientFundOutput.getQuantity()!=null)
-					{	
-						double totalAmount=clientFundOutput.getQuantity().doubleValue()*Double.valueOf(clientFundOutput.getTradePrice());
-						businessClientFund.setTotalAmount(totalAmount);
-					}
-					else
-					{
-						businessClientFund.setTotalAmount(0d);
-					}
-					
-					businessClientFunds.add(businessClientFund);
-					
+					businessClientFunds.add(this.changeUnit(clientFundOutput));
 				}
 			return businessClientFunds;
 		}		
 				return null;
+	}
+	
+	
+	private BusinessClientFund changeUnit(ClientFundOutput clientFundOutput)
+	{
+		BusinessClientFund  businessClientFund=new BusinessClientFund();
+		businessClientFund.setFundType(clientFundOutput.getAssetClass());
+		businessClientFund.setFundName(clientFundOutput.getCertificateName());
+		businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
+		businessClientFund.setCurrencyRate(clientFundOutput.getCurrencyRate());
+		businessClientFund.setTradePrice(clientFundOutput.getTradePrice());
+		businessClientFund.setQuantity(clientFundOutput.getQuantity());
+		if(clientFundOutput!=null&&StringUtility.isStringPopulated(clientFundOutput.getTradePrice())&&clientFundOutput.getQuantity()!=null)
+		{	
+			double totalAmount=clientFundOutput.getQuantity().doubleValue()*Double.valueOf(clientFundOutput.getTradePrice());
+			businessClientFund.setTotalAmount(totalAmount);
+		}
+		else
+		{
+			businessClientFund.setTotalAmount(0d);
+		}
+		return businessClientFund;
 	}
 
 }

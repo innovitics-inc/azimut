@@ -258,8 +258,10 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 				}
 			
 			businessUserService.editUser(businessUser);
+			
 			this.userUtility.uploadUserImages(userImages,businessValifyResponse,businessUser);
 			userImageService.saveImages(userImages);
+			businessValifyResponse.setVerificationPercentage((this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, UserStep.ID_IMAGES.getStepId())).getVerificationPercentage());
 		}
 		catch(Exception exception)
 		{

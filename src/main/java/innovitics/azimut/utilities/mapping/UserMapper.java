@@ -247,6 +247,12 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			businessUser.setLastSolvedPageId(user.getLastSolvedPageId());
 			if(user.getNextPageId()!=null)
 			businessUser.setNextPageId(user.getNextPageId());
+			if(user.getLivenessChecked()!=null)
+				businessUser.setLivenessChecked(user.getLivenessChecked());
+				else
+				businessUser.setLivenessChecked(false);
+				
+			
 			if(user.getUserStep()!=null)
 			{
 				businessUser.setUserStep(user.getUserStep().intValue());
@@ -257,10 +263,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 				businessUser.setNextUserStep(user.getUserStep().intValue()+2);
 				
 				else
-				businessUser.setNextUserStep(user.getUserStep().intValue()+1);
-				
-				
-				
+				businessUser.setNextUserStep(user.getUserStep().intValue()+1);	
 			}
 			else if(user.getUserStep()==null)
 			{
@@ -343,10 +346,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 					
 			businessUser.setAzimutAccount(azimutAccount);		
 			
-			if(user.getLivenessChecked()!=null)
-			businessUser.setLivenessChecked(user.getLivenessChecked());
-			else
-			businessUser.setLivenessChecked(false);
+			
 			
 			if(user.getSolvedPages()!=null)
 				businessUser.setSolvedPages(user.getSolvedPages());

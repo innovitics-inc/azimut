@@ -1,5 +1,7 @@
 package innovitics.azimut.businessmodels.funds;
 
+import java.util.List;
+
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
 
 public class BusinessClientFund extends BaseBusinessEntity {
@@ -19,7 +21,7 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	private Double totalAmount;
 	private String lastPriceUpdateDate;
 	private String logo;
-	
+	private List<BusinessFundTransaction> fundTransactions;
 	public Double getQuantity() {
 		return quantity;
 	}
@@ -104,6 +106,12 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	}
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+	public List<BusinessFundTransaction> getFundTransactions() {
+		return fundTransactions;
+	}
+	public void setFundTransactions(List<BusinessFundTransaction> fundTransactions) {
+		this.fundTransactions = fundTransactions;
 	}
 	
 	

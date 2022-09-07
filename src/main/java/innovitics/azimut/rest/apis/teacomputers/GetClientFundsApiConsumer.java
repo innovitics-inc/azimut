@@ -114,7 +114,7 @@ public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetCli
 	protected String generateSignature(GetClientFundsRequest getClientFundsRequest) {
 		if(getClientFundsRequest.getFundId()!=null)
 		{
-			return this.teaComputersSignatureGenerator.generateSignature(getClientFundsRequest.getIdTypeId().toString(),getClientFundsRequest.getIdNumber(),getClientFundsRequest.getFundId().toString());	
+			return this.teaComputersSignatureGenerator.generateSignature(getClientFundsRequest.getIdTypeId().toString(),getClientFundsRequest.getIdNumber(),getClientFundsRequest.getFundId()!=null?getClientFundsRequest.getFundId().toString():"");	
 		}
 		else
 		{

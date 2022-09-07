@@ -32,7 +32,7 @@ public class FundPriceMapper extends Mapper<FundPrice,BusinessFundPrice >{
 		if(fundPrice.getTeacomputerId()!=null)
 		businessFundPrice.setTeacomputerId(fundPrice.getTeacomputerId());
 		if(fundPrice.getLogo()!=null)
-		businessFundPrice.setLogo(fundPrice.getLogo()+this.configProperties.getAzimutFundImagesUrl());
+		businessFundPrice.setLogo(this.configProperties.getAzimutFundImagesUrl()+"/"+fundPrice.getLogo());
 		
 		
 		return businessFundPrice;
