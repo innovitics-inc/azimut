@@ -403,23 +403,31 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		return tokenizedBusinessUser;
 	}
 	
-	public BusinessUser updateUserStep(BusinessUser businessUser,Integer userStep) throws BusinessException
+	public BusinessUser updateUserStep(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException
 	{
 		BusinessUser editedUser=new BusinessUser();
 		try 
 		{
 		
-			if(NumberUtility.areIntegerValuesMatching(userStep, UserStep.STRAIGHT_AND_SMILE.getStepId()))
+			if(NumberUtility.areIntegerValuesMatching(businessUser.getUserStep().intValue(), UserStep.STRAIGHT_AND_SMILE.getStepId()))
 			{
 				throw new BusinessException(ErrorCode.INVALID_USER_STEP);
 			}
 			
-			if(NumberUtility.areIntegerValuesMatching(userStep, UserStep.LEFT_AND_RIGHT.getStepId()))
+			if(NumberUtility.areIntegerValuesMatching(businessUser.getUserStep().intValue(), UserStep.LEFT_AND_RIGHT.getStepId()))
 			{
-				businessUser.setLivenessChecked(true);
+				
+				if(businessUser!=null&&StringUtility.isStringPopulated(businessUser.getUserId()))
+				{
+					if(StringUtility.stringsDontMatch(tokenizedBusinessUser.getUserId(), businessUser.getUserId()))
+						throw new BusinessException(ErrorCode.USER_ID_NOT_MATCHING);
+					
+				}
+				
+				tokenizedBusinessUser.setLivenessChecked(true);
 			}
-						
-			editedUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(businessUser, userStep);
+		
+			editedUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(tokenizedBusinessUser, businessUser.getUserStep().intValue());
 			this.editUser(editedUser);
 		}
 		catch(Exception exception)

@@ -24,13 +24,6 @@ public enum ErrorCode {
 	USER_NOT_SAVED(2113, "User was not saved."),
 	USER_NOT_UPDATED(2114, "User was not updated."),
 	USER_EXISTS(2115, "User already exists."),
-	PAGES_NOT_FOUND(31111,"No pages are found for this user type."),
-	PAGE_NOT_FOUND(31112,"Page not found."),
-	INVALID_ANSWER_TYPE(31113,"Invalid answer type."),
-	ANSWER_SUBMISSION_FAILED(31114,"Could not submit the answers."),
-	CONTRACT_DOWNLOAD_FAILED(31115,"Could not download the contract."),
-	PDF_GENERATION_FAILED(31117,"Could not download the contract."),
-	KYC_INCOMPLETE(31118,"Please Complete the KYC Form."),
 	INCORRECT_PASSWORD(2116, "Incorrect password."),
 	BAD_CREDENTIALS(2117, "Bad credentials."),
 	FAILED_TO_VALIDATE_TOKEN(2118,"Session expired."),
@@ -40,7 +33,15 @@ public enum ErrorCode {
 	USE_MOBILE(2122,"Please use the mobile app to take the pictures for a better experience."),
 	TOO_MANY_USER_LOCATIONS(2123,"More than one user was found having this phone."),
 	USER_LOCATION_NOT_SAVED(2124,"Could not save the user location."),
-	INVALID_USER_STEP(2125,"Invalid userStep")
+	INVALID_USER_STEP(2125,"Invalid userStep"),
+	USER_ID_NOT_MATCHING(2126, "The User Id does not match the extracted client data."),
+	PAGES_NOT_FOUND(31111,"No pages are found for this user type."),
+	PAGE_NOT_FOUND(31112,"Page not found."),
+	INVALID_ANSWER_TYPE(31113,"Invalid answer type."),
+	ANSWER_SUBMISSION_FAILED(31114,"Could not submit the answers."),
+	CONTRACT_DOWNLOAD_FAILED(31115,"Could not download the contract."),
+	PDF_GENERATION_FAILED(31117,"Could not download the contract."),
+	KYC_INCOMPLETE(31118,"Please Complete the KYC Form."),
 	;
 	
 	private final int code;

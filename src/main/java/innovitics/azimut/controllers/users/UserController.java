@@ -188,7 +188,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> logUserStep(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserStep(this.getCurrentRequestHolder(token),businessUser.getUserStep()),null,null);
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserStep(this.getCurrentRequestHolder(token),businessUser),null,null);
 		}
 		
 		catch(BusinessException businessException)
