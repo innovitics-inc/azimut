@@ -7,7 +7,7 @@
 	
 	<!-- Ask Ehcache to store cache in this path -->
 	<!--diskStore path="c:\\cache" /-->
-	<diskStore path="//home//site//wwwroot//webapps//cache" />
+	<diskStore path="//home//site//wwwroot//cache" />
 
 	<!-- Sample cache named cache1
     This cache contains a maximum in memory of 10000 elements, and will expire
