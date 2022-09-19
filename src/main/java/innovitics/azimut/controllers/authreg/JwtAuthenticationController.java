@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import innovitics.azimut.businessmodels.user.AuthenticationRequest;
 import innovitics.azimut.businessmodels.user.AuthenticationResponse;
 import innovitics.azimut.businessmodels.user.BusinessUser;
-import innovitics.azimut.businessmodels.user.Token;
 import innovitics.azimut.businessservices.BusinessUserService;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
-import innovitics.azimut.pdfgenerator.Executor;
 import innovitics.azimut.utilities.businessutilities.EmailUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 

@@ -48,6 +48,7 @@ import innovitics.azimut.utilities.exceptionhandling.FileUploadExceptionAdvice;
 @ComponentScan(basePackages = {"innovitics.azimut.repositories"})
 @ComponentScan(basePackages = {"innovitics.azimut.services"})
 @ComponentScan(basePackages = {"innovitics.azimut.jobs"})
+@ComponentScan(basePackages = {"innovitics.azimut.pdfgenerator"})
 
 @EntityScan("innovitics.azimut.models")
 

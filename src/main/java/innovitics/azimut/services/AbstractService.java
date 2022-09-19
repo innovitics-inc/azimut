@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
+import innovitics.azimut.AzimutParent;
 import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.businessutilities.SearchFilter;
 import innovitics.azimut.configproperties.ConfigProperties;
@@ -25,13 +26,9 @@ import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.child.UserSpecification;
 	@Service
-	public abstract class AbstractService <T extends BaseEntity,S> {
+	public abstract class AbstractService <T extends BaseEntity,S> extends AzimutParent {
 		
 		protected static final Logger logger = LogManager.getLogger(AbstractService.class);
-		@Autowired
-		protected ArrayUtility arrayUtility;
-		@Autowired  
-		protected ConfigProperties configProperties;
 		PaginatedEntity<T> createPaginatedEntity(List<T> dataList,Integer pageNumber, Integer pageSize)
 		{
 			PagedListHolder<T> pages = new PagedListHolder<T>(dataList);

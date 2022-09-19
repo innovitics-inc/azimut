@@ -100,6 +100,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return this.beautifyBalanceAndTransactionsBusinessAzimutClient(responseBusinessAzimutClient);
 	}
 	
+	
+	
+
 	public BusinessAzimutClient getBankAccountsWithDetails(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,boolean isList) throws BusinessException,IntegrationException
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
@@ -318,17 +321,31 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	}
 	
 	
-	public BusinessAzimutClient getClientFundsList(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
+	public BusinessAzimutClient getClientFundsList(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
 	{
 		
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
-
+		
+		try {
 		Map <String,Object> clientFundPriceMap= this.getClientFunds(tokenizedBusinessUser, responseBusinessAzimutClient);
 
 		BusinessClientCashBalance businessClientCashBalance=this.getClientBalanceMapper.wrapBaseBusinessEntity(false,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();
 
 		this.beautifyBusinessClientFunds(responseBusinessAzimutClient,(List<BusinessClientFund>)clientFundPriceMap.get(BusinessClientFund.class.getName()),(List<BusinessFundPrice>)clientFundPriceMap.get(BusinessFundPrice.class.getName()), businessClientCashBalance);
-
+		}
+		
+		catch(Exception exception)
+		{
+			if(exception instanceof IntegrationException)
+			{
+				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			}
+			else
+			{
+				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			}
+		}
+		
 		return responseBusinessAzimutClient;
 	}
 	

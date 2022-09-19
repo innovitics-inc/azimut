@@ -21,7 +21,6 @@ public class ValifyUtility {
 	
 	@Autowired ExceptionHandler exceptionHandler;
 	
-	
 	public String getToken(Long id)throws BusinessException,IntegrationException
 	{
 		String token="";

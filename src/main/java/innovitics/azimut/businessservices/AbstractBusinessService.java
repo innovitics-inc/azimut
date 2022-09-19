@@ -1,33 +1,25 @@
 package innovitics.azimut.businessservices;
 
-import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.NoResultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Validator;
 
+import innovitics.azimut.AzimutParent;
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
-import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.businessutilities.SearchFilter;
-import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
-import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
-import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
-import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.datautilities.UserUtility;
 import innovitics.azimut.utilities.dbutilities.DatabaseConditions;
@@ -40,19 +32,18 @@ import innovitics.azimut.utilities.fileutilities.FileUtility;
 import innovitics.azimut.validations.Validation;
 
 @Service
-public abstract class AbstractBusinessService <T extends BaseBusinessEntity> {
+public abstract class AbstractBusinessService <T extends BaseBusinessEntity> extends AzimutParent {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractBusinessService.class);
 	@Autowired
 	protected ExceptionHandler exceptionHandler;
-	@Autowired
-	protected ArrayUtility arrayUtility;
+
 	@Autowired ListUtility<T> listUtility;
 	@Autowired Validation<T> validation;
 	@Autowired BlobFileUtility blobFileUtility;
-	@Autowired protected ConfigProperties configProperties;
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected UserUtility userUtility;
 	@Autowired protected UserTypeService userTypeService;
+
 
 	protected  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
 	{
@@ -145,5 +136,5 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> {
 	protected void validate(T businessEntity, Validator validator,String objectName) throws BusinessException {
 		this.validation.validate(businessEntity, validator,objectName);	
 	}
-	
+
 }

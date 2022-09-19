@@ -1,7 +1,8 @@
 package innovitics.azimut.businessservices;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,6 @@ import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.utilities.crosslayerenums.UserImageType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
-import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
@@ -33,6 +33,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.mapping.kyc.ValifyMapper;
 import innovitics.azimut.validations.validators.valify.ValifyFacialImages;
 import innovitics.azimut.validations.validators.valify.ValifyIdImages;
+
 @Service
 public class BusinessValifyService extends AbstractBusinessService <BusinessValify>{
 	@Autowired  ValifyAccessTokenMapper valifyAccessTokenMapper;
@@ -47,14 +48,14 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	@Autowired ListUtility<UserImage> userImageListUtility; 
 	@Autowired BusinessUserService businessUserService;
 	@Autowired GenderService genderService;
-	
 	public BusinessValify getValifyToken() throws BusinessException, IntegrationException
 	{
-		String token=this.valifyUtility.getToken(0l);
+		String token=(String)this.cachingLayer.getValueIfExisting(valifyUtility,"getToken",new Object[]{1l},new Class<?>[]{Long.class},"valifyToken",60,600);
 		BusinessValify businessValify=new BusinessValify();
 		businessValify.setToken(token);
 		return businessValify;
 	}
+	
 	
 	public BusinessValify valifyFacial (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile straightFace,MultipartFile smilingFace,MultipartFile leftSide,MultipartFile rightSide,Integer userStep,String language) throws BusinessException,IntegrationException, IOException
 	{		
@@ -281,5 +282,8 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		else
 			return null;
 	}
+	
+	
+	
 	
 }

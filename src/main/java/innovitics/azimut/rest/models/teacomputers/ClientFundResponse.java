@@ -10,12 +10,12 @@ public class ClientFundResponse extends TeaComputerResponse{
 	private Double availableToSell;
 	private String  statusName;
 	private String clientStatus;
-	private Long fundID;
+	private String fundID;
 	private String certificateName;
 	private String assetClass;
-	private Long currencyID;
+	private String currencyID;
 	private String currencyName;
-	private Double currencyRate;
+	private String currencyRate;
 	public String getClientName() {
 		return clientName;
 	}
@@ -70,10 +70,10 @@ public class ClientFundResponse extends TeaComputerResponse{
 	public void setClientStatus(String clientStatus) {
 		this.clientStatus = clientStatus;
 	}
-	public Long getFundID() {
+	public String getFundID() {
 		return fundID;
 	}
-	public void setFundID(Long fundID) {
+	public void setFundID(String fundID) {
 		this.fundID = fundID;
 	}
 	public String getCertificateName() {
@@ -88,10 +88,10 @@ public class ClientFundResponse extends TeaComputerResponse{
 	public void setAssetClass(String assetClass) {
 		this.assetClass = assetClass;
 	}
-	public Long getCurrencyID() {
+	public String getCurrencyID() {
 		return currencyID;
 	}
-	public void setCurrencyID(Long currencyID) {
+	public void setCurrencyID(String currencyID) {
 		this.currencyID = currencyID;
 	}
 	public String getCurrencyName() {
@@ -100,10 +100,10 @@ public class ClientFundResponse extends TeaComputerResponse{
 	public void setCurrencyName(String currencyName) {
 		this.currencyName = currencyName;
 	}
-	public Double getCurrencyRate() {
+	public String getCurrencyRate() {
 		return currencyRate;
 	}
-	public void setCurrencyRate(Double currencyRate) {
+	public void setCurrencyRate(String currencyRate) {
 		this.currencyRate = currencyRate;
 	}
 	@Override

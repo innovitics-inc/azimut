@@ -26,7 +26,6 @@ import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.user.UserLocation;
-import innovitics.azimut.pdfgenerator.Executor;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.user.UserDeviceService;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
@@ -39,7 +38,7 @@ import org.springframework.web.multipart.MultipartException;
 public class UserController extends BaseGenericRestController<BusinessUser,String> {
 
 	@Autowired BusinessUserService businessUserService;
-	@Autowired Executor executor;
+	
 	@Autowired BlobFileUtility blobFileUtility;
 	@Autowired FundService fundService;
 	@Autowired UserDeviceService userDeviceService;
@@ -301,14 +300,14 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	@GetMapping(value="/execute",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> execute(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException {
-		this.executor.execute();
+		//this.executor.execute();
 		return null;
 		
 	}
 	@GetMapping(value="/download",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> download(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
-		this.executor.downloadLoop();
+		//this.executor.downloadLoop();
 		return null;
 		
 	}
@@ -323,7 +322,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	@GetMapping(value="/listBlobs",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> listBlobs(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
-		this.executor.listBlobs();
+		//this.executor.listBlobs();
 		return null;
 		
 	}
