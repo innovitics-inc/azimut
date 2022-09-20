@@ -10,7 +10,7 @@
 	<!--diskStore path="//home//site//wwwroot//cache" /-->
 	<!--diskStore path="java.io.tmpdir" /-->
 
-	<diskstore path="//home//application//cache"/>
+	<diskStore path="//home//application//cache"/>
 
 
 	<!-- Sample cache named cache1
