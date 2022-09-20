@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.DiskStorePathManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.DiskStoreConfiguration;
 
 @Component
 public class CachingLayer {
@@ -20,6 +23,13 @@ public class CachingLayer {
 
 	public Object getValueIfExisting (Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes,String cacheKey,int timeToLive,int timeToIdle)
 	{
+		/*DiskStoreConfiguration diskStoreConfiguration = new DiskStoreConfiguration();
+		diskStoreConfiguration.setPath("/my/path/dir");
+		Configuration configuration=new Configuration();
+		configuration.addDiskStore(diskStoreConfiguration);
+		CacheManager mgr = new CacheManager(configuration);
+		*/
+		
 		Cache cache = singletonManager.getCache("cacheLayer");
 		if(cache.get(cacheKey)==null)
 		 {

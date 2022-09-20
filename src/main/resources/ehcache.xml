@@ -8,9 +8,8 @@
 	<!-- Ask Ehcache to store cache in this path -->
 	<!--diskStore path="c:\\cache" /-->
 	<!--diskStore path="//home//site//wwwroot//cache" /-->
-	<!--diskStore path="java.io.tmpdir" /-->
+	<diskStore path="java.io.tmpdir" />
 
-	<diskStore path="//home//application//cache"/>
 
 
 	<!-- Sample cache named cache1
