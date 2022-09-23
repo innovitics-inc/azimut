@@ -330,7 +330,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			//searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
 			
 			searchedForBusinessUser=new BusinessUser();
-			List<AzimutAccount> azimutAccounts=this.checkAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
+			List<AzimutAccount> azimutAccounts=this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
 			
 			if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
 			{

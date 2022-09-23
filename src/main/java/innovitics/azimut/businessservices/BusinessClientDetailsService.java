@@ -524,7 +524,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				sorting=false;	
 					
 				this.logger.info("Sorting:::"+sorting);
-				Collections.sort(businessAzimutClient.getTransactions(),sorting ? this.cashTransactionSortCompare: Collections.reverseOrder());
+				Collections.sort(businessAzimutClient.getTransactions(),sorting ? this.cashTransactionSortCompare: cashTransactionSortCompare.reversed());
 				int index = sorting ? businessAzimutClient.getTransactions().size() : 0;
 				this.logger.info("Index:::"+index);
 				businessAzimutClient.setLastTransactionDate(businessAzimutClient.getTransactions().get(index).getTrxDate());
