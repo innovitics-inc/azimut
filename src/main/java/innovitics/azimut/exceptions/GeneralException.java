@@ -15,6 +15,7 @@ public class GeneralException  extends Exception{
 	  protected Integer errorCode;
 	  protected Date timestamp;
 	  protected String errorMessage;
+	  protected String errorMessageAr;
 	  protected String description;
 	  protected StackTraceElement [] stackTrace;
 	  
@@ -25,6 +26,7 @@ public class GeneralException  extends Exception{
 		  this.error=error;
 		  this.errorCode = error.getCode();
 		  this.errorMessage = error.getMessage();
+		  this.errorMessageAr=error.getMessageAr();
 	  }
 
 	public GeneralException()
@@ -32,12 +34,13 @@ public class GeneralException  extends Exception{
 		  
 	  }
 	  
-	public GeneralException(int errorCode, Date timestamp, String errorMessage, String description,
+	public GeneralException(int errorCode, Date timestamp, String errorMessage, String errorMessageAr,String description,
 			StackTraceElement[] stackTrace) {
 		super();
 		this.errorCode = errorCode;
 		this.timestamp = timestamp;
 		this.errorMessage = errorMessage;
+		this.errorMessageAr=errorMessageAr;
 		this.description = description;
 		this.stackTrace = stackTrace;
 	}
@@ -69,6 +72,13 @@ public class GeneralException  extends Exception{
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
+	public String getErrorMessageAr() {
+		return errorMessageAr;
+	}
+	public void setErrorMessageAr(String errorMessageAr) {
+		this.errorMessageAr = errorMessageAr;
+	}
+
 	public String getDescription() {
 		return description;
 	}

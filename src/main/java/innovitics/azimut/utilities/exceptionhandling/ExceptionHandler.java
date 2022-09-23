@@ -30,7 +30,7 @@ public class ExceptionHandler extends ParentUtility{
 			logger.error("Exception Cause:"+exception.getCause());
 			logger.error("Exception Message:"+exception.getMessage());
 			logger.error("Exception Details:",exception);
-			BusinessException businessException=new  BusinessException(errorCode.getCode(),DateUtility.getCurrentDate(),errorCode.getMessage(), exception.getMessage(), exception.getStackTrace());
+			BusinessException businessException=new  BusinessException(errorCode.getCode(),DateUtility.getCurrentDate(),errorCode.getMessage(),errorCode.getMessageAr() ,exception.getMessage(), exception.getStackTrace());
 			
 			logger.error("Exxception:::"+businessException.toString());
 			
@@ -45,7 +45,7 @@ public class ExceptionHandler extends ParentUtility{
 			logger.error("Exception Cause:"+integrationException.getCause());
 			logger.error("Exception Message:"+integrationException.getErrorMessage());
 			logger.error("Exception Details:",integrationException.toString());
-			BusinessException businessException=new  BusinessException(integrationException.getErrorCode(),DateUtility.getCurrentDate(),integrationException.getErrorMessage(), integrationException.getDescription(), integrationException.getStackTrace());
+			BusinessException businessException=new  BusinessException(integrationException.getErrorCode(),DateUtility.getCurrentDate(),integrationException.getErrorMessage(),integrationException.getErrorMessageAr(), integrationException.getDescription(), integrationException.getStackTrace());
 			
 			logger.error("Exxception:::"+businessException.toString());
 			
@@ -58,7 +58,7 @@ public class ExceptionHandler extends ParentUtility{
 			logger.error("Exception Cause:"+exception.getCause());
 			logger.error("Exception Message:"+exception.getMessage());
 			
-			IntegrationException integrationException=new   IntegrationException(errorCode.getCode(),DateUtility.getCurrentDate(),errorCode.getMessage(), exception.getMessage(), exception.getStackTrace());
+			IntegrationException integrationException=new   IntegrationException(errorCode.getCode(),DateUtility.getCurrentDate(),errorCode.getMessage(),errorCode.getMessageAr(), exception.getMessage(), exception.getStackTrace());
 			
 			logger.error("Exxception:::"+integrationException.toString());
 			

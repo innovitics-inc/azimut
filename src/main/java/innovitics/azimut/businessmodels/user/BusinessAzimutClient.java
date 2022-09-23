@@ -13,11 +13,12 @@ import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
 public class BusinessAzimutClient extends BusinessUser{
 
 	private BusinessClientCashBalance businessClientCashBalance;
+	private List<BusinessClientCashBalance> businessClientCashBalances;
 	private List<BusinessTransaction> transactions;
 	private List<BusinessClientBankAccountDetails> bankList;
 	private BusinessClientBankAccountDetails bankAccountDetails;
 	private Double pendingAmount;
-	private Long balance;
+	private Double balance;
 	private String lastTransactionDate;
 	private String balanceCurrency;
 	private Double totalPendingAmount;
@@ -39,11 +40,11 @@ public class BusinessAzimutClient extends BusinessUser{
 		this.pendingAmount = pendingAmount;
 	}
 
-	public Long getBalance() {
+	public Double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(Long balance) {
+	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
 
@@ -85,6 +86,14 @@ public class BusinessAzimutClient extends BusinessUser{
 
 	public void setBusinessClientCashBalance(BusinessClientCashBalance businessClientCashBalance) {
 		this.businessClientCashBalance = businessClientCashBalance;
+	}
+
+	public List<BusinessClientCashBalance> getBusinessClientCashBalances() {
+		return businessClientCashBalances;
+	}
+
+	public void setBusinessClientCashBalances(List<BusinessClientCashBalance> businessClientCashBalances) {
+		this.businessClientCashBalances = businessClientCashBalances;
 	}
 
 	public List<BusinessTransaction> getTransactions() {

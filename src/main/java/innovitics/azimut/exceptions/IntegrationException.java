@@ -16,8 +16,8 @@ public class IntegrationException extends GeneralException {
 	
 	private static final long serialVersionUID = 1L;
 
-	public IntegrationException(int statusCode, Date timestamp, String message, String description, StackTraceElement[] stackTrace) {
-		super(statusCode, timestamp, message, description, stackTrace);
+	public IntegrationException(int statusCode, Date timestamp, String message,String messageAr,String description, StackTraceElement[] stackTrace) {
+		super(statusCode, timestamp, message,messageAr,description, stackTrace);
 	}
 
 	
@@ -33,9 +33,9 @@ public class IntegrationException extends GeneralException {
 	}
 
 
-	public IntegrationException(Integer errorCode, Date timestamp, String message, String description, StackTraceElement[] stackTrace) 
+	public IntegrationException(Integer errorCode, Date timestamp, String message,String messageAr, String description, StackTraceElement[] stackTrace) 
 	{
-		super(errorCode, timestamp, message, description, stackTrace);
+		super(errorCode, timestamp, message ,messageAr ,description, stackTrace);
 		
 	}
 	

@@ -34,7 +34,7 @@ public class FundController extends BaseGenericRestController<BusinessFundPrice,
 	@GetMapping(value="/updateFundPrices",
 			
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessFundPrice>> updateFundPrices() throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessFundPrice>> updateFundPrices(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			/*List<BusinessFundPrice> business=new ArrayList<BusinessFundPrice>();

@@ -13,6 +13,7 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	private Double availableToBuy;
 	private Double availableToSell;
 	private Long fundId;
+	private Long teacomputerId;
 	private String fundName;
 	private String fundType;
 	private Long currencyId;
@@ -106,6 +107,12 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	}
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+	public Long getTeacomputerId() {
+		return teacomputerId;
+	}
+	public void setTeacomputerId(Long teacomputerId) {
+		this.teacomputerId = teacomputerId;
 	}
 	public List<BusinessFundTransaction> getFundTransactions() {
 		return fundTransactions;

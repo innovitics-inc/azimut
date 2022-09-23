@@ -45,7 +45,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 
 	@PostMapping(value="/getById",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getById(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			
@@ -60,7 +62,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	
 	@PostMapping(value="/getByUserPhone",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getByUserPhone(@RequestBody BusinessUser businessUser) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getByUserPhone(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody BusinessUser businessUser) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			
@@ -77,7 +79,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	@PostMapping(value="/uploadSignedPdf",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> uploadSignedPdf(@RequestParam ("id") Long id,@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestParam (name="file",required=false) MultipartFile file,
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> uploadSignedPdf(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestParam ("id") Long id,@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestParam (name="file",required=false) MultipartFile file,
 			@RequestParam ("newCountryPhoneCode") String newCountryPhoneCode,@RequestParam ("newPhoneNumber") String newPhoneNumber) throws BusinessException, IOException,MaxUploadSizeExceededException {
 		try
 		{
@@ -105,7 +107,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	@PostMapping(value="/updateUserProfile",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> editUserProfile(@RequestParam ("id") Long id,@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestParam (name="file",required=false) MultipartFile file,
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> editUserProfile(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestParam ("id") Long id,@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestParam (name="file",required=false) MultipartFile file,
 			@RequestParam ("nickName") String nickName,@RequestParam  ("emailAddress")  String emailAddress) throws BusinessException,MaxUploadSizeExceededException,IllegalStateException, IOException {
 		try
 		{
@@ -137,7 +139,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	@PostMapping(value="/updatePassword",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> editUserPassword(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> editUserPassword(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.beautifyUser(this.businessUserService.editUserPassword(businessUser,this.getCurrentRequestHolder(token))),null,null);
@@ -154,7 +158,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	@PostMapping(value="/forgotPassword",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> forgotPassword(@RequestBody BusinessUser businessUser) throws BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> forgotPassword(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody BusinessUser businessUser) throws BusinessException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.beautifyUser(this.businessUserService.forgotUserPassword(businessUser)),null,null);
@@ -168,7 +172,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	}
 	@PostMapping(value="/downloadUnsignedPDF",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> downloadUnsignedPDF(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> downloadUnsignedPDF(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,
@@ -184,7 +190,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 
 	@PostMapping(value="/logUserStep",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> logUserStep(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> logUserStep(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserStep(this.getCurrentRequestHolder(token),businessUser),null,null);
@@ -198,7 +206,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	}
 	@PostMapping(value="/getUserImages",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getUserImages(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getUserImages(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.getUserImages(this.getCurrentRequestHolder(token),businessUser),null,null);
@@ -212,7 +222,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	}
 	@PostMapping(value="/saveClientDetails",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveClientDetails(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveClientDetails(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserDetails(this.getCurrentRequestHolder(token),businessUser),null,null);
@@ -226,7 +238,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	}
 	@PostMapping(value="/saveContractMapChoice",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveContractMapChoice(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveContractMapChoice(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserDetails(this.getCurrentRequestHolder(token),businessUser),null,null);
@@ -241,7 +255,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	
 	@PostMapping(value="/saveUserTemporarily",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveUserTemporarily(@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveUserTemporarily(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.saveUser(businessUser),null,null);
@@ -256,7 +270,9 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	
 	@PostMapping(value="/saveUserLocation",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveUserLocation(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody UserLocation userLocation) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> saveUserLocation(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody UserLocation userLocation) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.addUserLocation(userLocation,this.getCurrentRequestHolder(token)),null,null);
@@ -270,7 +286,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	}
 	@GetMapping(value="/getUserLocation",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getUserLocation(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getUserLocation(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.getUserLocation(this.getCurrentRequestHolder(token)),null,null);
@@ -284,7 +300,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	}
 	@GetMapping(value="/downloadContract",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> downloadContract(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> downloadContract(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.downloadUserContract(this.getCurrentRequestHolder(token)),null,null);
@@ -299,21 +315,21 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	
 	@GetMapping(value="/execute",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> execute(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> execute(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException {
 		//this.executor.execute();
 		return null;
 		
 	}
 	@GetMapping(value="/download",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> download(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> download(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
 		//this.executor.downloadLoop();
 		return null;
 		
 	}
 	@GetMapping(value="/deleteAll",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> deleteAll(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> deleteAll(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
 		this.blobFileUtility.deleteAllFilesFromBlob(this.configProperties.getBlobKYCDocumentsContainer(),"Users");
 		return null;
 		
@@ -321,7 +337,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 
 	@GetMapping(value="/listBlobs",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUser>> listBlobs(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> listBlobs(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
 		//this.executor.listBlobs();
 		return null;
 		
@@ -331,7 +347,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 
 	@GetMapping(value="/getPrices",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-		protected ResponseEntity<BaseGenericResponse<BusinessUser>> getFundPrices(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws IOException, BusinessException {
+		protected ResponseEntity<BaseGenericResponse<BusinessUser>> getFundPrices(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
 		
 		BusinessUser businessUser=new BusinessUser();
 		

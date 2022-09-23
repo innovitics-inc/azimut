@@ -1,5 +1,6 @@
 package innovitics.azimut.rest.mappers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,25 +10,28 @@ import org.springframework.web.client.HttpClientErrorException;
 import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.GetClientCashBalanceApiConsumer;
+import innovitics.azimut.rest.entities.teacomputers.ClientBalanceOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientBalanceInput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientBalanceOutput;
+import innovitics.azimut.rest.entities.teacomputers.TransactionOutput;
+import innovitics.azimut.rest.models.teacomputers.ClientCashBalanceResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientCashBalanceResponse;
+import innovitics.azimut.utilities.datautilities.ListUtility;
 @Service
 public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, GetClientBalanceOutput, GetClientCashBalanceResponse, BusinessClientCashBalance>{
 
 	@Autowired GetClientCashBalanceApiConsumer getClientBalanceApiConsumer ;
-	
+	@Autowired  ListUtility<ClientBalanceOutput> listUtility;
 	@Override
 	BusinessClientCashBalance consumeRestService(BusinessClientCashBalance businessClientBalance, String params)
 			throws HttpClientErrorException, Exception {
-		return  this.createBusinessEntityFromOutput(this.getClientBalanceApiConsumer.invoke(this.createInput(businessClientBalance),GetClientCashBalanceResponse.class, params));
+		return null;
 	}
 
 	@Override
-	List<BusinessClientCashBalance> consumeListRestService(BusinessClientCashBalance businessClientBalance, String params)
-			throws IntegrationException {
-		// TODO Auto-generated method stub
-		return null;
+	List<BusinessClientCashBalance> consumeListRestService(BusinessClientCashBalance businessClientBalance, String params)throws IntegrationException, HttpClientErrorException, Exception 
+	{
+		return  this.createListBusinessEntityFromOutput(this.getClientBalanceApiConsumer.invoke(this.createInput(businessClientBalance),ClientCashBalanceResponse[].class, params));
 	}
 
 	@Override
@@ -50,8 +54,27 @@ public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, Ge
 
 	@Override
 	protected List<BusinessClientCashBalance> createListBusinessEntityFromOutput(GetClientBalanceOutput getClientBalanceOutput) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<BusinessClientCashBalance> businessClientCashBalances=new ArrayList<BusinessClientCashBalance>();
+		if(getClientBalanceOutput!=null&&this.listUtility.isListPopulated(getClientBalanceOutput.getClientBalanceOutputs()))
+
+		{
+			for(ClientBalanceOutput clientBalanceOutput:getClientBalanceOutput.getClientBalanceOutputs())
+			{
+				BusinessClientCashBalance businessClientCashBalance=new BusinessClientCashBalance();
+				businessClientCashBalance.setBalance(clientBalanceOutput.getBalance());
+				businessClientCashBalance.setCurrencyID(clientBalanceOutput.getCurrencyID());
+				businessClientCashBalance.setCurrencyName(clientBalanceOutput.getCurrencyName());
+				businessClientCashBalance.setPendingTransfer(clientBalanceOutput.getPendingTransfer());
+				businessClientCashBalance.setCurrencyRate(clientBalanceOutput.getCurrencyRate());
+				businessClientCashBalances.add(businessClientCashBalance);
+			}
+		}
+		
+		
+		return businessClientCashBalances; 
+		
+		
 	}
 
 }

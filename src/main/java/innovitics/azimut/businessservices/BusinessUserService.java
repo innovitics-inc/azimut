@@ -569,12 +569,12 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 
 		return responseBusinessAzimutClient;
 	}
-	  AzimutAccount	prepareAccountRetrievalInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser)
+	  AzimutAccount	prepareAccountRetrievalInputs(BusinessAzimutClient businessAzimutClient,BusinessUser searchBusinessUser)
 	  {
 		  AzimutAccount azimutAccount=new AzimutAccount();
-		  azimutAccount.setPhoneNumber(businessAzimutClient.getUserPhone());
-		  azimutAccount.setUserId(businessAzimutClient.getUserId());
-		  azimutAccount.setIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+		  azimutAccount.setPhoneNumber(StringUtility.ZERO+searchBusinessUser.getPhoneNumber());
+		 /* azimutAccount.setUserId(businessAzimutClient.getUserId());
+		  azimutAccount.setIdType(this.getAzimutUserTypeId(searchBusinessUser));*/
 		  return azimutAccount;
 	  }	
 	  Long getAzimutUserTypeId(BusinessUser businessUser)

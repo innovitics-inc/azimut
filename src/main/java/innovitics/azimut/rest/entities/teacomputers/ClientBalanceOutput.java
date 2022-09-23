@@ -1,15 +1,14 @@
 package innovitics.azimut.rest.entities.teacomputers;
 
-import java.util.List;
+public class ClientBalanceOutput extends TeaComputerOutput{
 
-public class GetClientBalanceOutput extends TeaComputerOutput{
 	private Long currencyID;
     private String currencyName;
     private Double balance;
     private Double pendingTransfer;
-    
-    List<ClientBalanceOutput> clientBalanceOutputs;
-    
+    private Double inPendingTrans;
+    private Double outPendingTrans;
+    private Double currencyRate;
     
 	public Long getCurrencyID() {
 		return currencyID;
@@ -35,20 +34,23 @@ public class GetClientBalanceOutput extends TeaComputerOutput{
 	public void setPendingTransfer(Double pendingTransfer) {
 		this.pendingTransfer = pendingTransfer;
 	}
-	
-	public List<ClientBalanceOutput> getClientBalanceOutputs() {
-		return clientBalanceOutputs;
+	public Double getInPendingTrans() {
+		return inPendingTrans;
 	}
-	public void setClientBalanceOutputs(List<ClientBalanceOutput> clientBalanceOutputs) {
-		this.clientBalanceOutputs = clientBalanceOutputs;
+	public void setInPendingTrans(Double inPendingTrans) {
+		this.inPendingTrans = inPendingTrans;
 	}
-	@Override
-	public String toString() {
-		return "GetClientBalanceOutput [currencyID=" + currencyID + ", currencyName=" + currencyName + ", balance="
-				+ balance + ", pendingTransfer=" + pendingTransfer + "]";
+	public Double getOutPendingTrans() {
+		return outPendingTrans;
 	}
-    
-
-	
+	public void setOutPendingTrans(Double outPendingTrans) {
+		this.outPendingTrans = outPendingTrans;
+	}
+	public Double getCurrencyRate() {
+		return currencyRate;
+	}
+	public void setCurrencyRate(Double currencyRate) {
+		this.currencyRate = currencyRate;
+	}
 	
 }

@@ -1,5 +1,7 @@
 package innovitics.azimut.businessservices;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,15 +35,18 @@ import innovitics.azimut.rest.mappers.GetTransactionsMapper;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
-import innovitics.azimut.utilities.businessutilities.SortCompare;
+import innovitics.azimut.utilities.businessutilities.FundTransactionSortCompare;
+import innovitics.azimut.utilities.businessutilities.CashTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.Sorting;
 import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
+import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.mapping.FundMapper;
 import innovitics.azimut.utilities.mapping.FundPriceMapper;
 import innovitics.azimut.validations.validators.azimutclient.GetAzimutEntityLookup;
 import innovitics.azimut.validations.validators.azimutclient.GetBalanceAndTransactions;
@@ -62,7 +67,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired ListUtility<BusinessTransaction>listUtility;
 @Autowired ListUtility<BusinessFundPrice> fundPricesListUtility;
 @Autowired ListUtility<BusinessClientFund> clientFundListUtility ;
-@Autowired SortCompare sortCompare;
+@Autowired ListUtility<BusinessClientCashBalance> clientCashBalanceListUtility ;
+@Autowired CashTransactionSortCompare cashTransactionSortCompare;
+@Autowired FundTransactionSortCompare fundTransactionSortCompare;
 @Autowired GetBalanceAndTransactions getBalanceAndTransactions;
 @Autowired AzimutDataLookUpService azimutDataLookUpService;
 @Autowired AzimutDataLookupUtility azimutDataLookupUtility;
@@ -74,6 +81,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired GetAzimutEntityLookup getAzimutEntityLookup;
 @Autowired FundService fundService;
 @Autowired FundPriceMapper fundPriceMapper;
+@Autowired FundMapper fundMapper;
 @Autowired GetFundTransactionsMapper getFundTransactionsMapper;
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
@@ -86,8 +94,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		try 
 		{
 				responseBusinessAzimutClient.setBusinessTransactions(getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
-				responseBusinessAzimutClient.setBusinessClientCashBalance(getClientBalanceMapper.wrapBaseBusinessEntity(false,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getData());
-				
+				//responseBusinessAzimutClient.setBusinessClientCashBalance(getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getData());
+				responseBusinessAzimutClient.setBusinessClientCashBalances(getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
 		}
 		catch(Exception exception)
 		{
@@ -322,17 +330,18 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	}
 	
 	
-	public BusinessAzimutClient getClientFundsList(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
+	public BusinessAzimutClient getClientFundsOrFund(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
 	{
 		
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		
-		try {
-		Map <String,Object> clientFundPriceMap= this.getClientFunds(tokenizedBusinessUser, responseBusinessAzimutClient);
-
-		BusinessClientCashBalance businessClientCashBalance=this.getClientBalanceMapper.wrapBaseBusinessEntity(false,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();
-
-		this.beautifyBusinessClientFunds(responseBusinessAzimutClient,(List<BusinessClientFund>)clientFundPriceMap.get(BusinessClientFund.class.getName()),(List<BusinessFundPrice>)clientFundPriceMap.get(BusinessFundPrice.class.getName()), businessClientCashBalance);
+		try 
+		{
+			Map <String,Object> clientFundPriceMap= this.getClientFunds(tokenizedBusinessUser, businessAzimutClient);
+			this.beautifyBusinessClientFunds(responseBusinessAzimutClient,
+					(List<BusinessClientFund>)clientFundPriceMap.get(BusinessClientFund.class.getName()),
+					(List<BusinessFundPrice>)clientFundPriceMap.get(BusinessFundPrice.class.getName()),
+					(List<BusinessClientCashBalance>)clientFundPriceMap.get(BusinessClientCashBalance.class.getName()));
 		}
 		
 		catch(Exception exception)
@@ -349,46 +358,52 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		return responseBusinessAzimutClient;
 	}
-	
-	public BusinessAzimutClient getClientFundDetails(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
-	{	
-		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
-
-		Map <String,Object> clientFundPriceMap= this.getClientFunds(tokenizedBusinessUser, responseBusinessAzimutClient);
-
-		List<BusinessFundTransaction> businessFundTransactions=this.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser), null).getDataList();
-		
-		this.beautifyBusinessClientFunds(responseBusinessAzimutClient,(List<BusinessClientFund>)clientFundPriceMap.get(BusinessClientFund.class.getName()),(List<BusinessFundPrice>)clientFundPriceMap.get(BusinessFundPrice.class.getName()),null, businessFundTransactions);
-				
-		return responseBusinessAzimutClient;
-	}
-		
+			
 	Map<String,Object> getClientFunds(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
 	{
+		
+		Map <String,Object> clientFundPriceMap= new HashMap<String,Object>();
 		List<BusinessFundPrice> businessFundPrices=new ArrayList<BusinessFundPrice>();
 		List<BusinessClientFund> businessClientFunds=new ArrayList<BusinessClientFund>();
 		businessClientFunds=this.getClientFundsMapper.wrapBaseBusinessEntity(true, this.prepareClientFundInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
 		
-		if(businessAzimutClient!=null&&businessAzimutClient.getFundId()!=null)
+			
+		if(businessAzimutClient!=null&&businessAzimutClient.getTeacomputerId()!=null)
 		{
-			BusinessClientFund businessClientFund=new  BusinessClientFund();
-			businessClientFund=this.getClientFundsMapper.wrapBaseBusinessEntity(false, this.prepareClientFundInputs(tokenizedBusinessUser,businessAzimutClient), null).getData();
-			businessClientFunds.add(businessClientFund);	
+			if(clientFundListUtility.isListPopulated(businessClientFunds))
+			{
+				this.getClientFundDetails(businessClientFunds.get(0),tokenizedBusinessUser, businessAzimutClient);
+			}
+		}
+		else
+		{
+			List<BusinessClientCashBalance> businessClientCashBalances=this.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
+			clientFundPriceMap.put(BusinessClientCashBalance.class.getName(), businessClientCashBalances);
 		}
 		
-		/*this.getFundPricesMapper.wrapBaseBusinessEntity(true, this.prepareFundPriceSearchInputs(businessAzimutClient), null).getDataList();*/
 		
-		Long [] teacomputerFundIds=this.populateTheArrayOfFundIds(businessClientFunds);
 		
+		Long [] teacomputerFundIds=this.populateTheArrayOfFundIds(businessClientFunds);		
 		if(this.arrayUtility.isArrayPopulated(teacomputerFundIds))
 		{
+			this.logger.info("Funds Populated::::");
 			businessFundPrices= this.fundPriceMapper.convertBasicListToBusinessList(this.fundService.getAllRelevantFundPrices(teacomputerFundIds));
 		}
 		
-		Map <String,Object> clientFundPriceMap= new HashMap<String,Object>();
 		clientFundPriceMap.put(BusinessClientFund.class.getName(), businessClientFunds);
 		clientFundPriceMap.put(BusinessFundPrice.class.getName(), businessFundPrices);
+		
 		return clientFundPriceMap;
+	}
+	
+	public void getClientFundDetails(BusinessClientFund businessClientFund,BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
+	{	
+
+		List<BusinessFundTransaction> businessFundTransactions=this.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
+		
+		this.beautifyBusinessClientFundTransactions(businessClientFund,businessFundTransactions,businessAzimutClient);
+				
+		
 	}
 	
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
@@ -467,7 +482,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessClientFund searchBusinessClientFund=new BusinessClientFund();
 		searchBusinessClientFund.setAzId(tokenizedBusinessUser.getUserId());
 		searchBusinessClientFund.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
-		searchBusinessClientFund.setFundId(businessAzimutClient.getFundId());
+		searchBusinessClientFund.setFundId(businessAzimutClient.getTeacomputerId());
 		return searchBusinessClientFund;
 	}
 	BusinessFundPrice prepareFundPriceSearchInputs(BusinessAzimutClient businessAzimutClient)
@@ -509,7 +524,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				sorting=false;	
 					
 				this.logger.info("Sorting:::"+sorting);
-				Collections.sort(businessAzimutClient.getTransactions(),sorting ? this.sortCompare: Collections.reverseOrder());
+				Collections.sort(businessAzimutClient.getTransactions(),sorting ? this.cashTransactionSortCompare: Collections.reverseOrder());
 				int index = sorting ? businessAzimutClient.getTransactions().size() : 0;
 				this.logger.info("Index:::"+index);
 				businessAzimutClient.setLastTransactionDate(businessAzimutClient.getTransactions().get(index).getTrxDate());
@@ -549,35 +564,36 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
   }
   
   
-  BusinessFundTransaction prepareBusinessBusinessFundTransactionRetrievalInputs(BusinessUser tokenizedBusinessUser)
+  BusinessFundTransaction prepareBusinessBusinessFundTransactionRetrievalInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient)
   {
 	  BusinessFundTransaction searchBusinessFundTransaction=new BusinessFundTransaction();
 	  searchBusinessFundTransaction.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
 	  searchBusinessFundTransaction.setAzId(tokenizedBusinessUser.getUserId());
+	  searchBusinessFundTransaction.setFundId(businessAzimutClient.getTeacomputerId());
 	  return searchBusinessFundTransaction;
   }
   
-  private void beautifyBusinessClientFunds(BusinessAzimutClient responseBusinessAzimutClient,List<BusinessClientFund> businessClientFunds,List<BusinessFundPrice> businessFundPrices,BusinessClientCashBalance businessClientCashBalance)
+  private void beautifyBusinessClientFunds(BusinessAzimutClient responseBusinessAzimutClient,List<BusinessClientFund> businessClientFunds,List<BusinessFundPrice> businessFundPrices,List<BusinessClientCashBalance> businessClientCashBalances)
   {
 	  
 	  double totalPosition=0d;
 
 	  if(this.clientFundListUtility.isListPopulated(businessClientFunds)&&this.fundPricesListUtility.isListPopulated(businessFundPrices))
 	  {
-		  
+		this.logger.info("The two lists are populated::");  
 		  double totalFundPosition=0d;
 		  for(BusinessClientFund businessClientFund:businessClientFunds)
 		  {
 			  for(BusinessFundPrice businessFundPrice:businessFundPrices)
 			  {
-				  if(NumberUtility.areLongValuesMatching(businessClientFund.getFundId(), businessFundPrice.getTeacomputerId()))
+				  if(NumberUtility.areLongValuesMatching(businessClientFund.getTeacomputerId(), businessFundPrice.getTeacomputerId()))
 				  {
 					  businessClientFund.setLastPriceUpdateDate(businessFundPrice.getPriceDate());
 					  businessClientFund.setLogo(businessFundPrice.getLogo());
 					  
-					  if(businessClientFund.getQuantity()!=null&&businessFundPrice.getTradePrice()!=null&&businessClientFund.getCurrencyRate()!=null)
+					  if(businessClientFund.getTotalAmount()!=null)
 					  {
-						  totalFundPosition=totalFundPosition+(businessClientFund.getQuantity().doubleValue()*businessFundPrice.getTradePrice().doubleValue()*businessClientFund.getCurrencyRate());
+						  totalFundPosition=totalFundPosition+(businessClientFund.getTotalAmount().doubleValue());
 					  }
 					  
 				  }
@@ -587,10 +603,20 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		  totalPosition=totalFundPosition;
 	  }
 	  
-	  if(businessClientCashBalance!=null&businessClientCashBalance.getBalance()!=null)
+	  if(this.clientCashBalanceListUtility.isListPopulated(businessClientCashBalances))
 		{
-			responseBusinessAzimutClient.setBalance(businessClientCashBalance.getBalance());
-			totalPosition=totalPosition+businessClientCashBalance.getBalance();			
+		 double clientCashBalanceInAllCurrencies=0.0D;
+		  
+		  	for(BusinessClientCashBalance businessClientCashBalance:businessClientCashBalances)
+			{
+		  		if(businessClientCashBalance!=null&&businessClientCashBalance.getBalance()!=null&&businessClientCashBalance.getCurrencyRate()!=null)
+		  		{
+		  			clientCashBalanceInAllCurrencies=clientCashBalanceInAllCurrencies+(businessClientCashBalance.getBalance().doubleValue()*businessClientCashBalance.getCurrencyRate().doubleValue());
+		  		}
+			}
+		  	
+		  	responseBusinessAzimutClient.setBalance(clientCashBalanceInAllCurrencies);
+		  	totalPosition=totalPosition+clientCashBalanceInAllCurrencies;
 		}
 	  
 	 
@@ -598,17 +624,35 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	  responseBusinessAzimutClient.setBusinessClientFunds(businessClientFunds);
   }
   
-  private void beautifyBusinessClientFunds(BusinessAzimutClient responseBusinessAzimutClient,List<BusinessClientFund> businessClientFunds,List<BusinessFundPrice> businessFundPrices,BusinessClientCashBalance businessClientCashBalance,List<BusinessFundTransaction> businessFundTransactions)
+  private void beautifyBusinessClientFundTransactions(BusinessClientFund businessClientFund,List<BusinessFundTransaction> businessFundTransactions,BusinessAzimutClient searchBusinessAzimutClient)
   {
-	 
-	 if(this.clientFundListUtility.isListPopulated(businessClientFunds)&&businessClientFunds.size()<2)
+	 this.logger.info("Business Fund Transactions:::"+businessFundTransactions.toString());
+	 if(businessClientFund!=null)
 	 {
-		 for(BusinessClientFund businessClientFund:businessClientFunds)
+		boolean sorting = true;
+				if(StringUtility.isStringPopulated(searchBusinessAzimutClient.getSorting())&&searchBusinessAzimutClient.getSorting().equals(Sorting.ASC.getOrder()))
+				sorting=true;
+				
+				else if(!StringUtility.isStringPopulated(searchBusinessAzimutClient.getSorting())||StringUtility.stringsMatch(searchBusinessAzimutClient.getSorting(), Sorting.DESC.getOrder()))
+				sorting=false;	
+				{	
+				this.logger.info("Sorting:::"+sorting);
+				Collections.sort(businessFundTransactions,sorting ? this.fundTransactionSortCompare: fundTransactionSortCompare.reversed());
+				int index = sorting ? businessFundTransactions.size() : 0;
+				this.logger.info("Index:::"+index);
+				}
+				
+		 
+		 for(BusinessFundTransaction businessFundTransaction:businessFundTransactions)
 		 {
-			 businessClientFund.setFundTransactions(businessFundTransactions);
+			 String oldDate=businessFundTransaction.getOrderDate();
+			 businessFundTransaction.setOrderDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-mm-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
 		 }
+		 
+		 businessClientFund.setFundTransactions(businessFundTransactions);
+		 
 	 }
-	 this.beautifyBusinessClientFunds(responseBusinessAzimutClient, businessClientFunds, businessFundPrices, businessClientCashBalance);
+	
 	 
   }
   Long [] populateTheArrayOfFundIds(List<BusinessClientFund> businessClientFunds)
@@ -619,8 +663,10 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		  
 		  for(int i=0;i<businessClientFunds.size();i++)
 		  {
-			  fundIds[i]=businessClientFunds.get(i).getFundId().longValue();
-			  
+			  if(businessClientFunds!=null&&businessClientFunds.get(i)!=null&&businessClientFunds.get(i).getTeacomputerId()!=null)
+			  {
+				  fundIds[i]=businessClientFunds.get(i).getTeacomputerId().longValue();
+			  }
 		  }
 		  
 		  return fundIds;

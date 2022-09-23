@@ -31,7 +31,9 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	@Autowired EmailUtility emailUtility;
 
 	@RequestMapping(value="/authenticate", method=RequestMethod.POST)
-	public ResponseEntity<BaseGenericResponse<AuthenticationResponse>> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception, BusinessException
+	public ResponseEntity<BaseGenericResponse<AuthenticationResponse>> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language
+			) throws Exception, BusinessException
 	{
 		BusinessUser businessUser = new BusinessUser();
 		try {
@@ -46,7 +48,9 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 		}
 	}
 	@RequestMapping(value="/refresh", method=RequestMethod.POST)
-	public ResponseEntity<BaseGenericResponse<AuthenticationResponse>> refreshToken(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody AuthenticationRequest authenticationRequest) throws Exception, BusinessException
+	public ResponseEntity<BaseGenericResponse<AuthenticationResponse>> refreshToken(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody AuthenticationRequest authenticationRequest) throws Exception, BusinessException
 	{
 		try 
 		{			
@@ -67,7 +71,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	@PostMapping(value="/forgotPassword",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> forgotPassword(@RequestBody AuthenticationRequest authenticationRequest) throws BusinessException {
+	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> forgotPassword(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody AuthenticationRequest authenticationRequest) throws BusinessException {
 		try
 		{
 			BusinessUser businessUser=this.businessUserService.beautifyUser(this.businessUserService.forgotUserPassword(authenticationRequest));
@@ -84,7 +88,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	@PostMapping(value="/saveUserTemporarily",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> saveUserTemporarily(@RequestBody BusinessUser businessUser) throws BusinessException {
+	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> saveUserTemporarily(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody BusinessUser businessUser) throws BusinessException {
 		try
 		{
 			BusinessUser responseBusinessUser=this.businessUserService.saveUser(businessUser);

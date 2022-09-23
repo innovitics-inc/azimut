@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import innovitics.azimut.businessmodels.BusinessTransaction;
 @Component
-public class SortCompare implements Comparator<BusinessTransaction>{
+public class CashTransactionSortCompare implements Comparator<BusinessTransaction>{
 
 	@Override
 	public int compare(BusinessTransaction o1, BusinessTransaction o2) {

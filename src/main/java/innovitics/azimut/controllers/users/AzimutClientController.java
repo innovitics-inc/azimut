@@ -30,7 +30,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 
 	@PostMapping(value="/getAzimutClientBalanceAndTransactions",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutClientBalanceAndTransactions(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutClientBalanceAndTransactions(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			this.logger.info("SearchBusinessAzmiutClient::"+searchBusinessAzimutClient);
@@ -44,7 +46,8 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	}
 	@GetMapping(value="/getTemporaryAzimutClientBankAccounts",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getTemporaryAzimutClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getTemporaryAzimutClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getTemporaryClientBankAccountDetails(this.getCurrentRequestHolder(token)),null,null);
@@ -59,7 +62,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	
 	@PostMapping(value="/getAzimutClientBankAccounts",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			this.logger.info("SearchBusinessAzmiutClient::"+searchBusinessAzimutClient);
@@ -75,7 +80,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	
 	@PostMapping(value="/checkAccount",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> checkAzimutAccount(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> checkAzimutAccount(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.checkAccountAtTeaComputers(searchBusinessAzimutClient,this.getCurrentRequestHolder(token)),null,null);
@@ -88,7 +95,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	}
 	@PostMapping(value="/saveTeacomputersAccountData",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> saveTeaComputersAccountData(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody AzimutAccount azimutAccount) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> saveTeaComputersAccountData(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody AzimutAccount azimutAccount) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.saveTeaComputersAccountData(azimutAccount,this.getCurrentRequestHolder(token)),null,null);
@@ -101,7 +110,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	}
 	@PostMapping(value="/addAccount",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> addAccountAtTeaComputers(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody AzimutAccount azimutAccount) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> addAccountAtTeaComputers(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody AzimutAccount azimutAccount) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.addAccountAtTeaComputers(azimutAccount,this.getCurrentRequestHolder(token)),null,null);
@@ -114,7 +125,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	}
 	@PostMapping(value="/getAzimutLookUpData",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutLookupData(@RequestBody BusinessAzimutDataLookup businessAzimutDataLookup) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutLookupData(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody BusinessAzimutDataLookup businessAzimutDataLookup) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getAzimutLookupData(businessAzimutDataLookup,null),null,null);
@@ -128,7 +139,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	
 	@PostMapping(value="/synchronizeTeaComputersData",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getTeaComputersLookupData(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getTeaComputersLookupData(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.synchronizeTeaComputersLookupData(businessAzimutClient, this.getCurrentRequestHolder(token)),null,null);
@@ -142,7 +155,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	
 	@PostMapping(value="/saveClientBankAccounts",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> saveClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> saveClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.saveClientBankAccounts(businessAzimutClient, this.getCurrentRequestHolder(token)),null,null);
@@ -156,7 +171,9 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	
 	@PostMapping(value="/removeClientBankAccount",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> removeClientBankAccount(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessClientBankAccountDetails businessClientBankAccountDetails) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> removeClientBankAccount(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessClientBankAccountDetails businessClientBankAccountDetails) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.removeClientBankAccount(businessClientBankAccountDetails),null,null);
@@ -170,7 +187,8 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	
 	@GetMapping(value="/getAzimutDetails",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutDetails(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getAzimutDetails(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getAzimutDetails(),null,null);
@@ -186,10 +204,12 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	@PostMapping(value="/getClientFunds",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getClientFunds(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getClientFunds(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getClientFundsList(this.getCurrentRequestHolder(token),businessAzimutClient),null,null);
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getClientFundsOrFund(this.getCurrentRequestHolder(token),businessAzimutClient),null,null);
 		}		
 		catch(BusinessException businessException)
 		{

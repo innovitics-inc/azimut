@@ -40,7 +40,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	
 	@PostMapping(value="/getPagesByUserType",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> getPageByUserTypeId(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUserType businessUserType) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> getPageByUserTypeId(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUserType businessUserType) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessKYCPage.class,null,this.businessKYCPageService.getAllPagesByUserTypeId(this.getCurrentRequestHolder(token)), null);
@@ -133,7 +135,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	
 	@PostMapping(value="/uploadFile",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> uploadDocument(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,Long answerId,MultipartFile file) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> uploadDocument(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			Long answerId,MultipartFile file) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			this.logger.info("answerId:::"+answerId);
@@ -148,7 +152,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	
 	@PostMapping(value="/deleteFile",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> deleteDocument(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> deleteDocument(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			this.businessUserAnswerSubmissionService.deleteDocument(businessUserAnswerSubmission.getDocumentSubDirectory(), businessUserAnswerSubmission.getDocumentName());
@@ -163,7 +169,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 	
 	@PostMapping(value="/readFile",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> readDocument(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestBody BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> readDocument(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			//this.businessUserAnswerSubmissionService.readDocument(businessUserAnswerSubmission.getDocumentSubDirectory(), businessUserAnswerSubmission.getDocumentName());

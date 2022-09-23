@@ -77,15 +77,16 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 	private BusinessClientFund changeUnit(ClientFundOutput clientFundOutput)
 	{
 		BusinessClientFund  businessClientFund=new BusinessClientFund();
+		businessClientFund.setTeacomputerId(clientFundOutput.getFundId());
 		businessClientFund.setFundType(clientFundOutput.getAssetClass());
 		businessClientFund.setFundName(clientFundOutput.getCertificateName());
 		businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
 		businessClientFund.setCurrencyRate(clientFundOutput.getCurrencyRate());
 		businessClientFund.setTradePrice(clientFundOutput.getTradePrice());
 		businessClientFund.setQuantity(clientFundOutput.getQuantity());
-		if(clientFundOutput!=null&&StringUtility.isStringPopulated(clientFundOutput.getTradePrice())&&clientFundOutput.getQuantity()!=null)
+		if(clientFundOutput!=null&&StringUtility.isStringPopulated(clientFundOutput.getTradePrice())&&clientFundOutput.getQuantity()!=null&&clientFundOutput.getCurrencyRate()!=null)
 		{	
-			double totalAmount=clientFundOutput.getQuantity().doubleValue()*Double.valueOf(clientFundOutput.getTradePrice());
+			double totalAmount=clientFundOutput.getQuantity().doubleValue()*Double.valueOf(clientFundOutput.getTradePrice())*clientFundOutput.getCurrencyRate();
 			businessClientFund.setTotalAmount(totalAmount);
 		}
 		else

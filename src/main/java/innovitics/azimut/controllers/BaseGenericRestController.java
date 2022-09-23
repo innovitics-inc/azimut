@@ -77,6 +77,10 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 		this.logger.info("Exception Caught::::");
 		return this.generateFailureBaseGenericResponseEntity(businessException, this.determineErrorType(businessException.getErrorCode()));
 	}
+	protected ResponseEntity<BaseGenericResponse<T>> handleBaseGenericResponseException(BusinessException businessException,String locale) {
+		this.logger.info("Exception Caught::::");
+		return this.generateFailureBaseGenericResponseEntity(businessException, this.determineErrorType(businessException.getErrorCode()),locale);
+	}
 
 	private HttpStatus determineErrorType(int errorCode) {
 		this.logger.info("Determine the Error Code:::"+errorCode);
@@ -98,6 +102,29 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 		ResponseEntity<BaseGenericResponse<T>> responseEntity = new ResponseEntity<BaseGenericResponse<T>>(
 				this.generateBaseGenericResponseFailure(exception.getErrorCode(), exception.getErrorMessage()),
 				httpStatus);
+		return responseEntity;
+	}
+
+	protected ResponseEntity<BaseGenericResponse<T>> generateFailureBaseGenericResponseEntity(
+			GeneralException exception, HttpStatus httpStatus,String locale) {
+		String errorMessage="";
+		if(StringUtility.isStringPopulated(locale))
+		{
+			if(StringUtility.stringsMatch(locale, StringUtility.ENGLISH))
+			{
+				errorMessage=exception.getErrorMessage();
+			}
+			else if(StringUtility.stringsMatch(locale, StringUtility.ARABIC))
+			{
+				errorMessage=exception.getErrorMessageAr();
+			}
+		}
+		else
+		{
+			errorMessage=exception.getErrorMessage();
+		}
+		ResponseEntity<BaseGenericResponse<T>> responseEntity = new ResponseEntity<BaseGenericResponse<T>>(
+				this.generateBaseGenericResponseFailure(exception.getErrorCode(),errorMessage),httpStatus);
 		return responseEntity;
 	}
 

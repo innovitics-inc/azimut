@@ -1,37 +1,19 @@
-package innovitics.azimut.businessmodels.user;
+package innovitics.azimut.rest.models.teacomputers;
 
-import innovitics.azimut.businessmodels.BaseBusinessEntity;
+public class ClientCashBalanceResponse extends TeaComputerResponse {
 
-public class BusinessClientCashBalance extends BaseBusinessEntity{
-
-	private Long idType;
-	private String idNumber;
-	private Long currencyID;
+	private String currencyID;
     private String currencyName;
     private Double balance;
     private Double pendingTransfer;
     private Double inPendingTrans;
     private Double outPendingTrans;
     private Double currencyRate;
-	
-	
-	public Long getIdType() {
-		return idType;
-	}
-	public void setIdType(Long idType) {
-		this.idType = idType;
-	}
-	public String getIdNumber() {
-		return idNumber;
-	}
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
-	}
-	
-	public Long getCurrencyID() {
+    
+	public String getCurrencyID() {
 		return currencyID;
 	}
-	public void setCurrencyID(Long currencyID) {
+	public void setCurrencyID(String currencyID) {
 		this.currencyID = currencyID;
 	}
 	public String getCurrencyName() {
@@ -70,8 +52,6 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 	public void setCurrencyRate(Double currencyRate) {
 		this.currencyRate = currencyRate;
 	}
-    
-
 	
 	
 }

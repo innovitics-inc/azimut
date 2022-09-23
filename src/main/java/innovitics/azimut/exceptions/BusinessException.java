@@ -8,9 +8,9 @@ public class BusinessException extends GeneralException {
 
 	private static final long serialVersionUID = 1L;
 
-	public BusinessException(Integer errorCode, Date timestamp, String message, String description, StackTraceElement[] stackTrace) 
+	public BusinessException(Integer errorCode, Date timestamp, String message,String messageAr ,String description, StackTraceElement[] stackTrace) 
 	{
-		super(errorCode, timestamp, message, description, stackTrace);
+		super(errorCode, timestamp, message,messageAr,description, stackTrace);
 		
 	}
 	

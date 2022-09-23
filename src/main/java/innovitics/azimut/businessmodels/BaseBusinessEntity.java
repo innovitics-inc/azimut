@@ -43,6 +43,7 @@ public class BaseBusinessEntity {
 	private Boolean isMobile;
 	private Boolean isWeb;
 	private Long fundId;
+	private Long teacomputerId;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -242,6 +243,12 @@ public class BaseBusinessEntity {
 	}
 	public void setFundId(Long fundId) {
 		this.fundId = fundId;
+	}
+	public Long getTeacomputerId() {
+		return teacomputerId;
+	}
+	public void setTeacomputerId(Long teacomputerId) {
+		this.teacomputerId = teacomputerId;
 	}
 	
 	

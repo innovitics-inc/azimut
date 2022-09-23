@@ -12,6 +12,7 @@ import innovitics.azimut.repositories.fund.FundPriceDynamicRepository;
 import innovitics.azimut.repositories.fund.FundRepository;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
+import innovitics.azimut.utilities.dbutilities.specifications.child.FundChildSpecification;
 import innovitics.azimut.utilities.dbutilities.specifications.child.FundPriceChildSpecification;
 @Service
 public class FundService extends AbstractService<Fund,Long>{
@@ -21,6 +22,8 @@ public class FundService extends AbstractService<Fund,Long>{
 	@Autowired FundPriceDynamicRepository fundPriceDynamicRepository;
 	
 	@Autowired FundPriceChildSpecification fundPriceChildSpecification;
+	
+	@Autowired FundChildSpecification fundChildSpecification;
 	
 	public List<Fund> getAllFunds()
 	{
@@ -52,6 +55,15 @@ public class FundService extends AbstractService<Fund,Long>{
 		searchCriteriaList.add(new SearchCriteria("teacomputerId", this.arrayUtility.generateObjectListFromObjectArray(teacomputerFundIds),SearchOperation.IN, null));
 		
 		return this.fundPriceDynamicRepository.findAll(this.fundPriceChildSpecification.findByCriteria(searchCriteriaList));
+	}
+	
+	public List<Fund> getAllRelevantFundLogos(Long [] teacomputerFundIds)
+	{
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		
+		searchCriteriaList.add(new SearchCriteria("teacomputerId", this.arrayUtility.generateObjectListFromObjectArray(teacomputerFundIds),SearchOperation.IN, null));
+		
+		return this.fundRepository.findAll(this.fundChildSpecification.findByCriteria(searchCriteriaList));
 	}
 }
 
