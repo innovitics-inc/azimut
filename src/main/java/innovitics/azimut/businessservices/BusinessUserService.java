@@ -330,18 +330,32 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			//searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
 			
 			searchedForBusinessUser=new BusinessUser();
-			List<AzimutAccount> azimutAccounts=this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
 			
-			if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
+			try 
 			{
-				searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);
+				List<AzimutAccount> azimutAccounts=this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
+				if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
+				{
+					searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);
+				}
+				
+				else
+				{
+					searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
+				}
 			}
-			
-			else
+			catch(Exception teacomputerException)
 			{
+				
+				/*if(teacomputerException instanceof IntegrationException)
+					throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)teacomputerException, ErrorCode.FAILED_TO_INTEGRATE);
+					else		
+					throw this.handleBusinessException((Exception)teacomputerException,ErrorCode.OPERATION_NOT_PERFORMED);
+				*/
+				this.logger.info("Enter TC exception Handling");
+				
 				searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
 			}
-			
 			
 		}
 		
