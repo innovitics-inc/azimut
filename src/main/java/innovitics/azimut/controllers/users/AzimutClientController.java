@@ -67,7 +67,6 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 			@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			this.logger.info("SearchBusinessAzmiutClient::"+searchBusinessAzimutClient);
 			Long accountId=(searchBusinessAzimutClient!=null&&searchBusinessAzimutClient.getAccountId()!=null)?searchBusinessAzimutClient.getAccountId().longValue():null;
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBankAccountsWithDetails(searchBusinessAzimutClient,this.getCurrentRequestHolder(token),accountId==null),null,null);
 		}		
@@ -217,6 +216,21 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}
 		
 	}
-	
+
+	@GetMapping(value="/getTotalClientBankAccounts",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getTotalClientBankAccounts(this.getCurrentRequestHolder(token)),null,null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+
 	
 }

@@ -39,7 +39,27 @@ public class TeaComputersSignatureGenerator {
 		else 
 			return "";
 	}
-	
+	public String generateSignature(boolean custom,String customSecurityKey,String... params)
+	{
+		StringBuffer stringBuffer=new StringBuffer();
+		if(arrayUtility.isArrayPopulated(params))
+		{
+			logger.info("Param Array is populated:::");
+			for (int i=0;i<params.length;i++)
+			{
+				logger.info(params[i]);
+				stringBuffer.append(params.clone()[i]);				
+			}
+			stringBuffer.append(customSecurityKey);
+			 String hashedString = digest(StringUtility.SHA_256_ALGORITHM,stringBuffer.toString());
+			
+			 String encodedString = Base64.getEncoder().encodeToString(hashedString.getBytes());
+						
+			return encodedString;
+		}
+		else 
+			return "";
+	}
 	 private  String digest(String alg, String input) {
 		    try {
 		        MessageDigest messageDigest = MessageDigest.getInstance(alg);

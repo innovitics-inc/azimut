@@ -3,6 +3,7 @@ package innovitics.azimut.businessservices;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,7 @@ import innovitics.azimut.utilities.businessutilities.Sorting;
 import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
@@ -119,9 +121,29 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		try 
 		{			
 			if(isList)
-			responseBusinessAzimutClient.setBankList(getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList());
+			{
+				List<BusinessClientBankAccountDetails> teacomputersBankAccounts=this.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
+				
+				BusinessClientBankAccountDetails [] localClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
+				
+				if(arrayUtility.isArrayPopulated(localClientTeacomputersBankAccounts))
+				{	
+					teacomputersBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
+				}
+						
+				responseBusinessAzimutClient.setBankList(teacomputersBankAccounts);
+			}
 			else if(!isList)
-			responseBusinessAzimutClient.setBankAccountDetails(getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getData());	
+			{
+				if(BooleanUtility.isTrue(businessAzimutClient.getIsLocal()))
+				{
+					responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)[0]);
+				}
+				else
+				{
+					responseBusinessAzimutClient.setBankAccountDetails(getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getData());
+				}
+			}	
 		}
 		catch(Exception exception)
 		{
@@ -328,7 +350,27 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		return businessAzimutClient;
 	}
-	
+	public BusinessAzimutClient getTotalClientBankAccounts(BusinessUser tokenizedBusinessUser) throws BusinessException
+	{
+		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
+		try 
+			{	
+				List<BusinessClientBankAccountDetails> clientTeacomputersBankAccounts=this.getClientBankAccountsMapper.wrapBaseBusinessEntity(true,this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,true), null).getDataList();
+				BusinessClientBankAccountDetails [] tempClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
+				if(arrayUtility.isArrayPopulated(tempClientTeacomputersBankAccounts))
+				{	
+					clientTeacomputersBankAccounts.addAll(Arrays.asList(tempClientTeacomputersBankAccounts));
+				}
+				businessAzimutClient.setBankList(clientTeacomputersBankAccounts);
+			}
+		catch(Exception exception)
+		{
+			this.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
+
+		}
+		return businessAzimutClient;
+	}
+		
 	
 	public BusinessAzimutClient getClientFundsOrFund(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
 	{

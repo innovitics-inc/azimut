@@ -44,6 +44,7 @@ public class BaseBusinessEntity {
 	private Boolean isWeb;
 	private Long fundId;
 	private Long teacomputerId;
+	private Boolean isLocal;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -249,6 +250,12 @@ public class BaseBusinessEntity {
 	}
 	public void setTeacomputerId(Long teacomputerId) {
 		this.teacomputerId = teacomputerId;
+	}
+	public Boolean getIsLocal() {
+		return isLocal;
+	}
+	public void setIsLocal(Boolean isLocal) {
+		this.isLocal = isLocal;
 	}
 	
 	

@@ -24,6 +24,7 @@ import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
+import innovitics.azimut.utilities.crosslayerenums.BankAccountStatus;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 @Component
 public class AzimutDataLookupUtility extends ParentUtility {
@@ -108,6 +109,7 @@ public void syncTeaComputersData() throws IntegrationException
 				if(clientBankAccount!=null)
 				{
 					BusinessClientBankAccountDetails businessClientBankAccountDetails=new BusinessClientBankAccountDetails();
+					businessClientBankAccountDetails.setAccountId(clientBankAccount.getId());
 					businessClientBankAccountDetails.setBankId(clientBankAccount.getBankId());
 					businessClientBankAccountDetails.setBranchId(clientBankAccount.getBranchId());
 					businessClientBankAccountDetails.setCurrencyId(clientBankAccount.getCurrencyId());
@@ -120,6 +122,10 @@ public void syncTeaComputersData() throws IntegrationException
 					businessClientBankAccountDetails.setArabicBranchName(clientBankAccount.getArabicBranchName());
 					businessClientBankAccountDetails.setEnglishCurrencyName(clientBankAccount.getEnglishCurrencyName());
 					businessClientBankAccountDetails.setArabicCurrencyName(clientBankAccount.getArabicCurrencyName());
+					businessClientBankAccountDetails.setStatus(BankAccountStatus.PENDING.getStatusId());
+					businessClientBankAccountDetails.setAccountStatus(BankAccountStatus.PENDING.getStatusId());
+					businessClientBankAccountDetails.setStatusName(BankAccountStatus.PENDING.getStatus());
+					businessClientBankAccountDetails.setIsLocal(true);
 					businessClientBankAccountDetailsList.add(businessClientBankAccountDetails);
 				}
 			}

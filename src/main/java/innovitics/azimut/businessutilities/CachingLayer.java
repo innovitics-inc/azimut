@@ -28,8 +28,7 @@ public class CachingLayer {
 		Configuration configuration=new Configuration();
 		configuration.addDiskStore(diskStoreConfiguration);
 		CacheManager mgr = new CacheManager(configuration);
-		*/
-		
+		*/		
 		Cache cache = singletonManager.getCache("cacheLayer");
 		if(cache.get(cacheKey)==null)
 		 {
@@ -40,15 +39,12 @@ public class CachingLayer {
 			element.setTimeToIdle(timeToIdle);
 			cache.put(element);
 			return result;
-		 }
-		
+		 }		
 		else
 		{
 			this.logger.info("Cache Populated:::");
 			return cache.get(cacheKey).getObjectValue();
 		}
-		
-		
 	}
 				
 		private Object getValueToCacheUsingReflection(Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes)

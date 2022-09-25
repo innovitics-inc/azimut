@@ -3,7 +3,7 @@ package innovitics.azimut.utilities.exceptionhandling;
 public enum ErrorCode {
 	
 	PAYMENT_FAILURE(996,"Operation Could not be performed, please check with the vendor.",""),
-	INVALID_SIGNATURE(997,"Invalid signature, corrupted request.",""),
+	INVALID_SIGNATURE(997,"Invalid signature, corrupted response.",""),
 	INTEGRATION_TEST_FAILED(998,"Integration Test Failed.",""),
 	FAILED_TO_INTEGRATE(999,"Operation Could not be performed.",""),
 	OPERATION_NOT_PERFORMED(1000,"Operation Could not be performed.",""),
@@ -26,7 +26,7 @@ public enum ErrorCode {
 	USER_EXISTS(2115, "User already exists.",""),
 	INCORRECT_PASSWORD(2116, "Incorrect password.",""),
 	BAD_CREDENTIALS(2117, "Bad credentials.",""),
-	FAILED_TO_VALIDATE_TOKEN(2118,"Session expired.",""),
+	FAILED_TO_VALIDATE_TOKEN(2118,"Session expired.","لا يمكن الدخول الأن"),
 	INVALID_FIELD_VALUE(2119,"Invalid value",""),
 	IMAGES_NOT_SIMIILAR(2120,"The images are different, please retake them.",""),
 	IMAGES_NOT_ClEAR(2121,"The images are not clear.",""),
