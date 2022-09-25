@@ -55,7 +55,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -70,7 +70,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -90,7 +90,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		catch(MaxUploadSizeExceededException maxUploadSizeExceededException)
 		{
@@ -149,7 +149,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -166,7 +166,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -183,7 +183,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -200,7 +200,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -216,7 +216,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -232,7 +232,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -248,7 +248,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -263,7 +263,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -280,7 +280,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -294,7 +294,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -308,7 +308,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}

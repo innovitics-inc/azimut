@@ -44,7 +44,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 			
 		} 
 		catch (BusinessException businessException) {
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 	}
 	@RequestMapping(value="/refresh", method=RequestMethod.POST)
@@ -60,7 +60,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 		
@@ -80,7 +80,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -97,7 +97,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}

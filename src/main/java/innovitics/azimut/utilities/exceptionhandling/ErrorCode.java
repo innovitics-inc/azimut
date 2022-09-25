@@ -15,7 +15,7 @@ public enum ErrorCode {
 	FILE_TOO_BIG(2104,"File size too big.",""),
 	REQUESTS_FOUND(2105,"Another request was found for this user.",""),
 	MISSING_FILE(2106,"File missing.",""),
-	UNAUTHORIZED_USER(2107,"Unauthorized user.",""),
+	UNAUTHORIZED_USER(2107,"Unauthorized user.","غير مصرح لهذا المستخدم"),
 	WEAK_PASSWORD(2108,"The password is weak, it must be at least 8 characters long, consist of at least 1 capital letter 1 small letter and 1 number.",""),
 	PASSWORDS_NOT_MATHCING(2109,"The two passwords are not matching.",""),
 	TOO_MANY_USERS(2110,"More than one user was found having this phone.",""),

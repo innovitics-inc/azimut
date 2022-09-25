@@ -85,10 +85,8 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 			businessClientBankAccountDetails.setId(clientBankAccountOutput.getBankId());
 			businessClientBankAccountDetails.setBankName(clientBankAccountOutput.getBankName());
 			businessClientBankAccountDetails.setBranchId(clientBankAccountOutput.getBranchId());
-			businessClientBankAccountDetails.setBranchName(clientBankAccountOutput.getBranchName());
-			
+			businessClientBankAccountDetails.setBranchName(clientBankAccountOutput.getBranchName());			
 			businessClientBankAccountDetails.setCurrencyName(clientBankAccountOutput.getCurrencyName());
-			
 			businessClientBankAccountDetails.setAccountNumber(clientBankAccountOutput.getAccountNo());
 			businessClientBankAccountDetails.setIban(clientBankAccountOutput.getIban());
 			businessClientBankAccountDetails.setAccountId(clientBankAccountOutput.getAccountId());
@@ -96,6 +94,7 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 			businessClientBankAccountDetails.setStatusName(clientBankAccountOutput.getAccountStatusName());
 			businessClientBankAccountDetails.setAccountStatus(clientBankAccountOutput.getAccountStatus());
 			businessClientBankAccountDetails.setSwiftCode(clientBankAccountOutput.getSwiftCode());
+			businessClientBankAccountDetails.setIsLocal(false);
 			this.logger.info("BusinessClientBankAccountDetails::::"+businessClientBankAccountDetails.toString());
 		}
 		return businessClientBankAccountDetails;		

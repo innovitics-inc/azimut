@@ -40,7 +40,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -54,7 +54,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -72,7 +72,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -88,7 +88,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -103,7 +103,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -118,7 +118,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -131,7 +131,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -147,7 +147,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -163,7 +163,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -179,7 +179,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -194,7 +194,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -212,7 +212,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -227,7 +227,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
