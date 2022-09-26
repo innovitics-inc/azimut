@@ -455,9 +455,16 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	public BusinessAzimutClient getEportfolio(BusinessUser tokenizedBusinessUser,String language) throws BusinessException, IntegrationException
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
-		
-		responseBusinessAzimutClient.setEportfolioDetails(this.getEportfolioMapper.wrapBaseBusinessEntity(true, this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
-		
+		try {
+				responseBusinessAzimutClient.setEportfolioDetails(this.getEportfolioMapper.wrapBaseBusinessEntity(true, this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
+			}
+		catch(Exception exception)
+		{
+			if(exception instanceof IntegrationException)
+			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			else		
+			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+		}
 		return responseBusinessAzimutClient;
 	}
 	
