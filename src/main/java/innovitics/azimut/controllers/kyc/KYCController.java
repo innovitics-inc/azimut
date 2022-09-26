@@ -49,7 +49,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -65,7 +65,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -97,7 +97,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -128,7 +128,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -162,7 +162,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -179,7 +179,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}

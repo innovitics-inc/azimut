@@ -94,11 +94,11 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}
 		catch(MaxUploadSizeExceededException maxUploadSizeExceededException)
 		{
-			return this.handleBaseGenericResponseException(maxUploadSizeExceededException);
+			return this.handleBaseGenericResponseException(maxUploadSizeExceededException,language);
 		}
 		catch(IllegalStateException illegalStateException)
 		{
-			return this.handleBaseGenericResponseException(illegalStateException);
+			return this.handleBaseGenericResponseException(illegalStateException,language);
 		}
 		
 	}
@@ -117,19 +117,19 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		catch(MaxUploadSizeExceededException maxUploadSizeExceededException)
 		{
-			return this.handleBaseGenericResponseException(maxUploadSizeExceededException);
+			return this.handleBaseGenericResponseException(maxUploadSizeExceededException,language);
 		}
 		catch(IllegalStateException illegalStateException)
 		{
-			return this.handleBaseGenericResponseException(illegalStateException);
+			return this.handleBaseGenericResponseException(illegalStateException,language);
 		}
 		catch(MultipartException multipartException)
 		{
-			return this.handleBaseGenericResponseException(multipartException);
+			return this.handleBaseGenericResponseException(multipartException,language);
 		}
 
 		
@@ -312,7 +312,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}
 		
 	}
-	
+
 	@GetMapping(value="/execute",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> execute(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException {

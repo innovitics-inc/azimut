@@ -214,4 +214,11 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 			return null;
 	} 
 
+	protected ResponseEntity<BaseGenericResponse<T>> handleBaseGenericResponseException(Exception exception,String locale) {
+		this.logger.info("Exception Caught::::");
+		if(exception instanceof MultipartException ||exception instanceof MaxUploadSizeExceededException|| exception instanceof SizeLimitExceededException || exception instanceof IllegalStateException)
+		return this.generateFailureBaseGenericResponseEntity(new BusinessException(ErrorCode.FILE_TOO_BIG),HttpStatus.BAD_REQUEST,locale);
+		else 
+			return null;
+	} 
 }

@@ -30,7 +30,10 @@ public class BusinessAzimutClient extends BusinessUser{
 	private String param;
 	private AzimutDetails azimutDetails;
 	private List<BusinessClientFund> businessClientFunds;
-	private Double totalPosition;
+	private Double totalPosition;	
+	private List<EportfolioDetail> eportfolioDetails;
+	
+	
 	
 	public Double getPendingAmount() {
 		return pendingAmount;
@@ -96,7 +99,7 @@ public class BusinessAzimutClient extends BusinessUser{
 		this.businessClientCashBalances = businessClientCashBalances;
 	}
 
-	public List<BusinessTransaction> getTransactions() {
+	public List<BusinessTransaction> getBusinessTransactions() {
 		return transactions;
 	}
 
@@ -183,6 +186,14 @@ public class BusinessAzimutClient extends BusinessUser{
 
 	public void setTotalPosition(Double totalPosition) {
 		this.totalPosition = totalPosition;
+	}
+
+	public List<EportfolioDetail> getEportfolioDetails() {
+		return eportfolioDetails;
+	}
+
+	public void setEportfolioDetails(List<EportfolioDetail> eportfolioDetails) {
+		this.eportfolioDetails = eportfolioDetails;
 	}
 
 	public BusinessAzimutClient(BusinessClientBankAccountDetails[] clientBankAccounts) {

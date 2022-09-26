@@ -34,7 +34,7 @@ public class UserOtpController extends BaseGenericRestController<BusinessUserOTP
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}

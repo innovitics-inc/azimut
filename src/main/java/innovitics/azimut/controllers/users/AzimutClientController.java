@@ -16,6 +16,7 @@ import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
+import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessservices.BusinessClientDetailsService;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
@@ -217,14 +218,14 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		
 	}
 
-	@GetMapping(value="/getTotalClientBankAccounts",
+	@GetMapping(value="/getEportfolio",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getClientBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
-			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getEportfolio(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getTotalClientBankAccounts(this.getCurrentRequestHolder(token)),null,null);
-		}		
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getEportfolio(this.getCurrentRequestHolder(token),language),null,null);
+		}
+		
 		catch(BusinessException businessException)
 		{
 			return this.handleBaseGenericResponseException(businessException,language);

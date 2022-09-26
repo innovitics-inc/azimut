@@ -90,16 +90,28 @@ public class ConfigProperties {
 
     @Value("${tea.computers.url}")
     private String teaComputersUrl;
+    @Value("${tea.computers.eport.url}")
+    private String teaComputersEportUrl;
     
     @Value("${tea.computers.key}")
     private String teaComputersKey;
 
+    @Value("${tea.computers.eportfolio.key}")
+    private String teaComputersEportfolioKey;
+ 
+    @Value("${tea.computers.eportfolio.username}")
+    private String teaComputersEportfolioUsername;
+ 
+    
+    
     @Value("${tea.computers.username}")
     private String teaComputersUsername;
  
     @Value("${tea.computers.password}")
     private String teaComputersPassword;
     
+    
+   
     @Value("${valify.url}")
     private String valifyUrl;
     
@@ -203,6 +215,9 @@ public class ConfigProperties {
 	}
 	public String getTeaComputersUrl() {
 		return teaComputersUrl;
+	}	
+	public String getTeaComputersEportUrl() {
+		return teaComputersEportUrl;
 	}
 	public String getTeaComputersKey() {
 		return teaComputersKey;
@@ -212,6 +227,15 @@ public class ConfigProperties {
 	}
 	public String getTeaComputersPassword() {
 		return teaComputersPassword;
+	}
+	public String getTeaComputersEportfolioKey() {
+		return teaComputersEportfolioKey;
+	}	
+	public String getTeaComputersEportfolioUsername() {
+		return teaComputersEportfolioUsername;
+	}
+	public String getBlobKYCDocumentsTempContainer() {
+		return blobKYCDocumentsTempContainer;
 	}
 	public String getValifyUrl() {
 		return valifyUrl;

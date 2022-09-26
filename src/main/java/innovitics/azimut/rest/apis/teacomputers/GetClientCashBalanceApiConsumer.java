@@ -46,9 +46,12 @@ public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<
 				for(int i=0;i<responseEntity.getBody().length;i++)
 				{
 					ClientBalanceOutput clientBalanceOutput = new ClientBalanceOutput();
-					clientBalanceOutput.setBalance(responseEntity.getBody()[i].getBalance());
+					if(StringUtility.isStringPopulated(responseEntity.getBody()[i].getBalance()))
+					clientBalanceOutput.setBalance(Double.valueOf(responseEntity.getBody()[i].getBalance()));
+		
 					if(StringUtility.isStringPopulated(responseEntity.getBody()[i].getCurrencyID()))
 					clientBalanceOutput.setCurrencyID(Long.valueOf(responseEntity.getBody()[i].getCurrencyID()));					
+		
 					clientBalanceOutput.setCurrencyName(responseEntity.getBody()[i].getCurrencyName());
 					clientBalanceOutput.setPendingTransfer(responseEntity.getBody()[i].getPendingTransfer());
 					clientBalanceOutputs.add(clientBalanceOutput);

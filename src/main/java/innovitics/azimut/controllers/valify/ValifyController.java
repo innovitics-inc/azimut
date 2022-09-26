@@ -44,7 +44,7 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -60,7 +60,7 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -104,7 +104,7 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}
@@ -120,7 +120,7 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}

@@ -11,6 +11,7 @@ public class TeaComputerRequest extends BaseRestRequest{
 	 protected String UserName;
 	 protected String Password;
 	 protected Long FundId;
+	 protected String Lang;
 	 
 
 	public String getSignature() {
@@ -79,6 +80,18 @@ public class TeaComputerRequest extends BaseRestRequest{
 
 	public void setFundId(Long fundId) {
 		FundId = fundId;
+	}
+
+
+
+	public String getLang() {
+		return Lang;
+	}
+
+
+
+	public void setLang(String lang) {
+		Lang = lang;
 	}
 
 

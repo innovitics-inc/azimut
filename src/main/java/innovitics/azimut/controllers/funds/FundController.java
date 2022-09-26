@@ -43,7 +43,7 @@ public class FundController extends BaseGenericRestController<BusinessFundPrice,
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException);
+			return this.handleBaseGenericResponseException(businessException,language);
 		}
 		
 	}

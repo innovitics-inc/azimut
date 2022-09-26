@@ -1,5 +1,6 @@
 package innovitics.azimut.businessservices;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
 import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.businessmodels.user.EportfolioDetail;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.mappers.AddAccountMapper;
@@ -30,6 +32,7 @@ import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.rest.mappers.GetClientBalanceMapper;
 import innovitics.azimut.rest.mappers.GetClientBankAccountsMapper;
 import innovitics.azimut.rest.mappers.GetClientFundsMapper;
+import innovitics.azimut.rest.mappers.GetEportfolioMapper;
 import innovitics.azimut.rest.mappers.GetFundPricesMapper;
 import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
@@ -39,6 +42,7 @@ import innovitics.azimut.services.user.AzimutDataLookUpService;
 import innovitics.azimut.utilities.businessutilities.FundTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.CashTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.Sorting;
+import innovitics.azimut.utilities.crosslayerenums.AnswerType;
 import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
@@ -85,6 +89,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired FundPriceMapper fundPriceMapper;
 @Autowired FundMapper fundMapper;
 @Autowired GetFundTransactionsMapper getFundTransactionsMapper;
+@Autowired GetEportfolioMapper getEportfolioMapper;
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
@@ -95,8 +100,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 		try 
 		{
+				responseBusinessAzimutClient.setSorting(businessAzimutClient.getSorting());
 				responseBusinessAzimutClient.setBusinessTransactions(getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
-				//responseBusinessAzimutClient.setBusinessClientCashBalance(getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getData());
 				responseBusinessAzimutClient.setBusinessClientCashBalances(getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
 		}
 		catch(Exception exception)
@@ -440,13 +445,40 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	public void getClientFundDetails(BusinessClientFund businessClientFund,BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
 	{	
-
-		List<BusinessFundTransaction> businessFundTransactions=this.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
-		
+		List<BusinessFundTransaction> businessFundTransactions=this.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();	
 		this.beautifyBusinessClientFundTransactions(businessClientFund,businessFundTransactions,businessAzimutClient);
-				
+	
+	}
+	
+	
+	
+	public BusinessAzimutClient getEportfolio(BusinessUser tokenizedBusinessUser,String language) throws BusinessException, IntegrationException
+	{
+		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+		
+		responseBusinessAzimutClient.setEportfolioDetails(this.getEportfolioMapper.wrapBaseBusinessEntity(true, this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
+		
+		return responseBusinessAzimutClient;
+	}
+	
+	public void  getCompanyBankAccounts()
+	{
 		
 	}
+	
+	
+	private EportfolioDetail prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) {
+		EportfolioDetail eportfolioDetail=new EportfolioDetail();		
+		eportfolioDetail.setAzId(tokenizedBusinessUser.getUserId());
+		eportfolioDetail.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+		eportfolioDetail.setLanguage(language);
+		return eportfolioDetail;
+	}
+
+
+
+
+	
 	
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
@@ -539,23 +571,10 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	public BusinessAzimutClient beautifyBalanceAndTransactionsBusinessAzimutClient(BusinessAzimutClient businessAzimutClient)
 	{
 		double pendingAmount=0;
-		if(businessAzimutClient!=null &&listUtility.isListPopulated(businessAzimutClient.getTransactions()))
+		if(businessAzimutClient!=null &&listUtility.isListPopulated(businessAzimutClient.getBusinessTransactions()))
 			{
-				for(BusinessTransaction  businessTransaction:businessAzimutClient.getTransactions())
-				{
-					if(businessTransaction!=null)
-					{
-						this.logger.info("business Transaction:::"+ businessTransaction);
-						
-						businessTransaction.setStatus(businessTransaction.getTransactionStatus()!=null?businessTransaction.getTransactionStatus().getStatusId():null);
-						businessTransaction.setType(businessTransaction.getOrderType()!=null?businessTransaction.getOrderType().getTypeId():null);
-					
-						if(businessTransaction.getTransactionStatus()!=null&&businessTransaction.getTransactionStatus().getStatus().equals(TransactionStatus.PENDING.getStatus()))
-							{
-								pendingAmount=pendingAmount+businessTransaction.getAmount();
-							}
-					}
-				}
+				List<BusinessTransaction> unsortedTransactions=businessAzimutClient.getBusinessTransactions();
+				
 				businessAzimutClient.setTotalPendingAmount(pendingAmount);
 				
 				boolean sorting = true;
@@ -566,19 +585,36 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				sorting=false;	
 					
 				this.logger.info("Sorting:::"+sorting);
-				Collections.sort(businessAzimutClient.getTransactions(),sorting ? this.cashTransactionSortCompare: cashTransactionSortCompare.reversed());
-				int index = sorting ? businessAzimutClient.getTransactions().size() : 0;
+				
+				Collections.sort(unsortedTransactions,sorting ? this.cashTransactionSortCompare: cashTransactionSortCompare.reversed());
+				
+				this.logger.info("Sorted Transactions:::"+unsortedTransactions.toString());
+				
+				
+				int lastIndex=unsortedTransactions.size();
+				int index = sorting ?  lastIndex: 0;
+				
 				this.logger.info("Index:::"+index);
-				businessAzimutClient.setLastTransactionDate(businessAzimutClient.getTransactions().get(index).getTrxDate());
+				businessAzimutClient.setBusinessTransactions(unsortedTransactions);
+				
+				//businessAzimutClient.setLastTransactionDate(sorting? unsortedTransactions.get(lastIndex-1).getTrxDate():unsortedTransactions.get(0).getTrxDate());
+				
+				for(BusinessTransaction  businessTransaction:unsortedTransactions)
+				{
+					if(businessTransaction!=null)
+					{
+						this.logger.info("business Transaction:::"+ businessTransaction);
+						
+						businessTransaction.setStatus(businessTransaction.getTransactionStatus()!=null?businessTransaction.getTransactionStatus().getStatusId():null);
+						businessTransaction.setType(businessTransaction.getOrderType()!=null?businessTransaction.getOrderType().getTypeId():null);
+						
+						 String oldDate=businessTransaction.getTrxDate();
+						 businessTransaction.setTrxDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
+											
+					}
+				}
+				
 			}
-		if(businessAzimutClient!=null&&businessAzimutClient.getBusinessClientCashBalance()!=null)
-		{
-			BusinessClientCashBalance businessClientCashBalance=businessAzimutClient.getBusinessClientCashBalance();
-			businessAzimutClient.setBalance(businessClientCashBalance.getBalance());
-			businessAzimutClient.setBalanceCurrency(businessClientCashBalance.getCurrencyName());
-			businessAzimutClient.settPACurrency(businessClientCashBalance.getCurrencyName());
-			businessAzimutClient.setBusinessClientCashBalance(null);
-		}
 		
 		return businessAzimutClient;
 	}
@@ -688,7 +724,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		 for(BusinessFundTransaction businessFundTransaction:businessFundTransactions)
 		 {
 			 String oldDate=businessFundTransaction.getOrderDate();
-			 businessFundTransaction.setOrderDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-mm-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
+			 businessFundTransaction.setOrderDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
 		 }
 		 
 		 businessClientFund.setFundTransactions(businessFundTransactions);
