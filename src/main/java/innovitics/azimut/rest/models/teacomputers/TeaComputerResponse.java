@@ -11,7 +11,10 @@ public class TeaComputerResponse extends BaseRestResponse{
 	protected String Message;
 	@JsonProperty("ErrorCode")
 	protected String ErrorCode;
-
+	
+	@JsonProperty("errorMessage")
+	protected String errorMessage;
+	
 	public String getSignature() {
 		return Signature;
 	}
@@ -34,6 +37,13 @@ public class TeaComputerResponse extends BaseRestResponse{
 
 	public void setErrorCode(String ErrorCode) {
 		this.ErrorCode = ErrorCode;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 
 	@Override
