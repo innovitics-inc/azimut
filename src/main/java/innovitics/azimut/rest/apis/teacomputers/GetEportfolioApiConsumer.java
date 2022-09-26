@@ -87,7 +87,7 @@ public class GetEportfolioApiConsumer extends RestTeaComputerEportApiConsumer<Ge
 
 	@Override
 	protected String generateSignature(GetEportfolioRequest getEportfolioRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature(true, this.configProperties.getTeaComputersEportfolioKey(),getEportfolioRequest.getIdTypeId().toString(),getEportfolioRequest.getIdNumber());
+		return this.teaComputersSignatureGenerator.generateSignature(true, this.configProperties.getTeaComputersEportfolioKey(),getEportfolioRequest.getIdType().toString(),getEportfolioRequest.getIdNumber());
 	}
 
 	@Override
