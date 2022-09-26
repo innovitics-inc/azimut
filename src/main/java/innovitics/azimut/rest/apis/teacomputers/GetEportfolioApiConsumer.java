@@ -26,7 +26,7 @@ public class GetEportfolioApiConsumer extends RestTeaComputerEportApiConsumer<Ge
 		
 		GetEportfolioRequest request=new GetEportfolioRequest();
 		this.populateCredentials(request);
-		request.setIdTypeId(input.getIdTypeId());
+		request.setIdType(input.getIdTypeId());
 		request.setIdNumber(input.getIdNumber());
 		request.setSignature(this.generateSignature(request));
 		request.setLang(input.getLocale());

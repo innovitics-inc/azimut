@@ -7,6 +7,7 @@ import innovitics.azimut.rest.models.BaseRestRequest;
 public class TeaComputerRequest extends BaseRestRequest{
 	 protected String Signature;
 	 protected Long IdTypeId;
+	 protected Long IdType;
 	 protected String IdNumber;
 	 protected String UserName;
 	 protected String Password;
@@ -34,6 +35,18 @@ public class TeaComputerRequest extends BaseRestRequest{
 
 	public void setIdTypeId(Long idTypeId) {
 		IdTypeId = idTypeId;
+	}
+
+
+
+	public Long getIdType() {
+		return IdType;
+	}
+
+
+
+	public void setIdType(Long idType) {
+		IdType = idType;
 	}
 
 
