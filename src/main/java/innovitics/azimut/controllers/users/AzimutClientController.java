@@ -228,7 +228,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException,language);
+			return this.handleBaseGenericResponseException(businessException);
 		}
 		
 	}
