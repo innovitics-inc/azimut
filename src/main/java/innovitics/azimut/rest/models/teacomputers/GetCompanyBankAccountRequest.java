@@ -1,5 +1,5 @@
 package innovitics.azimut.rest.models.teacomputers;
 
-public class GetCompanyBankAccountRequest {
+public class GetCompanyBankAccountRequest extends TeaComputerRequest {
 
 }

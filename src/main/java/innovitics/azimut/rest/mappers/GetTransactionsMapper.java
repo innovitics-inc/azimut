@@ -16,6 +16,7 @@ import innovitics.azimut.rest.entities.teacomputers.TransactionOutput;
 import innovitics.azimut.rest.models.teacomputers.GetTransactionsResponse;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
 import innovitics.azimut.utilities.crosslayerenums.OrderType;
+import innovitics.azimut.utilities.crosslayerenums.TransactionOrderType;
 import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.TransactionType;
 import innovitics.azimut.utilities.datautilities.ListUtility;
@@ -113,13 +114,13 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 			}
 			if(StringUtility.isStringPopulated(transactionOutput.getOrderTypeName()))
 			{
-				if(transactionOutput.getOrderTypeName().equals(OrderType.WITHDRAW.getType()))
+				if(transactionOutput.getOrderTypeName().equals(TransactionOrderType.WITHDRAW.getType()))
 				{
-					businessTransaction.setOrderType(OrderType.WITHDRAW);
+					businessTransaction.setTransactionOrderType(TransactionOrderType.WITHDRAW);
 				}
-				else if(transactionOutput.getOrderTypeName().equals(OrderType.INJECT.getType()))
+				else if(transactionOutput.getOrderTypeName().equals(TransactionOrderType.INJECT.getType()))
 				{
-					businessTransaction.setOrderType(OrderType.INJECT);
+					businessTransaction.setTransactionOrderType(TransactionOrderType.INJECT);
 				}
 				else  
 				{

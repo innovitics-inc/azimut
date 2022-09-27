@@ -1,15 +1,14 @@
-
 package innovitics.azimut.utilities.crosslayerenums;
 
+public enum TransactionOrderType {
 
-public enum OrderType {
-	BUY(1,"Buy"),
-	SELL(2,"Sell"),
+	WITHDRAW(1,"Withdraw"),
+	INJECT(2,"Inject"),
 	OTHER(3,"Other")
 	
 	;
 
-	OrderType(int typeId, String type) {
+	TransactionOrderType(int typeId, String type) {
 		this.typeId=typeId;
 		this.type=type;
 	}
@@ -22,5 +21,7 @@ public enum OrderType {
 	public String getType() {
 		return type;
 	}
+
+	
 	
 }

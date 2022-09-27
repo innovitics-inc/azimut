@@ -4,6 +4,7 @@ import java.util.Date;
 
 import innovitics.azimut.utilities.CustomJsonRootName;
 import innovitics.azimut.utilities.crosslayerenums.OrderType;
+import innovitics.azimut.utilities.crosslayerenums.TransactionOrderType;
 import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.TransactionType;
 @CustomJsonRootName(plural = "transactions", singular = "transaction")
@@ -15,6 +16,7 @@ public class BusinessTransaction extends BaseBusinessEntity {
 	private String trxDate;
 	private TransactionStatus transactionStatus;
 	private OrderType orderType;
+	private TransactionOrderType transactionOrderType;
 	private Integer status;
 	private Integer type;
 	private Integer order;
@@ -74,6 +76,14 @@ public class BusinessTransaction extends BaseBusinessEntity {
 	}
 	public void setOrder(Integer order) {
 		this.order = order;
+	}
+	
+	
+	public TransactionOrderType getTransactionOrderType() {
+		return transactionOrderType;
+	}
+	public void setTransactionOrderType(TransactionOrderType transactionOrderType) {
+		this.transactionOrderType = transactionOrderType;
 	}
 	@Override
 	public String toString() {
