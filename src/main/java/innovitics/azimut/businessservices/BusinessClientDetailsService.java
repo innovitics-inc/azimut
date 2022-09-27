@@ -461,7 +461,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			
 		try {
 		
-		responseBusinessAzimutClient.setEportfolioDetails(this.getEportfolioMapper.wrapBaseBusinessEntity(true,(EportfolioDetail)this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
+		responseBusinessAzimutClient.setEportfolioDetails(this.getEportfolioMapper.wrapBaseBusinessEntity(true,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
 			}
 		catch(Exception exception)
 		{
@@ -496,8 +496,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 	}
 	
-	private EportBusinessEntity prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) {
-		EportBusinessEntity eportBusinessEntity=new EportBusinessEntity();		
+	private EportfolioDetail prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) {
+		EportfolioDetail eportBusinessEntity=new EportfolioDetail();		
 		eportBusinessEntity.setAzId(tokenizedBusinessUser.getUserId());
 		eportBusinessEntity.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
 		eportBusinessEntity.setLanguage(language);

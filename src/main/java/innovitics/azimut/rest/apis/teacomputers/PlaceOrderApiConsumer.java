@@ -7,7 +7,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderOutput;
@@ -19,6 +18,9 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 @Service
 public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrderRequest, PlaceOrderResponse, PlaceOrderInput, PlaceOrderOutput>{
 
+	
+	public static final String PATH="/PlaceOrder";
+	
 	@Override
 	public HttpEntity<String> generateRequestFromInput(PlaceOrderInput input) {
 		PlaceOrderRequest request=new PlaceOrderRequest();
@@ -39,13 +41,16 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 
 	@Override
 	public PlaceOrderOutput generateOutPutFromResponse(ResponseEntity<PlaceOrderResponse> responseEntity) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new PlaceOrderOutput();
 	}
 
 	@Override
 	public void validateResponse(ResponseEntity<PlaceOrderResponse> responseEntity) throws IntegrationException {
-		// TODO Auto-generated method stub
+		if (this.validateResponseStatus(responseEntity)) 
+		{
+			this.generateResponseSignature(responseEntity.getBody());
+		}
 		
 	}
 
@@ -72,25 +77,19 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 	}
 
 	@Override
-	protected void generateResponseSignature(PlaceOrderResponse placeOrderResponse) throws IntegrationException {
+	protected void generateResponseSignature(PlaceOrderResponse placeOrderResponse) throws IntegrationException 
+	{
 		
 		if(placeOrderResponse!=null)
 		{
-			if((StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("",placeOrderResponse.getMessage()), placeOrderResponse.getSignature()))
+			if((StringUtility.stringsDontMatch(teaComputersSignatureGenerator.generateSignature(placeOrderResponse.getMessage(),placeOrderResponse.getTransactionID().toString()), placeOrderResponse.getSignature()))
 					||!StringUtility.isStringPopulated(placeOrderResponse.getSignature()))
 			{
 				throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);
 			}
 			
 		}
-		else 
-		{
-			throw new IntegrationException(ErrorCode.NO_DATA_FOUND);
-		}
-
-		
-		teaComputersSignatureGenerator.generateSignature(placeOrderResponse.getMessage(),placeOrderResponse.getTransactionID().toString());
-		
+	
 	}
 
 	@Override
