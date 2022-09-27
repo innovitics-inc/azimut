@@ -701,7 +701,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				  {
 					  
 					  if(StringUtility.isStringPopulated(businessFundPrice.getPriceDate()))
-					  businessClientFund.setLastPriceUpdateDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(), new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
+					  businessClientFund.setLastPriceUpdateDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(), new SimpleDateFormat("yyyy-MM-dd"), new SimpleDateFormat("dd MMM,yyyy")));
 					 
 					  
 					  businessClientFund.setLogo(businessFundPrice.getLogo());
