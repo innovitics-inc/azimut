@@ -591,18 +591,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		  azimutAccount.setIdType(this.getAzimutUserTypeId(searchBusinessUser));*/
 		  return azimutAccount;
 	  }	
-	  Long getAzimutUserTypeId(BusinessUser businessUser)
-	  {
-		  try 
-		  {
-			  return businessUser.getAzimutIdTypeId();
-		  }
-		  catch(Exception exception)
-		  {
-			  this.exceptionHandler.getNullIfNonExistent(exception);
-			  return null;
-		  }
-	  }
+	 
 	
 	private User storeFileBlobNameAndGenerateTokenInBusinessUser(BusinessUser businessUser,User user,MultipartFile file,String containerName,String parameter,boolean generateSasToken) throws IOException, BusinessException
 	{

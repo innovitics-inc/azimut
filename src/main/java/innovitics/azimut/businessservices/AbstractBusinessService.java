@@ -13,6 +13,7 @@ import org.springframework.validation.Validator;
 
 import innovitics.azimut.AzimutParent;
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.businessutilities.SearchFilter;
 import innovitics.azimut.exceptions.BusinessException;
@@ -136,5 +137,18 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	protected void validate(T businessEntity, Validator validator,String objectName) throws BusinessException {
 		this.validation.validate(businessEntity, validator,objectName);	
 	}
+	
+	 protected Long getAzimutUserTypeId(BusinessUser businessUser)
+	  {
+		  try 
+		  {
+			  return businessUser.getAzimutIdTypeId();
+		  }
+		  catch(Exception exception)
+		  {
+			  this.exceptionHandler.getNullIfNonExistent(exception);
+			  return null;
+		  }
+	  }
 
 }

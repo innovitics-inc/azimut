@@ -1,5 +1,6 @@
 package innovitics.azimut.rest.apis.teacomputers;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderOutput;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderRequest;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderResponse;
+import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
@@ -28,7 +30,7 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 		request.setIdTypeId(input.getIdTypeId());
 		request.setIdNumber(input.getIdNumber());
 		request.setFundID(input.getFundId());
-		request.setOrderDate((new Date()).toString());
+		request.setOrderDate(DateUtility.getCurrentDayMonthYear());
 		request.setOrderTypeId(input.getOrderTypeId());
 		request.setOrderValue(input.getOrderValue());
 		request.setExternalOrderID(UUID.randomUUID().toString());

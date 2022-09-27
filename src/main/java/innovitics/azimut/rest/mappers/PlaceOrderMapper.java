@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
+import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.PlaceOrderApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
@@ -37,14 +38,16 @@ public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutp
 		input.setOrderTypeId(baseAzimutTrading.getOrderTypeId());
 		input.setOrderValue(baseAzimutTrading.getOrderValue());
 		input.setIdTypeId(baseAzimutTrading.getAzIdType());
+		input.setIdNumber(baseAzimutTrading.getAzId());
+		input.setQuantity(baseAzimutTrading.getQuantity());
 		
-		return null;
+		return input;
 	}
 
 	@Override
 	BaseAzimutTrading createBusinessEntityFromOutput(PlaceOrderOutput placeOrderOutput) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new BaseAzimutTrading();
 	}
 
 	@Override

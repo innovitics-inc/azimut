@@ -100,6 +100,14 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 	MaxUploadSizeExceededException,IllegalStateException,BusinessException, IOException, IntegrationException {
 		try
 		{
+			
+			this.logger.info("Front:::"+ frontImage!=null?frontImage.getName():null);
+			this.logger.info("Back:::"+backImage!=null?backImage.getName():null);
+			this.logger.info("Passport:::"+passportImage!=null?passportImage.getName():null);
+			this.logger.info("userStep:::"+userStep);
+			this.logger.info("language:::"+language);
+			this.logger.info("documentType:::"+documentType);
+			this.logger.info("isWeb:::"+isWeb);
 			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.valifyId(this.getCurrentRequestHolder(token), null,frontImage,backImage,passportImage,userStep,language,documentType,isWeb),null, null);			
 		}		
 		catch(BusinessException businessException)

@@ -661,18 +661,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	  return azimutAccount;
   }	
   
-  Long getAzimutUserTypeId(BusinessUser businessUser)
-  {
-	  try 
-	  {
-		  return businessUser.getAzimutIdTypeId();
-	  }
-	  catch(Exception exception)
-	  {
-		  this.exceptionHandler.getNullIfNonExistent(exception);
-		  return null;
-	  }
-  }
+
   
   
   BusinessFundTransaction prepareBusinessBusinessFundTransactionRetrievalInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient)
