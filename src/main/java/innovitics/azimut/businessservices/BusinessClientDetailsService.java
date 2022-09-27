@@ -699,7 +699,11 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			  {
 				  if(NumberUtility.areLongValuesMatching(businessClientFund.getTeacomputerId(), businessFundPrice.getTeacomputerId()))
 				  {
-					  businessClientFund.setLastPriceUpdateDate(businessFundPrice.getPriceDate());
+					  
+					  if(StringUtility.isStringPopulated(businessFundPrice.getPriceDate()))
+					  businessClientFund.setLastPriceUpdateDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(), new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
+					 
+					  
 					  businessClientFund.setLogo(businessFundPrice.getLogo());
 					  
 					  if(businessClientFund.getTotalAmount()!=null)
