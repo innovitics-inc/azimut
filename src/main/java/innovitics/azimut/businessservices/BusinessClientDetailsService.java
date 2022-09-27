@@ -23,6 +23,7 @@ import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
 import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.businessmodels.user.EportBusinessEntity;
 import innovitics.azimut.businessmodels.user.EportfolioDetail;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
@@ -36,6 +37,7 @@ import innovitics.azimut.rest.mappers.GetEportfolioMapper;
 import innovitics.azimut.rest.mappers.GetFundPricesMapper;
 import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
+import innovitics.azimut.rest.mappers.GetValuationReportMapper;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
@@ -90,6 +92,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired FundMapper fundMapper;
 @Autowired GetFundTransactionsMapper getFundTransactionsMapper;
 @Autowired GetEportfolioMapper getEportfolioMapper;
+@Autowired GetValuationReportMapper getValuationReportMapper;
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
@@ -455,11 +458,31 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	public BusinessAzimutClient getEportfolio(BusinessUser tokenizedBusinessUser,String language) throws BusinessException, IntegrationException
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+			
 		try {
-				responseBusinessAzimutClient.setEportfolioDetails(this.getEportfolioMapper.wrapBaseBusinessEntity(true, this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
+		
+		responseBusinessAzimutClient.setEportfolioDetails(this.getEportfolioMapper.wrapBaseBusinessEntity(true,(EportfolioDetail)this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
 			}
 		catch(Exception exception)
 		{
+	
+			if(exception instanceof IntegrationException)
+			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			else		
+			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+		}
+		return responseBusinessAzimutClient;
+	}
+	
+	public BusinessAzimutClient getValuationReport(BusinessUser tokenizedBusinessUser,String language) throws BusinessException, IntegrationException
+	{
+		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+		try {
+			responseBusinessAzimutClient= this.getValuationReportMapper.wrapBaseBusinessEntity(false,this.prepareGetValuationReportInputs(tokenizedBusinessUser,language), null).getData();
+			}
+		catch(Exception exception)
+		{
+	
 			if(exception instanceof IntegrationException)
 			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
 			else		
@@ -473,20 +496,21 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 	}
 	
-	
-	private EportfolioDetail prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) {
-		EportfolioDetail eportfolioDetail=new EportfolioDetail();		
-		eportfolioDetail.setAzId(tokenizedBusinessUser.getUserId());
-		eportfolioDetail.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
-		eportfolioDetail.setLanguage(language);
-		return eportfolioDetail;
+	private EportBusinessEntity prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) {
+		EportBusinessEntity eportBusinessEntity=new EportBusinessEntity();		
+		eportBusinessEntity.setAzId(tokenizedBusinessUser.getUserId());
+		eportBusinessEntity.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+		eportBusinessEntity.setLanguage(language);
+		return eportBusinessEntity;
 	}
-
-
-
-
-	
-	
+	private BusinessAzimutClient prepareGetValuationReportInputs(BusinessUser tokenizedBusinessUser,String language) {
+		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();		
+		businessAzimutClient.setAzId(tokenizedBusinessUser.getUserId());
+		businessAzimutClient.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+		businessAzimutClient.setLanguage(language);
+		return businessAzimutClient;
+	}
+		
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
 		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+businessUser.getLastName());
@@ -690,6 +714,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	  
 	  if(this.clientCashBalanceListUtility.isListPopulated(businessClientCashBalances))
 		{
+		 this.logger.info("Cash Balances:::::::"+businessClientCashBalances.toString()); 
 		 double clientCashBalanceInAllCurrencies=0.0D;
 		  
 		  	for(BusinessClientCashBalance businessClientCashBalance:businessClientCashBalances)

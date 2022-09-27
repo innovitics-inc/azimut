@@ -70,6 +70,13 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 	public void setCurrencyRate(Double currencyRate) {
 		this.currencyRate = currencyRate;
 	}
+	@Override
+	public String toString() {
+		return "BusinessClientCashBalance [idType=" + idType + ", idNumber=" + idNumber + ", currencyID=" + currencyID
+				+ ", currencyName=" + currencyName + ", balance=" + balance + ", pendingTransfer=" + pendingTransfer
+				+ ", inPendingTrans=" + inPendingTrans + ", outPendingTrans=" + outPendingTrans + ", currencyRate="
+				+ currencyRate + "]";
+	}
     
 
 	

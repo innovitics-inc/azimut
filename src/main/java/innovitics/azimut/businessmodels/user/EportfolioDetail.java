@@ -2,7 +2,7 @@ package innovitics.azimut.businessmodels.user;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
 
-public class EportfolioDetail extends BaseBusinessEntity {
+public class EportfolioDetail extends EportBusinessEntity {
 	
 	
 	private String id;
