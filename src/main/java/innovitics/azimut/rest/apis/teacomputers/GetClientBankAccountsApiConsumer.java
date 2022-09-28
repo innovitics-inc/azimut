@@ -49,8 +49,7 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 				List<ClientBankAccountOutput> clientBankAccountOutputs=new ArrayList<ClientBankAccountOutput>();
 				for(ClientBankAccountResponse clientBankAccountResponse:responseEntity.getBody())
 				{
-					if(clientBankAccountResponse!=null&&StringUtility.stringsMatch(clientBankAccountResponse.getAccountStatus(), ACTIVE_ACCOUNT_STATUS))
-					{
+					
 						ClientBankAccountOutput clientBankAccountOutput=new ClientBankAccountOutput();
 						clientBankAccountOutput.setBankId(StringUtility.isStringPopulated(clientBankAccountResponse.getBankId())?Long.valueOf(clientBankAccountResponse.getBankId()):null);
 						clientBankAccountOutput.setBankName(clientBankAccountResponse.getBankName());
@@ -65,7 +64,7 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 						clientBankAccountOutput.setAccountStatusName(clientBankAccountResponse.getAccountStatusName());
 						clientBankAccountOutput.setSwiftCode(clientBankAccountResponse.getSwiftCode());
 						clientBankAccountOutputs.add(clientBankAccountOutput);
-					}
+					
 					
 				}
 				getClientBankAccountsOutput.setClientBankAccountOutputs(clientBankAccountOutputs);

@@ -45,6 +45,7 @@ public class BaseBusinessEntity {
 	private Long fundId;
 	private Long teacomputerId;
 	private Boolean isLocal;
+	private Boolean isActive;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -256,6 +257,12 @@ public class BaseBusinessEntity {
 	}
 	public void setIsLocal(Boolean isLocal) {
 		this.isLocal = isLocal;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	

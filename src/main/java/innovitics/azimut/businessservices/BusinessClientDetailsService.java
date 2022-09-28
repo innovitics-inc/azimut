@@ -27,12 +27,14 @@ import innovitics.azimut.businessmodels.user.EportBusinessEntity;
 import innovitics.azimut.businessmodels.user.EportfolioDetail;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.rest.mappers.AddAccountMapper;
 import innovitics.azimut.rest.mappers.AddClientBankAccountMapper;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.rest.mappers.GetClientBalanceMapper;
 import innovitics.azimut.rest.mappers.GetClientBankAccountsMapper;
 import innovitics.azimut.rest.mappers.GetClientFundsMapper;
+import innovitics.azimut.rest.mappers.GetCompanyBankAccountMapper;
 import innovitics.azimut.rest.mappers.GetEportfolioMapper;
 import innovitics.azimut.rest.mappers.GetFundPricesMapper;
 import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
@@ -93,6 +95,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired GetFundTransactionsMapper getFundTransactionsMapper;
 @Autowired GetEportfolioMapper getEportfolioMapper;
 @Autowired GetValuationReportMapper getValuationReportMapper;
+@Autowired GetCompanyBankAccountMapper getCompanyBankAccountMapper;
+
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
@@ -132,14 +136,17 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			{
 				List<BusinessClientBankAccountDetails> teacomputersBankAccounts=this.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
 				
-				BusinessClientBankAccountDetails [] localClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
+				if(BooleanUtility.isFalse(businessAzimutClient.getIsActive()))
+				{
+					BusinessClientBankAccountDetails [] localClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
 				
-				if(arrayUtility.isArrayPopulated(localClientTeacomputersBankAccounts))
-				{	
-					teacomputersBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
-				}
-						
+					if(arrayUtility.isArrayPopulated(localClientTeacomputersBankAccounts))
+					{	
+						teacomputersBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
+					}
+				}		
 				responseBusinessAzimutClient.setBankList(teacomputersBankAccounts);
+				
 			}
 			else if(!isList)
 			{
@@ -491,9 +498,27 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return responseBusinessAzimutClient;
 	}
 	
-	public void  getCompanyBankAccounts()
+	public BusinessAzimutClient  getCompanyBankAccounts() throws BusinessException,IntegrationException
 	{
-		
+		try 
+		{
+			BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
+			BusinessAzimutDataLookup businessAzimutDataLookup=new BusinessAzimutDataLookup();
+			
+			businessAzimutDataLookup.setCompanyBankAccounts(this.getCompanyBankAccountMapper.wrapBaseBusinessEntity(true, null, null).getDataList());
+			
+			businessAzimutClient.setLookupData(businessAzimutDataLookup);
+			
+			return businessAzimutClient;
+		}
+		catch(Exception exception)
+		{
+	
+			if(exception instanceof IntegrationException)
+			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			else		
+			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+		}
 	}
 	
 	private EportfolioDetail prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) {
@@ -577,7 +602,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		BusinessClientBankAccountDetails searchBusinessClientBankAccountDetails=new BusinessClientBankAccountDetails();
 		searchBusinessClientBankAccountDetails.setAzId(tokenizedBusinessUser.getUserId());
-		searchBusinessClientBankAccountDetails.setAzIdType(/*businessAzimutClient.getAzIdType()*/this.getAzimutUserTypeId(tokenizedBusinessUser));	
+		searchBusinessClientBankAccountDetails.setAzIdType(/*businessAzimutClient.getAzIdType()*/this.getAzimutUserTypeId(tokenizedBusinessUser));
+		searchBusinessClientBankAccountDetails.setIsActive(businessAzimutClient.getIsActive());
 		searchBusinessClientBankAccountDetails.setAccountId(businessAzimutClient.getAccountId());
 		return searchBusinessClientBankAccountDetails;
 	}

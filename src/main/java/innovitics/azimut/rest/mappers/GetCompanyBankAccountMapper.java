@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import innovitics.azimut.businessmodels.user.BusinessCompanyBankAccount;
 import innovitics.azimut.exceptions.IntegrationException;
@@ -15,9 +16,11 @@ import innovitics.azimut.rest.models.teacomputers.CompanyBankAccountResponse;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 
+@Component
 public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput, GetCompanyBankAccountResponse, BusinessCompanyBankAccount> {
 
 	@Autowired GetCompanyBankAccountsApiConsumer getCompanyBankAccountsApiConsumer;
+	
 	@Autowired ListUtility<CompanyBankAccountOutput> companyBankAccountListUtility;
 	
 	@Override
@@ -49,7 +52,10 @@ public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccoun
 		List<BusinessCompanyBankAccount> businessCompanyBankAccounts=new ArrayList<BusinessCompanyBankAccount>();
 		if(getCompanyBankAccountsOutput!=null&&companyBankAccountListUtility.isListPopulated(getCompanyBankAccountsOutput.getCompanyBankAccountOutputs()))
 		{
-			
+			for(CompanyBankAccountOutput companyBankAccountOutput:getCompanyBankAccountsOutput.getCompanyBankAccountOutputs())
+			{
+				businessCompanyBankAccounts.add(this.getConversion(companyBankAccountOutput));
+			}
 		}
 		
 		return businessCompanyBankAccounts;
@@ -60,8 +66,16 @@ public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccoun
 		BusinessCompanyBankAccount businessCompanyBankAccount=new BusinessCompanyBankAccount();
 		if(companyBankAccountOutput!=null)
 		{
-					
-		
+			businessCompanyBankAccount.setBankName(companyBankAccountOutput.getBankName());
+			businessCompanyBankAccount.setAccountNo(companyBankAccountOutput.getAccountNo());
+			businessCompanyBankAccount.setBankName(companyBankAccountOutput.getBankName());
+			businessCompanyBankAccount.setBranchName(companyBankAccountOutput.getBranchName());
+			businessCompanyBankAccount.setIban(companyBankAccountOutput.getIban());
+			businessCompanyBankAccount.setSwiftCode(companyBankAccountOutput.getSwiftCode());
+			businessCompanyBankAccount.setAccountNo(companyBankAccountOutput.getAccountNo());
+			businessCompanyBankAccount.setCurrencyId(companyBankAccountOutput.getCurrencyId());
+			businessCompanyBankAccount.setCurrencyName(companyBankAccountOutput.getCurrencyName());
+				
 		}
 		return businessCompanyBankAccount; 
 		

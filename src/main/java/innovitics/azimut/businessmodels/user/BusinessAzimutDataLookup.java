@@ -24,6 +24,7 @@ public class BusinessAzimutDataLookup extends BaseBusinessEntity{
 	private List<Bank> banks;
 	private List<Branch> branches;
 	private List<UserType> userTypes;
+	private List<BusinessCompanyBankAccount> companyBankAccounts;
 	
 	
 	public String getEntityType() {
@@ -80,6 +81,12 @@ public class BusinessAzimutDataLookup extends BaseBusinessEntity{
 	}
 	public void setUserTypes(List<UserType> userTypes) {
 		this.userTypes = userTypes;
+	}
+	public List<BusinessCompanyBankAccount> getCompanyBankAccounts() {
+		return companyBankAccounts;
+	}
+	public void setCompanyBankAccounts(List<BusinessCompanyBankAccount> companyBankAccounts) {
+		this.companyBankAccounts = companyBankAccounts;
 	}
 	
 	

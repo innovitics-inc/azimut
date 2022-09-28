@@ -16,6 +16,8 @@ import innovitics.azimut.rest.entities.teacomputers.GetClientBankAccountsOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientBankAccountResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientBankAccountsResponse;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
+import innovitics.azimut.utilities.crosslayerenums.ClientBankAccountStatus;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
@@ -42,7 +44,7 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 	@Override
 	List<BusinessClientBankAccountDetails> consumeListRestService(BusinessClientBankAccountDetails businessClientBankAccountDetails,
 			String params) throws HttpClientErrorException, Exception {
-		return  this.createListBusinessEntityFromOutput(this.getClientBankAccountsApiConsumer.invoke(this.createInput(businessClientBankAccountDetails),ClientBankAccountResponse[].class, params));
+		return  this.createListBusinessEntityFromOutput(this.getClientBankAccountsApiConsumer.invoke(this.createInput(businessClientBankAccountDetails),ClientBankAccountResponse[].class, params),BooleanUtility.isTrue(businessClientBankAccountDetails.getIsActive()));
 	}
 
 	@Override
@@ -51,6 +53,7 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 		input.setIdNumber(businessClientBankAccountDetails.getAzId());
 		input.setIdTypeId(businessClientBankAccountDetails.getAzIdType());
 		input.setAccountId(businessClientBankAccountDetails.getAccountId());
+		input.setIsActive(businessClientBankAccountDetails.getIsActive());
 		return input;
 	}
 
@@ -67,6 +70,24 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 		{
 			for(ClientBankAccountOutput clientBankAccountOutput:getClientBankAccountsOutput.getClientBankAccountOutputs())
 			{
+				businessClientBankAccountsDetails.add(this.getConversion(clientBankAccountOutput));
+			}
+		}
+		else
+		{
+			return new ArrayList<BusinessClientBankAccountDetails>();
+		}
+		return businessClientBankAccountsDetails;
+	}
+	
+	protected List<BusinessClientBankAccountDetails> createListBusinessEntityFromOutput(
+			GetClientBankAccountsOutput getClientBankAccountsOutput,boolean isActive) {
+		List<BusinessClientBankAccountDetails> businessClientBankAccountsDetails=new ArrayList<BusinessClientBankAccountDetails>();	
+		if(getClientBankAccountsOutput!=null&&listUtility.isListPopulated(getClientBankAccountsOutput.getClientBankAccountOutputs()))
+		{
+			for(ClientBankAccountOutput clientBankAccountOutput:getClientBankAccountsOutput.getClientBankAccountOutputs())
+			{
+				if(clientBankAccountOutput!=null&&NumberUtility.areLongValuesMatching(clientBankAccountOutput.getAccountStatus(), ClientBankAccountStatus.ACTIVE.getStatusId()))
 				businessClientBankAccountsDetails.add(this.getConversion(clientBankAccountOutput));
 			}
 		}

@@ -3,7 +3,7 @@ package innovitics.azimut.rest.entities.teacomputers;
 public class PlaceOrderInput extends TeaComputerInput{
 
 	private Long orderTypeId;
-	private Long orderValue;
+	private Double orderValue;
 	private Integer Quantity;
 	private String ExternalOrderID;
 
@@ -15,11 +15,11 @@ public class PlaceOrderInput extends TeaComputerInput{
 		this.orderTypeId = orderTypeId;
 	}
 
-	public Long getOrderValue() {
+	public Double getOrderValue() {
 		return orderValue;
 	}
 
-	public void setOrderValue(Long orderValue) {
+	public void setOrderValue(Double orderValue) {
 		this.orderValue = orderValue;
 	}
 

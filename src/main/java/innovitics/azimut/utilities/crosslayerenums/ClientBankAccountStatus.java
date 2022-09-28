@@ -2,9 +2,9 @@ package innovitics.azimut.utilities.crosslayerenums;
 
 public enum ClientBankAccountStatus {
 
-	PENDING(1,"Pending"),
+	PENDING(3,"Pending"),
 	DEACTIVATED(2,"Deactivated"),
-	ACTIVE(3,"Active");
+	ACTIVE(1,"Active");
 
 	
 	ClientBankAccountStatus(int statusId, String status) {
@@ -14,7 +14,7 @@ public enum ClientBankAccountStatus {
 
 	private final int statusId;
 	private final String status;
-	public int getStatusId() {
+	public long getStatusId() {
 		return statusId;
 	}
 	public String getStatus() {

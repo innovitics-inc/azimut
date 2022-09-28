@@ -9,6 +9,8 @@ public class CompanyBankAccountOutput {
 	private String accountNo;
 	private String swiftCode;
 	private String iban;
+	private String currencyId;
+	private String currencyName;
 
 	public Long getBankId() {
 		return bankId;
@@ -51,6 +53,20 @@ public class CompanyBankAccountOutput {
 	}
 	public void setIban(String iban) {
 		this.iban = iban;
+	}
+	
+	
+	public String getCurrencyId() {
+		return currencyId;
+	}
+	public void setCurrencyId(String currencyId) {
+		this.currencyId = currencyId;
+	}
+	public String getCurrencyName() {
+		return currencyName;
+	}
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
 	}
 	@Override
 	public String toString() {

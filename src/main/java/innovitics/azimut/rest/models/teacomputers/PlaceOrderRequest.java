@@ -4,7 +4,7 @@ public class PlaceOrderRequest extends TeaComputerRequest{
 
 	private Integer Quanity;
 	
-	private Long OrderValue;
+	private Double OrderValue;
 	
 	private String ExternalOrderID;
 	
@@ -22,11 +22,11 @@ public class PlaceOrderRequest extends TeaComputerRequest{
 		Quanity = quanity;
 	}
 
-	public Long getOrderValue() {
+	public Double getOrderValue() {
 		return OrderValue;
 	}
 
-	public void setOrderValue(Long orderValue) {
+	public void setOrderValue(Double orderValue) {
 		OrderValue = orderValue;
 	}
 

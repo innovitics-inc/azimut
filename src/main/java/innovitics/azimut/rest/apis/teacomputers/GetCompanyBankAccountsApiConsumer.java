@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.entities.teacomputers.ClientFundOutput;
@@ -18,9 +19,11 @@ import innovitics.azimut.rest.models.teacomputers.GetClientFundsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountRequest;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-
+@Service
 public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsumer<GetCompanyBankAccountRequest, CompanyBankAccountResponse[], GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput>{
 
+	
+	public final static String PATH="/lookups/GetCompanyBankAcc"; 
 	@Override
 	public HttpEntity<String> generateRequestFromInput(GetCompanyBankAccountsInput input) {
 		GetCompanyBankAccountRequest request=new GetCompanyBankAccountRequest();
@@ -43,12 +46,15 @@ public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsum
 				{
 					CompanyBankAccountOutput companyBankAccountOutput = new CompanyBankAccountOutput();
 					
-					companyBankAccountOutput.setAccountNo(null);
-					companyBankAccountOutput.setBankId(null);
-					companyBankAccountOutput.setBankName(null);
-					companyBankAccountOutput.setBranchName(null);
-					companyBankAccountOutput.setIban(null);
-					companyBankAccountOutput.setSwiftCode(null);
+					companyBankAccountOutput.setAccountNo(responseEntity.getBody()[i].getAccountNo());
+					companyBankAccountOutput.setBankId(Long.valueOf(responseEntity.getBody()[i].getBankId()));
+					companyBankAccountOutput.setBankName(responseEntity.getBody()[i].getBankName());
+					companyBankAccountOutput.setBranchName(responseEntity.getBody()[i].getBranchName());
+					companyBankAccountOutput.setIban(responseEntity.getBody()[i].getIban());
+					companyBankAccountOutput.setSwiftCode(responseEntity.getBody()[i].getSwiftCode());
+					companyBankAccountOutput.setAccountNo(responseEntity.getBody()[i].getAccountNo());
+					companyBankAccountOutput.setCurrencyId(responseEntity.getBody()[i].getCurrencyID());
+					companyBankAccountOutput.setCurrencyName(responseEntity.getBody()[i].getCurrencyName());
 					
 					companyBankAccountOutputs.add(companyBankAccountOutput);
 				}
@@ -105,5 +111,12 @@ public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsum
 		
 		
 	}
+	
+	@Override
+	public String generateURL(String params) 
+	{
+		return super.generateURL(params)+PATH;
+	}
+	
 
 }

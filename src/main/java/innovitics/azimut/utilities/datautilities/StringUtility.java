@@ -38,6 +38,10 @@ public final class StringUtility extends ParentUtility{
 	public final static String CONTRACTS_SUBDIRECTORY="userContracts";
 	public final static String CONTRACT_DOCUMENT_NAME="contract";
 	public final static String WEB_DEVICE="WEB";
+	public final static String INFORM_WITHDRAW="InformWithdraw";
+	public final static String INFORM_DEPOST="InformDeposit";
+	
+	
 	public static String getClassName(Object object)
 	{
 		return object.getClass().getName();
