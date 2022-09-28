@@ -257,13 +257,28 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			{
 				businessUser.setUserStep(user.getUserStep().intValue());
 				
+				if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.KYC.getStepId()))
+				{
+					if(user.getLastSolvedPageId()!=null&&user.getNextPageId()!=null)
+					{
+						if(NumberUtility.areLongValuesMatching(user.getLastSolvedPageId(),user.getNextPageId()))
+						{
+							businessUser.setNextUserStep(user.getUserStep().intValue()+1);
+						}
+						else
+						{
+							businessUser.setNextUserStep(UserStep.KYC.getStepId());
+						}
+					}
+				}	
+				else	
+				{		if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.CLIENT_DATA.getStepId())
+							||NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.BANK_REFERENCES_IGNORE.getStepId()))
+							businessUser.setNextUserStep(user.getUserStep().intValue()+2);
 				
-				if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.CLIENT_DATA.getStepId())
-						||NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.BANK_REFERENCES_IGNORE.getStepId()))
-				businessUser.setNextUserStep(user.getUserStep().intValue()+2);
-				
-				else
-				businessUser.setNextUserStep(user.getUserStep().intValue()+1);	
+					else
+						businessUser.setNextUserStep(user.getUserStep().intValue()+1);
+				}	
 			}
 			else if(user.getUserStep()==null)
 			{
