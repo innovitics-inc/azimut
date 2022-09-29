@@ -270,6 +270,10 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 							businessUser.setNextUserStep(UserStep.KYC.getStepId());
 						}
 					}
+					else if(user.getLastSolvedPageId()==null||user.getNextPageId()==null)
+					{
+						businessUser.setNextUserStep(UserStep.KYC.getStepId());
+					}
 				}	
 				else	
 				{		if(NumberUtility.areIntegerValuesMatching(user.getUserStep().intValue(), UserStep.CLIENT_DATA.getStepId())

@@ -15,12 +15,14 @@ import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessmodels.valify.BusinessValify;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.User;
+import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.models.user.UserDevice;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.user.GenderService;
+import innovitics.azimut.services.user.UserBlockageService;
 import innovitics.azimut.services.user.UserDeviceService;
 import innovitics.azimut.services.user.UserLocationService;
 import innovitics.azimut.services.user.UserService;
@@ -31,6 +33,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
+import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class UserUtility extends ParentUtility{
 	@Autowired UserDeviceService userDeviceService;
@@ -44,6 +47,7 @@ public class UserUtility extends ParentUtility{
 	@Autowired GenderService genderService;
 	@Autowired AES aes;
 	@Autowired UserLocationService userLocationService;
+	@Autowired UserBlockageService userBlockageService; 
 
 	public void upsertDeviceIdAudit(User user,String deviceId,UserDevice updatedUserDevice)
 	{
@@ -82,11 +86,10 @@ public class UserUtility extends ParentUtility{
 		
 		
 		if(userDeviceListUtility.isListPopulated(userDevices))
-			{
+		{
+			
 			List<String> deviceIds=new ArrayList<String>();
-			
-			
-			
+
 			Timestamp current=new Timestamp(System.currentTimeMillis());		
 		    Calendar cal = Calendar.getInstance();
 		    cal.setTimeInMillis(current.getTime());	    
@@ -96,7 +99,7 @@ public class UserUtility extends ParentUtility{
 		    
 		    for(UserDevice userDevice:userDevices)
 		    {
-		    	if(currentMinusTokenExpiry.before(userDevice.getUpdatedAt()))
+		    	if(this.getMinutesBefore(this.configProperties.getJwTokenDurationInMinutes()).before(userDevice.getUpdatedAt()))
 		    	{
 		    		throw new BusinessException(ErrorCode.MULTIPLE_LOGINS);
 		    	}
@@ -291,6 +294,42 @@ public class UserUtility extends ParentUtility{
 		
 	}
 	
+	public void checkUserBlockage(BusinessUser tokenizedBusinessUser,UserMapper userMapper) throws BusinessException
+	{
+		UserBlockage userBlockage=this.userBlockageService.findByUserId(tokenizedBusinessUser.getId());
+		if(userBlockage!=null)
+		{
+			if(userBlockage.getErrorCount()!=null&&userBlockage.getErrorCount()>=3)
+				{
+					if(this.getMinutesBefore(null).before(userBlockage.getUpdatedAt()))	
+					{	
+						throw new BusinessException(ErrorCode.USER_BLOCKED);
+					}
+				}
+			else
+				{
+					int oldErrorCount=userBlockage.getErrorCount()!=null?userBlockage.getErrorCount():0;
+					userBlockage.setErrorCount(oldErrorCount+1);
+					userBlockage.setUpdatedAt(new Date());
+					this.userBlockageService.updateUserBlockage(userBlockage);
+				}		
+		}
+		else
+		{
+			this.userBlockageService.addUserBlockage(userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+		}
+	}
 	
+	
+	Timestamp getMinutesBefore(String value)
+	{
+		Timestamp current=new Timestamp(System.currentTimeMillis());		
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(current.getTime());	    
+		int valueExpiryInMinutes=Integer.valueOf(value);
+		cal.add(Calendar.MINUTE, -valueExpiryInMinutes);
+		Timestamp currentMinusMinutesInValue = new Timestamp(cal.getTime().getTime());
+		return currentMinusMinutesInValue;
+	}
 	
 }

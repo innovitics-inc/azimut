@@ -12,14 +12,17 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.mappers.InjectWithdrawMapper;
 import innovitics.azimut.rest.mappers.PlaceOrderMapper;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.mapping.UserMapper;
 
 @Service
 public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAzimutTrading> {
 
 	@Autowired PlaceOrderMapper placeOrderMapper;
 	@Autowired InjectWithdrawMapper injectWithdrawMapper;
+	@Autowired UserMapper userMapper;
 	
 	public BaseAzimutTrading placeOrder(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{		
@@ -31,11 +34,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		
 		catch(Exception exception)
 		{
-
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(tokenizedBusinessUser,exception);	
 		}
 	
 	
@@ -50,16 +49,20 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		}
 		catch(Exception exception)
 		{
-			if(exception instanceof IntegrationException)
-				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(tokenizedBusinessUser,exception);
 		}
 	}
 	
 	public BaseAzimutTrading withdraw(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{
-		return this.injectWithdrawMapper.wrapBaseBusinessEntity(false,  this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_WITHDRAW).getData();
+		try 
+		{
+			return this.injectWithdrawMapper.wrapBaseBusinessEntity(false,  this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_WITHDRAW).getData();
+		}
+		catch(Exception exception)
+		{
+			throw this.handleException(tokenizedBusinessUser,exception);
+		}
 	}
 
 	
@@ -86,5 +89,23 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		return addBaseAzimutTrading;
 	}
 	
+
+		
+		
+		public BusinessException handleException(BusinessUser tokenizedBusinessUser,Exception exception) throws BusinessException 
+		{
+			if(exception instanceof IntegrationException)
+			{
+				if(NumberUtility.areIntegerValuesMatching(ErrorCode.OPERATION_FAILURE.getCode(), ((IntegrationException)exception).getErrorCode()))
+				{
+					this.userUtility.checkUserBlockage(tokenizedBusinessUser,this.userMapper);
+					return new BusinessException(ErrorCode.OPERATION_FAILURE);
+				}
+				else
+					return this.handleException(exception);
+			}
+			return (BusinessException)exception;
+		}
+
 	
 }

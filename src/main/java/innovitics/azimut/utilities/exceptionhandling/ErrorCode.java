@@ -1,7 +1,7 @@
 package innovitics.azimut.utilities.exceptionhandling;
 
 public enum ErrorCode {
-	
+	OPERATION_FAILURE(995,"Operation failed.",""),
 	PAYMENT_FAILURE(996,"Operation Could not be performed, please check with the vendor.",""),
 	INVALID_SIGNATURE(997,"Invalid signature, corrupted response.",""),
 	INTEGRATION_TEST_FAILED(998,"Integration Test Failed.",""),
@@ -10,6 +10,7 @@ public enum ErrorCode {
 	NO_DATA_FOUND(1001,"No data found.",""),
 	NO_USER_ACCOUNT_FOUND(1002,"User Account not found.",""),
 	MULTIPLE_LOGINS(1003,"Multiple logins detected.",""),
+	USER_BLOCKED(2101,"User Blocked.","المستخدم محظور"),
 	COPY_FAILURE(2102,"Could not upload the file.",""),
 	UPLOAD_FAILURE(2103,"Could not upload the file.",""),
 	FILE_TOO_BIG(2104,"File size too big.",""),

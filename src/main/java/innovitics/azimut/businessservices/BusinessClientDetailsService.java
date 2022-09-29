@@ -113,11 +113,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-	
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(exception);
 		}
 
 		return this.beautifyBalanceAndTransactionsBusinessAzimutClient(responseBusinessAzimutClient);
@@ -162,17 +158,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-	
-
-			if(exception instanceof IntegrationException)
-			{
-				this.logger.info("Detecting the exception type in the checkAccountAtTeaComputers method:::");
-				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			}
-			else
-			{
-				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
-			}
+			throw this.handleException(exception);
 		}
 
 		return responseBusinessAzimutClient;
@@ -189,15 +175,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		catch(Exception exception)
 		{
 	
-			if(exception instanceof IntegrationException)
-			{
-				this.logger.info("Detecting the exception type in the checkAccountAtTeaComputers method:::");
-				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			}
-			else
-			{
-				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
-			}
+			throw this.handleException(exception);
 		}
 
 		return responseBusinessAzimutClient;
@@ -213,11 +191,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-	
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(exception);	
 		}
 
 		return responseBusinessAzimutClient;
@@ -238,11 +212,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-	
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(exception);		
 		}
 
 		return responseBusinessAzimutClient;
@@ -316,10 +286,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-			if(exception instanceof IntegrationException)
-				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-				else		
-				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			this.handleException(exception);		
 		}
 		return new BusinessAzimutClient();
 	}
@@ -403,14 +370,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		catch(Exception exception)
 		{
-			if(exception instanceof IntegrationException)
-			{
-				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			}
-			else
-			{
-				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
-			}
+			throw this.handleException(exception);
 		}
 		
 		return responseBusinessAzimutClient;
@@ -472,11 +432,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			}
 		catch(Exception exception)
 		{
-	
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(exception);		
 		}
 		return responseBusinessAzimutClient;
 	}
@@ -489,11 +445,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			}
 		catch(Exception exception)
 		{
-	
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(exception);		
 		}
 		return responseBusinessAzimutClient;
 	}
@@ -513,11 +465,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-	
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-			throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+			throw this.handleException(exception);	
 		}
 	}
 	
