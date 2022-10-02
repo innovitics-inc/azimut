@@ -5,12 +5,14 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import innovitics.azimut.businessmodels.WrapperBusinessEntity;
 import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.mappers.InjectWithdrawMapper;
 import innovitics.azimut.rest.mappers.PlaceOrderMapper;
+import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
@@ -23,26 +25,39 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	@Autowired PlaceOrderMapper placeOrderMapper;
 	@Autowired InjectWithdrawMapper injectWithdrawMapper;
 	@Autowired UserMapper userMapper;
-	
+	@Autowired UserBlockageUtility userBlockageUtility;
 	public BaseAzimutTrading placeOrder(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
-	{		
-		try 
-		{
-		
+	{				
+		/*try 
+		{		
 			return this.placeOrderMapper.wrapBaseBusinessEntity(false, this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading), null).getData();
-		}
-		
+		}		
 		catch(Exception exception)
 		{
 			throw this.handleException(tokenizedBusinessUser,exception);	
 		}
-	
-	
+		*/
+		try {
+		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
+		@SuppressWarnings("unchecked")
+		WrapperBusinessEntity<BaseAzimutTrading> wrapperBusinessEntity=
+		
+		 (WrapperBusinessEntity<BaseAzimutTrading>)(this.userBlockageUtility.
+		 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,placeOrderMapper,"wrapBaseBusinessEntity",
+				 new Object[]{false,this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading),null},
+				 new Class<?>[]{Boolean.class,BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
+		 
+		 return wrapperBusinessEntity.getData();
+		 }
+		catch(Exception exception)
+		{
+			throw this.handleException(exception);
+		}
 	}
 	
 	public BaseAzimutTrading inject(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException, IOException
-	{
-		try 
+	{		
+		/*try 
 		{
 			this.blobFileUtility.uploadFileToBlob(baseAzimutTrading.getInjectionDocument(), true, this.configProperties.getBlobSignedPdfPath(), "injections/"+tokenizedBusinessUser.getUserId()+"/"+DateUtility.getCurrentDayMonthYear(), true);
 			return this.injectWithdrawMapper.wrapBaseBusinessEntity(false, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_DEPOST).getData();
@@ -50,18 +65,52 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		catch(Exception exception)
 		{
 			throw this.handleException(tokenizedBusinessUser,exception);
+		}*/
+		try {
+		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
+		@SuppressWarnings("unchecked")
+		WrapperBusinessEntity<BaseAzimutTrading> wrapperBusinessEntity=
+				
+				 (WrapperBusinessEntity<BaseAzimutTrading>)(this.userBlockageUtility.
+				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"wrapBaseBusinessEntity",
+						 new Object[]{false,this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_DEPOSIT},
+						 new Class<?>[]{Boolean.class,BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
+		
+		return wrapperBusinessEntity.getData();
+		}
+		catch(Exception exception)
+		{
+			throw this.handleException(exception);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public BaseAzimutTrading withdraw(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{
-		try 
+		/*try 
 		{
 			return this.injectWithdrawMapper.wrapBaseBusinessEntity(false,  this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_WITHDRAW).getData();
 		}
 		catch(Exception exception)
 		{
 			throw this.handleException(tokenizedBusinessUser,exception);
+		}
+		*/
+		try 
+		{
+		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
+		WrapperBusinessEntity<BaseAzimutTrading> wrapperBusinessEntity=	
+		
+				 (WrapperBusinessEntity<BaseAzimutTrading>)(this.userBlockageUtility.
+				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"wrapBaseBusinessEntity",
+						 new Object[]{false,this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_WITHDRAW},
+						 new Class<?>[]{Boolean.class,BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
+		
+		return wrapperBusinessEntity.getData();
+		}
+		catch(Exception exception)
+		{
+			throw this.handleException(exception);
 		}
 	}
 
@@ -86,26 +135,8 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		addBaseAzimutTrading.setOrderValue(baseAzimutTrading.getOrderValue());
 		addBaseAzimutTrading.setAccountNo(baseAzimutTrading.getAccountNo());
 		addBaseAzimutTrading.setCurrencyId(baseAzimutTrading.getCurrencyId());
+		addBaseAzimutTrading.setUserId(tokenizedBusinessUser.getUserId());
 		return addBaseAzimutTrading;
 	}
-	
 
-		
-		
-		public BusinessException handleException(BusinessUser tokenizedBusinessUser,Exception exception) throws BusinessException 
-		{
-			if(exception instanceof IntegrationException)
-			{
-				if(NumberUtility.areIntegerValuesMatching(ErrorCode.OPERATION_FAILURE.getCode(), ((IntegrationException)exception).getErrorCode()))
-				{
-					this.userUtility.checkUserBlockage(tokenizedBusinessUser,this.userMapper);
-					return new BusinessException(ErrorCode.OPERATION_FAILURE);
-				}
-				else
-					return this.handleException(exception);
-			}
-			return (BusinessException)exception;
-		}
-
-	
 }

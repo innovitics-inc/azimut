@@ -39,7 +39,7 @@ public final class StringUtility extends ParentUtility{
 	public final static String CONTRACT_DOCUMENT_NAME="contract";
 	public final static String WEB_DEVICE="WEB";
 	public final static String INFORM_WITHDRAW="InformWithdraw";
-	public final static String INFORM_DEPOST="InformDeposit";
+	public final static String INFORM_DEPOSIT="InformDeposit";
 	
 	
 	public static String getClassName(Object object)

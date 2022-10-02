@@ -47,7 +47,6 @@ public class UserUtility extends ParentUtility{
 	@Autowired GenderService genderService;
 	@Autowired AES aes;
 	@Autowired UserLocationService userLocationService;
-	@Autowired UserBlockageService userBlockageService; 
 
 	public void upsertDeviceIdAudit(User user,String deviceId,UserDevice updatedUserDevice)
 	{
@@ -294,42 +293,8 @@ public class UserUtility extends ParentUtility{
 		
 	}
 	
-	public void checkUserBlockage(BusinessUser tokenizedBusinessUser,UserMapper userMapper) throws BusinessException
-	{
-		UserBlockage userBlockage=this.userBlockageService.findByUserId(tokenizedBusinessUser.getId());
-		if(userBlockage!=null)
-		{
-			if(userBlockage.getErrorCount()!=null&&userBlockage.getErrorCount()>=3)
-				{
-					if(this.getMinutesBefore(null).before(userBlockage.getUpdatedAt()))	
-					{	
-						throw new BusinessException(ErrorCode.USER_BLOCKED);
-					}
-				}
-			else
-				{
-					int oldErrorCount=userBlockage.getErrorCount()!=null?userBlockage.getErrorCount():0;
-					userBlockage.setErrorCount(oldErrorCount+1);
-					userBlockage.setUpdatedAt(new Date());
-					this.userBlockageService.updateUserBlockage(userBlockage);
-				}		
-		}
-		else
-		{
-			this.userBlockageService.addUserBlockage(userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
-		}
-	}
 	
 	
-	Timestamp getMinutesBefore(String value)
-	{
-		Timestamp current=new Timestamp(System.currentTimeMillis());		
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(current.getTime());	    
-		int valueExpiryInMinutes=Integer.valueOf(value);
-		cal.add(Calendar.MINUTE, -valueExpiryInMinutes);
-		Timestamp currentMinusMinutesInValue = new Timestamp(cal.getTime().getTime());
-		return currentMinusMinutesInValue;
-	}
+	
 	
 }

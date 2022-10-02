@@ -5,6 +5,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
 import innovitics.azimut.businessmodels.WrapperBusinessEntity;
+import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.entities.BaseInput;
 import innovitics.azimut.rest.entities.BaseOutput;
@@ -25,6 +26,7 @@ public abstract class RestMapper <I extends BaseInput,O extends BaseOutput, RES 
 	ExceptionHandler exceptionHandler;
 	@Autowired
 	ListUtility<B> listUtility;
+	@Autowired protected ConfigProperties configProperties;
 	
 	
 	abstract B consumeRestService(B baseBusinessEntity,String params) throws IntegrationException, HttpClientErrorException, Exception;	
@@ -38,7 +40,7 @@ public abstract class RestMapper <I extends BaseInput,O extends BaseOutput, RES 
     protected abstract List<B> createListBusinessEntityFromOutput(O BaseOutput);
 	
 	
-	public WrapperBusinessEntity<B> wrapBaseBusinessEntity(boolean isList,B baseBusinessEntity,String params) throws IntegrationException
+	public WrapperBusinessEntity<B> wrapBaseBusinessEntity(Boolean isList,B baseBusinessEntity,String params) throws IntegrationException
 	{
 		WrapperBusinessEntity<B> wrapperBusinessEntity=new WrapperBusinessEntity<B>();
 		try {

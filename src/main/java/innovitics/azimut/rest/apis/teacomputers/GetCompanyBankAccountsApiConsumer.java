@@ -14,6 +14,7 @@ import innovitics.azimut.rest.entities.teacomputers.CompanyBankAccountOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientFundsOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetCompanyBankAccountsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetCompanyBankAccountsOutput;
+import innovitics.azimut.rest.models.teacomputers.ClientFundResponse;
 import innovitics.azimut.rest.models.teacomputers.CompanyBankAccountResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientFundsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountRequest;
@@ -107,8 +108,25 @@ public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsum
 	}
 
 	@Override
-	protected void generateResponseListSignature(CompanyBankAccountResponse[] teaComputerResponse) throws IntegrationException {
-		
+	protected void generateResponseListSignature(CompanyBankAccountResponse[] companyBankAccountResponses) throws IntegrationException 
+	{
+		if(this.arrayUtility.isArrayPopulated(companyBankAccountResponses))
+		{
+			for(CompanyBankAccountResponse  companyBankAccountResponse: companyBankAccountResponses)
+			{
+				if(companyBankAccountResponse!=null)
+				{
+					if((StringUtility.stringsDontMatch(this.teaComputersSignatureGenerator.generateSignature("","CompanyBankAccResponse"),companyBankAccountResponse.getSignature())
+							||!StringUtility.isStringPopulated(companyBankAccountResponse.getSignature())))
+					{
+						throw new IntegrationException(ErrorCode.INVALID_SIGNATURE);
+					}
+					
+				}
+			}
+
+		}
+
 		
 	}
 	

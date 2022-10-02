@@ -13,6 +13,7 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
     private String accountNo;
     private Long orderId;
     private MultipartFile injectionDocument;
+    private String userId;
 	
 	public Long getOrderTypeId() {
 		return orderTypeId;
@@ -55,6 +56,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	}
 	public void setInjectionDocument(MultipartFile injectionDocument) {
 		this.injectionDocument = injectionDocument;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	

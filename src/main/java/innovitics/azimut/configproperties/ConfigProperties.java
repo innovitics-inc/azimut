@@ -76,6 +76,13 @@ public class ConfigProperties {
     @Value("${token.encryption.init.vector}")
     private String jwTokenInitVector;
 
+    @Value("${blockage.duration.minutes}")
+    private String blockageDurationInMinutes;
+    
+    @Value("${blockage.number.of.trials}")
+    private String blockageNumberOfTrials;
+    
+    
     @Value("${profile.picture.max.size.bytes}")
     private String profilePictureMaximumSizeInBytes;
 
@@ -199,6 +206,14 @@ public class ConfigProperties {
 	}
 	public String getJwTokenInitVector() {
 		return jwTokenInitVector;
+	}
+
+	public String getBlockageDurationInMinutes() {
+		return blockageDurationInMinutes;
+	}
+	
+	public String getBlockageNumberOfTrials() {
+		return blockageNumberOfTrials;
 	}
 	public String getProfilePictureMaximumSizeInBytes() {
 		return profilePictureMaximumSizeInBytes;
