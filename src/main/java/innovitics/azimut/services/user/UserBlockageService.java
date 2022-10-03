@@ -37,6 +37,7 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 		UserBlockage userBlockage=new UserBlockage();	
 		userBlockage.setErrorCount(1);
 		userBlockage.setUserPhone(user.getUserPhone());
+		userBlockage.setUserId(user.getUserId());
 		userBlockage.setCreatedAt(new Date());
 		userBlockage.setUpdatedAt(new Date());
 		userBlockage.setUser(user);

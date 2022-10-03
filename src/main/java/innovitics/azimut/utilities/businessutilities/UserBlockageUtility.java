@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.services.user.UserBlockageService;
 import innovitics.azimut.utilities.ParentUtility;
@@ -23,7 +24,6 @@ public class UserBlockageUtility extends ParentUtility
 	
 	public Object checkUserBlockage(Integer numberOfTrials,String blockageDurationMinutes,BusinessUser tokenizedBusinessUser,UserMapper userMapper,Object object, String methodName,Object[] parameters,Class<?>[] paramterTypes,ErrorCode errorCode) throws BusinessException
 	{
-		int oldErrorCount=0;
 		int actualNumberOfTrials= numberOfTrials!=null?numberOfTrials.intValue():0;
 		UserBlockage userBlockage=this.userBlockageService.findByUserId(tokenizedBusinessUser.getId());
 		if(userBlockage!=null)
@@ -34,13 +34,9 @@ public class UserBlockageUtility extends ParentUtility
 					{	
 						throw new BusinessException(ErrorCode.USER_BLOCKED);
 					}
-					else
-					{
-						userBlockage.setErrorCount(oldErrorCount);
-						userBlockage.setUpdatedAt(new Date());
-					}
-				}
-				else
+					
+				}				
+				else				
 				{
 						try 
 						{
@@ -49,34 +45,34 @@ public class UserBlockageUtility extends ParentUtility
 						}					
 						catch(Exception exception)
 						{							
-							if((exception instanceof IntegrationException)&&
-									(NumberUtility.areIntegerValuesMatching(((IntegrationException)exception).getErrorCode(), errorCode.getCode())))
-							{
-								oldErrorCount=userBlockage.getErrorCount()!=null?userBlockage.getErrorCount():0;
-								userBlockage.setErrorCount(oldErrorCount+1);
-								userBlockage.setUpdatedAt(new Date());
-							}							
+							throw (BusinessException)this.getValueUsingReflection(object,methodName,parameters,paramterTypes);							
 						}
-				  }				
-					this.userBlockageService.updateUserBlockage(userBlockage);
+				}				
+				
 		}
-		else
-		{
-			try 
-			{
-				Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
-				return result;
-			}					
-			catch(Exception exception)
-			{							
-				if((exception instanceof IntegrationException)&&
-						(NumberUtility.areIntegerValuesMatching(((IntegrationException)exception).getErrorCode(), errorCode.getCode())))
-				{
-					this.userBlockageService.addUserBlockage(userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
-				}							
-			}			
-		}
-		return null;
+			return null;
 	}
+	
+	public UserBlockage addUserBlockage(User user)
+	{
+		
+		return this.userBlockageService.addUserBlockage(user);
+		
+	}
+	public UserBlockage updateUserBlockage(UserBlockage userBlockage)
+	{
+		
+		return this.userBlockageService.updateUserBlockage(userBlockage);
+		
+	}
+	public UserBlockage getUserBlockage(Long userId)
+	{	
+		UserBlockage userBlockage=this.userBlockageService.findByUserId(userId);
+		if(userBlockage!=null)
+		{
+			userBlockage.setUser(null);
+		}
+		return 	userBlockage;
+	}	
 	
 }

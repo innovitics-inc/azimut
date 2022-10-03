@@ -3,7 +3,9 @@ package innovitics.azimut.businessmodels.trading;
 import org.springframework.web.multipart.MultipartFile;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
-
+import innovitics.azimut.models.user.UserBlockage;
+import innovitics.azimut.utilities.CustomJsonRootName;
+@CustomJsonRootName(plural = "trading", singular = "trading")
 public class BaseAzimutTrading extends BaseBusinessEntity {
 
 	private Long orderTypeId;
@@ -14,6 +16,8 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
     private Long orderId;
     private MultipartFile injectionDocument;
     private String userId;
+    private UserBlockage userBlockage;
+    
 	
 	public Long getOrderTypeId() {
 		return orderTypeId;
@@ -62,6 +66,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public UserBlockage getUserBlockage() {
+		return userBlockage;
+	}
+	public void setUserBlockage(UserBlockage userBlockage) {
+		this.userBlockage = userBlockage;
 	}
 	
 	

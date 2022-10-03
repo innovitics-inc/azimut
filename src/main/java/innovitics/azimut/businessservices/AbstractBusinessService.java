@@ -20,6 +20,7 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
+import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.datautilities.UserUtility;
@@ -44,7 +45,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected UserUtility userUtility;
 	@Autowired protected UserTypeService userTypeService;
-
+	@Autowired UserBlockageUtility userBlockageUtility;
 
 	protected  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
 	{

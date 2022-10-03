@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -108,5 +109,36 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 		{
 			return this.handleBaseGenericResponseException(businessException,language);
 		}
+	}
+	
+	
+	@GetMapping(value="/incrementUserBlockage",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> incrementUserBlockage(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
+		try
+		{
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.incrementUserBlockage(this.getCurrentRequestHolder(token)),null,null);
+		}
+		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException,language);
+		}
+		
+	}
+	
+	@GetMapping(value="/getUserBlockage",
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> getUserBlockage(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
+		try
+		{
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.getUserBlockage(this.getCurrentRequestHolder(token)),null,null);
+		}
+		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException,language);
+		}
+		
 	}
 }

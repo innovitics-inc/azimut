@@ -10,6 +10,7 @@ import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.rest.mappers.InjectWithdrawMapper;
 import innovitics.azimut.rest.mappers.PlaceOrderMapper;
 import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
@@ -25,7 +26,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	@Autowired PlaceOrderMapper placeOrderMapper;
 	@Autowired InjectWithdrawMapper injectWithdrawMapper;
 	@Autowired UserMapper userMapper;
-	@Autowired UserBlockageUtility userBlockageUtility;
+
 	public BaseAzimutTrading placeOrder(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{				
 		/*try 
@@ -114,6 +115,58 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		}
 	}
 
+	public BaseAzimutTrading getUserBlockage(BusinessUser tokenizedBusinessUser)
+	{
+		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
+		
+		try 
+		{
+			baseAzimutTrading.setUserBlockage(this.userBlockageUtility.getUserBlockage(tokenizedBusinessUser.getId()));
+		}
+		catch(Exception exception)
+		{	
+			this.exceptionHandler.getNullIfNonExistent(exception);
+		}
+		
+		return  baseAzimutTrading;
+	}
+	
+	public BaseAzimutTrading incrementUserBlockage(BusinessUser tokenizedBusinessUser) throws BusinessException
+	{
+		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
+		try
+		{
+			
+			baseAzimutTrading=this.getUserBlockage(tokenizedBusinessUser);
+			UserBlockage userBlockage=baseAzimutTrading.getUserBlockage();
+			
+			if(userBlockage==null)
+			{
+				UserBlockage addedUserBlockage=this.userBlockageUtility.addUserBlockage(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+				addedUserBlockage.setUser(null);
+				baseAzimutTrading.setUserBlockage(addedUserBlockage);
+			}
+			else
+			{
+				if(userBlockage.getErrorCount()!=null)
+				{	
+					int oldUserCount= userBlockage.getErrorCount().intValue();
+					userBlockage.setErrorCount(oldUserCount+1);
+					userBlockage.setUser(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+					this.userBlockageUtility.updateUserBlockage(userBlockage);
+					userBlockage.setUser(null);
+				}
+			}
+			return baseAzimutTrading;
+		}
+		catch (Exception exception)
+		{
+			throw this.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
+		}
+		
+	}
+	
+	
 	
 	private BaseAzimutTrading prepareOrderPlacingInputs(BusinessUser tokenizedBusinessUser, BaseAzimutTrading baseAzimutTrading) {
 		
