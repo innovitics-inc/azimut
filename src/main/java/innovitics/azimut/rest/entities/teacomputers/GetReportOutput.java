@@ -1,6 +1,6 @@
-package innovitics.azimut.rest.models.teacomputers;
+package innovitics.azimut.rest.entities.teacomputers;
 
-public class GetValuationReportResponse extends TeaComputerResponse{
+public class GetReportOutput extends TeaComputerOutput {
 
 	private String filePath;
 
@@ -11,6 +11,5 @@ public class GetValuationReportResponse extends TeaComputerResponse{
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
-	
 	
 }

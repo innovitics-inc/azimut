@@ -3,9 +3,11 @@ package innovitics.azimut.rest.apis.valify;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -47,6 +49,11 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 	
 	public abstract HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(ValifyInput valifyInput);
 	
+	protected void populateResponse(String url,ResponseEntity<ValifyResponse> responseEntity)
+	{
+		
+	};
+
 	
 	
 	

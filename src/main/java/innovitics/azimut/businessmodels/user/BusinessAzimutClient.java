@@ -32,7 +32,8 @@ public class BusinessAzimutClient extends BusinessUser{
 	private List<BusinessClientFund> businessClientFunds;
 	private Double totalPosition;	
 	private List<EportfolioDetail> eportfolioDetails;
-	
+	private String reportType;
+	private Long currencyId;
 	
 	
 	public Double getPendingAmount() {
@@ -194,6 +195,22 @@ public class BusinessAzimutClient extends BusinessUser{
 
 	public void setEportfolioDetails(List<EportfolioDetail> eportfolioDetails) {
 		this.eportfolioDetails = eportfolioDetails;
+	}
+
+	public String getReportType() {
+		return reportType;
+	}
+
+	public Long getCurrencyId() {
+		return currencyId;
+	}
+
+	public void setCurrencyId(Long currencyId) {
+		this.currencyId = currencyId;
+	}
+
+	public void setReportType(String reportType) {
+		this.reportType = reportType;
 	}
 
 	public BusinessAzimutClient(BusinessClientBankAccountDetails[] clientBankAccounts) {

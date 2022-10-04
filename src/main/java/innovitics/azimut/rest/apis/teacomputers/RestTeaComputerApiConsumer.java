@@ -152,5 +152,10 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		return  integrationException; 
 }
 	
+	protected void populateResponse(String url,ResponseEntity<TeaComputerResponse> responseEntity)
+	{
+		
+	};
+
 	
 }

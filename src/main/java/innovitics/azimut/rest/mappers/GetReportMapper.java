@@ -8,17 +8,17 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.exceptions.IntegrationException;
-import innovitics.azimut.rest.apis.teacomputers.GetValuationReportApiConsumer;
-import innovitics.azimut.rest.entities.teacomputers.GetValuationReportInput;
-import innovitics.azimut.rest.entities.teacomputers.GetValuationReportOutput;
-import innovitics.azimut.rest.models.teacomputers.GetValuationReportResponse;
+import innovitics.azimut.rest.apis.teacomputers.GetReportApiConsumer;
+import innovitics.azimut.rest.entities.teacomputers.GetReportInput;
+import innovitics.azimut.rest.entities.teacomputers.GetReportOutput;
+import innovitics.azimut.rest.models.teacomputers.GetReportResponse;
 @Component
-public class GetValuationReportMapper extends RestMapper<GetValuationReportInput, GetValuationReportOutput, GetValuationReportResponse, BusinessAzimutClient> {
-	@Autowired GetValuationReportApiConsumer getValuationReportApiConsumer;
+public class GetReportMapper extends RestMapper<GetReportInput, GetReportOutput, GetReportResponse, BusinessAzimutClient> {
+	@Autowired GetReportApiConsumer getReportApiConsumer;
 	
 	@Override
 	BusinessAzimutClient consumeRestService(BusinessAzimutClient businessAzimutClient, String params) throws IntegrationException, HttpClientErrorException, Exception {
-		return this.createBusinessEntityFromOutput(this.getValuationReportApiConsumer.invoke(this.createInput(businessAzimutClient), GetValuationReportResponse.class, params));
+		return this.createBusinessEntityFromOutput(this.getReportApiConsumer.invoke(this.createInput(businessAzimutClient), GetReportResponse.class, params));
 	}
 
 	@Override
@@ -28,16 +28,20 @@ public class GetValuationReportMapper extends RestMapper<GetValuationReportInput
 	}
 
 	@Override
-	GetValuationReportInput createInput(BusinessAzimutClient businessAzimutClient) {
-		GetValuationReportInput input=new GetValuationReportInput();
+	GetReportInput createInput(BusinessAzimutClient businessAzimutClient) {
+		GetReportInput input=new GetReportInput();
 		input.setIdNumber(businessAzimutClient.getAzId());		
 		input.setIdTypeId(businessAzimutClient.getAzIdType());
 		input.setLocale(businessAzimutClient.getLanguage());
+		input.setReportType(businessAzimutClient.getReportType());
+		input.setFromDate(businessAzimutClient.getSearchFromDate());
+		input.setToDate(businessAzimutClient.getSearchToDate());
+		input.setCurrencyId(businessAzimutClient.getCurrencyId());
 		return  input;
 	}
 
 	@Override
-	BusinessAzimutClient createBusinessEntityFromOutput(GetValuationReportOutput getValuationReportOutput) {
+	BusinessAzimutClient createBusinessEntityFromOutput(GetReportOutput getValuationReportOutput) {
 		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
 		if (getValuationReportOutput!=null) 
 		{
@@ -47,7 +51,7 @@ public class GetValuationReportMapper extends RestMapper<GetValuationReportInput
 	}
 
 	@Override
-	protected List<BusinessAzimutClient> createListBusinessEntityFromOutput(GetValuationReportOutput getValuationReportOutput) {
+	protected List<BusinessAzimutClient> createListBusinessEntityFromOutput(GetReportOutput getValuationReportOutput) {
 		// TODO Auto-generated method stub
 		return null;
 	}

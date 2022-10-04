@@ -43,6 +43,8 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	@Autowired protected ArrayUtility arrayUtility;
 	@Autowired protected RestErrorHandler restErrorHandler;
 
+	protected abstract void populateResponse(String url,ResponseEntity<RES> responseEntity);
+	
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
 		logger.info("Input::" + input);
 		ResponseEntity<RES> responseEntity=null;
@@ -64,6 +66,8 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				
 				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
 				responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
+				
+				this.populateResponse(url, responseEntity);
 				
 				logger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
 				

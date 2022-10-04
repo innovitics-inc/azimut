@@ -40,6 +40,8 @@ public final class StringUtility extends ParentUtility{
 	public final static String WEB_DEVICE="WEB";
 	public final static String INFORM_WITHDRAW="InformWithdraw";
 	public final static String INFORM_DEPOSIT="InformDeposit";
+	public final static String VALUATION_REPORT= "Report/SendValReport";
+	public final static String REQUEST_STATEMENT="Statment/Report";
 	
 	
 	public static String getClassName(Object object)

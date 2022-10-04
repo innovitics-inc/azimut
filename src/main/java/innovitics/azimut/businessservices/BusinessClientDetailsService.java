@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ import innovitics.azimut.rest.mappers.GetEportfolioMapper;
 import innovitics.azimut.rest.mappers.GetFundPricesMapper;
 import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
-import innovitics.azimut.rest.mappers.GetValuationReportMapper;
+import innovitics.azimut.rest.mappers.GetReportMapper;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
@@ -94,7 +95,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired FundMapper fundMapper;
 @Autowired GetFundTransactionsMapper getFundTransactionsMapper;
 @Autowired GetEportfolioMapper getEportfolioMapper;
-@Autowired GetValuationReportMapper getValuationReportMapper;
+@Autowired GetReportMapper getReportMapper;
 @Autowired GetCompanyBankAccountMapper getCompanyBankAccountMapper;
 
 
@@ -439,9 +440,18 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	public BusinessAzimutClient getValuationReport(BusinessUser tokenizedBusinessUser,String language) throws BusinessException, IntegrationException
 	{
+		return this.getReport(tokenizedBusinessUser, language, StringUtility.VALUATION_REPORT,null);
+	}
+	public BusinessAzimutClient getRequestStatement(BusinessUser tokenizedBusinessUser,String language,BusinessAzimutClient businessAzimutClient) throws BusinessException, IntegrationException
+	{
+		return this.getReport(tokenizedBusinessUser, language, StringUtility.REQUEST_STATEMENT, businessAzimutClient);
+	}
+	
+	public BusinessAzimutClient getReport(BusinessUser tokenizedBusinessUser,String language,String reportType,BusinessAzimutClient businessAzimutClient) throws BusinessException
+	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		try {
-			responseBusinessAzimutClient= this.getValuationReportMapper.wrapBaseBusinessEntity(false,this.prepareGetValuationReportInputs(tokenizedBusinessUser,language), null).getData();
+				responseBusinessAzimutClient= this.getReportMapper.wrapBaseBusinessEntity(false,this.prepareGetReportInputs(tokenizedBusinessUser,language,reportType,businessAzimutClient), reportType).getData();
 			}
 		catch(Exception exception)
 		{
@@ -449,6 +459,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		return responseBusinessAzimutClient;
 	}
+	
+	
 	
 	public BusinessAzimutClient  getCompanyBankAccounts() throws BusinessException,IntegrationException
 	{
@@ -476,12 +488,22 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		eportBusinessEntity.setLanguage(language);
 		return eportBusinessEntity;
 	}
-	private BusinessAzimutClient prepareGetValuationReportInputs(BusinessUser tokenizedBusinessUser,String language) {
-		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();		
-		businessAzimutClient.setAzId(tokenizedBusinessUser.getUserId());
-		businessAzimutClient.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
-		businessAzimutClient.setLanguage(language);
-		return businessAzimutClient;
+	private BusinessAzimutClient prepareGetReportInputs(BusinessUser tokenizedBusinessUser,String language,String reportType,BusinessAzimutClient businessAzimutClient) {
+		BusinessAzimutClient searchBusinessAzimutClient=new BusinessAzimutClient();
+		searchBusinessAzimutClient.setAzId(tokenizedBusinessUser.getUserId());
+		searchBusinessAzimutClient.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+		searchBusinessAzimutClient.setReportType(reportType);
+		searchBusinessAzimutClient.setLanguage(language);
+		
+		if(businessAzimutClient!=null)
+		{
+			searchBusinessAzimutClient.setSearchFromDate(businessAzimutClient.getSearchFromDate());
+			searchBusinessAzimutClient.setSearchToDate(businessAzimutClient.getSearchToDate());
+			searchBusinessAzimutClient.setCurrencyId(businessAzimutClient.getCurrencyId());
+		}
+		
+		
+		return searchBusinessAzimutClient;
 	}
 		
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 

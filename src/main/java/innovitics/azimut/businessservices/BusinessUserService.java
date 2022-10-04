@@ -372,7 +372,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			
 			businessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(businessUser, user, true);
 			
-			if(StringUtility.isStringPopulated(deviceId)&&BooleanUtility.isTrue(businessUser.getLivenessChecked())&&businessUser.getUserStep()!=null
+			if(StringUtility.isStringPopulated(deviceId)&&BooleanUtility.isFalse(businessUser.getLivenessChecked())&&businessUser.getUserStep()!=null
 					&&businessUser.getUserStep().intValue()>UserStep.LEFT_AND_RIGHT.getStepId())
 			{
 				businessUser.setNextUserStep(UserStep.LEFT_AND_RIGHT.getStepId());
