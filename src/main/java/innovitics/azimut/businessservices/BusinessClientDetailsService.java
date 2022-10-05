@@ -355,6 +355,29 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	}
 		
 	
+	public BusinessAzimutClient getPaginatedClientFunds(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
+	{
+		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+		responseBusinessAzimutClient=this.getClientFundsOrFund(tokenizedBusinessUser, responseBusinessAzimutClient);
+		if(responseBusinessAzimutClient!=null && this.clientFundListUtility.isListPopulated(responseBusinessAzimutClient.getBusinessClientFunds()))
+		{
+			List<BusinessClientFund> paginatedBusinessClientFunds=new ArrayList<BusinessClientFund>();
+			for(int i=0;i<20;i++)
+			{
+				BusinessClientFund addedBusinessClientFund=new BusinessClientFund();
+				addedBusinessClientFund.setTeacomputerId(Long.valueOf(i));
+				paginatedBusinessClientFunds.add(addedBusinessClientFund);
+			}
+			
+			responseBusinessAzimutClient.setPaginatedBusinessClientFunds(this.clientFundListUtility.getPaginatedList(paginatedBusinessClientFunds,businessAzimutClient.getPageNumber(),businessAzimutClient.getPageSize()));			
+		}
+		
+		
+		
+		return responseBusinessAzimutClient;
+	}
+	
+	
 	public BusinessAzimutClient getClientFundsOrFund(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
 	{
 		

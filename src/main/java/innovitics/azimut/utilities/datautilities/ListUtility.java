@@ -44,4 +44,29 @@ public class ListUtility<T> extends ParentUtility{
 	            dataList.add(t);
 	        return dataList;
 	}
+	
+	 public PaginatedEntity<T>  getPaginatedList(List<T> list,int currentPage, int pageSize)
+	 { 
+		 PaginatedEntity<T> paginatedEntity=new PaginatedEntity<>(); 
+		boolean hasPrevious = (currentPage>1);
+		 currentPage=currentPage-1;
+		 paginatedEntity.setCurrentPage(currentPage);
+		
+		 if(this.isListPopulated(list))
+			{
+				paginatedEntity.setNumberOfItems(Long.valueOf(list.size()));
+				int start = Math.min(list.size(), Math.abs(currentPage * pageSize));
+				list.subList(0, start).clear();
+				int size = list.size();
+				int end = Math.min(pageSize, size);
+				list.subList(end, size).clear();
+				boolean hasNext = (end < size);
+				paginatedEntity.setPageSize(pageSize);
+				paginatedEntity.setGenericDataList(list);
+				paginatedEntity.setHasNext(hasNext);
+				paginatedEntity.setHasPrevious(hasPrevious);
+			}		 
+		 return paginatedEntity;
+
+	 }
 }

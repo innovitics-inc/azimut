@@ -6,6 +6,7 @@ import java.util.Map;
 public class PaginatedEntity<T> {
 
 	List<T> dataList;
+	List<?> genericDataList;
 	Integer currentPage;
 	Long numberOfItems;
 	Integer numberOfPages;
@@ -62,6 +63,12 @@ public class PaginatedEntity<T> {
 	}
 	public void setNamedList(Map<String, List<T>> namedList) {
 		this.namedList = namedList;
+	}
+	public List<?> getGenericDataList() {
+		return genericDataList;
+	}
+	public void setGenericDataList(List<?> genericDataList) {
+		this.genericDataList = genericDataList;
 	}
 	@Override
 	public String toString() {

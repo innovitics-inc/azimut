@@ -209,7 +209,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 			@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getClientFundsOrFund(this.getCurrentRequestHolder(token),businessAzimutClient),null,null);
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getPaginatedClientFunds(this.getCurrentRequestHolder(token),businessAzimutClient),null,null);
 		}		
 		catch(BusinessException businessException)
 		{

@@ -9,6 +9,7 @@ import innovitics.azimut.models.azimutdetails.AzimutDetails;
 import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.utilities.CustomJsonRootName;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
+import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 @CustomJsonRootName(plural = "azAccounts", singular = "azAccount")
 public class BusinessAzimutClient extends BusinessUser{
 
@@ -30,6 +31,7 @@ public class BusinessAzimutClient extends BusinessUser{
 	private String param;
 	private AzimutDetails azimutDetails;
 	private List<BusinessClientFund> businessClientFunds;
+	private PaginatedEntity<BusinessClientFund> paginatedBusinessClientFunds;
 	private Double totalPosition;	
 	private List<EportfolioDetail> eportfolioDetails;
 	private String reportType;
@@ -179,6 +181,14 @@ public class BusinessAzimutClient extends BusinessUser{
 
 	public void setBusinessClientFunds(List<BusinessClientFund> businessClientFunds) {
 		this.businessClientFunds = businessClientFunds;
+	}
+
+	public PaginatedEntity<BusinessClientFund> getPaginatedBusinessClientFunds() {
+		return paginatedBusinessClientFunds;
+	}
+
+	public void setPaginatedBusinessClientFunds(PaginatedEntity<BusinessClientFund> paginatedBusinessClientFunds) {
+		this.paginatedBusinessClientFunds = paginatedBusinessClientFunds;
 	}
 
 	public Double getTotalPosition() {

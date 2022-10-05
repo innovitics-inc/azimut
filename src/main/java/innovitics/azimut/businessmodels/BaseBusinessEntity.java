@@ -46,6 +46,8 @@ public class BaseBusinessEntity {
 	private Long teacomputerId;
 	private Boolean isLocal;
 	private Boolean isActive;
+	private Integer pageNumber;
+	private Integer pageSize;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -263,6 +265,18 @@ public class BaseBusinessEntity {
 	}
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+	public Integer getPageNumber() {
+		return pageNumber;
+	}
+	public void setPageNumber(Integer pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+	public Integer getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
 	}
 	
 	
