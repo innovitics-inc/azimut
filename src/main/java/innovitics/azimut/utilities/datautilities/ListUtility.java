@@ -49,9 +49,8 @@ public class ListUtility<T> extends ParentUtility{
 	 { 
 		 PaginatedEntity<T> paginatedEntity=new PaginatedEntity<>(); 
 		boolean hasPrevious = (currentPage>1);
-		 currentPage=currentPage-1;
 		 paginatedEntity.setCurrentPage(currentPage);
-		
+		 currentPage=currentPage-1;
 		 if(this.isListPopulated(list))
 			{
 				paginatedEntity.setNumberOfItems(Long.valueOf(list.size()));
@@ -62,7 +61,7 @@ public class ListUtility<T> extends ParentUtility{
 				list.subList(end, size).clear();
 				boolean hasNext = (end < size);
 				paginatedEntity.setPageSize(pageSize);
-				paginatedEntity.setGenericDataList(list);
+				paginatedEntity.setPageList(list);
 				paginatedEntity.setHasNext(hasNext);
 				paginatedEntity.setHasPrevious(hasPrevious);
 			}		 

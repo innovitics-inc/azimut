@@ -144,6 +144,9 @@ public class ConfigProperties {
     @Value("${log.file.path}")
     private String logFilePath;
     
+    @Value("${page.size}")
+    private String pageSize;
+    
     
 	public String getBlobConnectionString() {
 		return blobConnectionString;
@@ -278,6 +281,9 @@ public class ConfigProperties {
 	}
 	public String getLogFilePath() {
 		return logFilePath;
+	}
+	public String getPageSize() {
+		return pageSize;
 	}
     
     

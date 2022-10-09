@@ -1,12 +1,9 @@
 package innovitics.azimut.businessservices;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +21,9 @@ import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
 import innovitics.azimut.businessmodels.user.BusinessUser;
-import innovitics.azimut.businessmodels.user.EportBusinessEntity;
 import innovitics.azimut.businessmodels.user.EportfolioDetail;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
-import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.rest.mappers.AddAccountMapper;
 import innovitics.azimut.rest.mappers.AddClientBankAccountMapper;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
@@ -39,22 +34,21 @@ import innovitics.azimut.rest.mappers.GetCompanyBankAccountMapper;
 import innovitics.azimut.rest.mappers.GetEportfolioMapper;
 import innovitics.azimut.rest.mappers.GetFundPricesMapper;
 import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
-import innovitics.azimut.rest.mappers.GetTransactionsMapper;
 import innovitics.azimut.rest.mappers.GetReportMapper;
+import innovitics.azimut.rest.mappers.GetTransactionsMapper;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
-import innovitics.azimut.utilities.businessutilities.FundTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.CashTransactionSortCompare;
+import innovitics.azimut.utilities.businessutilities.FundTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.Sorting;
-import innovitics.azimut.utilities.crosslayerenums.AnswerType;
-import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
+import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.mapping.FundMapper;
@@ -358,22 +352,14 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	public BusinessAzimutClient getPaginatedClientFunds(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
-		responseBusinessAzimutClient=this.getClientFundsOrFund(tokenizedBusinessUser, responseBusinessAzimutClient);
-		if(responseBusinessAzimutClient!=null && this.clientFundListUtility.isListPopulated(responseBusinessAzimutClient.getBusinessClientFunds()))
+		responseBusinessAzimutClient=this.getClientFundsOrFund(tokenizedBusinessUser, businessAzimutClient);
+		if(responseBusinessAzimutClient!=null&&businessAzimutClient!=null&&businessAzimutClient.getPageNumber()!=null)
 		{
-			List<BusinessClientFund> paginatedBusinessClientFunds=new ArrayList<BusinessClientFund>();
-			for(int i=0;i<20;i++)
-			{
-				BusinessClientFund addedBusinessClientFund=new BusinessClientFund();
-				addedBusinessClientFund.setTeacomputerId(Long.valueOf(i));
-				paginatedBusinessClientFunds.add(addedBusinessClientFund);
-			}
-			
-			responseBusinessAzimutClient.setPaginatedBusinessClientFunds(this.clientFundListUtility.getPaginatedList(paginatedBusinessClientFunds,businessAzimutClient.getPageNumber(),businessAzimutClient.getPageSize()));			
+			List<BusinessClientFund> clientFunds=responseBusinessAzimutClient.getBusinessClientFunds();
+			PaginatedEntity<BusinessClientFund> paginatedBusinessClientFunds=this.clientFundListUtility.getPaginatedList(clientFunds,businessAzimutClient.getPageNumber(),Integer.valueOf(this.configProperties.getPageSize()));
+			responseBusinessAzimutClient.setPaginatedBusinessClientFunds(paginatedBusinessClientFunds);
+			responseBusinessAzimutClient.setBusinessClientFunds(null);
 		}
-		
-		
-		
 		return responseBusinessAzimutClient;
 	}
 	
