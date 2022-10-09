@@ -50,10 +50,17 @@ public class ListUtility<T> extends ParentUtility{
 		 PaginatedEntity<T> paginatedEntity=new PaginatedEntity<>(); 
 		boolean hasPrevious = (currentPage>1);
 		 paginatedEntity.setCurrentPage(currentPage);
+		 
 		 currentPage=currentPage-1;
 		 if(this.isListPopulated(list))
 			{
-				paginatedEntity.setNumberOfItems(Long.valueOf(list.size()));
+			 	if(pageSize!=0)
+			 	{
+			 		paginatedEntity.setNumberOfPages(list.size()/pageSize);
+			 		paginatedEntity.setLastPage(list.size()/pageSize);
+			 	}
+				
+			 	paginatedEntity.setNumberOfItems(Long.valueOf(list.size()));
 				int start = Math.min(list.size(), Math.abs(currentPage * pageSize));
 				list.subList(0, start).clear();
 				int size = list.size();
@@ -62,9 +69,25 @@ public class ListUtility<T> extends ParentUtility{
 				boolean hasNext = (end < size);
 				paginatedEntity.setPageSize(pageSize);
 				paginatedEntity.setPageList(list);
-				paginatedEntity.setHasNext(hasNext);
+				
+				if(hasNext)
+				{
+					paginatedEntity.setHasNext(hasNext);
+					paginatedEntity.setNextPage(currentPage+1);
+				}
+				else
+				{	paginatedEntity.setHasNext(false);
+					paginatedEntity.setNextPage(currentPage);
+				}
+				
 				paginatedEntity.setHasPrevious(hasPrevious);
-			}		 
+			}
+		 else
+		 {
+			 paginatedEntity.setCurrentPage(0);
+			 paginatedEntity.setNextPage(0);
+			 paginatedEntity.setNumberOfPages(0);
+		 }
 		 return paginatedEntity;
 
 	 }

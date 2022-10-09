@@ -8,8 +8,10 @@ public class PaginatedEntity<T> {
 	List<T> dataList;
 	List<?> pageList;
 	Integer currentPage;
+	Integer nextPage;
 	Long numberOfItems;
 	Integer numberOfPages;
+	Integer lastPage;
 	Integer pageSize;
 	Boolean hasPrevious;
 	Boolean hasNext;
@@ -26,6 +28,13 @@ public class PaginatedEntity<T> {
 	}
 	public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
+	}
+	
+	public Integer getNextPage() {
+		return nextPage;
+	}
+	public void setNextPage(Integer nextPage) {
+		this.nextPage = nextPage;
 	}
 	public Long getNumberOfItems() {
 		return numberOfItems;
@@ -69,6 +78,12 @@ public class PaginatedEntity<T> {
 	}
 	public void setPageList(List<?> pageList) {
 		this.pageList = pageList;
+	}
+	public Integer getLastPage() {
+		return lastPage;
+	}
+	public void setLastPage(Integer lastPage) {
+		this.lastPage = lastPage;
 	}
 	@Override
 	public String toString() {
