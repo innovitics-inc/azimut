@@ -83,18 +83,22 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 				if(transactionOutput.getTransStatusName().equals(TransactionStatus.PENDING.getStatus()))
 				{
 					businessTransaction.setTransactionStatus(TransactionStatus.PENDING);
+					businessTransaction.setStatus(TransactionStatus.PENDING.getStatusId());
 				}
 				else if(transactionOutput.getTransStatusName().equals(TransactionStatus.TIKCET.getStatus()))
 				{
 					businessTransaction.setTransactionStatus(TransactionStatus.TIKCET);
+					businessTransaction.setStatus(TransactionStatus.TIKCET.getStatusId());
 				}
 				else if((transactionOutput.getTransStatusName().equals(TransactionStatus.CANCELED.getStatus())))
 				{
 					businessTransaction.setTransactionStatus(TransactionStatus.CANCELED);
+					businessTransaction.setStatus(TransactionStatus.CANCELED.getStatusId());
 				}
 				else 
 				{
 					businessTransaction.setTransactionStatus(TransactionStatus.OTHER);
+					businessTransaction.setStatus(TransactionStatus.OTHER.getStatusId());
 				}
 			}
 			if(StringUtility.isStringPopulated(transactionOutput.getTransTypeName()))
@@ -117,14 +121,17 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 				if(transactionOutput.getOrderTypeName().equals(TransactionOrderType.WITHDRAW.getType()))
 				{
 					businessTransaction.setTransactionOrderType(TransactionOrderType.WITHDRAW);
+					businessTransaction.setType(TransactionOrderType.WITHDRAW.getTypeId());
 				}
 				else if(transactionOutput.getOrderTypeName().equals(TransactionOrderType.INJECT.getType()))
 				{
 					businessTransaction.setTransactionOrderType(TransactionOrderType.INJECT);
+					businessTransaction.setType(TransactionOrderType.INJECT.getTypeId());
 				}
 				else  
 				{
 					businessTransaction.setOrderType(OrderType.OTHER);
+					businessTransaction.setType(OrderType.OTHER.getTypeId());
 				}
 				
 			}
