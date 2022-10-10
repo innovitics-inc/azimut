@@ -642,10 +642,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 					if(businessTransaction!=null)
 					{
 						this.logger.info("business Transaction:::"+ businessTransaction);
-						
-						businessTransaction.setStatus(businessTransaction.getTransactionStatus()!=null?businessTransaction.getTransactionStatus().getStatusId():null);
-						businessTransaction.setType(businessTransaction.getTransactionOrderType()!=null?businessTransaction.getTransactionOrderType().getTypeId():null);
-						
+							
 						 String oldDate=businessTransaction.getTrxDate();
 						 businessTransaction.setTrxDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
 											

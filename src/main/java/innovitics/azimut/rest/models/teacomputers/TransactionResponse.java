@@ -8,6 +8,7 @@ public class TransactionResponse extends TeaComputerResponse {
 	private String transTypeName;
 	private String orderTypeName;
 	private String transStatusName;
+	private String statusName;
 	private String transValue;
 	private String netValue;
 	private String currencyId;
@@ -62,6 +63,12 @@ public class TransactionResponse extends TeaComputerResponse {
 	}
 	public void setCurrencyName(String currencyName) {
 		this.currencyName = currencyName;
+	}
+	public String getStatusName() {
+		return statusName;
+	}
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 
 }
