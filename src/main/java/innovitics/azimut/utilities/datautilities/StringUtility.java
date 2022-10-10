@@ -1,5 +1,6 @@
 package innovitics.azimut.utilities.datautilities;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -184,5 +185,13 @@ public final class StringUtility extends ParentUtility{
 		else
 			return null;	
 		
+	}
+	public static String getStringValue(byte[] contentAsByteArray, String characterEncoding) {
+		try {
+			return new String(contentAsByteArray, 0, contentAsByteArray.length, characterEncoding);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

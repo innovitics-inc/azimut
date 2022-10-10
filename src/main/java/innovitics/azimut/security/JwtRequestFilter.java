@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
@@ -36,6 +38,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		try {
+			
+			
+			ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
+			ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+			long startTime = System.currentTimeMillis();
+
 			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
 			String username = null;
 			String jwt = null;
@@ -65,7 +73,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 
 			    
-			filterChain.doFilter(request, response);
+			//filterChain.doFilter(request, response);
+			
+			filterChain.doFilter(requestWrapper, responseWrapper);
+
+			String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),
+					request.getCharacterEncoding());
+			this.logger.info("REQUEST:::"+requestBody);
+
+
+			String responseBody = StringUtility.getStringValue(responseWrapper.getContentAsByteArray(),
+					response.getCharacterEncoding());
+			long timeTaken = System.currentTimeMillis() - startTime;
+			this.logger.info("RESPONSE:::"+responseBody);
+			responseWrapper.copyBodyToResponse();
+
+			
 		} 
 		
 		catch (JwtException e) {

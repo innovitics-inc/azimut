@@ -10,6 +10,20 @@ import innovitics.azimut.utilities.ParentUtility;
 public final class NumberUtility {
 	protected static final Logger logger = LoggerFactory.getLogger(NumberUtility.class);
 
+	
+	public static boolean areDoubleValuesMatching(Double value1,Double value2)
+	{
+		boolean	result=false;
+		logger.info("Are the values "+ value1+" and "+ value1+"matching?");
+		
+		if(value1!=null&&value2!=null&&value1.doubleValue()==value2.doubleValue())
+			result= true;
+		else
+			result= false;
+		
+		logger.info("result="+result);
+		return result;
+	}
 	public static boolean areLongValuesMatching(Long value1,Long value2)
 	{
 		boolean	result=false;

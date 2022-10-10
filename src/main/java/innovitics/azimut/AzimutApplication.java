@@ -47,7 +47,6 @@ import innovitics.azimut.utilities.exceptionhandling.FileUploadExceptionAdvice;
 @ComponentScan(basePackages= {"innovitics.azimut.rest"})
 @ComponentScan(basePackages = {"innovitics.azimut.repositories"})
 @ComponentScan(basePackages = {"innovitics.azimut.services"})
-@ComponentScan(basePackages = {"innovitics.azimut.jobs"})
 @ComponentScan(basePackages = {"innovitics.azimut.pdfgenerator"})
 
 @EntityScan("innovitics.azimut.models")
@@ -62,7 +61,7 @@ import innovitics.azimut.utilities.exceptionhandling.FileUploadExceptionAdvice;
 @EnableScheduling
 
 @EnableCaching
-public class AzimutApplication extends SpringBootServletInitializer {
+public class AzimutApplication {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(AzimutApplication.class);
 	public static void main(String[] args) {
@@ -70,10 +69,6 @@ public class AzimutApplication extends SpringBootServletInitializer {
 		SpringApplication.run(AzimutApplication.class, args);
 	}
 
-	@Override
-	  protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-	    return builder.sources(AzimutApplication.class);
-	  }
 	
 	
 	   @Bean
@@ -84,44 +79,6 @@ public class AzimutApplication extends SpringBootServletInitializer {
 	        multipartResolver.setMaxUploadSize(20000000);
 	        return multipartResolver;
 	    }
-	   
-	   
-	   @Component
-	   class MyRunner implements CommandLineRunner {
-
-	       @Autowired
-	       private Environment environment;
-
-	       @Override
-	       public void run(String... args) throws Exception {
-
-	           System.out.println("Active profiles: " +
-	                   Arrays.toString(environment.getActiveProfiles()));
-	       }
-	   }
-
-
-	   @Component
-	   @Profile(value="test & !dev")
-	   class MyRunner3 implements CommandLineRunner {
-
-	       @Override
-	       public void run(String... args) throws Exception {
-
-	           System.out.println("In development");
-	       }
-	   }
-
-	   @Component
-	   @Profile(value="dev & !test")
-	   class MyRunner4 implements CommandLineRunner {
-
-	       @Override
-	       public void run(String... args) throws Exception {
-
-	           System.out.println("In testing");
-	       }
-	   }
 	   
 
 }

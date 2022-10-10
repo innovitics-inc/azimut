@@ -41,11 +41,14 @@ public class UserBlockageUtility extends ParentUtility
 						try 
 						{
 							Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
+							userBlockage.setErrorCount(0);
+							this.userBlockageService.updateUserBlockage(userBlockage);
 							return result;
 						}					
 						catch(Exception exception)
-						{							
-							throw (BusinessException)this.getValueUsingReflection(object,methodName,parameters,paramterTypes);							
+						{
+							this.logger.info("Could not invoke method:::");							
+							exception.printStackTrace();
 						}
 				}				
 				

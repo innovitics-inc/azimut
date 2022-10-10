@@ -88,8 +88,11 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 					else if (nav.getNav() != null && businessFundPrice.getNav() != null
 							&& nav.getNav().doubleValue() == businessFundPrice.getNav().doubleValue()) {
 						if (nav.getDate() != null && StringUtility.isStringPopulated(businessFundPrice.getPriceDate())
-								&& DateUtility.areDatesDifferent(nav.getDate(),
-										DateUtility.changeStringDateToDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(),new SimpleDateFormat("dd-mm-yyyy"),new SimpleDateFormat("yyyy-mm-dd"))))) {
+								&& 
+								/*DateUtility.areDatesDifferent(nav.getDate(),
+										DateUtility.changeStringDateToDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(),new SimpleDateFormat("dd-MM-yyyy"),new SimpleDateFormat("yyyy-MM-dd"))))*/
+							StringUtility.stringsDontMatch(nav.getDate().toString().substring(0,10), DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(),new SimpleDateFormat("dd-MM-yyyy"),new SimpleDateFormat("yyyy-MM-dd"))))	
+							{
 							this.logger.info("Inserting due to same price on a different date.");
 							insertedNavs.add(this.generateNavFromNavAndBusinessFund(nav.getFundId(), businessFundPrice));
 							}
