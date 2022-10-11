@@ -498,9 +498,9 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			if(BooleanUtility.isTrue(businessUser.getIsMobile()))
 			{
 				businessUser.setClientBankAccounts(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser));
-				businessUser.setVerificationPercentage(tokenizedBusinessUser.getVerificationPercentage());
+				
 			}
-			
+			businessUser.setVerificationPercentage(tokenizedBusinessUser.getVerificationPercentage());
 		}
 		catch(Exception exception)
 		{

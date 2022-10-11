@@ -36,6 +36,7 @@ import innovitics.azimut.rest.mappers.GetFundPricesMapper;
 import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
 import innovitics.azimut.rest.mappers.GetReportMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
+import innovitics.azimut.rest.mappers.HoldClientBankAccountMapper;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
@@ -65,6 +66,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired GetTransactionsMapper getTransactionsMapper;
 @Autowired GetClientBankAccountsMapper getClientBankAccountsMapper;
 @Autowired AddClientBankAccountMapper addClientBankAccountMapper;
+@Autowired HoldClientBankAccountMapper holdClientBankAccountMapper;
 @Autowired CheckAccountMapper checkAccountMapper;
 @Autowired AddAccountMapper addAccountMapper;
 @Autowired  GetClientFundsMapper getClientFundsMapper;
@@ -157,6 +159,33 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 
 		return responseBusinessAzimutClient;
+	}
+	
+	public BusinessAzimutClient holdClientBankAccount(BusinessUser tokenizedBusinessUser, BusinessAzimutClient businessAzimutClient) throws BusinessException
+	{
+		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
+		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
+		try 
+		{			
+			responseBusinessAzimutClient=this.holdClientBankAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();	
+		}
+		catch(Exception exception)
+		{
+	
+			throw this.handleException(exception);
+		}
+
+		return responseBusinessAzimutClient;
+	}
+	private BusinessAzimutClient prepareAccountHoldingInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) 
+	{
+		BusinessAzimutClient searchAzimutClient=new BusinessAzimutClient();
+		searchAzimutClient.setAccountId(businessAzimutClient.getAccountId());
+		searchAzimutClient.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+		searchAzimutClient.setAzId(tokenizedBusinessUser.getUserId());
+		
+		return searchAzimutClient;
+	
 	}
 	
 	public BusinessAzimutClient checkAccountAtTeaComputers(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException

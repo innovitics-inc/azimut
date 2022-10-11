@@ -9,7 +9,6 @@ public class AddClientBankAccountInput extends TeaComputerInput {
 	private String accountNo;
 	private String swiftCode;
 	private String iban;
-	private String signature;
 	public Long getBankId() {
 		return bankId;
 	}
@@ -52,18 +51,13 @@ public class AddClientBankAccountInput extends TeaComputerInput {
 	public void setIban(String iban) {
 		this.iban = iban;
 	}
-	public String getSignature() {
-		return signature;
-	}
-	public void setSignature(String signature) {
-		this.signature = signature;
-	}
 	@Override
 	public String toString() {
 		return "AddClientBankAccountInput [bankId=" + bankId + ", branchId=" + branchId + ", currencyId=" + currencyId
 				+ ", currencyName=" + currencyName + ", accountNo=" + accountNo + ", swiftCode=" + swiftCode + ", iban="
-				+ iban + ", signature=" + signature + "]";
+				+ iban + "]";
 	}
+
 	
 	
 	
