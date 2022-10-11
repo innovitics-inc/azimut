@@ -284,7 +284,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		try 
 		{	
-			if(BooleanUtility.isTrue(businessAzimutClient.getPersist()))
+			if(BooleanUtility.isFalse(businessAzimutClient.getPersist()))
 			{
 				this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
 			}
