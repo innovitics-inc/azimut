@@ -19,13 +19,15 @@ public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutp
 	@Autowired PlaceOrderApiConsumer placeOrderApiConsumer;
 	
 	@Override
-	BaseAzimutTrading consumeRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
+	public BaseAzimutTrading consumeRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
+		this.logger.info("Access the place order mapper:::::");
+		
 		return this.createBusinessEntityFromOutput(this.placeOrderApiConsumer.invoke(this.createInput(baseAzimutTrading), PlaceOrderResponse.class, params));
 		
 	}
 
 	@Override
-	List<BaseAzimutTrading> consumeListRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
+	public List<BaseAzimutTrading> consumeListRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

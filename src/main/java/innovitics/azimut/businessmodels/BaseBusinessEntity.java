@@ -48,6 +48,7 @@ public class BaseBusinessEntity {
 	private Boolean isActive;
 	private Integer pageNumber;
 	private Integer pageSize;
+	private Boolean persist;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -277,6 +278,12 @@ public class BaseBusinessEntity {
 	}
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
+	}
+	public Boolean getPersist() {
+		return persist;
+	}
+	public void setPersist(Boolean persist) {
+		this.persist = persist;
 	}
 	
 	

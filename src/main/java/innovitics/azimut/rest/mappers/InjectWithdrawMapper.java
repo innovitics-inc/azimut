@@ -26,9 +26,9 @@ public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, Inject
 	@Autowired InjectWithdrawApiConsumer injectWithdrawApiConsumer;
 	
 	@Override
-	BaseAzimutTrading consumeRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
+	public BaseAzimutTrading consumeRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
 		
-		if(baseAzimutTrading!=null&&StringUtility.stringsMatch(params, StringUtility.INFORM_WITHDRAW))
+		if(baseAzimutTrading!=null&&StringUtility.stringsMatch(params, StringUtility.INFORM_DEPOSIT))
 		{
 			this.uploadFile(baseAzimutTrading);
 		}
@@ -48,7 +48,8 @@ public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, Inject
 		input.setIdNumber(baseAzimutTrading.getAzId());
 		input.setAccountNo(baseAzimutTrading.getAccountNo());
 		input.setCurrencyId(baseAzimutTrading.getCurrencyId());
-		input.setOrderValue(baseAzimutTrading.getOrderValue());		
+		input.setOrderValue(baseAzimutTrading.getOrderValue());
+		input.setModuleType(baseAzimutTrading.getModuleTypeId());
 		return input;
 	}
 

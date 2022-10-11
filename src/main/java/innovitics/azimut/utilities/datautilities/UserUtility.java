@@ -43,7 +43,7 @@ public class UserUtility extends ParentUtility{
 	@Autowired protected ListUtility<UserImage> listUtility;
 	@Autowired protected ListUtility<UserDevice> userDeviceListUtility;
 	@Autowired protected ListUtility<UserLocation> userLocationListUtility;
-	@Autowired protected ExceptionHandler exceptionHandler;
+
 	@Autowired GenderService genderService;
 	@Autowired AES aes;
 	@Autowired UserLocationService userLocationService;

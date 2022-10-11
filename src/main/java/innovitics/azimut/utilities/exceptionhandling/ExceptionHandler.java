@@ -17,7 +17,7 @@ import innovitics.azimut.utilities.datautilities.DateUtility;
 
 
 @Service
-public class ExceptionHandler extends ParentUtility{
+public class ExceptionHandler{
 
 	protected static final Logger logger = LogManager.getLogger(ExceptionHandler.class);
 

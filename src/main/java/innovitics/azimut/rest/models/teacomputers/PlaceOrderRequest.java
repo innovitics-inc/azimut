@@ -2,7 +2,7 @@ package innovitics.azimut.rest.models.teacomputers;
 
 public class PlaceOrderRequest extends TeaComputerRequest{
 
-	private Integer Quanity;
+	private Integer Quantity;
 	
 	private Double OrderValue;
 	
@@ -14,12 +14,15 @@ public class PlaceOrderRequest extends TeaComputerRequest{
 	
 	private Long FundID;
 
-	public Integer getQuanity() {
-		return Quanity;
+
+
+
+	public Integer getQuantity() {
+		return Quantity;
 	}
 
-	public void setQuanity(Integer quanity) {
-		Quanity = quanity;
+	public void setQuantity(Integer quantity) {
+		Quantity = quantity;
 	}
 
 	public Double getOrderValue() {

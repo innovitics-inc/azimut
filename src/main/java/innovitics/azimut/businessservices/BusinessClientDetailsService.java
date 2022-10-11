@@ -284,7 +284,11 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		try 
 		{	
-			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
+			if(BooleanUtility.isTrue(businessAzimutClient.getPersist()))
+			{
+				this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
+			}
+			
 			this.azimutDataLookupUtility.saveAzimutClientBankAccountData(tokenizedBusinessUser,businessAzimutClient.getClientBankAccounts());
 			BusinessUser editedUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(tokenizedBusinessUser, UserStep.BANK_REFERENCES_SHOW.getStepId());
 			this.businessUserService.editUser(editedUser);

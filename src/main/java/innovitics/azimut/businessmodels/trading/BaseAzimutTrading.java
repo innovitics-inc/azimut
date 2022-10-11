@@ -10,13 +10,14 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 
 	private Long orderTypeId;
 	private Double orderValue;
-	private Integer Quantity;
+	private Integer quantity;
     private Long currencyId;
     private String accountNo;
     private Long orderId;
     private MultipartFile injectionDocument;
     private String userId;
     private UserBlockage userBlockage;
+    private Long moduleTypeId;
     
 	
 	public Long getOrderTypeId() {
@@ -31,11 +32,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	public void setOrderValue(Double orderValue) {
 		this.orderValue = orderValue;
 	}
+
 	public Integer getQuantity() {
-		return Quantity;
+		return quantity;
 	}
 	public void setQuantity(Integer quantity) {
-		Quantity = quantity;
+		this.quantity = quantity;
 	}
 	public Long getCurrencyId() {
 		return currencyId;
@@ -72,6 +74,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	}
 	public void setUserBlockage(UserBlockage userBlockage) {
 		this.userBlockage = userBlockage;
+	}
+	public Long getModuleTypeId() {
+		return moduleTypeId;
+	}
+	public void setModuleTypeId(Long moduleTypeId) {
+		this.moduleTypeId = moduleTypeId;
 	}
 	
 	

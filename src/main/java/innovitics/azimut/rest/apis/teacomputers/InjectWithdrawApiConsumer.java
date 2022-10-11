@@ -24,7 +24,7 @@ public class InjectWithdrawApiConsumer extends RestTeaComputerApiConsumer<Inject
 		request.setIdTypeId(input.getIdTypeId());
 		request.setIdNumber(input.getIdNumber());
 		request.setOrderDate(DateUtility.getCurrentDayMonthYear());
-		request.setModuleTypeId(1l);
+		request.setModuleTypeId(input.getModuleType());
 		request.setOrderValue(input.getOrderValue());
 		request.setAccountNo(input.getAccountNo());
 		request.setCurrencyId(input.getCurrencyId());

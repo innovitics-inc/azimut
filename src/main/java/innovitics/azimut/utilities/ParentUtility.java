@@ -19,6 +19,7 @@ import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 
 @Component
 public class ParentUtility {
+	@Autowired protected ExceptionHandler exceptionHandler;
 @Autowired protected ConfigProperties configProperties;
 protected static final Logger logger = LoggerFactory.getLogger(ParentUtility.class);
 	

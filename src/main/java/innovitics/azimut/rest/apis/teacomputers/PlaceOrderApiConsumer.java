@@ -34,6 +34,7 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 		request.setOrderTypeId(input.getOrderTypeId());
 		request.setOrderValue(input.getOrderValue());
 		request.setExternalOrderID(UUID.randomUUID().toString());
+		request.setQuantity(input.getQuantity());
 		request.setSignature(this.generateSignature(request));
 		
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getLocale(), this.getContentLength(request)));
@@ -98,6 +99,12 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 	protected void generateResponseListSignature(PlaceOrderResponse teaComputerResponse) throws IntegrationException {
 		// TODO Auto-generated method stub
 		
+	}
+	
+
+	@Override
+	public String generateURL(String params) {
+		return super.generateURL(params)+PATH;
 	}
 
 }

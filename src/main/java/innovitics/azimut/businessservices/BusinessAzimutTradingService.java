@@ -41,14 +41,14 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		try {
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		@SuppressWarnings("unchecked")
-		WrapperBusinessEntity<BaseAzimutTrading> wrapperBusinessEntity=
+		BaseAzimutTrading responseBaseAzimutTrading=
 		
-		 (WrapperBusinessEntity<BaseAzimutTrading>)(this.userBlockageUtility.
-		 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,placeOrderMapper,"wrapBaseBusinessEntity",
-				 new Object[]{false,this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading),null},
-				 new Class<?>[]{Boolean.class,BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
-		 
-		 return wrapperBusinessEntity.getData();
+		 (BaseAzimutTrading)(this.userBlockageUtility.
+		 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,placeOrderMapper,"consumeRestService",
+				 new Object[]{this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading),null},
+				 new Class<?>[]{BaseAzimutTrading.class,String.class},
+				 ErrorCode.OPERATION_FAILURE));
+		return responseBaseAzimutTrading;
 		 }
 		catch(Exception exception)
 		{
@@ -70,14 +70,14 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		try {
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		@SuppressWarnings("unchecked")
-		WrapperBusinessEntity<BaseAzimutTrading> wrapperBusinessEntity=
-				
-				 (WrapperBusinessEntity<BaseAzimutTrading>)(this.userBlockageUtility.
-				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"wrapBaseBusinessEntity",
-						 new Object[]{false,this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_DEPOSIT},
-						 new Class<?>[]{Boolean.class,BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
+		BaseAzimutTrading responseBaseAzimutTrading=
 		
-		return wrapperBusinessEntity.getData();
+		 (BaseAzimutTrading)(this.userBlockageUtility.
+				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"consumeRestService",
+						 new Object[]{this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_DEPOSIT},
+						 new Class<?>[]{BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
+		
+		return responseBaseAzimutTrading;
 		}
 		catch(Exception exception)
 		{
@@ -100,14 +100,14 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		try 
 		{
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
-		WrapperBusinessEntity<BaseAzimutTrading> wrapperBusinessEntity=	
+		BaseAzimutTrading responseBaseAzimutTrading=
+				
+				 (BaseAzimutTrading)(this.userBlockageUtility.
+				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"consumeRestService",
+						 new Object[]{this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_WITHDRAW},
+						 new Class<?>[]{BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
 		
-				 (WrapperBusinessEntity<BaseAzimutTrading>)(this.userBlockageUtility.
-				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"wrapBaseBusinessEntity",
-						 new Object[]{false,this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_WITHDRAW},
-						 new Class<?>[]{Boolean.class,BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
-		
-		return wrapperBusinessEntity.getData();
+		return responseBaseAzimutTrading;
 		}
 		catch(Exception exception)
 		{
@@ -189,6 +189,7 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		addBaseAzimutTrading.setAccountNo(baseAzimutTrading.getAccountNo());
 		addBaseAzimutTrading.setCurrencyId(baseAzimutTrading.getCurrencyId());
 		addBaseAzimutTrading.setUserId(tokenizedBusinessUser.getUserId());
+		addBaseAzimutTrading.setModuleTypeId(baseAzimutTrading.getModuleTypeId());
 		return addBaseAzimutTrading;
 	}
 

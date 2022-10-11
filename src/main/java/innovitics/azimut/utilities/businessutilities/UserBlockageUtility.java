@@ -24,8 +24,10 @@ public class UserBlockageUtility extends ParentUtility
 	
 	public Object checkUserBlockage(Integer numberOfTrials,String blockageDurationMinutes,BusinessUser tokenizedBusinessUser,UserMapper userMapper,Object object, String methodName,Object[] parameters,Class<?>[] paramterTypes,ErrorCode errorCode) throws BusinessException
 	{
+		
+		this.logger.info("Checking User Blockage::::");
 		int actualNumberOfTrials= numberOfTrials!=null?numberOfTrials.intValue():0;
-		UserBlockage userBlockage=this.userBlockageService.findByUserId(tokenizedBusinessUser.getId());
+		UserBlockage userBlockage=this.getUserBlockage(tokenizedBusinessUser.getId());
 		if(userBlockage!=null)
 		{
 				if(userBlockage.getErrorCount()!=null&&userBlockage.getErrorCount()>=actualNumberOfTrials)
@@ -42,7 +44,7 @@ public class UserBlockageUtility extends ParentUtility
 						{
 							Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
 							userBlockage.setErrorCount(0);
-							this.userBlockageService.updateUserBlockage(userBlockage);
+							this.updateUserBlockage(userBlockage);
 							return result;
 						}					
 						catch(Exception exception)
@@ -53,7 +55,14 @@ public class UserBlockageUtility extends ParentUtility
 				}				
 				
 		}
-			return null;
+		else
+		{
+			Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
+			addUserBlockage(userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+			return result;
+		}
+		return null;
+			
 	}
 	
 	public UserBlockage addUserBlockage(User user)
@@ -70,12 +79,17 @@ public class UserBlockageUtility extends ParentUtility
 	}
 	public UserBlockage getUserBlockage(Long userId)
 	{	
-		UserBlockage userBlockage=this.userBlockageService.findByUserId(userId);
-		if(userBlockage!=null)
+		
+		try 
 		{
-			userBlockage.setUser(null);
+			return this.userBlockageService.findByUserId(userId);
 		}
-		return 	userBlockage;
+		catch(Exception exception)
+		{
+			this.exceptionHandler.getNullIfNonExistent(exception);
+			return null;
+		}
+		
 	}	
 	
 }
