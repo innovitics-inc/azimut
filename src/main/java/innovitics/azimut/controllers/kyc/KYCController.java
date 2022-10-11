@@ -119,9 +119,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			if(BooleanUtility.isTrue(businessAzimutClient.getIsMobile()))
 			{
 				businessKYCPage=this.businessKYCPageService.getKycPagebyId(businessUser,businessUser.getFirstPageId(),false,language);
-				businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(null, businessUser));
+				
 			}
-			
+			businessKYCPage.setVerificationPercentage(this.businessKYCPageService.adjustProgress(null, businessUser));
 			
 			return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);
 
