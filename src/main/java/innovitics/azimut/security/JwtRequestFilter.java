@@ -77,6 +77,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			
 			filterChain.doFilter(requestWrapper, responseWrapper);
 
+			this.logger.info("Method:::"+requestWrapper.getMethod());
+			
+			this.logger.info("URL:::"+requestWrapper.getRequestURI());
+			
 			String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),
 					request.getCharacterEncoding());
 			this.logger.info("REQUEST:::"+requestBody);
