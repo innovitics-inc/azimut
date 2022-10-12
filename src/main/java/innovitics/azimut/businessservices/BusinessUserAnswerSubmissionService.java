@@ -54,7 +54,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	@Autowired ListUtility<Integer> integerListUtility;
 	public BusinessKYCPage submitAnswers(BusinessUser businessUser,BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException
 	{
-		this.validation.validateUserKYCCompletion(businessUser);
+		
 		BusinessKYCPage businessKYCPage=new BusinessKYCPage();
 		this.validation.checkUserAnswersValidity(businessUserAnswerSubmission);
 		try 
@@ -345,5 +345,9 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		
 	}
 	
+	public void validateKYC(BusinessUser tokenizedBusinessUser) throws BusinessException
+	{
+		this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
+	}
 	
 }

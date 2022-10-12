@@ -80,6 +80,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		
 		try
 		{
+			this.logger.info("Validating first::::");
+			this.businessUserAnswerSubmissionService.validateKYC(this.getCurrentRequestHolder(token));
+			this.logger.info("Validation passed::::");
 			businessKYCPage=this.businessUserAnswerSubmissionService.submitAnswers(this.getCurrentRequestHolder(token), businessUserAnswerSubmission);
 			
 			if(businessUserAnswerSubmission.getNextPageId()!=null)
