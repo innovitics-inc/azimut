@@ -51,7 +51,24 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		try
 		{
 			
-			return this.generateBaseGenericResponse(BusinessUser.class, this.businessUserService.beautifyUser(businessUserService.getById(businessUser.getId(),this.getCurrentRequestHolder(token))), null, null);
+			return this.generateBaseGenericResponse(BusinessUser.class, this.businessUserService.beautifyUser(businessUserService.getById(businessUser.getId(),this.getCurrentRequestHolder(token),false)), null, null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException,language);
+		}
+		
+	}
+	
+	@PostMapping(value="/getClientOCRDetails",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> getClientOCRDetails(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
+		try
+		{
+			
+			return this.generateBaseGenericResponse(BusinessUser.class, this.businessUserService.beautifyUser(businessUserService.getById(businessUser.getId(),this.getCurrentRequestHolder(token),true)), null, null);
 		}		
 		catch(BusinessException businessException)
 		{

@@ -3,6 +3,8 @@ package innovitics.azimut.exceptions;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.springframework.http.HttpStatus;
+
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
 public class GeneralException  extends Exception{
@@ -18,8 +20,19 @@ public class GeneralException  extends Exception{
 	  protected String errorMessageAr;
 	  protected String description;
 	  protected StackTraceElement [] stackTrace;
+	  protected HttpStatus httpStatus;
 	  
 	 
+	  public GeneralException(ErrorCode error,HttpStatus httpStatus) 
+	  {
+		  super();
+		  this.error=error;
+		  this.errorCode = error.getCode();
+		  this.errorMessage = error.getMessage();
+		  this.errorMessageAr=error.getMessageAr();
+		  this.httpStatus=httpStatus;
+	  }
+	  
 	  public GeneralException(ErrorCode error) 
 	  {
 		  super();
@@ -91,6 +104,15 @@ public class GeneralException  extends Exception{
 	public void setStackTrace(StackTraceElement[] stackTrace) {
 		this.stackTrace = stackTrace;
 	}
+	
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
+	}
+
+	public void setHttpStatus(HttpStatus httpStatus) {
+		this.httpStatus = httpStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "GeneralException [errorCode=" + errorCode + ", timestamp=" + timestamp + ", errorMessage="

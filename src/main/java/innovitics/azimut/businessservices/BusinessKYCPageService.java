@@ -31,6 +31,8 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 	public BusinessKYCPage getKycPagebyId(BusinessUser businessUser,Long id,Boolean draw,String language) throws BusinessException
 	{
 
+		this.validation.validateUserKYCCompletion(businessUser);
+		
 		try 
 			{
 				KYCPage kycPage=this.kycPageService.getById(id);

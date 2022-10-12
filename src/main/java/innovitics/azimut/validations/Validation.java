@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Validator;
@@ -30,6 +31,7 @@ import innovitics.azimut.services.kyc.KYCPageService;
 import innovitics.azimut.services.kyc.QuestionService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.crosslayerenums.AnswerType;
+import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ChangePhoneNumberRequestUtility;
@@ -481,6 +483,22 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 		}
 		
 		return solvedPageOrders;
+	}
+	
+	public void validateUserKYCCompletion(BusinessUser tokenizedBusinessUser) throws BusinessException
+	{
+		
+		
+		if(tokenizedBusinessUser!=null)
+		{
+			if(BooleanUtility.isTrue(tokenizedBusinessUser.getLivenessChecked())
+					&&NumberUtility.areIntegerValuesMatching(UserStep.CONTRACT_MAP.getStepId(), tokenizedBusinessUser.getNextUserStep().intValue())
+					&&NumberUtility.areLongValuesMatching(tokenizedBusinessUser.getNextPageId(), tokenizedBusinessUser.getLastSolvedPageId())
+			   )
+			   {
+				throw new BusinessException(ErrorCode.KYC_SUBMITTED,HttpStatus.NOT_FOUND);
+			   }
+		}
 	}
 
 }

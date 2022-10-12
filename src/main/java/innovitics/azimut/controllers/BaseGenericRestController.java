@@ -93,7 +93,8 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 		{
 			httpStatus=HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-				return httpStatus;
+		
+		return httpStatus;
 	}
 
 	protected ResponseEntity<BaseGenericResponse<T>> generateFailureBaseGenericResponseEntity(
@@ -101,7 +102,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 		
 		ResponseEntity<BaseGenericResponse<T>> responseEntity = new ResponseEntity<BaseGenericResponse<T>>(
 				this.generateBaseGenericResponseFailure(exception.getErrorCode(), exception.getErrorMessage()),
-				httpStatus);
+				exception.getHttpStatus()!=null?exception.getHttpStatus():httpStatus);
 		return responseEntity;
 	}
 

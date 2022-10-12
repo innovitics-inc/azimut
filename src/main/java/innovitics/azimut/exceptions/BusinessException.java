@@ -2,6 +2,8 @@ package innovitics.azimut.exceptions;
 
 import java.util.Date;
 
+import org.springframework.http.HttpStatus;
+
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
 public class BusinessException extends GeneralException {
@@ -18,6 +20,10 @@ public class BusinessException extends GeneralException {
 	{
 		super(errorCode);
 		
+	}
+	public BusinessException(ErrorCode errorCode,HttpStatus httpStatus)
+	{
+		super(errorCode,httpStatus);
 	}
 
 	@Override

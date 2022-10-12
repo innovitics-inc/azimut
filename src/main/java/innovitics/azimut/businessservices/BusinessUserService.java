@@ -276,13 +276,18 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	}
 	
-	public BusinessUser getById(Long id,BusinessUser tokenizedBusinessUser) throws BusinessException
+	public BusinessUser getById(Long id,BusinessUser tokenizedBusinessUser,boolean validate) throws BusinessException
 	{
 		this.validation.validateUser(id, tokenizedBusinessUser);
+		if(validate)
+		{
+			this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
+		}
+		
 		BusinessUser businessUser=new BusinessUser();		
 		try 
 		{	
-			businessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(businessUser, this.userService.findById(id),true);
+			businessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(businessUser, this.userService.findById(id),validate?false:true);
 		}
 		catch(Exception exception)
 		{
@@ -419,6 +424,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public BusinessUser updateUserStep(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException
 	{
+		this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
 		BusinessUser editedUser=new BusinessUser();
 		try 
 		{
@@ -486,6 +492,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public BusinessUser updateUserDetails(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException
 	{
+		this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
 		try 
 		{
 			

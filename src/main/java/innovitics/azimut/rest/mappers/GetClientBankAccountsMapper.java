@@ -87,8 +87,14 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 		{
 			for(ClientBankAccountOutput clientBankAccountOutput:getClientBankAccountsOutput.getClientBankAccountOutputs())
 			{
-				if(clientBankAccountOutput!=null&&NumberUtility.areLongValuesMatching(clientBankAccountOutput.getAccountStatus(), ClientBankAccountStatus.ACTIVE.getStatusId()))
-				businessClientBankAccountsDetails.add(this.getConversion(clientBankAccountOutput));
+				if(isActive)
+				{
+					if(clientBankAccountOutput!=null&&NumberUtility.areLongValuesMatching(clientBankAccountOutput.getAccountStatus(), ClientBankAccountStatus.ACTIVE.getStatusId()))
+						businessClientBankAccountsDetails.add(this.getConversion(clientBankAccountOutput));
+				}
+				else
+					businessClientBankAccountsDetails.add(this.getConversion(clientBankAccountOutput));
+					
 			}
 		}
 		else

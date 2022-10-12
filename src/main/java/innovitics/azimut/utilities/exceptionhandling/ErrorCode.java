@@ -43,6 +43,7 @@ public enum ErrorCode {
 	CONTRACT_DOWNLOAD_FAILED(31115,"Could not download the contract.",""),
 	PDF_GENERATION_FAILED(31117,"Could not download the contract.",""),
 	KYC_INCOMPLETE(31118,"Please Complete the KYC Form.",""),
+	KYC_SUBMITTED(31119,"KYC Form submitted.",""),
 	;
 	
 	private final int code;

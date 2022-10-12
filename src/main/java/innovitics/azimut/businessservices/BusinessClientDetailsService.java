@@ -275,6 +275,16 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	public BusinessAzimutClient saveClientBankAccounts(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
+		
+		if(BooleanUtility.isFalse(businessAzimutClient.getPersist()))
+		{
+			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
+		}
+		if(BooleanUtility.isTrue(businessAzimutClient.getPersist()))
+		{
+			this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
+		}
+		
 		this.validation.validate(businessAzimutClient, saveClientBankAccountsTemporarily, BusinessAzimutClient.class.getName());
 		BusinessAzimutClient responseBusinessAzimutClient= new BusinessAzimutClient();
 		for(BusinessClientBankAccountDetails businessClientBankAccountDetails:businessAzimutClient.getClientBankAccounts())
@@ -283,12 +293,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		
 		try 
-		{	
-			if(BooleanUtility.isFalse(businessAzimutClient.getPersist()))
-			{
-				this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
-			}
-			
+		{					
 			this.azimutDataLookupUtility.saveAzimutClientBankAccountData(tokenizedBusinessUser,businessAzimutClient.getClientBankAccounts());
 			BusinessUser editedUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(tokenizedBusinessUser, UserStep.BANK_REFERENCES_SHOW.getStepId());
 			this.businessUserService.editUser(editedUser);
@@ -335,6 +340,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	public BusinessAzimutClient getTemporaryClientBankAccountDetails(BusinessUser businessUser) throws BusinessException
 	{
+		this.validation.validateUserKYCCompletion(businessUser);
 		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
 		try {
 				businessAzimutClient.setClientBankAccounts(this.azimutDataLookupUtility.getClientBankAccountData(businessUser));

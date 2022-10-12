@@ -130,6 +130,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	public 	BusinessValify valifyId (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile frontImage,MultipartFile backImage,MultipartFile passportImage,Integer userStep,String language,String documentType,Boolean incrementFailure) throws BusinessException,IntegrationException, IOException
 	{	
 		//this.validate(businessValify, valifyIdImages,BusinessValify.class.getName());
+		this.validation.validateUserKYCCompletion(businessUser);
 		List<UserImage> userImages=new ArrayList<UserImage>();
 		BusinessValify businessValify=new BusinessValify();
 		BusinessValify businessValifyResponse=new BusinessValify();

@@ -54,7 +54,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	@Autowired ListUtility<Integer> integerListUtility;
 	public BusinessKYCPage submitAnswers(BusinessUser businessUser,BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException
 	{
-		
+		this.validation.validateUserKYCCompletion(businessUser);
 		BusinessKYCPage businessKYCPage=new BusinessKYCPage();
 		this.validation.checkUserAnswersValidity(businessUserAnswerSubmission);
 		try 
@@ -68,7 +68,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 						weight=pageDetails.getWeight().intValue();
 						order=pageDetails.getPageOrder().intValue();
 						businessUser.setLastSolvedPageId(businessUserAnswerSubmission.getPageId());
-						businessUser.setNextPageId(businessUserAnswerSubmission.getNextPageId());
+						businessUser.setNextPageId(businessUserAnswerSubmission.getNextPageId()!=null?businessUserAnswerSubmission.getNextPageId():businessUserAnswerSubmission.getPageId());
 						StringBuffer stringBuffer=new StringBuffer(businessUser!=null&&StringUtility.isStringPopulated(businessUser.getSolvedPages())?businessUser.getSolvedPages():"");
 						//businessUser.setSolvedPages(stringBuffer.append(String.valueOf(order)+",").toString());
 						businessUser.setSolvedPages(addSolvedPageOrder(order,stringBuffer));
