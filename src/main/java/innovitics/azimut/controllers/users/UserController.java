@@ -244,7 +244,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserDetails(this.getCurrentRequestHolder(token),businessUser),null,null);
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserDetails(this.getCurrentRequestHolder(token),businessUser,false),null,null);
 		}
 		
 		catch(BusinessException businessException)
@@ -260,7 +260,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 			@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserDetails(this.getCurrentRequestHolder(token),businessUser),null,null);
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.updateUserDetails(this.getCurrentRequestHolder(token),businessUser,true),null,null);
 		}
 		
 		catch(BusinessException businessException)

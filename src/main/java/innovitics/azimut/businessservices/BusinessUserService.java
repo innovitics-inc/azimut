@@ -490,9 +490,13 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		return businessUser;
 	}
 	
-	public BusinessUser updateUserDetails(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException
+	public BusinessUser updateUserDetails(BusinessUser tokenizedBusinessUser,BusinessUser businessUser,boolean isContractSigning) throws BusinessException
 	{
-		this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
+		if(!isContractSigning)
+		{
+			this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
+		}
+		
 		try 
 		{
 			
