@@ -27,6 +27,7 @@ import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
@@ -80,12 +81,9 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 		
 		try
 		{
-			this.logger.info("Validating first::::");
-			this.businessUserAnswerSubmissionService.validateKYC(this.getCurrentRequestHolder(token));
-			this.logger.info("Validation passed::::");
 			businessKYCPage=this.businessUserAnswerSubmissionService.submitAnswers(this.getCurrentRequestHolder(token), businessUserAnswerSubmission);
 			
-			if(businessUserAnswerSubmission.getNextPageId()!=null)
+			if(!NumberUtility.areLongValuesMatching(businessUserAnswerSubmission.getNextPageId(),businessUserAnswerSubmission.getPageId())&&BooleanUtility.isTrue(businessUserAnswerSubmission.getIsMobile()))
 			{
 				
 			  int verificationPercentage=businessKYCPage!=null&&businessKYCPage.getVerificationPercentage()!=null?businessKYCPage.getVerificationPercentage().intValue():0;
