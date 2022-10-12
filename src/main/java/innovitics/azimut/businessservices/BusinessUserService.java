@@ -209,7 +209,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		this.validation.validateUser(businessUser.getId(), tokenizedBusinessUser);
 		businessUser.setCountryPhoneCode(tokenizedBusinessUser.getCountryPhoneCode());
 		businessUser.setPhoneNumber(tokenizedBusinessUser.getPhoneNumber());
-		BusinessUser oldUser = this.getByUserPhoneAndPassword(businessUser);
+		BusinessUser oldUser = this.getByUserPhoneAndPassword(tokenizedBusinessUser);
 		BusinessUser updatedBusinessUser=new BusinessUser();
 		try 
 		{
