@@ -209,7 +209,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		this.validation.validateUser(businessUser.getId(), tokenizedBusinessUser);
 		businessUser.setCountryPhoneCode(tokenizedBusinessUser.getCountryPhoneCode());
 		businessUser.setPhoneNumber(tokenizedBusinessUser.getPhoneNumber());
-		BusinessUser oldUser = this.getByUserPhoneAndPassword(tokenizedBusinessUser);
+		BusinessUser oldUser = this.getByUserPhoneAndPassword(businessUser);
 		BusinessUser updatedBusinessUser=new BusinessUser();
 		try 
 		{
@@ -398,7 +398,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		BusinessUser businessUser=new BusinessUser();		
 		try 
 		{
-			businessUser=userMapper.convertBasicUnitToBusinessUnit(this.userService.findByUserPhoneAndPassword(insertedBusinessUser.getCountryPhoneCode(),insertedBusinessUser.getPhoneNumber(),insertedBusinessUser.getPassword()));
+			businessUser=userMapper.convertBasicUnitToBusinessUnit(this.userService.findByUserPhoneAndPassword(insertedBusinessUser.getCountryPhoneCode(),insertedBusinessUser.getPhoneNumber(),aes.encrypt(insertedBusinessUser.getPassword())));
 		}
 		catch(Exception exception)
 		{
