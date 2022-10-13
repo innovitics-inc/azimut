@@ -239,7 +239,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 	{
 		if(file!=null)
 		   {
-			  if(StringUtility.isStringPopulated(file.getName())&&!file.getName().contains("."+extension))
+			  if(StringUtility.isStringPopulated(file.getOriginalFilename())&&!file.getOriginalFilename().contains("."+extension))
 			  {  
 				  this.logger.info("File Name::::"+file.getName());
 				  BusinessException  businessException=new BusinessException(ErrorCode.INVALID_EXTENSION);
