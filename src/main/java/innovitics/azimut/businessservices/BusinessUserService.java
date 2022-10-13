@@ -512,6 +512,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 				
 			}
 			businessUser.setVerificationPercentage(tokenizedBusinessUser.getVerificationPercentage());
+			businessUser.setFirstPageId(tokenizedBusinessUser.getFirstPageId());
 		}
 		catch(Exception exception)
 		{
