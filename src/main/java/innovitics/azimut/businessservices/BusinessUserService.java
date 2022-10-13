@@ -389,7 +389,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		{
 			throw this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);
 		}
-		this.userUtility.allowUserToLogin(user, deviceId);
+		//this.userUtility.allowUserToLogin(user, deviceId);
 		return businessUser;
 		
 	}
