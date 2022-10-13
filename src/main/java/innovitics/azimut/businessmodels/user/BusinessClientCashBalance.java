@@ -9,7 +9,9 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 	private Long currencyID;
     private String currencyName;
     private Double balance;
+    private String balanceFormatted;
     private Double pendingTransfer;
+    private String pendingTransferFormatted;
     private Double inPendingTrans;
     private Double outPendingTrans;
     private Double currencyRate;
@@ -69,6 +71,20 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 	}
 	public void setCurrencyRate(Double currencyRate) {
 		this.currencyRate = currencyRate;
+	}
+	
+	
+	public String getBalanceFormatted() {
+		return balanceFormatted;
+	}
+	public void setBalanceFormatted(String balanceFormatted) {
+		this.balanceFormatted = balanceFormatted;
+	}
+	public String getPendingTransferFormatted() {
+		return pendingTransferFormatted;
+	}
+	public void setPendingTransferFormatted(String pendingTransferFormatted) {
+		this.pendingTransferFormatted = pendingTransferFormatted;
 	}
 	@Override
 	public String toString() {

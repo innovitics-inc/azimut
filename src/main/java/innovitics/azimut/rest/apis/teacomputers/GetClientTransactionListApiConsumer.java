@@ -52,6 +52,7 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 					transactionOutput.setTransStatusName(responseEntity.getBody()[i].getStatusName());
 					transactionOutput.setTransDate(responseEntity.getBody()[i].getTransDate());
 					transactionOutput.setOrderTypeName(responseEntity.getBody()[i].getOrderTypeName());
+					transactionOutput.setCurrencyId(responseEntity.getBody()[i].getCurrencyId());
 					transactionOutput.setCurrencyName(responseEntity.getBody()[i].getCurrencyName());
 					transactionOutputs.add(transactionOutput);
 				}

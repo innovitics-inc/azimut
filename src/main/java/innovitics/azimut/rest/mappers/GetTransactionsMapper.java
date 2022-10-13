@@ -15,6 +15,7 @@ import innovitics.azimut.rest.entities.teacomputers.GetTransactionsOutput;
 import innovitics.azimut.rest.entities.teacomputers.TransactionOutput;
 import innovitics.azimut.rest.models.teacomputers.GetTransactionsResponse;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
+import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 import innovitics.azimut.utilities.crosslayerenums.OrderType;
 import innovitics.azimut.utilities.crosslayerenums.TransactionOrderType;
 import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
@@ -77,7 +78,16 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 			this.logger.info("TransactionOutput:::::"+ transactionOutput);
 			businessTransaction.setAmount(transactionOutput.getTransValue()==null? null:Double.valueOf(transactionOutput.getTransValue()));
 			businessTransaction.setTrxDate(transactionOutput.getTransDate());
-			businessTransaction.setCurrency(transactionOutput.getCurrencyName());
+			
+			if(transactionOutput.getCurrencyId()!=null&&StringUtility.isStringPopulated(CurrencyType.getById(Long.valueOf(transactionOutput.getCurrencyId())).getType()))
+			{
+				businessTransaction.setCurrency(CurrencyType.getById((Long.valueOf(transactionOutput.getCurrencyId()).longValue())).getType());
+			}
+			else
+			{
+				businessTransaction.setCurrency(transactionOutput.getCurrencyName());
+			}
+			
 			if(StringUtility.isStringPopulated(transactionOutput.getTransStatusName()))
 			{
 				if(transactionOutput.getTransStatusName().equals(TransactionStatus.PENDING.getStatus()))

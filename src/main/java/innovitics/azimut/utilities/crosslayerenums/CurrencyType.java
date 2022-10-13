@@ -3,8 +3,8 @@ package innovitics.azimut.utilities.crosslayerenums;
 public enum CurrencyType {
 
 	EGYPTIAN_POUND(1,"EGP"),
-	US_DOLLAR(2,"USD"),
-	OTHER(3,"OTHER")
+	US_DOLLAR(32,"USD")
+	
 	;
 
 	CurrencyType(long typeId, String type) {
@@ -19,5 +19,17 @@ public enum CurrencyType {
 	}
 	public String getType() {
 		return type;
+	}
+	
+	public static CurrencyType getById(long id) 
+	{
+	    for(CurrencyType currencyType : values()) 
+	    {
+	        if(currencyType.typeId==id)
+	        {
+	        	return currencyType;
+	        }
+	    }
+	    return null;
 	}
 }

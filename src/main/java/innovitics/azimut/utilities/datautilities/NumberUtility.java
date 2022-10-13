@@ -1,5 +1,7 @@
 package innovitics.azimut.utilities.datautilities;
 
+import java.text.DecimalFormat;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -63,4 +65,12 @@ public final class NumberUtility {
 		return result;
 	}
 	
+	public static String changeFormat(Double value)
+	{
+		logger.info("value to be formatted::"+value);
+		DecimalFormat decFormat = new DecimalFormat("###,###");
+		String str = decFormat.format(value);
+
+		return str;
+	}
 }

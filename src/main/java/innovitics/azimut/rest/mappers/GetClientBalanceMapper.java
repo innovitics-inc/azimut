@@ -16,7 +16,10 @@ import innovitics.azimut.rest.entities.teacomputers.GetClientBalanceOutput;
 import innovitics.azimut.rest.entities.teacomputers.TransactionOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientCashBalanceResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientCashBalanceResponse;
+import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 @Service
 public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, GetClientBalanceOutput, GetClientCashBalanceResponse, BusinessClientCashBalance>{
 
@@ -62,21 +65,47 @@ public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, Ge
 		{
 			for(ClientBalanceOutput clientBalanceOutput:getClientBalanceOutput.getClientBalanceOutputs())
 			{
-				BusinessClientCashBalance businessClientCashBalance=new BusinessClientCashBalance();
-				businessClientCashBalance.setBalance(clientBalanceOutput.getBalance());
-				businessClientCashBalance.setCurrencyID(clientBalanceOutput.getCurrencyID());
-				businessClientCashBalance.setCurrencyName(clientBalanceOutput.getCurrencyName());
-				businessClientCashBalance.setCurrencyRate(clientBalanceOutput.getCurrencyRate());
-				if(clientBalanceOutput!=null&&clientBalanceOutput.getOutPendingTrans()!=null&&clientBalanceOutput.getInPendingTrans()!=null)
+				if(clientBalanceOutput!=null)
 				{
-					businessClientCashBalance.setPendingTransfer(clientBalanceOutput.getInPendingTrans()-clientBalanceOutput.getOutPendingTrans());
+					BusinessClientCashBalance businessClientCashBalance=new BusinessClientCashBalance();
+				
+				if(clientBalanceOutput.getBalance()!=null)
+				{
+					businessClientCashBalance.setBalance(clientBalanceOutput.getBalance());
+					businessClientCashBalance.setBalanceFormatted(NumberUtility.changeFormat(clientBalanceOutput.getBalance()));
+				}
+				else 
+				{
+					businessClientCashBalance.setBalance(0D);
+					businessClientCashBalance.setBalanceFormatted("0");
+				}
+				
+				
+				businessClientCashBalance.setCurrencyID(clientBalanceOutput.getCurrencyID());
+				if(clientBalanceOutput.getCurrencyID()!=null&&StringUtility.isStringPopulated(CurrencyType.getById(Long.valueOf(clientBalanceOutput.getCurrencyID())).getType()))
+				{
+					businessClientCashBalance.setCurrencyName(CurrencyType.getById(clientBalanceOutput.getCurrencyID()).getType());
+				}
+				else
+				{
+					businessClientCashBalance.setCurrencyName(clientBalanceOutput.getCurrencyName());
+				}
+				
+				businessClientCashBalance.setCurrencyRate(clientBalanceOutput.getCurrencyRate());
+				if(clientBalanceOutput.getOutPendingTrans()!=null&&clientBalanceOutput.getInPendingTrans()!=null)
+				{
+					double value=clientBalanceOutput.getInPendingTrans().doubleValue()-clientBalanceOutput.getOutPendingTrans().doubleValue();
+					businessClientCashBalance.setPendingTransfer(value);
+					businessClientCashBalance.setPendingTransferFormatted(value!=0D?NumberUtility.changeFormat(value):"0");
 				}
 				else
 				{
 					businessClientCashBalance.setPendingTransfer(0D);
+					businessClientCashBalance.setPendingTransferFormatted("0");
 				}
 				
 				businessClientCashBalances.add(businessClientCashBalance);
+				}
 			}
 		}
 		
