@@ -344,6 +344,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
 		try {
 				businessAzimutClient.setClientBankAccounts(this.azimutDataLookupUtility.getClientBankAccountData(businessUser));
+				businessAzimutClient.setFirstPageId(businessUser.getFirstPageId());
 			}
 		catch(Exception exception)
 		{
