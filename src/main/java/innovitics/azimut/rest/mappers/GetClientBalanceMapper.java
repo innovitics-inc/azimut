@@ -68,7 +68,13 @@ public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, Ge
 				businessClientCashBalance.setCurrencyName(clientBalanceOutput.getCurrencyName());
 				businessClientCashBalance.setCurrencyRate(clientBalanceOutput.getCurrencyRate());
 				if(clientBalanceOutput!=null&&clientBalanceOutput.getOutPendingTrans()!=null&&clientBalanceOutput.getInPendingTrans()!=null)
-				businessClientCashBalance.setPendingTransfer(clientBalanceOutput.getInPendingTrans()-clientBalanceOutput.getOutPendingTrans());
+				{
+					businessClientCashBalance.setPendingTransfer(clientBalanceOutput.getInPendingTrans()-clientBalanceOutput.getOutPendingTrans());
+				}
+				else
+				{
+					businessClientCashBalance.setPendingTransfer(0D);
+				}
 				
 				businessClientCashBalances.add(businessClientCashBalance);
 			}

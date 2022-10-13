@@ -211,7 +211,8 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 	
 
 		pdfMergerUtility.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
-
+		
+		
 		BlobData blobData= this.blobFileUtility.
 		uploadFileToBlob(mergingByteArrayOutputStream.toByteArray(), true, this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),StringUtility.CONTRACT_DOCUMENT_NAME, "pdf");
 		

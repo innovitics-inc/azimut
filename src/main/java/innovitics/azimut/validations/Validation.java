@@ -235,6 +235,21 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 			  
 		   }
 	}
+	public void validateFileExtension(MultipartFile file,String extension) throws BusinessException
+	{
+		if(file!=null)
+		   {
+			  if(StringUtility.isStringPopulated(file.getName())&&!file.getName().contains("."+extension))
+			  {  
+				  this.logger.info("File Name::::"+file.getName());
+				  BusinessException  businessException=new BusinessException(ErrorCode.INVALID_EXTENSION);
+				  businessException.setErrorMessage(extension+" file extension should be uploaded.");
+				  throw  businessException;
+			  }
+			 
+			  
+		   }
+	}
 	
 	public void validateNewPhoneNumberAvailability(BusinessUser businessUser) throws BusinessException
 	{

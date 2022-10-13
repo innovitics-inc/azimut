@@ -202,6 +202,8 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	
 	public BusinessKYCPage uploadDocument(BusinessUser businessUser,Long answerId,MultipartFile file) throws BusinessException
 	{
+		
+		this.validation.validateFileExtension(file,StringUtility.PDF_EXTENSION);
 		BusinessKYCPage businessKYCPage=new BusinessKYCPage();
 		UserAnswer  userAnswer=this.checkForPreviousAnswer(businessUser, answerId);
 		if(userAnswer!=null)
