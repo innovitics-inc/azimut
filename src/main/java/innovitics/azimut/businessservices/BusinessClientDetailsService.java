@@ -599,8 +599,13 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	BusinessTransaction prepareTransactionSearchInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser)
 	{
 		BusinessTransaction searchBusinessTransaction=new BusinessTransaction();
+		/*
 		searchBusinessTransaction.setSearchFromDate(businessAzimutClient.getSearchFromDate());
 		searchBusinessTransaction.setSearchToDate(businessAzimutClient.getSearchToDate());
+		*/
+		searchBusinessTransaction.setSearchFromDate(StringUtility.SEARCH_FROM_TRANSACTION_DATE);
+		searchBusinessTransaction.setSearchToDate(StringUtility.SEARCH_TO_TRANSACTION_DATE);
+		
 		searchBusinessTransaction.setAzId(tokenizedBusinessUser.getUserId());
 		searchBusinessTransaction.setAzIdType(/*businessAzimutClient.getAzIdType()*/this.getAzimutUserTypeId(tokenizedBusinessUser));
 		this.logger.info("SearchBusinessTransaction:"+ searchBusinessTransaction.toString());

@@ -44,6 +44,8 @@ public final class StringUtility extends ParentUtility{
 	public final static String VALUATION_REPORT= "Report/SendValReport";
 	public final static String REQUEST_STATEMENT="Statment/Report";
 	public final static String PDF_EXTENSION="pdf";
+	public final static String SEARCH_FROM_TRANSACTION_DATE="01-12-1950";
+	public final static String SEARCH_TO_TRANSACTION_DATE="12-12-2050";
 	
 	public static String getClassName(Object object)
 	{
