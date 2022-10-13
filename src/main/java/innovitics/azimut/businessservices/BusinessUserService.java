@@ -448,6 +448,10 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			}
 		
 			editedUser=this.userUtility.isOldUserStepGreaterThanNewUserStep(tokenizedBusinessUser, businessUser.getUserStep().intValue());
+			if(NumberUtility.areIntegerValuesMatching(businessUser.getUserStep(), UserStep.CHOOSE_CONTRACT_MAP.getStepId()))
+			{
+				editedUser.setNextUserStep(UserStep.FINISHED.getStepId());
+			}
 			this.editUser(editedUser);
 		}
 		catch(Exception exception)
