@@ -90,8 +90,10 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			  businessKYCPage=this.businessKYCPageService.getKycPagebyId(this.getCurrentRequestHolder(token),businessUserAnswerSubmission.getNextPageId(),false,language);
 			  businessKYCPage.setVerificationPercentage(verificationPercentage);
 			}
-			
-			
+			if(NumberUtility.areLongValuesMatching(businessUserAnswerSubmission.getNextPageId(),businessUserAnswerSubmission.getPageId())&&BooleanUtility.isTrue(businessUserAnswerSubmission.getIsMobile()))
+			{
+				businessKYCPage.setNextId(businessUserAnswerSubmission.getNextPageId());
+			}
 			
 			return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);
 			
