@@ -509,7 +509,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 			if(BooleanUtility.isTrue(tokenizedBusinessUser.getLivenessChecked())
 					
 					//&&NumberUtility.areIntegerValuesMatching(UserStep.CONTRACT_MAP.getStepId(), tokenizedBusinessUser.getNextUserStep().intValue())
-					&& ((tokenizedBusinessUser.getNextUserStep()!=null)&&tokenizedBusinessUser.getNextUserStep().intValue()<=UserStep.CONTRACT_MAP.getStepId())
+					&& ((tokenizedBusinessUser.getNextUserStep()!=null)&&tokenizedBusinessUser.getNextUserStep().intValue()>=UserStep.CONTRACT_MAP.getStepId())
 					&&NumberUtility.areLongValuesMatching(tokenizedBusinessUser.getNextPageId(), tokenizedBusinessUser.getLastSolvedPageId())
 			   )
 			   {
