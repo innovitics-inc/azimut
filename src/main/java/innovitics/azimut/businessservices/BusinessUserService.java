@@ -424,7 +424,11 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public BusinessUser updateUserStep(BusinessUser tokenizedBusinessUser,BusinessUser businessUser) throws BusinessException
 	{
-		this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
+		if(!(businessUser.getNextUserStep().intValue()>UserStep.CONTRACT_MAP.getStepId()))
+		{
+			this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
+		}
+		
 		BusinessUser editedUser=new BusinessUser();
 		try 
 		{
