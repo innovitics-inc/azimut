@@ -437,12 +437,12 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			if(NumberUtility.areIntegerValuesMatching(businessUser.getUserStep().intValue(), UserStep.LEFT_AND_RIGHT.getStepId()))
 			{
 				
-				if(businessUser!=null&&StringUtility.isStringPopulated(businessUser.getUserId()))
+				/*if(businessUser!=null&&StringUtility.isStringPopulated(businessUser.getUserId()))
 				{
 					if(StringUtility.stringsDontMatch(tokenizedBusinessUser.getUserId(), businessUser.getUserId()))
 						throw new BusinessException(ErrorCode.USER_ID_NOT_MATCHING);
 					
-				}
+				}*/
 				
 				tokenizedBusinessUser.setLivenessChecked(true);
 			}

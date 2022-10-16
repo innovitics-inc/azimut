@@ -147,7 +147,7 @@ public class JwtUtil {
 	    return null;
 	    }
 	 
-	 private Date calculateExpirationDate() {
+	 protected Date calculateExpirationDate() {
 	        return new Date(System.currentTimeMillis()+(1000*60)*Long.parseLong(this.configProperties.getJwTokenDurationInMinutes()));
 	    }
 	 
