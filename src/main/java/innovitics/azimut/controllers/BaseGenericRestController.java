@@ -125,7 +125,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 			errorMessage=exception.getErrorMessage();
 		}
 		ResponseEntity<BaseGenericResponse<T>> responseEntity = new ResponseEntity<BaseGenericResponse<T>>(
-				this.generateBaseGenericResponseFailure(exception.getErrorCode(),errorMessage),httpStatus);
+				this.generateBaseGenericResponseFailure(exception.getErrorCode(),errorMessage),exception.getHttpStatus()!=null?exception.getHttpStatus():httpStatus);
 		return responseEntity;
 	}
 
