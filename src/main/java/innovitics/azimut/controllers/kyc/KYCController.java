@@ -93,6 +93,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			if(NumberUtility.areLongValuesMatching(businessUserAnswerSubmission.getNextPageId(),businessUserAnswerSubmission.getPageId())&&BooleanUtility.isTrue(businessUserAnswerSubmission.getIsMobile()))
 			{
 				businessKYCPage.setNextId(businessUserAnswerSubmission.getNextPageId());
+				businessKYCPage.setId(businessUserAnswerSubmission.getNextPageId());
 			}
 			
 			return this.generateBaseGenericResponse(BusinessKYCPage.class,businessKYCPage,null, null);

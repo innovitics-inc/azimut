@@ -517,5 +517,13 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 			   }
 		}
 	}
+	
+	public void validateUserStepValue(Integer userStep) throws BusinessException
+	{
+		
+		
+	
+	}
+	
 
 }
