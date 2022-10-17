@@ -90,7 +90,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		this.validation.validateNewPhoneNumberAvailability(businessUser);
 		this.validate(businessUser,addBusinessUserValidator,BusinessUser.class.getName());
 		User user=new User();
-		BusinessUser savedbusinessUser=new BusinessUser();
+		BusinessUser savedBusinessUser=new BusinessUser();
 		try {
 			if (businessUser.getAzimutAccount()!=null)
 			{
@@ -108,13 +108,14 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			user=userMapper.convertBusinessUnitToBasicUnit(businessUser,true);
 			user.setCreatedAt(DateUtility.getCurrentDate());
 			userService.save(user);
-			savedbusinessUser=userMapper.convertBasicUnitToBusinessUnit(user);
+			savedBusinessUser=userMapper.convertBasicUnitToBusinessUnit(user);
+			savedBusinessUser.setIsVerified(false);
 		}
 		catch (Exception exception) 
 		{
 			throw this.handleBusinessException(exception,ErrorCode.USER_NOT_SAVED);
 		}
-		return savedbusinessUser;
+		return savedBusinessUser;
 		
 	}
 	
