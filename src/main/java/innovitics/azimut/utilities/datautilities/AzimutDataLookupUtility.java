@@ -144,7 +144,7 @@ public void syncTeaComputersData() throws IntegrationException
 
 	
 
- ClientBankAccount removeClientBankAccount(Long id)
+ public ClientBankAccount removeClientBankAccount(Long id)
  {
 	 try {
 		 this.teaComputerService.removeClientBankAccount(id);

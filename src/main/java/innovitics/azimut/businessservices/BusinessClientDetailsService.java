@@ -167,7 +167,14 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
 		try 
 		{			
-			responseBusinessAzimutClient=this.holdClientBankAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();	
+			if(BooleanUtility.isTrue(businessAzimutClient.getIsLocal()))
+			{
+				responseBusinessAzimutClient=this.holdClientBankAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();
+			}
+			else
+			{
+				this.azimutDataLookupUtility.removeClientBankAccount(businessAzimutClient.getAccountId());
+			}
 		}
 		catch(Exception exception)
 		{
@@ -279,11 +286,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		if(BooleanUtility.isFalse(businessAzimutClient.getPersist()))
 		{
 			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
-		}
-		if(BooleanUtility.isTrue(businessAzimutClient.getPersist()))
-		{
 			this.validation.validateUserKYCCompletion(tokenizedBusinessUser);
 		}
+	
 		
 		this.validation.validate(businessAzimutClient, saveClientBankAccountsTemporarily, BusinessAzimutClient.class.getName());
 		BusinessAzimutClient responseBusinessAzimutClient= new BusinessAzimutClient();
