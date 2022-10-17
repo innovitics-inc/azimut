@@ -477,6 +477,13 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		try 
 		{
 			this.userUtility.addUserLocation(tokenizedBusinessUser, userLocation);
+			
+			if(userLocation.getUserStep()!=null&&NumberUtility.areIntegerValuesMatching(userLocation.getUserStep(), UserStep.CHOOSE_CONTRACT_MAP.getStepId()))
+			{
+				tokenizedBusinessUser.setUserStep(UserStep.CHOOSE_CONTRACT_MAP.getStepId());
+				this.editUser(tokenizedBusinessUser);
+			}
+			
 		}
 		catch (Exception exception)
 		{

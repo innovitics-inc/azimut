@@ -44,7 +44,7 @@ public final class NumberUtility {
 		boolean	result=false;
 		logger.info("Are the values "+ value1+" and "+ value1+"matching?");
 		
-		if(value1!=null&&value2!=null&&value1.longValue()==value2.longValue())
+		if(value1!=null&&value2!=null&&value1.intValue()==value2.intValue())
 			result= true;
 		else
 			result= false;

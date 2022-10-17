@@ -19,6 +19,7 @@ public class BaseEntity {
 	protected String privateUrl;
 	protected MultipartFile file;
 	protected Boolean draw;
+	protected Integer userStep;
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -66,6 +67,12 @@ public class BaseEntity {
 	}
 	public void setDraw(Boolean draw) {
 		this.draw = draw;
+	}
+	public Integer getUserStep() {
+		return userStep;
+	}
+	public void setUserStep(Integer userStep) {
+		this.userStep = userStep;
 	}
 	
 	
