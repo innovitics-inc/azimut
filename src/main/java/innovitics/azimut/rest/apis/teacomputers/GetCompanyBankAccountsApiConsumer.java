@@ -56,6 +56,7 @@ public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsum
 					companyBankAccountOutput.setAccountNo(responseEntity.getBody()[i].getAccountNo());
 					companyBankAccountOutput.setCurrencyId(responseEntity.getBody()[i].getCurrencyID());
 					companyBankAccountOutput.setCurrencyName(responseEntity.getBody()[i].getCurrencyName());
+					companyBankAccountOutput.setAccountId(responseEntity.getBody()[i].getAccountID());
 					
 					companyBankAccountOutputs.add(companyBankAccountOutput);
 				}

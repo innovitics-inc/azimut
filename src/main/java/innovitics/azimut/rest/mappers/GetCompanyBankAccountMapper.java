@@ -75,6 +75,7 @@ public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccoun
 			businessCompanyBankAccount.setAccountNo(companyBankAccountOutput.getAccountNo());
 			businessCompanyBankAccount.setCurrencyId(companyBankAccountOutput.getCurrencyId());
 			businessCompanyBankAccount.setCurrencyName(companyBankAccountOutput.getCurrencyName());
+			businessCompanyBankAccount.setAccountId(companyBankAccountOutput.getAccountId());
 				
 		}
 		return businessCompanyBankAccount; 

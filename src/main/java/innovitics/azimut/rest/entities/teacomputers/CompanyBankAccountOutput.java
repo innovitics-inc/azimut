@@ -2,6 +2,7 @@ package innovitics.azimut.rest.entities.teacomputers;
 
 public class CompanyBankAccountOutput {
 
+	private Long accountId;
 	private Long bankId;
 	private String bankName;
 	private Long branchId;
@@ -12,6 +13,14 @@ public class CompanyBankAccountOutput {
 	private String currencyId;
 	private String currencyName;
 
+	
+	
+	public Long getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
 	public Long getBankId() {
 		return bankId;
 	}
