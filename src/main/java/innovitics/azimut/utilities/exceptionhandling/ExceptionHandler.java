@@ -14,6 +14,7 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 
 
 @Service
@@ -139,6 +140,16 @@ public class ExceptionHandler{
 			this.logger.info("Handling Exception as Is"+exception.getMessage());
 			return this.handleAsBusinessException(exception, errorCode);
 	}
+	
+	public boolean checkIfIntegrationExceptinWithSpecificErrorCode(Exception exception,ErrorCode errorCode)
+	{	
+			if((exception instanceof IntegrationException)&&NumberUtility.areIntegerValuesMatching(((IntegrationException)exception).getErrorCode().intValue(),errorCode.getCode()))
+			{
+				return true;
+			}
+			return false;
+	}
+	
 	
 	public Object getNullIfNonExistent(Exception exception)
 	 {

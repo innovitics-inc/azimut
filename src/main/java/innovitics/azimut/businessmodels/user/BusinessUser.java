@@ -61,6 +61,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private List<AzimutAccount> azimutAccounts;
 	private List<UserDevice> userDevices;
 	private String[] dates;
+	private Boolean isOld;
 	
 	
 	public Date getCreatedAt() {
@@ -373,6 +374,12 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setDates(String[] dates) {
 		this.dates = dates;
+	}
+	public Boolean getIsOld() {
+		return isOld;
+	}
+	public void setIsOld(Boolean isOld) {
+		this.isOld = isOld;
 	}
 	public void concatinate()
 	{

@@ -18,6 +18,7 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
+import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.pdfgenerator.PdfGenerateService;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.services.kyc.KYCPageService;
@@ -265,6 +266,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		{
 			oldUser.setPassword(authenticationRequest.getNewPassword());
 			updatedBusinessUser=this.returnUpdatedEntity(oldUser,true);
+			this.getMultipleTcAccounts(updatedBusinessUser);
 			
 		}
 		catch(Exception exception)
@@ -320,6 +322,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		try 
 		{
 			searchedForBusinessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(searchedForBusinessUser, this.userService.findByUserPhone(businessUser.getCountryPhoneCode()+businessUser.getPhoneNumber()), false);
+			
 			if(searchedForBusinessUser!=null)
 			{
 				if(StringUtility.isStringPopulated(searchedForBusinessUser.getPassword()))
@@ -333,16 +336,14 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		{
 			this.logger.info("Enter Excepton Handling");
 			this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);			
-			//searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
-			
-			searchedForBusinessUser=new BusinessUser();
-			
+			searchedForBusinessUser=new BusinessUser();			
 			try 
 			{
 				List<AzimutAccount> azimutAccounts=this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
 				if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
 				{
-					searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);
+					searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);					
+					this.userUtility.saveOldUser(businessUser.getCountryPhoneCode(),businessUser.getPhoneNumber(),azimutAccounts);
 				}
 				
 				else
@@ -359,8 +360,14 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 					throw this.handleBusinessException((Exception)teacomputerException,ErrorCode.OPERATION_NOT_PERFORMED);
 				*/
 				this.logger.info("Enter TC exception Handling");
-				
-				searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
+				if(exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(teacomputerException, ErrorCode.NO_MATCHED_CLIENT_NUMBER_EXIST))
+				{
+					searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
+				}
+				else
+				{
+					throw teacomputerException;
+				}
 			}
 			
 		}
@@ -378,12 +385,14 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			
 			businessUser=this.convertBasicToBusinessAndPrepareURLsInBusinessUser(businessUser, user, true);
 			
+			
 			if(StringUtility.isStringPopulated(deviceId)&&BooleanUtility.isFalse(businessUser.getLivenessChecked())&&businessUser.getUserStep()!=null
 					&&businessUser.getUserStep().intValue()>UserStep.LEFT_AND_RIGHT.getStepId())
 			{
 				businessUser.setNextUserStep(UserStep.LEFT_AND_RIGHT.getStepId());
 			}
 			
+			this.getMultipleTcAccounts(businessUser);
 			
 		}
 		catch(Exception exception)
@@ -615,7 +624,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	  AzimutAccount	prepareAccountRetrievalInputs(BusinessAzimutClient businessAzimutClient,BusinessUser searchBusinessUser)
 	  {
 		  AzimutAccount azimutAccount=new AzimutAccount();
-		  azimutAccount.setPhoneNumber(StringUtility.ZERO+searchBusinessUser.getPhoneNumber());
+		  azimutAccount.setPhoneNumber(searchBusinessUser.getPhoneNumber());
 		 /* azimutAccount.setUserId(businessAzimutClient.getUserId());
 		  azimutAccount.setIdType(this.getAzimutUserTypeId(searchBusinessUser));*/
 		  return azimutAccount;
@@ -713,6 +722,40 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		return businessUserWithHiddenDetails;
 	}
 	
+	public BusinessUser setUserIdAndUserIdType(BusinessUser tokenizedBusinessUser,BusinessUser inputBusinessUser)
+	{
+		if(inputBusinessUser!=null)
+		{
+			tokenizedBusinessUser.setIdType(inputBusinessUser.getIdType());
+			tokenizedBusinessUser.setUserId(inputBusinessUser.getUserId());			
+			try 
+			{
+				this.editUser(tokenizedBusinessUser);
+			}
+			catch(Exception exception)
+			{
+				this.handleBusinessException(exception, ErrorCode.USER_NOT_UPDATED);
+			}
+		}
+		
+		return tokenizedBusinessUser;
+	}
 	
+	
+	public void getMultipleTcAccounts(BusinessUser businessUser)
+	{
+		if(businessUser!=null&&BooleanUtility.isTrue(businessUser.getIsOld()))
+		{
+			try 
+			{
+				businessUser.setAzimutAccounts(this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser),null).getDataList());
+			}
+			catch(Exception exception)
+			{
+				this.logger.info("Could not retrieve the azimut bank accounts");
+				exception.printStackTrace();
+			}
+		}
+	}
 	
 }

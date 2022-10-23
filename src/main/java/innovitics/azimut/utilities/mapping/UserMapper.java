@@ -163,6 +163,11 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			if(businessUser.getSolvedPages()!=null)
 				user.setSolvedPages(businessUser.getSolvedPages());
 			
+			if(businessUser.getIsOld())
+			{
+				user.setIsOld(businessUser.getIsOld());
+			}
+			
 			user.concatinate();
 			
 			this.logger.info("User::"+user.toString());
@@ -370,6 +375,10 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			if(user.getSolvedPages()!=null)
 				businessUser.setSolvedPages(user.getSolvedPages());
 
+			if(user.getIsOld()!=null)
+			{
+				businessUser.setIsOld(user.getIsOld());
+			}
 			
 			businessUser.concatinate();
 
@@ -494,8 +503,13 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 					oldBusinessUser.setLivenessChecked(businessUser.getLivenessChecked());
 					
 				if(businessUser.getSolvedPages()!=null)
-					oldBusinessUser.setSolvedPages(oldBusinessUser.getSolvedPages());
-				
+					oldBusinessUser.setSolvedPages(businessUser.getSolvedPages());
+		
+				if(businessUser.getIsOld()!=null)
+				{
+					oldBusinessUser.setIsOld(businessUser.getIsOld());
+				}
+		
 			businessUser.concatinate();
 			oldBusinessUser.concatinate();
 

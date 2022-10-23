@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessmodels.valify.BusinessValify;
 import innovitics.azimut.exceptions.BusinessException;
@@ -19,8 +20,10 @@ import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.models.user.UserDevice;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
+import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserImageService;
+import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.services.user.UserBlockageService;
 import innovitics.azimut.services.user.UserDeviceService;
@@ -47,7 +50,7 @@ public class UserUtility extends ParentUtility{
 	@Autowired GenderService genderService;
 	@Autowired AES aes;
 	@Autowired UserLocationService userLocationService;
-
+	@Autowired UserTypeService userTypeService;
 	public void upsertDeviceIdAudit(User user,String deviceId,UserDevice updatedUserDevice)
 	{
 			if(updatedUserDevice!=null)
@@ -293,8 +296,51 @@ public class UserUtility extends ParentUtility{
 		
 	}
 	
+	public User saveOldUser(String countryPhoneCode,String phoneNumber,List<AzimutAccount> azimutAccounts)
+	{
+		User user=new User();
+		user.setCountryPhoneCode(countryPhoneCode);
+		user.setPhoneNumber(phoneNumber);
+		user.setIsVerified(true);
+		user.setIsOld(true);
+		user.concatinate();
+		user.setCreatedAt(new Date());
+		user.setUpdatedAt(new Date());	
+		
+		String userId="";
+		Long userIdType=0L;
+		
+	    if(azimutAccounts.size()==1&&azimutAccounts.get(0)!=null)
+	    {
+	    	userId=azimutAccounts.get(0).getAzId();
+	    	userIdType=azimutAccounts.get(0).getAzIdType();
+	    	UserType userType=this.getUserTypeByTeacomputerId(userIdType);
+	    	if(userType==null)
+	    	{	    		
+	    		userIdType=this.userTypeService.addUserType(userIdType).getId();
+	    	}
+	    	user.setUserType(userType);
+			user.setUserId(userId);
+	    }
+		
+		this.logger.info("Old user being saved::::::::::::::::::::::"+user.toString());
+		this.userService.save(user);
+		return user;
+	}
 	
-	
+	public UserType getUserTypeByTeacomputerId(Long teacomputerId)
+	{
+		try 
+		{
+			return this.userTypeService.getUserTypeByTeacomputerId(teacomputerId);
+		}
+		catch (Exception exception) 
+		{
+			this.exceptionHandler.getNullIfNonExistent(exception);
+			return null;
+		}
+				
+	}
 	
 	
 }

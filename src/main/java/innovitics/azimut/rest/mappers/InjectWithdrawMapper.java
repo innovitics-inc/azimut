@@ -22,17 +22,11 @@ import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
 @Component
 public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, InjectWithdrawOutput, InjectWithdrawResponse, BaseAzimutTrading> {
 
-	@Autowired BlobFileUtility blobFileUtility;
 	@Autowired InjectWithdrawApiConsumer injectWithdrawApiConsumer;
 	
 	@Override
-	public BaseAzimutTrading consumeRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
-		
-		if(baseAzimutTrading!=null&&StringUtility.stringsMatch(params, StringUtility.INFORM_DEPOSIT))
-		{
-			this.uploadFile(baseAzimutTrading);
-		}
-		
+	public BaseAzimutTrading consumeRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception 
+	{			
 		return this.createBusinessEntityFromOutput(this.injectWithdrawApiConsumer.invoke(this.createInput(baseAzimutTrading),InjectWithdrawResponse.class, params));
 	}
 
@@ -50,6 +44,7 @@ public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, Inject
 		input.setCurrencyId(baseAzimutTrading.getCurrencyId());
 		input.setOrderValue(baseAzimutTrading.getOrderValue());
 		input.setModuleType(baseAzimutTrading.getModuleTypeId());
+		input.setTicketDoc(baseAzimutTrading.getFileBytes());
 		return input;
 	}
 
@@ -62,11 +57,4 @@ public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, Inject
 	protected List<BaseAzimutTrading> createListBusinessEntityFromOutput(InjectWithdrawOutput BaseOutput) {
 		return null;
 	}
-	
-	protected void uploadFile(BaseAzimutTrading baseAzimutTrading) throws BusinessException, IOException
-	{
-		this.blobFileUtility.uploadFileToBlob(baseAzimutTrading.getInjectionDocument(), true, this.configProperties.getBlobSignedPdfPath(), "injections/"+baseAzimutTrading.getUserId()+"/"+DateUtility.getCurrentDayMonthYear(), true);
-
-	}
-
 }

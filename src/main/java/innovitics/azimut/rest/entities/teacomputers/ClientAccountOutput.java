@@ -4,8 +4,8 @@ public class ClientAccountOutput {
 
 	private String  clientName;
 	private String mobile;
-	private String signature;
-	
+	private Long idTypeId;
+	private String idNumber;
 	public String getClientName() {
 		return clientName;
 	}
@@ -18,11 +18,19 @@ public class ClientAccountOutput {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public String getSignature() {
-		return signature;
+	public Long getIdTypeId() {
+		return idTypeId;
 	}
-	public void setSignature(String signature) {
-		this.signature = signature;
+	public void setIdTypeId(Long idTypeId) {
+		this.idTypeId = idTypeId;
 	}
+	public String getIdNumber() {
+		return idNumber;
+	}
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
+	}
+	
+	
 	
 }

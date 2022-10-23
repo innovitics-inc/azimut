@@ -183,13 +183,29 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusinessUser, BaseAzimutTrading baseAzimutTrading) {
 		
 		BaseAzimutTrading addBaseAzimutTrading=new BaseAzimutTrading();
-		addBaseAzimutTrading.setAzId(tokenizedBusinessUser.getUserId());
-		addBaseAzimutTrading.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
-		addBaseAzimutTrading.setOrderValue(baseAzimutTrading.getOrderValue());
-		addBaseAzimutTrading.setAccountNo(baseAzimutTrading.getAccountNo());
-		addBaseAzimutTrading.setCurrencyId(baseAzimutTrading.getCurrencyId());
-		addBaseAzimutTrading.setUserId(tokenizedBusinessUser.getUserId());
-		addBaseAzimutTrading.setModuleTypeId(baseAzimutTrading.getModuleTypeId());
+		
+		if(baseAzimutTrading!=null)
+		{
+			addBaseAzimutTrading.setAzId(tokenizedBusinessUser.getUserId());
+			addBaseAzimutTrading.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+			addBaseAzimutTrading.setOrderValue(baseAzimutTrading.getOrderValue());
+			addBaseAzimutTrading.setAccountNo(baseAzimutTrading.getAccountNo());
+			addBaseAzimutTrading.setCurrencyId(baseAzimutTrading.getCurrencyId());
+			addBaseAzimutTrading.setUserId(tokenizedBusinessUser.getUserId());
+			addBaseAzimutTrading.setModuleTypeId(baseAzimutTrading.getModuleTypeId());
+		
+			if(baseAzimutTrading.getInjectionDocument()!=null)
+			try 
+			{
+				addBaseAzimutTrading.setFileBytes(baseAzimutTrading.getInjectionDocument().getBytes().toString());
+			} 
+			catch (IOException ioException) 
+			{
+				this.logger.info("Could not extract the file bytes");
+				ioException.printStackTrace();
+			}
+		 }
+		
 		return addBaseAzimutTrading;
 	}
 

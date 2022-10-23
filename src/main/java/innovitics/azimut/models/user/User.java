@@ -90,6 +90,8 @@ public class User extends BaseEntity {
 	
 	private String solvedPages;
 	
+	private Boolean isOld;
+	
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -403,6 +405,14 @@ public class User extends BaseEntity {
 	}
 	public void setSolvedPages(String solvedPages) {
 		this.solvedPages = solvedPages;
+	}
+	
+	
+	public Boolean getIsOld() {
+		return isOld;
+	}
+	public void setIsOld(Boolean isOld) {
+		this.isOld = isOld;
 	}
 	public void concatinate()
 	{

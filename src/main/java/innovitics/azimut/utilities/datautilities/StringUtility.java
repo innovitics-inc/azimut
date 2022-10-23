@@ -28,6 +28,7 @@ public final class StringUtility extends ParentUtility{
 	public final static String NATIONAL_ID_DOCUMENT_TYPE="egy_nid";
 	public final static String PASSPORT_DOCUMENT_TYPE="passport";
 	public final static String EGYPT="Egypt";
+	public final static String EG="EG";
 	public final static long CLIENT_AML=1L;
 	public final static String OCCUPATION="NULL";
 	public final static String ZERO="0";

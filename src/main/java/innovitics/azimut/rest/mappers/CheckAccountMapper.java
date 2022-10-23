@@ -15,6 +15,7 @@ import innovitics.azimut.rest.entities.teacomputers.GetClientAccountsOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientAccountResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientAccountsResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 @Component
 public class CheckAccountMapper extends RestMapper<GetClientAccountsInput, GetClientAccountsOutput, GetClientAccountsResponse, AzimutAccount>{
 
@@ -36,7 +37,7 @@ public class CheckAccountMapper extends RestMapper<GetClientAccountsInput, GetCl
 	GetClientAccountsInput createInput(AzimutAccount azimutAccount) 
 	{
 		GetClientAccountsInput input =new GetClientAccountsInput();
-		input.setMobile("0"+azimutAccount.getPhoneNumber());
+		input.setMobile(StringUtility.ZERO+azimutAccount.getPhoneNumber());
 		input.setIdNumber(azimutAccount.getUserId());
 		input.setIdTypeId(azimutAccount.getIdType());
 		return input;
@@ -69,7 +70,9 @@ public class CheckAccountMapper extends RestMapper<GetClientAccountsInput, GetCl
 		AzimutAccount azimutAccount=new AzimutAccount();
 	
 		azimutAccount.setFullName(clientAccountOutput.getClientName());
-		azimutAccount.setPhoneNumber(clientAccountOutput.getMobile());		
+		azimutAccount.setPhoneNumber(clientAccountOutput.getMobile());
+		azimutAccount.setAzId(clientAccountOutput.getIdNumber());
+		azimutAccount.setAzIdType(clientAccountOutput.getIdTypeId());
 		return azimutAccount; 	
 	}
 

@@ -1,6 +1,7 @@
 package innovitics.azimut.services.kyc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,24 @@ public class UserTypeService extends AbstractService<UserType, String>{
 		return this.userTypeDynamicRepository.findAll();
 	}
 	
+	public UserType getUserTypeByTeacomputerId(Long teacomputerId)
+	{
+		this.logger.info("Fetching user type for teacomputerID:::"+teacomputerId);
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("azimutIdTypeId", teacomputerId,SearchOperation.EQUAL,null));
+		UserType userType= this.userTypeDynamicRepository.findOne(this.userTypeSpecification.findByCriteria(searchCriteriaList)).get();
+		return userType;
+	}
+	
+	
+	public UserType addUserType (Long  userTypeTeacomputerId)
+	{
+		
+		UserType userType=new UserType();
+		userType.setAzimutIdTypeId(userTypeTeacomputerId);
+		userType.setCreatedAt(new Date());
+		userType.setUpdatedAt(new Date());
+		
+		return this.userTypeDynamicRepository.save(userType);
+	}
 }

@@ -4,6 +4,9 @@ public class ClientAccountResponse extends TeaComputerResponse{
 
     private String clientName;
     private String mobile;
+    private String idTypeId;
+    private String idNumber;
+    
 	public String getClientName() {
 		return clientName;
 	}
@@ -15,6 +18,18 @@ public class ClientAccountResponse extends TeaComputerResponse{
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+	public String getIdTypeId() {
+		return idTypeId;
+	}
+	public void setIdTypeId(String idTypeId) {
+		this.idTypeId = idTypeId;
+	}
+	public String getIdNumber() {
+		return idNumber;
+	}
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
 	}
     
     

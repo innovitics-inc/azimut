@@ -28,8 +28,6 @@ public class CheckAccountApiConsumer extends RestTeaComputerApiConsumer<GetClien
 	public HttpEntity<String> generateRequestFromInput(GetClientAccountsInput input) {
 		GetClientAccountsRequest request=new GetClientAccountsRequest();
 		this.populateCredentials(request);
-		request.setIdNumber(input.getIdNumber());
-		request.setIdTypeId(input.getIdTypeId());	
 		request.setMobile(input.getMobile());
 		request.setSignature(this.generateSignature(request));
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getLocale(), this.getContentLength(request)));
@@ -46,6 +44,14 @@ public class CheckAccountApiConsumer extends RestTeaComputerApiConsumer<GetClien
 				{
 					ClientAccountOutput clientAccountOutput = new ClientAccountOutput();
 					clientAccountOutput.setClientName(responseEntity.getBody()[i].getClientName());
+					clientAccountOutput.setMobile(responseEntity.getBody()[i].getMobile());
+					
+					if(StringUtility.isStringPopulated(responseEntity.getBody()[i].getIdTypeId()))
+					{
+						clientAccountOutput.setIdTypeId(Long.valueOf(responseEntity.getBody()[i].getIdTypeId()));
+					}
+					clientAccountOutput.setIdNumber(responseEntity.getBody()[i].getIdNumber());
+					
 					clientAccountOutput.setMobile(responseEntity.getBody()[i].getMobile());
 					
 					clientAccountOutputs.add(clientAccountOutput);

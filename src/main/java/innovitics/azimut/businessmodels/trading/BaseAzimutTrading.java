@@ -18,6 +18,7 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
     private String userId;
     private UserBlockage userBlockage;
     private Long moduleTypeId;
+    private String fileBytes;
     
 	
 	public Long getOrderTypeId() {
@@ -80,6 +81,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	}
 	public void setModuleTypeId(Long moduleTypeId) {
 		this.moduleTypeId = moduleTypeId;
+	}
+	public String getFileBytes() {
+		return fileBytes;
+	}
+	public void setFileBytes(String fileBytes) {
+		this.fileBytes = fileBytes;
 	}
 	
 	
