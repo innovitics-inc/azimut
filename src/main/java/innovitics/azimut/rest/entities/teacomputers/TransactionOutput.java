@@ -11,6 +11,7 @@ public class TransactionOutput {
 	private String currencyId;
 	private String currencyName;
 	private Integer statusType;
+	private Integer orderType;
 	private String signature;
 	
 	
@@ -69,6 +70,12 @@ public class TransactionOutput {
 	}
 	public void setStatusType(Integer statusType) {
 		this.statusType = statusType;
+	}
+	public Integer getOrderType() {
+		return orderType;
+	}
+	public void setOrderType(Integer orderType) {
+		this.orderType = orderType;
 	}
 
 

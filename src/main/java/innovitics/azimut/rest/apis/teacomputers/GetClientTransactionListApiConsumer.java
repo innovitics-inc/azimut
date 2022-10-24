@@ -64,6 +64,10 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 						{
 							transactionOutput.setStatusType(Integer.valueOf(responseEntity.getBody()[i].getStatusType()));
 						}
+						if(StringUtility.isStringPopulated(responseEntity.getBody()[i].getOrderType()))
+						{
+							transactionOutput.setOrderType(Integer.valueOf(responseEntity.getBody()[i].getOrderType()));
+						}
 					
 						transactionOutputs.add(transactionOutput);
 					}

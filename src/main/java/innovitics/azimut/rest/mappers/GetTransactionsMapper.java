@@ -92,44 +92,15 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 			{
 				businessTransaction.setStatus(TransactionStatus.getById(transactionOutput.getStatusType()).getStatusId());				
 			}
-			if(StringUtility.isStringPopulated(transactionOutput.getTransTypeName()))
+
+			if(transactionOutput.getOrderType()!=null)
 			{
-				if(transactionOutput.getTransTypeName().equals(TransactionType.DEPOSIT.getType()))
-				{
-					businessTransaction.setTransactionType(TransactionType.DEPOSIT);
-				}
-				else if(transactionOutput.getTransTypeName().equals(TransactionType.SWIFT.getType()))
-				{
-					businessTransaction.setTransactionType(TransactionType.SWIFT);
-				}
-				else 
-				{
-					businessTransaction.setTransactionType(TransactionType.OTHER);
-				}
-			}
-			if(StringUtility.isStringPopulated(transactionOutput.getOrderTypeName()))
-			{
-				if(transactionOutput.getOrderTypeName().equals(TransactionOrderType.WITHDRAW.getType()))
-				{
-					businessTransaction.setTransactionOrderType(TransactionOrderType.WITHDRAW);
-					businessTransaction.setType(TransactionOrderType.WITHDRAW.getTypeId());
-				}
-				else if(transactionOutput.getOrderTypeName().equals(TransactionOrderType.INJECT.getType()))
-				{
-					businessTransaction.setTransactionOrderType(TransactionOrderType.INJECT);
-					businessTransaction.setType(TransactionOrderType.INJECT.getTypeId());
-				}
-				else  
-				{
-					businessTransaction.setOrderType(OrderType.OTHER);
-					businessTransaction.setType(OrderType.OTHER.getTypeId());
-				}
 				
+				businessTransaction.setOrder(TransactionOrderType.getById(transactionOutput.getOrderType()).getTypeId());
 			}
 			
 		}
-		return businessTransaction; 
-		
+		return businessTransaction; 		
 	}
 
 }
