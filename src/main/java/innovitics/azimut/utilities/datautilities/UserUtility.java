@@ -303,6 +303,7 @@ public class UserUtility extends ParentUtility{
 		user.setPhoneNumber(phoneNumber);
 		user.setIsVerified(true);
 		user.setIsOld(true);
+		user.setUserStep(UserStep.CHOOSE_CONTRACT_MAP.getStepId());
 		user.concatinate();
 		user.setCreatedAt(new Date());
 		user.setUpdatedAt(new Date());	

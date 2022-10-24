@@ -23,6 +23,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	protected String deviceId;
 	protected String userId;
 	protected String userIdType;
+	protected String userIdTypeAr;
 	protected Long 	 idType; 
 	protected String nickName;
 	protected String emailAddress;
@@ -130,6 +131,13 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setUserIdType(String userIdType) {
 		this.userIdType = userIdType;
+	}
+	
+	public String getUserIdTypeAr() {
+		return userIdTypeAr;
+	}
+	public void setUserIdTypeAr(String userIdTypeAr) {
+		this.userIdTypeAr = userIdTypeAr;
 	}
 	public Long getIdType() {
 		return idType;
