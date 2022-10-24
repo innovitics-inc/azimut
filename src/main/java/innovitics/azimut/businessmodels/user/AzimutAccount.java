@@ -1,7 +1,6 @@
 package innovitics.azimut.businessmodels.user;
 
 public class AzimutAccount extends BusinessUser{
-	private String fullName;
 	private String idDate;
 	private String idMaturityDate;
 	private Long clientAML;

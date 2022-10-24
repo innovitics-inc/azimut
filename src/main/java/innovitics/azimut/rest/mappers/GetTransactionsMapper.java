@@ -90,24 +90,7 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 			
 			if(transactionOutput.getStatusType()!=null)
 			{
-				/*
-				 if(transactionOutput.getTransStatusName().equals(TransactionStatus.PENDING.
-				 getStatus())) {
-				 businessTransaction.setTransactionStatus(TransactionStatus.PENDING);
-				 businessTransaction.setStatus(TransactionStatus.PENDING.getStatusId()); }
-				 else
-				 if(transactionOutput.getTransStatusName().equals(TransactionStatus.TIKCET.
-				 getStatus())) {
-				 businessTransaction.setTransactionStatus(TransactionStatus.TIKCET);
-				 businessTransaction.setStatus(TransactionStatus.TIKCET.getStatusId()); } else
-				 if((transactionOutput.getTransStatusName().equals(TransactionStatus.CANCELED.
-				 getStatus()))) {
-				 businessTransaction.setTransactionStatus(TransactionStatus.CANCELED);
-				 businessTransaction.setStatus(TransactionStatus.CANCELED.getStatusId()); }
-				 else { businessTransaction.setTransactionStatus(TransactionStatus.OTHER);
-				 businessTransaction.setStatus(TransactionStatus.OTHER.getStatusId()); }
-				 */
-				
+				businessTransaction.setStatus(TransactionStatus.getById(transactionOutput.getStatusType()).getStatusId());				
 			}
 			if(StringUtility.isStringPopulated(transactionOutput.getTransTypeName()))
 			{

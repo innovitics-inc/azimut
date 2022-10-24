@@ -325,11 +325,19 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			
 			if(searchedForBusinessUser!=null)
 			{
+				
+				if(BooleanUtility.isTrue(searchedForBusinessUser.getIsOld())&&!StringUtility.isStringPopulated(searchedForBusinessUser.getPassword()))
+				{
+					searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);
+				}
+
 				if(StringUtility.isStringPopulated(searchedForBusinessUser.getPassword()))
 				{
 					searchedForBusinessUser.setBusinessFlow(BusinessFlow.VERIFY_PASSWORD);
 				}
+				
 			}
+			
 					
 		}
 		catch(Exception exception)
@@ -727,7 +735,9 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		if(inputBusinessUser!=null)
 		{
 			tokenizedBusinessUser.setIdType(inputBusinessUser.getIdType());
-			tokenizedBusinessUser.setUserId(inputBusinessUser.getUserId());			
+			tokenizedBusinessUser.setUserId(inputBusinessUser.getUserId());
+			
+			tokenizedBusinessUser.setNickName(inputBusinessUser.getFullName());
 			try 
 			{
 				this.editUser(tokenizedBusinessUser);

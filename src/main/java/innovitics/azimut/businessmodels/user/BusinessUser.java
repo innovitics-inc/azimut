@@ -40,6 +40,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	protected int flowId;
 	protected String countryCode;
 	protected MultipartFile file;
+	protected String fullName;
 	private Long lastSolvedPageId;
 	private Long nextPageId;
 	private Integer nextUserStep;
@@ -388,6 +389,14 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setIsOld(Boolean isOld) {
 		this.isOld = isOld;
+	}
+	
+	
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	public void concatinate()
 	{
