@@ -90,7 +90,7 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 			
 			if(transactionOutput.getStatusType()!=null)
 			{
-				businessTransaction.setStatus(TransactionStatus.getById(transactionOutput.getStatusType()).getStatusId());				
+				businessTransaction.setStatus(TransactionStatus.getById(transactionOutput.getStatusType().intValue()).getStatusId());				
 			}
 
 			if(transactionOutput.getOrderType()!=null)

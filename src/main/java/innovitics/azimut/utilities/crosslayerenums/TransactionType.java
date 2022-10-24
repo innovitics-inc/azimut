@@ -38,7 +38,7 @@ public enum TransactionType {
 	{
 	    for(TransactionType transactionType : values()) 
 	    {
-	        if(transactionType.typeId==id)
+	        if(transactionType.teacomputerId==id)
 	        {
 	        	return transactionType;
 	        }

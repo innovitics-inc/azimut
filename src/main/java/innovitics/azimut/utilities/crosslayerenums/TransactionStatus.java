@@ -37,7 +37,7 @@ public enum TransactionStatus {
 	{
 	    for(TransactionStatus transactionStatus : values()) 
 	    {
-	        if(transactionStatus.statusId==id)
+	        if(transactionStatus.teacomputerTypeId==id)
 	        {
 	        	return transactionStatus;
 	        }
