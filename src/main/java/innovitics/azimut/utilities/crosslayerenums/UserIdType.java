@@ -6,7 +6,7 @@ public enum UserIdType {
 	NATIONAL_ID(1,1,"National Id","بطاقة شخصية"),
 	PASSPORT(3,3,"passport","جواز سفر"),
 	INSTITUTIONAL(5,5,"Institutional","مؤسسة"),
-	
+	OTHER(0,0,"Other","أخرى"),
 	;
 
 	UserIdType(long typeId,long teacomputerTypeId ,String type,String typeAr) {
@@ -44,6 +44,6 @@ public enum UserIdType {
 	        	return userIdType;
 	        }
 	    }
-	    return null;
+	    return UserIdType.OTHER;
 	}
 }

@@ -13,6 +13,7 @@ public class TransactionResponse extends TeaComputerResponse {
 	private String netValue;
 	private String currencyId;
 	private String currencyName;
+	private String statusType;
 
 
 	public String getTransDate() {
@@ -69,6 +70,12 @@ public class TransactionResponse extends TeaComputerResponse {
 	}
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
+	}
+	public String getStatusType() {
+		return statusType;
+	}
+	public void setStatusType(String statusType) {
+		this.statusType = statusType;
 	}
 
 }

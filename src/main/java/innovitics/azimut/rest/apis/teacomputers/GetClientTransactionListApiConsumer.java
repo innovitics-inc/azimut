@@ -46,15 +46,27 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 		{		
 				for(int i=0;i<responseEntity.getBody().length;i++)
 				{
-					TransactionOutput transactionOutput = new TransactionOutput();
-					transactionOutput.setTransValue(responseEntity.getBody()[i].getTransValue());
-					transactionOutput.setTransTypeName(responseEntity.getBody()[i].getTransTypeName());
-					transactionOutput.setTransStatusName(responseEntity.getBody()[i].getStatusName());
-					transactionOutput.setTransDate(responseEntity.getBody()[i].getTransDate());
-					transactionOutput.setOrderTypeName(responseEntity.getBody()[i].getOrderTypeName());
-					transactionOutput.setCurrencyId(responseEntity.getBody()[i].getCurrencyId());
-					transactionOutput.setCurrencyName(responseEntity.getBody()[i].getCurrencyName());
-					transactionOutputs.add(transactionOutput);
+					
+					if(responseEntity.getBody()[i]!=null)
+					{					
+					
+						TransactionOutput transactionOutput = new TransactionOutput();
+					
+						transactionOutput.setTransValue(responseEntity.getBody()[i].getTransValue());
+						transactionOutput.setTransTypeName(responseEntity.getBody()[i].getTransTypeName());
+						transactionOutput.setTransStatusName(responseEntity.getBody()[i].getStatusName());
+						transactionOutput.setTransDate(responseEntity.getBody()[i].getTransDate());
+						transactionOutput.setOrderTypeName(responseEntity.getBody()[i].getOrderTypeName());
+						transactionOutput.setCurrencyId(responseEntity.getBody()[i].getCurrencyId());
+						transactionOutput.setCurrencyName(responseEntity.getBody()[i].getCurrencyName());
+					
+						if(StringUtility.isStringPopulated(responseEntity.getBody()[i].getStatusType()))
+						{
+							transactionOutput.setStatusType(Integer.valueOf(responseEntity.getBody()[i].getStatusType()));
+						}
+					
+						transactionOutputs.add(transactionOutput);
+					}
 				}
 				output.setTransactionOutputs(transactionOutputs);
 		}

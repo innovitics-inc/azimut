@@ -163,7 +163,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			if(businessUser.getSolvedPages()!=null)
 				user.setSolvedPages(businessUser.getSolvedPages());
 			
-			if(businessUser.getIsOld())
+			if(businessUser.getIsOld()!=null)
 			{
 				user.setIsOld(businessUser.getIsOld());
 			}

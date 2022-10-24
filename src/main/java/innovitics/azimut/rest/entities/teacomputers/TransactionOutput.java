@@ -10,6 +10,7 @@ public class TransactionOutput {
 	private String netValue;
 	private String currencyId;
 	private String currencyName;
+	private Integer statusType;
 	private String signature;
 	
 	
@@ -63,20 +64,14 @@ public class TransactionOutput {
 	public void setCurrencyName(String currencyName) {
 		this.currencyName = currencyName;
 	}
-	public String getSignature() {
-		return signature;
+	public Integer getStatusType() {
+		return statusType;
 	}
-	public void setSignature(String signature) {
-		this.signature = signature;
+	public void setStatusType(Integer statusType) {
+		this.statusType = statusType;
 	}
-	@Override
-	public String toString() {
-		return "TransactionOutput [transDate=" + transDate + ", transTypeName=" + transTypeName + ", orderTypeName="
-				+ orderTypeName + ", transStatusName=" + transStatusName + ", transValue=" + transValue + ", netValue="
-				+ netValue + ", currencyId=" + currencyId + ", currencyName=" + currencyName + ", signature="
-				+ signature + "]";
-	}
-	
+
+
 	
 	
 }

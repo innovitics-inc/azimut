@@ -88,28 +88,26 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 				businessTransaction.setCurrency(transactionOutput.getCurrencyName());
 			}
 			
-			if(StringUtility.isStringPopulated(transactionOutput.getTransStatusName()))
+			if(transactionOutput.getStatusType()!=null)
 			{
-				if(transactionOutput.getTransStatusName().equals(TransactionStatus.PENDING.getStatus()))
-				{
-					businessTransaction.setTransactionStatus(TransactionStatus.PENDING);
-					businessTransaction.setStatus(TransactionStatus.PENDING.getStatusId());
-				}
-				else if(transactionOutput.getTransStatusName().equals(TransactionStatus.TIKCET.getStatus()))
-				{
-					businessTransaction.setTransactionStatus(TransactionStatus.TIKCET);
-					businessTransaction.setStatus(TransactionStatus.TIKCET.getStatusId());
-				}
-				else if((transactionOutput.getTransStatusName().equals(TransactionStatus.CANCELED.getStatus())))
-				{
-					businessTransaction.setTransactionStatus(TransactionStatus.CANCELED);
-					businessTransaction.setStatus(TransactionStatus.CANCELED.getStatusId());
-				}
-				else 
-				{
-					businessTransaction.setTransactionStatus(TransactionStatus.OTHER);
-					businessTransaction.setStatus(TransactionStatus.OTHER.getStatusId());
-				}
+				/*
+				 if(transactionOutput.getTransStatusName().equals(TransactionStatus.PENDING.
+				 getStatus())) {
+				 businessTransaction.setTransactionStatus(TransactionStatus.PENDING);
+				 businessTransaction.setStatus(TransactionStatus.PENDING.getStatusId()); }
+				 else
+				 if(transactionOutput.getTransStatusName().equals(TransactionStatus.TIKCET.
+				 getStatus())) {
+				 businessTransaction.setTransactionStatus(TransactionStatus.TIKCET);
+				 businessTransaction.setStatus(TransactionStatus.TIKCET.getStatusId()); } else
+				 if((transactionOutput.getTransStatusName().equals(TransactionStatus.CANCELED.
+				 getStatus()))) {
+				 businessTransaction.setTransactionStatus(TransactionStatus.CANCELED);
+				 businessTransaction.setStatus(TransactionStatus.CANCELED.getStatusId()); }
+				 else { businessTransaction.setTransactionStatus(TransactionStatus.OTHER);
+				 businessTransaction.setStatus(TransactionStatus.OTHER.getStatusId()); }
+				 */
+				
 			}
 			if(StringUtility.isStringPopulated(transactionOutput.getTransTypeName()))
 			{
