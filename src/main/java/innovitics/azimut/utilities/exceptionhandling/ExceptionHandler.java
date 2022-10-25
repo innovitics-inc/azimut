@@ -5,11 +5,13 @@ import java.util.NoSuchElementException;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 /*import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;*/
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
@@ -118,7 +120,21 @@ public class ExceptionHandler{
 		return this.isExceptionOfTypeEntityNotFoundException(exception)||this.isExceptionOfTypeNoResultException(exception)||this.isExceptionOfTypeNoSuchElementException(exception)||this.isExceptionValidationException(errorCode);
 	}
 	
-	
+	public boolean isConnectionTimeOutException(Exception exception)
+	{
+		boolean result=false;
+		
+		if(exception instanceof ResourceAccessException&&exception.getCause() instanceof HttpHostConnectException)
+		{
+			result=true;
+		}
+		else
+		{
+			result=false;
+		}
+		this.logger.info("Did the connection timeout?::"+result);
+		return result;
+	}
 	public  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
 	{
 		if (this.isNonTechnicalException(exception, errorCode))

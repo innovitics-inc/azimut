@@ -105,17 +105,14 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 		
 		catch (Exception exception) 
 		{
-			
-			this.logger.info("Exception:::"+exception.getClass().getName());
-			
-			
-			if(exception instanceof HttpHostConnectException)
+			if(this.exceptionHandler.isConnectionTimeOutException(exception))
 			{
-				this.logger.info("Connection Timeout Exception:::");
 				throw new IntegrationException(ErrorCode.CONNECTION_TIMEOUT);
 			}
-			throw this.handleException(exception);
-			
+			else
+			{
+				throw this.handleException(exception);
+			}	
 		}
 	}
 	
