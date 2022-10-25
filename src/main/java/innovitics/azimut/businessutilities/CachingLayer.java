@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.utilities.ParentUtility;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -22,7 +23,7 @@ public class CachingLayer  extends ParentUtility {
 	@Autowired CacheManager singletonManager;
 	protected static final Logger logger = LoggerFactory.getLogger(CachingLayer.class);
 
-	public Object getValueIfExisting (Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes,String cacheKey,int timeToLive,int timeToIdle)
+	public Object getValueIfExisting (Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes,String cacheKey,int timeToLive,int timeToIdle) throws BusinessException
 	{
 		/*DiskStoreConfiguration diskStoreConfiguration = new DiskStoreConfiguration();
 		diskStoreConfiguration.setPath("/my/path/dir");

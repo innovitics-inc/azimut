@@ -2,6 +2,7 @@ package innovitics.azimut.utilities.exceptionhandling;
 
 public enum ErrorCode {
 	NO_MATCHED_CLIENT_NUMBER_EXIST(79,"",""),
+	CONNECTION_TIMEOUT(994,"Could not perform the operation, please try again later.",""),
 	OPERATION_FAILURE(995,"Operation failed.",""),
 	PAYMENT_FAILURE(996,"Operation Could not be performed, please check with the vendor.",""),
 	INVALID_SIGNATURE(997,"Invalid signature, corrupted response.",""),

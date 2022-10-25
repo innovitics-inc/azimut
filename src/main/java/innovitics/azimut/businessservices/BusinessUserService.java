@@ -48,7 +48,6 @@ import innovitics.azimut.validations.validators.user.FindUserByUserPhone;
 import innovitics.azimut.validations.validators.user.ForgottenUserPassword;
 @Service
 public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
-	@Autowired CheckAccountMapper checkAccountMapper;
 	@Autowired UserMapper userMapper;
 	@Autowired UserService userService;
 	@Autowired EditUserProfile editUserProfile;
@@ -347,7 +346,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			searchedForBusinessUser=new BusinessUser();			
 			try 
 			{
-				List<AzimutAccount> azimutAccounts=this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
+				List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
 				if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
 				{
 					searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);					
@@ -611,7 +610,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
 		try 
 		{			
-			responseBusinessAzimutClient.setAzimutAccounts(this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());	
+			responseBusinessAzimutClient.setAzimutAccounts(this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());	
 		}
 		catch(Exception exception)
 		{
@@ -752,18 +751,19 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	}
 	
 	
-	public void getMultipleTcAccounts(BusinessUser businessUser)
+	public void getMultipleTcAccounts(BusinessUser businessUser) throws BusinessException
 	{
 		if(businessUser!=null&&BooleanUtility.isTrue(businessUser.getIsOld()))
 		{
 			try 
 			{
-				businessUser.setAzimutAccounts(this.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser),null).getDataList());
+				businessUser.setAzimutAccounts(this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser),null).getDataList());
 			}
 			catch(Exception exception)
 			{
 				this.logger.info("Could not retrieve the azimut bank accounts");
 				exception.printStackTrace();
+				throw this.handleException(exception);
 			}
 		}
 	}

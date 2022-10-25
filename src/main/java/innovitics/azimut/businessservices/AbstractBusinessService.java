@@ -18,6 +18,7 @@ import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.businessutilities.SearchFilter;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.mappers.RestManager;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
@@ -48,7 +49,8 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected UserTypeService userTypeService;
 	@Autowired UserBlockageUtility userBlockageUtility;
 	@Autowired AES aes;
-
+	@Autowired protected  RestManager restManager;
+	
 	protected  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
 	{
 		if (this.exceptionHandler.isNonTechnicalException(exception, errorCode))

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.http.conn.HttpHostConnectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -32,6 +33,7 @@ import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.errorhandling.RestErrorHandler;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
+import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 
 @Service
@@ -103,6 +105,15 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 		
 		catch (Exception exception) 
 		{
+			
+			this.logger.info("Exception:::"+exception.getClass().getName());
+			
+			
+			if(exception instanceof HttpHostConnectException)
+			{
+				this.logger.info("Connection Timeout Exception:::");
+				throw new IntegrationException(ErrorCode.CONNECTION_TIMEOUT);
+			}
 			throw this.handleException(exception);
 			
 		}

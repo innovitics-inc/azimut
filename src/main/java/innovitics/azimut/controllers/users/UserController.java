@@ -37,11 +37,8 @@ import org.springframework.web.multipart.MultipartException;
 @RequestMapping("/api/user")
 public class UserController extends BaseGenericRestController<BusinessUser,String> {
 
-	@Autowired BusinessUserService businessUserService;
-	
+	@Autowired BusinessUserService businessUserService;	
 	@Autowired BlobFileUtility blobFileUtility;
-	@Autowired FundService fundService;
-	@Autowired UserDeviceService userDeviceService;
 
 	@PostMapping(value="/getById",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 

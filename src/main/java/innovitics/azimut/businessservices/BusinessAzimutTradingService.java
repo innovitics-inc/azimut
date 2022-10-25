@@ -23,8 +23,6 @@ import innovitics.azimut.utilities.mapping.UserMapper;
 @Service
 public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAzimutTrading> {
 
-	@Autowired PlaceOrderMapper placeOrderMapper;
-	@Autowired InjectWithdrawMapper injectWithdrawMapper;
 	@Autowired UserMapper userMapper;
 
 	public BaseAzimutTrading placeOrder(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
@@ -38,22 +36,18 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 			throw this.handleException(tokenizedBusinessUser,exception);	
 		}
 		*/
-		try {
+		
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		@SuppressWarnings("unchecked")
 		BaseAzimutTrading responseBaseAzimutTrading=
 		
 		 (BaseAzimutTrading)(this.userBlockageUtility.
-		 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,placeOrderMapper,"consumeRestService",
+		 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,this.restManager.placeOrderMapper,"consumeRestService",
 				 new Object[]{this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading),null},
 				 new Class<?>[]{BaseAzimutTrading.class,String.class},
 				 ErrorCode.OPERATION_FAILURE));
 		return responseBaseAzimutTrading;
-		 }
-		catch(Exception exception)
-		{
-			throw this.handleException(exception);
-		}
+		 
 	}
 	
 	public BaseAzimutTrading inject(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException, IOException
@@ -67,22 +61,18 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		{
 			throw this.handleException(tokenizedBusinessUser,exception);
 		}*/
-		try {
+	
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		@SuppressWarnings("unchecked")
 		BaseAzimutTrading responseBaseAzimutTrading=
 		
 		 (BaseAzimutTrading)(this.userBlockageUtility.
-				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"consumeRestService",
+				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,this.restManager.injectWithdrawMapper,"consumeRestService",
 						 new Object[]{this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_DEPOSIT},
 						 new Class<?>[]{BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
 		
 		return responseBaseAzimutTrading;
-		}
-		catch(Exception exception)
-		{
-			throw this.handleException(exception);
-		}
+	
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -97,23 +87,19 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 			throw this.handleException(tokenizedBusinessUser,exception);
 		}
 		*/
-		try 
-		{
+
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		BaseAzimutTrading responseBaseAzimutTrading=
 				
 				 (BaseAzimutTrading)(this.userBlockageUtility.
-				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,injectWithdrawMapper,"consumeRestService",
+				 checkUserBlockage(numberOfTrials,this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,this.restManager.injectWithdrawMapper,"consumeRestService",
 						 new Object[]{this.prepareInjectWithdrawInputs(tokenizedBusinessUser,baseAzimutTrading),StringUtility.INFORM_WITHDRAW},
 						 new Class<?>[]{BaseAzimutTrading.class,String.class},ErrorCode.OPERATION_FAILURE));
 		
 		return responseBaseAzimutTrading;
-		}
-		catch(Exception exception)
-		{
-			throw this.handleException(exception);
-		}
 	}
+	
+	
 
 	public BaseAzimutTrading getUserBlockage(BusinessUser tokenizedBusinessUser)
 	{

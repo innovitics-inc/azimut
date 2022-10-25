@@ -1,5 +1,6 @@
 package innovitics.azimut.utilities.exceptionhandling;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 
 import javax.persistence.EntityNotFoundException;
@@ -149,7 +150,13 @@ public class ExceptionHandler{
 			}
 			return false;
 	}
-	
+	 public BusinessException handleException(Exception exception) 
+		{
+			if(exception instanceof IntegrationException)
+				return this.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+			else		
+				return this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+		}
 	
 	public Object getNullIfNonExistent(Exception exception)
 	 {
@@ -161,4 +168,23 @@ public class ExceptionHandler{
 			else
 			return null;
 	 }
+	
+	public boolean isInvocationException(Exception exception)
+	{
+		boolean result=true;
+		if(exception instanceof NoSuchMethodException || 
+		   exception instanceof SecurityException || 
+		   exception instanceof IllegalAccessException ||
+		   exception instanceof IllegalArgumentException)
+			{
+			result= false;
+			}
+		else if(exception instanceof InvocationTargetException)		
+			{
+			result= true;
+			}
+	
+		return result;
+	}
+	
 }

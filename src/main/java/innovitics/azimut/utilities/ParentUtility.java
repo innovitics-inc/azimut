@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import innovitics.azimut.businessservices.AbstractBusinessService;
 import innovitics.azimut.configproperties.ConfigProperties;
+import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
@@ -35,7 +36,7 @@ protected Timestamp getMinutesBefore(String value)
 	}
 
 
-protected Object getValueUsingReflection(Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes)
+protected Object getValueUsingReflection(Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes) throws BusinessException
 {				
 	try 
 	{
@@ -48,8 +49,14 @@ protected Object getValueUsingReflection(Object object,String methodName,Object[
 	{
 		this.logger.info("Could not return the method invocation");
 		exception.printStackTrace();
-		return null;
-	}  
+		if(this.exceptionHandler.isInvocationException(exception))
+		{
+		   this.logger.info("Detecting if the exception was caused by an integration exception:::");
+		  Exception cause=(Exception) ((InvocationTargetException)exception).getCause();
+		  throw this.exceptionHandler.handleException(cause);
+		}
+	}
+	return null;
 }
 
 }
