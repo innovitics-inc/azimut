@@ -88,12 +88,26 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 	public BusinessAzimutClient getBalanceAndTransactionsUpgraded(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
-		return this.azimutClientDetailsUtility.getBalanceAndTransactionsCached(cachingLayer,restManager,businessAzimutClient,tokenizedBusinessUser);
+		try 
+		{
+			return this.azimutClientDetailsUtility.getBalanceAndTransactionsCached(cachingLayer,restManager,businessAzimutClient,tokenizedBusinessUser);
+		}
+		catch(Exception exception)
+		{
+		 throw this.handleException(exception);
+		}
 	}
 
 	public BusinessAzimutClient getClientFundsUpgraded(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
-		return this.azimutClientDetailsUtility.getPaginatedClientFundsCached(cachingLayer,restManager,businessAzimutClient,tokenizedBusinessUser,this.arrayUtility);
+		try 
+		{
+			return this.azimutClientDetailsUtility.getPaginatedClientFundsCached(cachingLayer,restManager,businessAzimutClient,tokenizedBusinessUser,arrayUtility);
+		}
+		catch(Exception exception)
+		{
+		 throw this.handleException(exception);
+		}
 	}
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
@@ -124,12 +138,22 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
+		List<BusinessClientBankAccountDetails> teacomputersBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
 		try 
 		{			
 			if(isList)
 			{
-				List<BusinessClientBankAccountDetails> teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
-				
+				try 
+				{
+					teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
+				}
+				catch(Exception exception)
+				{
+					if(!this.exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(exception,ErrorCode.INVALID_CLIENT))
+					{
+						throw this.handleException(exception);
+					}
+				}
 				if(BooleanUtility.isFalse(businessAzimutClient.getIsActive()))
 				{
 					BusinessClientBankAccountDetails [] localClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);

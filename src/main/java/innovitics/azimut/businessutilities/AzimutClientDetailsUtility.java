@@ -56,7 +56,7 @@ public class AzimutClientDetailsUtility extends ParentUtility
 	{
 		BusinessAzimutClient responseBusinessAzimutClient= (BusinessAzimutClient)cachingLayer.getValueIfExisting(this,"getBalanceAndTransactions",
 				new Object[]{restManager,businessAzimutClient,tokenizedBusinessUser},
-				new Class<?>[]{RestManager.class,BusinessAzimutClient.class,BusinessUser.class},"AZ"+tokenizedBusinessUser.getUserId(),60,600);
+				new Class<?>[]{RestManager.class,BusinessAzimutClient.class,BusinessUser.class},"AZ"+tokenizedBusinessUser.getUserId(),60,60);
 		
 		return responseBusinessAzimutClient;
 		
@@ -65,7 +65,7 @@ public class AzimutClientDetailsUtility extends ParentUtility
 	{
 		BusinessAzimutClient responseBusinessAzimutClient= (BusinessAzimutClient)cachingLayer.getValueIfExisting(this,"getPaginatedClientFunds",
 				new Object[]{restManager,tokenizedBusinessUser,businessAzimutClient,arrayUtility},
-				new Class<?>[]{RestManager.class,BusinessUser.class,BusinessAzimutClient.class,ArrayUtility.class},"Funds"+tokenizedBusinessUser.getUserId(),60,600);
+				new Class<?>[]{RestManager.class,BusinessUser.class,BusinessAzimutClient.class,ArrayUtility.class},"Funds"+tokenizedBusinessUser.getUserId(),60,60);
 		
 		return responseBusinessAzimutClient;
 		
