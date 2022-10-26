@@ -360,20 +360,18 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			}
 			catch(Exception teacomputerException)
 			{
+				teacomputerException.printStackTrace();
 				
-				/*if(teacomputerException instanceof IntegrationException)
-					throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)teacomputerException, ErrorCode.FAILED_TO_INTEGRATE);
-					else		
-					throw this.handleBusinessException((Exception)teacomputerException,ErrorCode.OPERATION_NOT_PERFORMED);
-				*/
 				this.logger.info("Enter TC exception Handling");
 				if(exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(teacomputerException, ErrorCode.NO_MATCHED_CLIENT_NUMBER_EXIST))
 				{
+					this.logger.info("Go to reg");
 					searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
 				}
 				else
 				{
-					throw teacomputerException;
+					this.logger.info("Throw exception");
+					throw this.handleException(teacomputerException);
 				}
 			}
 			

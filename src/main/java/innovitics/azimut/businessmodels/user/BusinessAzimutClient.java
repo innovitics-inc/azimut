@@ -6,7 +6,7 @@ import java.util.Map;
 import innovitics.azimut.businessmodels.BusinessTransaction;
 import innovitics.azimut.businessmodels.funds.BusinessClientFund;
 import innovitics.azimut.models.azimutdetails.AzimutDetails;
-import innovitics.azimut.models.user.AzimutDataLookup;
+import innovitics.azimut.models.teacomputers.Currency;
 import innovitics.azimut.utilities.CustomJsonRootName;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
@@ -36,7 +36,7 @@ public class BusinessAzimutClient extends BusinessUser{
 	private List<EportfolioDetail> eportfolioDetails;
 	private String reportType;
 	private Long currencyId;
-	
+	private List<Currency> currency;
 	
 	public Double getPendingAmount() {
 		return pendingAmount;
@@ -221,6 +221,14 @@ public class BusinessAzimutClient extends BusinessUser{
 
 	public void setReportType(String reportType) {
 		this.reportType = reportType;
+	}
+
+	public List<Currency> getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(List<Currency> currency) {
+		this.currency = currency;
 	}
 
 	public BusinessAzimutClient(BusinessClientBankAccountDetails[] clientBankAccounts) {

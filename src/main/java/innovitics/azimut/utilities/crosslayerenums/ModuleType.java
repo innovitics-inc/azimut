@@ -2,19 +2,19 @@ package innovitics.azimut.utilities.crosslayerenums;
 
 public enum ModuleType {
 	
-	DEPOSIT(1,"DEPOSIT"),
-	SWIFT(2,"SWIFT"),
+	CASH(5,"Cash"),
+	SWIFT(22,"SWIFT"),
 	OTHER(3,"OTHER")
 	;
 
-	ModuleType(int typeId, String type) {
+	ModuleType(long typeId, String type) {
 		this.typeId=typeId;
 		this.type=type;
 	}
 
-	private final int typeId;
+	private final long typeId;
 	private final String type;
-	public int getTypeId() {
+	public long getTypeId() {
 		return typeId;
 	}
 	public String getType() {

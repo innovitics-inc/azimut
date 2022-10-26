@@ -87,6 +87,13 @@ public class CompanyBankAccountResponse extends TeaComputerResponse{
 	public void setCurrencyName(String currencyName) {
 		this.currencyName = currencyName;
 	}
+	@Override
+	public String toString() {
+		return "CompanyBankAccountResponse [accountID=" + accountID + ", bankId=" + bankId + ", bankName=" + bankName
+				+ ", branchId=" + branchId + ", branchName=" + branchName + ", accountNo=" + accountNo + ", iban="
+				+ iban + ", accountStatus=" + accountStatus + ", accountStatusName=" + accountStatusName
+				+ ", swiftCode=" + swiftCode + ", currencyID=" + currencyID + ", currencyName=" + currencyName + "]";
+	}
 	
 	
 	

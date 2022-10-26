@@ -12,7 +12,8 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	private Double orderValue;
 	private Integer quantity;
     private Long currencyId;
-    private String accountNo;
+    private Long accountId;
+    private Long bankId;
     private Long orderId;
     private MultipartFile injectionDocument;
     private String userId;
@@ -46,11 +47,17 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	public void setCurrencyId(Long currencyId) {
 		this.currencyId = currencyId;
 	}
-	public String getAccountNo() {
-		return accountNo;
+	public Long getAccountId() {
+		return accountId;
 	}
-	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}	
+	public Long getBankId() {
+		return bankId;
+	}
+	public void setBankId(Long bankId) {
+		this.bankId = bankId;
 	}
 	public Long getOrderId() {
 		return orderId;

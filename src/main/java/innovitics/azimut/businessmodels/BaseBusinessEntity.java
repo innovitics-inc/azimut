@@ -1,11 +1,16 @@
 package innovitics.azimut.businessmodels;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class BaseBusinessEntity {
+public class BaseBusinessEntity implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3988427385021157139L;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	protected Date createdAt;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")

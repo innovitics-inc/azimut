@@ -6,8 +6,9 @@ public class InjectWithdrawRequest extends TeaComputerRequest{
 	   	private Long ModuleTypeId;
 	   	private Long CurrencyId;
 	   	private Double  OrderValue;
-	   	private String AccountNo;
-	   	private String AccountId;
+	   	private Long AccountNo;
+	   	private Long AccountId;
+	   	private Long BankId;
 	   	private String TicketDoc;
 	   	
 	   	
@@ -35,10 +36,10 @@ public class InjectWithdrawRequest extends TeaComputerRequest{
 		public void setOrderValue(Double orderValue) {
 			OrderValue = orderValue;
 		}
-		public String getAccountNo() {
+		public Long getAccountNo() {
 			return AccountNo;
 		}
-		public void setAccountNo(String accountNo) {
+		public void setAccountNo(Long accountNo) {
 			AccountNo = accountNo;
 		}
 		public String getTicketDoc() {
@@ -47,12 +48,19 @@ public class InjectWithdrawRequest extends TeaComputerRequest{
 		public void setTicketDoc(String ticketDoc) {
 			TicketDoc = ticketDoc;
 		}
-		public String getAccountId() {
+		public Long getAccountId() {
 			return AccountId;
 		}
-		public void setAccountId(String accountId) {
+		public void setAccountId(Long accountId) {
 			AccountId = accountId;
 		}
+		public Long getBankId() {
+			return BankId;
+		}
+		public void setBankId(Long bankId) {
+			BankId = bankId;
+		}
+		
 	   	
 	   	
 

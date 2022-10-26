@@ -79,10 +79,9 @@ public class CompanyBankAccountOutput {
 	}
 	@Override
 	public String toString() {
-		return "CompanyBankAccountOutput [bankId=" + bankId + ", bankName=" + bankName + ", branchId=" + branchId
-				+ ", branchName=" + branchName + ", accountNo=" + accountNo + ", swiftCode=" + swiftCode + ", iban="
-				+ iban + "]";
+		return "CompanyBankAccountOutput [accountId=" + accountId + ", bankId=" + bankId + ", bankName=" + bankName
+				+ ", branchId=" + branchId + ", branchName=" + branchName + ", accountNo=" + accountNo + ", swiftCode="
+				+ swiftCode + ", iban=" + iban + ", currencyId=" + currencyId + ", currencyName=" + currencyName + "]";
 	}
-	
-	
+
 }

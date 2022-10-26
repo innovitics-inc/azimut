@@ -4,7 +4,7 @@ public class InjectWithdrawInput extends TeaComputerInput{
 	
     private Long currencyId;
     private Double  orderValue;
-    private String accountNo;
+    private Long accountId;
     private Long moduleType;
     private String ticketDoc;
 	
@@ -20,11 +20,11 @@ public class InjectWithdrawInput extends TeaComputerInput{
 	public void setOrderValue(Double orderValue) {
 		this.orderValue = orderValue;
 	}
-	public String getAccountNo() {
-		return accountNo;
+	public Long getAccountId() {
+		return accountId;
 	}
-	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
 	}
 	public Long getModuleType() {
 		return moduleType;

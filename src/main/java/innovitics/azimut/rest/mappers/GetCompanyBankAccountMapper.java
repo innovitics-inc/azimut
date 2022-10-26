@@ -66,9 +66,9 @@ public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccoun
 		BusinessCompanyBankAccount businessCompanyBankAccount=new BusinessCompanyBankAccount();
 		if(companyBankAccountOutput!=null)
 		{
+			this.logger.info("companyBankAccountOutput:::"+companyBankAccountOutput.toString());
 			businessCompanyBankAccount.setBankName(companyBankAccountOutput.getBankName());
 			businessCompanyBankAccount.setAccountNo(companyBankAccountOutput.getAccountNo());
-			businessCompanyBankAccount.setBankName(companyBankAccountOutput.getBankName());
 			businessCompanyBankAccount.setBranchName(companyBankAccountOutput.getBranchName());
 			businessCompanyBankAccount.setIban(companyBankAccountOutput.getIban());
 			businessCompanyBankAccount.setSwiftCode(companyBankAccountOutput.getSwiftCode());
@@ -76,6 +76,7 @@ public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccoun
 			businessCompanyBankAccount.setCurrencyId(companyBankAccountOutput.getCurrencyId());
 			businessCompanyBankAccount.setCurrencyName(companyBankAccountOutput.getCurrencyName());
 			businessCompanyBankAccount.setAccountId(companyBankAccountOutput.getAccountId());
+			businessCompanyBankAccount.setBankId(companyBankAccountOutput.getBankId());
 				
 		}
 		return businessCompanyBankAccount; 

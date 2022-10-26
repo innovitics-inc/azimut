@@ -2,7 +2,7 @@ package innovitics.azimut.utilities.crosslayerenums;
 
 public enum TransactionStatus {
 
-	PENDING(1,610,"PENDING","معلق"),
+	PENDING(1,592,"PENDING","معلق"),
 	TIKCET(2,593,"POSTED","تنفيذ"),
 	CANCELED(3,595,"CANCELED","الغاء"),
 	OTHER(4,0,"OTHER","أخرى")

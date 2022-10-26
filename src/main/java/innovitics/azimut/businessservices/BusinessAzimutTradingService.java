@@ -14,6 +14,7 @@ import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.rest.mappers.InjectWithdrawMapper;
 import innovitics.azimut.rest.mappers.PlaceOrderMapper;
 import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
+import innovitics.azimut.utilities.crosslayerenums.ModuleType;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
@@ -175,11 +176,11 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 			addBaseAzimutTrading.setAzId(tokenizedBusinessUser.getUserId());
 			addBaseAzimutTrading.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
 			addBaseAzimutTrading.setOrderValue(baseAzimutTrading.getOrderValue());
-			addBaseAzimutTrading.setAccountNo(baseAzimutTrading.getAccountNo());
+			addBaseAzimutTrading.setAccountId(baseAzimutTrading.getAccountId());
+			addBaseAzimutTrading.setBankId(baseAzimutTrading.getBankId());
 			addBaseAzimutTrading.setCurrencyId(baseAzimutTrading.getCurrencyId());
-			addBaseAzimutTrading.setUserId(tokenizedBusinessUser.getUserId());
-			addBaseAzimutTrading.setModuleTypeId(baseAzimutTrading.getModuleTypeId());
-		
+			addBaseAzimutTrading.setUserId(tokenizedBusinessUser.getUserId());		
+			addBaseAzimutTrading.setModuleTypeId(ModuleType.CASH.getTypeId());
 			if(baseAzimutTrading.getInjectionDocument()!=null)
 			try 
 			{

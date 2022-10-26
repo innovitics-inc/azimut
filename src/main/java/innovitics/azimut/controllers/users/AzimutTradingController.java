@@ -57,14 +57,16 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
 			@RequestParam ("orderValue") Double orderValue,
 			@RequestParam ("currencyId") Long currencyId,
-			@RequestParam ("accountNo") String accountNo,
+			@RequestParam ("accountId") Long accountId,
+			@RequestParam ("bankId") Long bankId,
 			@RequestParam (name="file",required=false) MultipartFile file) throws BusinessException,MaxUploadSizeExceededException,IllegalStateException, IOException, IntegrationException {
 		try
 		{
 			BaseAzimutTrading inputBaseAzimutTrading=new BaseAzimutTrading();
 			inputBaseAzimutTrading.setOrderValue(orderValue);
 			inputBaseAzimutTrading.setCurrencyId(currencyId);
-			inputBaseAzimutTrading.setAccountNo(accountNo);
+			inputBaseAzimutTrading.setAccountId(accountId);
+			inputBaseAzimutTrading.setBankId(bankId);
 			inputBaseAzimutTrading.setInjectionDocument(file);
 			
 			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.inject(this.getCurrentRequestHolder(token),inputBaseAzimutTrading),null,null);

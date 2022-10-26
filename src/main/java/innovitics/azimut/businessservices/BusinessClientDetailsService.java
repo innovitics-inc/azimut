@@ -22,6 +22,7 @@ import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessmodels.user.EportfolioDetail;
+import innovitics.azimut.businessutilities.AzimutClientDetailsUtility;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.mappers.AddAccountMapper;
@@ -37,6 +38,7 @@ import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
 import innovitics.azimut.rest.mappers.GetReportMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
 import innovitics.azimut.rest.mappers.HoldClientBankAccountMapper;
+import innovitics.azimut.rest.mappers.RestManager;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
@@ -81,7 +83,18 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired FundService fundService;
 @Autowired FundPriceMapper fundPriceMapper;
 @Autowired FundMapper fundMapper;
+@Autowired AzimutClientDetailsUtility azimutClientDetailsUtility;
 
+
+	public BusinessAzimutClient getBalanceAndTransactionsUpgraded(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	{
+		return this.azimutClientDetailsUtility.getBalanceAndTransactionsCached(cachingLayer,restManager,businessAzimutClient,tokenizedBusinessUser);
+	}
+
+	public BusinessAzimutClient getClientFundsUpgraded(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	{
+		return this.azimutClientDetailsUtility.getPaginatedClientFundsCached(cachingLayer,restManager,businessAzimutClient,tokenizedBusinessUser,this.arrayUtility);
+	}
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{

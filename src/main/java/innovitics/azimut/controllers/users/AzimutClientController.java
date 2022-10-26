@@ -37,7 +37,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		try
 		{
 			this.logger.info("SearchBusinessAzmiutClient::"+searchBusinessAzimutClient);
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBalanceAndTransactions(searchBusinessAzimutClient,this.getCurrentRequestHolder(token)),null, null);
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBalanceAndTransactionsUpgraded(searchBusinessAzimutClient,this.getCurrentRequestHolder(token)),null, null);
 		}		
 		catch(BusinessException businessException)
 		{

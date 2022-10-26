@@ -10,6 +10,7 @@ import innovitics.azimut.businessmodels.BusinessTransaction;
 @Component
 public class CashTransactionSortCompare implements Comparator<BusinessTransaction>{
 	
+	//SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	@Override
 	public int compare(BusinessTransaction o1, BusinessTransaction o2) {			
