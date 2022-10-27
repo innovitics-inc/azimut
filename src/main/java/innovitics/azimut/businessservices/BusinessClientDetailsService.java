@@ -143,17 +143,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		{			
 			if(isList)
 			{
-				try 
-				{
-					teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
-				}
-				catch(Exception exception)
-				{
-					if(!this.exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(exception,ErrorCode.INVALID_CLIENT))
-					{
-						throw this.handleException(exception);
-					}
-				}
+			
 				if(BooleanUtility.isFalse(businessAzimutClient.getIsActive()))
 				{
 					BusinessClientBankAccountDetails [] localClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
@@ -162,9 +152,10 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 					{	
 						teacomputersBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
 					}
-				}		
-				responseBusinessAzimutClient.setBankList(teacomputersBankAccounts);
+				}
 				
+				teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
+					
 			}
 			else if(!isList)
 			{
@@ -180,9 +171,12 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-			throw this.handleException(exception);
+			if(!this.exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(exception,ErrorCode.INVALID_CLIENT)&&BooleanUtility.isFalse(tokenizedBusinessUser.getIsVerified()))
+			{
+				throw this.handleException(exception);
+			}
 		}
-
+		responseBusinessAzimutClient.setBankList(teacomputersBankAccounts);
 		return responseBusinessAzimutClient;
 	}
 	
