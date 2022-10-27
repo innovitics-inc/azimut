@@ -138,6 +138,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
+		List<BusinessClientBankAccountDetails> totalBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
 		List<BusinessClientBankAccountDetails> teacomputersBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
 		try 
 		{			
@@ -150,12 +151,12 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				
 					if(arrayUtility.isArrayPopulated(localClientTeacomputersBankAccounts))
 					{	
-						teacomputersBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
+						totalBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
 					}
 				}
 				
 				teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
-					
+				totalBankAccounts.addAll(teacomputersBankAccounts);	
 			}
 			else if(!isList)
 			{
@@ -176,7 +177,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				throw this.handleException(exception);
 			}
 		}
-		responseBusinessAzimutClient.setBankList(teacomputersBankAccounts);
+		responseBusinessAzimutClient.setBankList(totalBankAccounts);
 		return responseBusinessAzimutClient;
 	}
 	
