@@ -64,28 +64,36 @@ public void syncTeaComputersData() throws IntegrationException
 	this.lookUpMapper.wrapBaseBusinessEntity(true, new BusinessAzimutClient(AzimutEntityType.NATIONALITY), null);
 }
 
-	public void saveAzimutClientBankAccountData(BusinessUser businessUser,BusinessClientBankAccountDetails [] businessClientBankAccountDetails)
+	public void saveAzimutClientBankAccountData(BusinessUser businessUser,BusinessAzimutClient businessAzimutClient)
 	{
 		List<ClientBankAccount> clientBankAccounts=new ArrayList<ClientBankAccount>();
 		
-		if(this.arrayUtility.isArrayPopulated(businessClientBankAccountDetails))
+		if(this.arrayUtility.isArrayPopulated(businessAzimutClient.getClientBankAccounts()))
 		{
-			for(BusinessClientBankAccountDetails businessClientBankAccountDetailsIterator: businessClientBankAccountDetails)
+			for(BusinessClientBankAccountDetails businessClientBankAccountDetailsIterator: businessAzimutClient.getClientBankAccounts())
 			{
-				clientBankAccounts.add(this.convertBusinessClientBankAccountDetailsToClientBankAccount(businessClientBankAccountDetailsIterator, businessUser));
+				clientBankAccounts.add(this.convertBusinessClientBankAccountDetailsToClientBankAccount(businessAzimutClient.getPersist(),businessClientBankAccountDetailsIterator, businessUser));
 			}
 		}
 		this.teaComputerService.saveClientBankAccountsTemporarily(clientBankAccounts);	
 	}
 
-	
+	public BusinessClientBankAccountDetails[] getKYCClientBankAccountData(BusinessUser businessUser)
+	{
+		return this.getData(businessUser, true);
+	}
 	
 	public BusinessClientBankAccountDetails[] getClientBankAccountData(BusinessUser businessUser)
+	{
+		return this.getData(businessUser, false);
+	}
+
+	public BusinessClientBankAccountDetails[] getData(BusinessUser businessUser,boolean kyc)
 	{
 		List<ClientBankAccount> clientBankAccounts=new  ArrayList<ClientBankAccount>();
 		try 
 		{
-			clientBankAccounts=this.teaComputerService.getUserClientBankAccounts(businessUser.getId());
+			clientBankAccounts=this.teaComputerService.getUserClientBankAccounts(businessUser.getId(),kyc);
 
 		}
 		catch(Exception exception)
@@ -139,10 +147,7 @@ public void syncTeaComputersData() throws IntegrationException
 			BusinessClientBankAccountDetails[] empty= {};
 			return empty;
 		}
-				
 	}
-
-	
 
  public ClientBankAccount removeClientBankAccount(Long id)
  {
@@ -280,7 +285,7 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 		return null;
 	}
 	
-	 ClientBankAccount	convertBusinessClientBankAccountDetailsToClientBankAccount(BusinessClientBankAccountDetails businessClientBankAccountDetails,BusinessUser businessUser)
+	 ClientBankAccount	convertBusinessClientBankAccountDetailsToClientBankAccount(Boolean persist,BusinessClientBankAccountDetails businessClientBankAccountDetails,BusinessUser businessUser)
 		{
 		 ClientBankAccount clientBankAccount=new ClientBankAccount();
 		 
@@ -299,6 +304,8 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 			clientBankAccount.setIban(businessClientBankAccountDetails.getIban());
 			clientBankAccount.setAccountNo(businessClientBankAccountDetails.getAccountNumber());
 			clientBankAccount.setSwiftCode(businessClientBankAccountDetails.getSwiftCode());
+			clientBankAccount.setKycOnly(BooleanUtility.isFalse(persist)?true:false);
+			
 			return clientBankAccount;
 		}	
 		

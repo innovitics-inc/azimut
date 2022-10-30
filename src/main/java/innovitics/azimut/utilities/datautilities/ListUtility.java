@@ -1,12 +1,17 @@
 package innovitics.azimut.utilities.datautilities;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.ParentUtility;
+import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 @Component
 public class ListUtility<T> extends ParentUtility{
 	
@@ -87,8 +92,53 @@ public class ListUtility<T> extends ParentUtility{
 			 paginatedEntity.setCurrentPage(0);
 			 paginatedEntity.setNextPage(0);
 			 paginatedEntity.setNumberOfPages(0);
+			 paginatedEntity.setPageList(new ArrayList<T>());
 		 }
 		 return paginatedEntity;
 
 	 }
+	 
+	 public List<T> handleExceptionAndReturnEmptyList(Exception exception,ErrorCode errorCode) throws BusinessException 
+		{
+			if(exception instanceof IntegrationException)
+				
+			    {	
+					IntegrationException integrationException=(IntegrationException) exception;
+					if(NumberUtility.areIntegerValuesMatching(integrationException.getErrorCode(), errorCode.getCode()))
+					{
+						return new ArrayList<T>();
+					}
+					else 
+					{
+						throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+					}
+				}
+			
+			else		
+				{
+					throw this.exceptionHandler.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+				}
+		}
+	 public List<?> handleExceptionAndReturnEmptyList(Exception exception,Class<?> clazz,ErrorCode errorCode) throws BusinessException 
+		{
+			if(exception instanceof IntegrationException)
+				
+			    {	
+					IntegrationException integrationException=(IntegrationException) exception;
+					if(NumberUtility.areIntegerValuesMatching(integrationException.getErrorCode(), errorCode.getCode()))
+					{
+						List<?> list=new ArrayList<>();
+						return list;
+					}
+					else 
+					{
+						throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+					}
+				}
+			
+			else		
+				{
+					throw this.exceptionHandler.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+				}
+		}
 }

@@ -371,7 +371,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 				else
 				{
 					this.logger.info("Throw exception");
-					throw this.handleException(teacomputerException);
+					throw this.exceptionHandler.handleException(teacomputerException);
 				}
 			}
 			
@@ -538,7 +538,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			this.editUser(tokenizedBusinessUser);
 			if(BooleanUtility.isTrue(businessUser.getIsMobile()))
 			{
-				businessUser.setClientBankAccounts(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser));
+				businessUser.setClientBankAccounts(this.azimutDataLookupUtility.getKYCClientBankAccountData(tokenizedBusinessUser));
 				
 			}
 			businessUser.setVerificationPercentage(tokenizedBusinessUser.getVerificationPercentage());
@@ -761,7 +761,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			{
 				this.logger.info("Could not retrieve the azimut bank accounts");
 				exception.printStackTrace();
-				throw this.handleException(exception);
+				throw this.exceptionHandler.handleException(exception);
 			}
 		}
 	}

@@ -156,12 +156,5 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 		  }
 	  }
 	 
-	 public BusinessException handleException(Exception exception) 
-		{
-			if(exception instanceof IntegrationException)
-				return this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
-				return this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
-		}
-
+	 
 }

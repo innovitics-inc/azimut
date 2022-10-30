@@ -22,6 +22,7 @@ import innovitics.azimut.repositories.teacomputers.CountryDynamicRepository;
 import innovitics.azimut.repositories.teacomputers.CurrencyDynamicRepository;
 import innovitics.azimut.repositories.teacomputers.NationalityDynamicRepository;
 import innovitics.azimut.services.AbstractService;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.child.BranchChildSpecification;
@@ -136,6 +137,17 @@ public class TeaComputerService extends AbstractService<Country, String> {
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
 		searchCriteriaList.add(new SearchCriteria("userId",userId,SearchOperation.EQUAL,null));
 		searchCriteriaList.add(new SearchCriteria("deletedAt","",SearchOperation.IS_NULL,null));
+		return this.clientBankAccountDynamicRepository.findAll(this.clientBankAccountEntitySpecification.findByCriteria(searchCriteriaList));
+	}
+	public List<ClientBankAccount> getUserClientBankAccounts(Long userId,Boolean kycOnly)
+	{
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("userId",userId,SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("deletedAt","",SearchOperation.IS_NULL,null));
+		
+		if(BooleanUtility.isTrue(kycOnly))
+		searchCriteriaList.add(new SearchCriteria("kycOnly",true,SearchOperation.EQUAL,null));
+		
 		return this.clientBankAccountDynamicRepository.findAll(this.clientBankAccountEntitySpecification.findByCriteria(searchCriteriaList));
 	}
 	

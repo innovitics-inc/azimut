@@ -50,6 +50,8 @@ public class ClientBankAccount extends BaseEntity{
 	private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
+    
+    private Boolean kycOnly;
 	
     public Long getId() {
 		return id;
@@ -164,6 +166,12 @@ public class ClientBankAccount extends BaseEntity{
 	}
 	public void setDeletedAt(Date deletedAt) {
 		this.deletedAt = deletedAt;
+	}
+	public Boolean getKycOnly() {
+		return kycOnly;
+	}
+	public void setKycOnly(Boolean kycOnly) {
+		this.kycOnly = kycOnly;
 	}
 
 }
