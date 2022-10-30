@@ -104,13 +104,13 @@ public class ListUtility<T> extends ParentUtility{
 				
 			    {	
 					IntegrationException integrationException=(IntegrationException) exception;
-					if(NumberUtility.areIntegerValuesMatching(integrationException.getErrorCode(), errorCode.getCode()))
+					if(NumberUtility.areIntegerValuesMatching(integrationException.getErrorCode().intValue(), errorCode.getCode()))
 					{
 						return new ArrayList<T>();
 					}
 					else 
 					{
-						throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+						throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException(integrationException, ErrorCode.FAILED_TO_INTEGRATE);
 					}
 				}
 			
@@ -119,26 +119,5 @@ public class ListUtility<T> extends ParentUtility{
 					throw this.exceptionHandler.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
 				}
 		}
-	 public List<?> handleExceptionAndReturnEmptyList(Exception exception,Class<?> clazz,ErrorCode errorCode) throws BusinessException 
-		{
-			if(exception instanceof IntegrationException)
-				
-			    {	
-					IntegrationException integrationException=(IntegrationException) exception;
-					if(NumberUtility.areIntegerValuesMatching(integrationException.getErrorCode(), errorCode.getCode()))
-					{
-						List<?> list=new ArrayList<>();
-						return list;
-					}
-					else 
-					{
-						throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-					}
-				}
-			
-			else		
-				{
-					throw this.exceptionHandler.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
-				}
-		}
+
 }
