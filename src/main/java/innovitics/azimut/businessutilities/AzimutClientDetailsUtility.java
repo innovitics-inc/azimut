@@ -31,6 +31,7 @@ import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.mapping.FundMapper;
 import innovitics.azimut.utilities.mapping.FundPriceMapper;
 import innovitics.azimut.validations.Validation;
@@ -39,7 +40,7 @@ import innovitics.azimut.validations.validators.azimutclient.GetBalanceAndTransa
 public class AzimutClientDetailsUtility extends ParentUtility 
 {
 	@Autowired Validation<?> validation;
-	@Autowired ListUtility<BusinessTransaction> listUtility;
+	@Autowired ListUtility<BusinessTransaction> businessTransactionListUtility;
 	@Autowired CashTransactionSortCompare cashTransactionSortCompare;
 	@Autowired GetBalanceAndTransactions getBalanceAndTransactions;	
 	@Autowired ListUtility<BusinessClientFund> clientFundListUtility ;
@@ -76,25 +77,34 @@ public class AzimutClientDetailsUtility extends ParentUtility
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
 		this.validation.validate(businessAzimutClient, getBalanceAndTransactions, BusinessAzimutClient.class.getName());
+		responseBusinessAzimutClient.setSorting(businessAzimutClient.getSorting());
 
 		try 
-		{
-				responseBusinessAzimutClient.setSorting(businessAzimutClient.getSorting());
-				responseBusinessAzimutClient.setBusinessTransactions(restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
-				responseBusinessAzimutClient.setBusinessClientCashBalances(restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
+		{				
+			responseBusinessAzimutClient.setBusinessClientCashBalances(restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());			
+			
 		}
 		catch(Exception exception)
 		{
-			throw this.exceptionHandler.handleException(exception);
+			responseBusinessAzimutClient.setLastTransactionDate("No transactions yet.");
+			responseBusinessAzimutClient.setBusinessClientCashBalances(clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));						
 		}
-
+		try 
+		{
+				responseBusinessAzimutClient.setBusinessTransactions(restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
+		}
+		catch(Exception exception)
+		{
+			responseBusinessAzimutClient.setBusinessTransactions(businessTransactionListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));
+		}
+		
 		return this.beautifyBalanceAndTransactionsBusinessAzimutClient(responseBusinessAzimutClient);
 	}
 	
 	public BusinessAzimutClient beautifyBalanceAndTransactionsBusinessAzimutClient(BusinessAzimutClient businessAzimutClient)
 	{
 		double pendingAmount=0;
-		if(businessAzimutClient!=null &&listUtility.isListPopulated(businessAzimutClient.getBusinessTransactions()))
+		if(businessAzimutClient!=null &&businessTransactionListUtility.isListPopulated(businessAzimutClient.getBusinessTransactions()))
 			{
 				List<BusinessTransaction> unsortedTransactions=businessAzimutClient.getBusinessTransactions();
 				
@@ -206,7 +216,7 @@ public class AzimutClientDetailsUtility extends ParentUtility
 			
 			catch(Exception exception)
 			{
-				throw this.exceptionHandler.handleException(exception);
+				responseBusinessAzimutClient.setBusinessClientFunds(clientFundListUtility.handleExceptionAndReturnEmptyList(exception, ErrorCode.INVALID_CLIENT));
 			}
 			
 			return responseBusinessAzimutClient;

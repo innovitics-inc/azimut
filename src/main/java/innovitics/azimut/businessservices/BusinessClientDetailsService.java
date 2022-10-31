@@ -25,20 +25,6 @@ import innovitics.azimut.businessmodels.user.EportfolioDetail;
 import innovitics.azimut.businessutilities.AzimutClientDetailsUtility;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
-import innovitics.azimut.rest.mappers.AddAccountMapper;
-import innovitics.azimut.rest.mappers.AddClientBankAccountMapper;
-import innovitics.azimut.rest.mappers.CheckAccountMapper;
-import innovitics.azimut.rest.mappers.GetClientBalanceMapper;
-import innovitics.azimut.rest.mappers.GetClientBankAccountsMapper;
-import innovitics.azimut.rest.mappers.GetClientFundsMapper;
-import innovitics.azimut.rest.mappers.GetCompanyBankAccountMapper;
-import innovitics.azimut.rest.mappers.GetEportfolioMapper;
-import innovitics.azimut.rest.mappers.GetFundPricesMapper;
-import innovitics.azimut.rest.mappers.GetFundTransactionsMapper;
-import innovitics.azimut.rest.mappers.GetReportMapper;
-import innovitics.azimut.rest.mappers.GetTransactionsMapper;
-import innovitics.azimut.rest.mappers.HoldClientBankAccountMapper;
-import innovitics.azimut.rest.mappers.RestManager;
 import innovitics.azimut.services.FundService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
@@ -53,7 +39,6 @@ import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.exceptionhandling.AzimutExceptionHandler;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.mapping.FundMapper;
 import innovitics.azimut.utilities.mapping.FundPriceMapper;
@@ -66,7 +51,7 @@ import innovitics.azimut.validations.validators.azimutclient.SaveClientBankAccou
 public class BusinessClientDetailsService extends AbstractBusinessService<BusinessAzimutClient> {
 
 
-@Autowired ListUtility<BusinessTransaction>businessTransactionListUtility;
+@Autowired ListUtility<BusinessTransaction> businessTransactionListUtility;
 @Autowired ListUtility<BusinessFundPrice> fundPricesListUtility;
 @Autowired ListUtility<BusinessClientFund> clientFundListUtility ;
 @Autowired ListUtility<BusinessClientCashBalance> clientCashBalanceListUtility ;
@@ -124,16 +109,15 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			responseBusinessAzimutClient.setBusinessClientCashBalances(this.restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());			}
 		catch(Exception exception)
 		{
-			//throw this.exceptionHandler.handleException(exception);		
+			responseBusinessAzimutClient.setLastTransactionDate("No transactions yet.");
 			responseBusinessAzimutClient.setBusinessClientCashBalances(clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));						
 		}
 		try 
 		{
-				responseBusinessAzimutClient.setBusinessTransactions(this.restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
+			responseBusinessAzimutClient.setBusinessTransactions(this.restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
 		}
 		catch(Exception exception)
 		{
-			//throw this.exceptionHandler.handleException(exception);			
 			responseBusinessAzimutClient.setBusinessTransactions(businessTransactionListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));
 		}
 		return this.beautifyBalanceAndTransactionsBusinessAzimutClient(responseBusinessAzimutClient);
@@ -454,6 +438,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		catch(Exception exception)
 		{
+			responseBusinessAzimutClient.setTotalPosition(0D);
+			responseBusinessAzimutClient.setBalance(0D);
 			responseBusinessAzimutClient.setBusinessClientFunds(clientFundListUtility.handleExceptionAndReturnEmptyList(exception, ErrorCode.INVALID_CLIENT));
 		}
 		

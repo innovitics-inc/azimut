@@ -15,7 +15,9 @@ import innovitics.azimut.rest.entities.teacomputers.GetClientFundsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientFundsOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientFundResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientFundsResponse;
+import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
 @Component
 public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetClientFundsOutput, GetClientFundsResponse, BusinessClientFund> 
@@ -66,34 +68,57 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 		{
 			for(ClientFundOutput clientFundOutput:getClientFundsOutput.getClientFundOutputs()) 
 				{
-					businessClientFunds.add(this.changeUnit(clientFundOutput));
+					BusinessClientFund businessClientFund=this.changeUnit(clientFundOutput);
+					if(businessClientFund!=null)
+					{
+						businessClientFunds.add(businessClientFund);
+					}
+				
 				}
 			return businessClientFunds;
-		}		
+		}
 				return null;
 	}
 	
 	
 	private BusinessClientFund changeUnit(ClientFundOutput clientFundOutput)
 	{
-		BusinessClientFund  businessClientFund=new BusinessClientFund();
-		businessClientFund.setTeacomputerId(clientFundOutput.getFundId());
-		businessClientFund.setFundType(clientFundOutput.getAssetClass());
-		businessClientFund.setFundName(clientFundOutput.getCertificateName());
-		businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
-		businessClientFund.setCurrencyRate(clientFundOutput.getCurrencyRate());
-		businessClientFund.setTradePrice(clientFundOutput.getTradePrice());
-		businessClientFund.setQuantity(clientFundOutput.getQuantity());
-		if(clientFundOutput!=null&&StringUtility.isStringPopulated(clientFundOutput.getTradePrice())&&clientFundOutput.getQuantity()!=null&&clientFundOutput.getCurrencyRate()!=null)
-		{	
-			double totalAmount=clientFundOutput.getQuantity().doubleValue()*Double.valueOf(clientFundOutput.getTradePrice())*clientFundOutput.getCurrencyRate();
-			businessClientFund.setTotalAmount(totalAmount);
-		}
-		else
+		if (clientFundOutput != null && StringUtility.isStringPopulated(clientFundOutput.getCertificateName())) 
 		{
-			businessClientFund.setTotalAmount(0d);
+			BusinessClientFund businessClientFund = new BusinessClientFund();
+			businessClientFund.setTeacomputerId(clientFundOutput.getFundId());
+			businessClientFund.setFundType(clientFundOutput.getAssetClass());
+			businessClientFund.setFundName(clientFundOutput.getCertificateName());
+			
+			businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
+			
+			if(clientFundOutput.getCurrencyId()!=null&&StringUtility.isStringPopulated(CurrencyType.getById(Long.valueOf(clientFundOutput.getCurrencyId())).getType()))
+			{
+				businessClientFund.setCurrencyName(CurrencyType.getById((Long.valueOf(clientFundOutput.getCurrencyId()).longValue())).getType());
+			}
+			else
+			{
+				businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
+			}
+			
+			
+			
+			
+			businessClientFund.setCurrencyRate(clientFundOutput.getCurrencyRate());
+			businessClientFund.setTradePrice(clientFundOutput.getTradePrice());
+			businessClientFund.setQuantity(clientFundOutput.getQuantity());
+			if (clientFundOutput != null && StringUtility.isStringPopulated(clientFundOutput.getTradePrice())
+					&& clientFundOutput.getQuantity() != null && clientFundOutput.getCurrencyRate() != null) {
+				double totalAmount = clientFundOutput.getQuantity().doubleValue()
+						* Double.valueOf(clientFundOutput.getTradePrice()) * clientFundOutput.getCurrencyRate();
+				businessClientFund.setTotalAmount(totalAmount);
+			} else {
+				businessClientFund.setTotalAmount(0d);
+			}
+			return businessClientFund;
+		} else {
+			return null;
 		}
-		return businessClientFund;
 	}
 
 }

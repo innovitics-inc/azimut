@@ -71,6 +71,8 @@ public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetCli
 					clientFundOutput.setClientName(responseEntity.getBody()[i].getClientName());
 					clientFundOutput.setClientStatus(responseEntity.getBody()[i].getClientStatus());
 					clientFundOutput.setCurrencyName(responseEntity.getBody()[i].getCurrencyName());
+					if(StringUtility.isStringPopulated(responseEntity.getBody()[i].getCurrencyID()))
+					clientFundOutput.setCurrencyId(Long.valueOf(responseEntity.getBody()[i].getCurrencyID()));
 					
 					if(StringUtility.isStringPopulated(responseEntity.getBody()[i].getCurrencyRate()))
 					clientFundOutput.setCurrencyRate(Double.valueOf(responseEntity.getBody()[i].getCurrencyRate()));

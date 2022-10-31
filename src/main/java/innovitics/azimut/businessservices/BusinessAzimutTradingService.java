@@ -28,16 +28,6 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 
 	public BaseAzimutTrading placeOrder(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{				
-		/*try 
-		{		
-			return this.placeOrderMapper.wrapBaseBusinessEntity(false, this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading), null).getData();
-		}		
-		catch(Exception exception)
-		{
-			throw this.handleException(tokenizedBusinessUser,exception);	
-		}
-		*/
-		
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		@SuppressWarnings("unchecked")
 		BaseAzimutTrading responseBaseAzimutTrading=
@@ -53,16 +43,6 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	
 	public BaseAzimutTrading inject(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException, IOException
 	{		
-		/*try 
-		{
-			this.blobFileUtility.uploadFileToBlob(baseAzimutTrading.getInjectionDocument(), true, this.configProperties.getBlobSignedPdfPath(), "injections/"+tokenizedBusinessUser.getUserId()+"/"+DateUtility.getCurrentDayMonthYear(), true);
-			return this.injectWithdrawMapper.wrapBaseBusinessEntity(false, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_DEPOST).getData();
-		}
-		catch(Exception exception)
-		{
-			throw this.handleException(tokenizedBusinessUser,exception);
-		}*/
-	
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		@SuppressWarnings("unchecked")
 		BaseAzimutTrading responseBaseAzimutTrading=
@@ -79,16 +59,6 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	@SuppressWarnings("unchecked")
 	public BaseAzimutTrading withdraw(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{
-		/*try 
-		{
-			return this.injectWithdrawMapper.wrapBaseBusinessEntity(false,  this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_WITHDRAW).getData();
-		}
-		catch(Exception exception)
-		{
-			throw this.handleException(tokenizedBusinessUser,exception);
-		}
-		*/
-
 		Integer numberOfTrials=Integer.valueOf(this.configProperties.getBlockageNumberOfTrials());
 		BaseAzimutTrading responseBaseAzimutTrading=
 				
