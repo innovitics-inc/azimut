@@ -755,7 +755,26 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		{
 			try 
 			{
-				businessUser.setAzimutAccounts(this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser),null).getDataList());
+				List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser),null).getDataList();
+				boolean isListPopulated=azimutAccountListUtility.isListPopulated(azimutAccounts);
+				
+				if(isListPopulated&&azimutAccounts.size()==1)
+				{
+					BusinessUser inputBusinessUser=new BusinessUser();
+					
+					inputBusinessUser.setIdType(azimutAccounts.get(0).getAzIdType());
+					inputBusinessUser.setUserId(azimutAccounts.get(0).getUserId());
+					inputBusinessUser.setNickName(azimutAccounts.get(0).getFullName());	
+					this.setUserIdAndUserIdType(businessUser, inputBusinessUser);
+				}
+				else if(isListPopulated&&azimutAccounts.size()>1)
+				{	
+					businessUser.setAzimutAccounts(azimutAccounts);
+				}
+				else
+				{
+					businessUser.setAzimutAccounts(null);
+				}
 			}
 			catch(Exception exception)
 			{
@@ -764,6 +783,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 				throw this.exceptionHandler.handleException(exception);
 			}
 		}
+	
 	}
 	
 }
