@@ -1,6 +1,7 @@
 package innovitics.azimut.businessmodels.user;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 
 public class BusinessClientCashBalance extends BaseBusinessEntity{
 
@@ -17,6 +18,41 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
     private Double currencyRate;
 	
 	
+	public BusinessClientCashBalance() {
+		super();
+	}
+
+	public BusinessClientCashBalance(Long currencyID, String currencyName, Double balance, String balanceFormatted,
+			Double pendingTransfer, String pendingTransferFormatted, Double inPendingTrans, Double outPendingTrans,
+			Double currencyRate) {
+		super();
+		this.currencyID = currencyID;
+		this.currencyName = currencyName;
+		this.balance = balance;
+		this.balanceFormatted = balanceFormatted;
+		this.pendingTransfer = pendingTransfer;
+		this.pendingTransferFormatted = pendingTransferFormatted;
+		this.inPendingTrans = inPendingTrans;
+		this.outPendingTrans = outPendingTrans;
+		this.currencyRate = currencyRate;
+	}
+	
+	public BusinessClientCashBalance(Long currencyID) 
+	{
+		super();
+		this.currencyID = currencyID;
+		this.currencyName=CurrencyType.getById(currencyID).getType();
+	}
+	public BusinessClientCashBalance(CurrencyType currencyType) 
+	{
+		super();
+		this.currencyID = currencyType.getTypeId();
+		this.currencyName=CurrencyType.getById(currencyID).getType();
+		this.balance=0D;
+		this.balanceFormatted="0";
+		this.pendingTransfer=0D;
+		this.pendingTransferFormatted="0";
+	}
 	public Long getIdType() {
 		return idType;
 	}
@@ -86,6 +122,8 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 	public void setPendingTransferFormatted(String pendingTransferFormatted) {
 		this.pendingTransferFormatted = pendingTransferFormatted;
 	}
+
+	
 	@Override
 	public String toString() {
 		return "BusinessClientCashBalance [idType=" + idType + ", idNumber=" + idNumber + ", currencyID=" + currencyID

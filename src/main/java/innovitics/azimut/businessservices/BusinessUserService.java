@@ -729,6 +729,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public BusinessUser setUserIdAndUserIdType(BusinessUser tokenizedBusinessUser,BusinessUser inputBusinessUser)
 	{
+		this.logger.debug("Editing the user:::");
 		if(inputBusinessUser!=null)
 		{
 			tokenizedBusinessUser.setIdType(inputBusinessUser.getIdType());
@@ -738,6 +739,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			try 
 			{
 				this.editUser(tokenizedBusinessUser);
+				this.logger.debug("User Editted:::");
 			}
 			catch(Exception exception)
 			{
@@ -760,11 +762,12 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 				
 				if(isListPopulated&&azimutAccounts.size()==1)
 				{
+					this.logger.info("Single old account::::");
 					BusinessUser inputBusinessUser=new BusinessUser();
 					
 					inputBusinessUser.setIdType(azimutAccounts.get(0).getAzIdType());
-					inputBusinessUser.setUserId(azimutAccounts.get(0).getUserId());
-					inputBusinessUser.setNickName(azimutAccounts.get(0).getFullName());	
+					inputBusinessUser.setUserId(azimutAccounts.get(0).getAzId());
+					inputBusinessUser.setFullName(azimutAccounts.get(0).getFullName());	
 					this.setUserIdAndUserIdType(businessUser, inputBusinessUser);
 				}
 				else if(isListPopulated&&azimutAccounts.size()>1)

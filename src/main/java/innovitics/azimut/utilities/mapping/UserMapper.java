@@ -27,7 +27,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 		
 		if(businessUser!=null)
 		{
-			this.logger.info("Business User::"+businessUser.toString());
+			this.logger.info("Business User to be editted::"+businessUser.toString());
 			//this.convertBusinessDatesToBasicDates(user, businessUser, save);
 			
 			user.setId(businessUser.getId());

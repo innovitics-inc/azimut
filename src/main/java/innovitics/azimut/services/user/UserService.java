@@ -36,7 +36,7 @@ public class UserService extends AbstractService<User,String>{
 	
 	
 	public User save(User user) {
-	
+		this.logger.info("Persisting:: User:::"+user.toString());
 		return this.userRepository.save(user);
 	
 	}
