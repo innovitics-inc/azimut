@@ -24,7 +24,7 @@ public class FundService extends AbstractService<Fund,Long>{
 	@Autowired FundPriceChildSpecification fundPriceChildSpecification;
 	
 	@Autowired FundChildSpecification fundChildSpecification;
-	
+
 	public List<Fund> getAllFunds()
 	{
 		return this.fundRepository.findAll();
@@ -65,6 +65,8 @@ public class FundService extends AbstractService<Fund,Long>{
 		
 		return this.fundRepository.findAll(this.fundChildSpecification.findByCriteria(searchCriteriaList));
 	}
+	
+
 }
 
 

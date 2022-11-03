@@ -16,6 +16,11 @@ import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 public class ListUtility<T> extends ParentUtility{
 	
 
+	public boolean sizeIsOne(List<T> dataList)
+	{
+		return this.isListPopulated(dataList)&&dataList.size()==1;
+	}
+	
 	public boolean isListPopulated(List<T> dataList)
 	{
 		return (dataList!=null&&!dataList.isEmpty()&&dataList.size()>0);

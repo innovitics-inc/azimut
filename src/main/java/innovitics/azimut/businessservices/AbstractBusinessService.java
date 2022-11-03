@@ -13,6 +13,7 @@ import org.springframework.validation.Validator;
 
 import innovitics.azimut.AzimutParent;
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.businessmodels.funds.BusinessFundPrice;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.businessutilities.SearchFilter;
@@ -23,6 +24,7 @@ import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
 import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
+import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.datautilities.UserUtility;
@@ -156,5 +158,12 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 		  }
 	  }
 	 
+		protected BusinessFundPrice prepareBusinessFundPriceInput(Long teacomputerId)
+		{
+			BusinessFundPrice searchBusinessFundPrice = new BusinessFundPrice();
+			searchBusinessFundPrice.setSearchFromDate(DateUtility.getCurrentDayMonthYear());
+			searchBusinessFundPrice.setSearchToDate(DateUtility.getCurrentDayMonthYear());
+			return searchBusinessFundPrice;
+		}
 	 
 }

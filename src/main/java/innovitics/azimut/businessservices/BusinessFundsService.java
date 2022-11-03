@@ -22,7 +22,6 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 @Service
 public class BusinessFundsService extends AbstractBusinessService<BusinessFundPrice> {
-	@Autowired GetFundPricesMapper getFundPricesMapper;
 	@Autowired FundService fundService;
 	@Autowired NavService navService;	
 	@Autowired ListUtility<Nav> navListUtility;
@@ -36,7 +35,7 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 		List<Nav> insertedNavs=new ArrayList<Nav>();
 		try 
 		{
-			businessFundPrices = this.getFundPricesMapper.wrapBaseBusinessEntity(true, this.prepareBusinessFundPriceInput(), null).getDataList();
+			businessFundPrices = this.restManager.getFundPricesMapper.wrapBaseBusinessEntity(true, this.prepareBusinessFundPriceInput(null), null).getDataList();
 			fundsWithoutNavs=this.fundService.getFundsWithoutNavs();
 		
 			for(Fund fund:fundsWithoutNavs) 
@@ -56,13 +55,6 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 		return this.convertNavListToBusinessFundPricesList(insertedNavs);
 	}
 
-	private BusinessFundPrice prepareBusinessFundPriceInput()
-	{
-		BusinessFundPrice searchBusinessFundPrice = new BusinessFundPrice();
-		searchBusinessFundPrice.setSearchFromDate(DateUtility.getCurrentDayMonthYear());
-		searchBusinessFundPrice.setSearchToDate(DateUtility.getCurrentDayMonthYear());
-		return searchBusinessFundPrice;
-	}
 	
 	private List<Nav> checkTeaComputerNavAvailabilityForFundAndUpdatePrices(List<Nav> availableNavs,List<BusinessFundPrice> businessFundPrices,List<Fund> fundsWithoutNavs)
 	{

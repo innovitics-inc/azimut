@@ -20,6 +20,11 @@ public class BaseEntity {
 	protected MultipartFile file;
 	protected Boolean draw;
 	protected Integer userStep;
+	protected Integer minimumInitialUnits;
+	protected Integer minimumOwnedUnits;
+	protected Double minimumInitialAmount;
+	protected Double minimumOwnedAmount;
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -74,7 +79,32 @@ public class BaseEntity {
 	public void setUserStep(Integer userStep) {
 		this.userStep = userStep;
 	}
-	
+	public Integer getMinimumInitialUnits() {
+		return minimumInitialUnits;
+	}
+	public void setMinimumInitialUnits(Integer minimumInitialUnits) {
+		this.minimumInitialUnits = minimumInitialUnits;
+	}
+	public Integer getMinimumOwnedUnits() {
+		return minimumOwnedUnits;
+	}
+	public void setMinimumOwnedUnits(Integer minimumOwnedUnits) {
+		this.minimumOwnedUnits = minimumOwnedUnits;
+	}
+	public Double getMinimumInitialAmount() {
+		return minimumInitialAmount;
+	}
+	public void setMinimumInitialAmount(Double minimumInitialAmount) {
+		this.minimumInitialAmount = minimumInitialAmount;
+	}
+	public Double getMinimumOwnedAmount() {
+		return minimumOwnedAmount;
+	}
+	public void setMinimumOwnedAmount(Double minimumOwnedAmount) {
+		this.minimumOwnedAmount = minimumOwnedAmount;
+	}
+
+
 	
 	
 }

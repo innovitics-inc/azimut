@@ -47,6 +47,8 @@ public final class StringUtility extends ParentUtility{
 	public final static String PDF_EXTENSION="pdf";
 	public final static String SEARCH_FROM_TRANSACTION_DATE="01-12-1950";
 	public final static String SEARCH_TO_TRANSACTION_DATE="12-12-2050";
+	public final static String MIN_INITIAL="Min. Initial";
+	public final static String ADDITIONAL_SUBSCRIPTION_UNITS="Additional Subscription Units";
 	
 	public static String getClassName(Object object)
 	{
