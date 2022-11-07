@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import innovitics.azimut.models.BaseEntity;
@@ -25,7 +26,9 @@ public class UserBlockage extends BaseEntity{
 	private Long id;
 	private String userId;
 	private String 	userPhone;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date createdAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Africa/Cairo")
 	private Date updatedAt;
 	private Integer errorCount;
 	
@@ -34,7 +37,7 @@ public class UserBlockage extends BaseEntity{
 	private User user;
 
 	
-	
+	private Boolean block;
 	public Long getId() {
 		return id;
 	}
@@ -82,6 +85,12 @@ public class UserBlockage extends BaseEntity{
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public Boolean getBlock() {
+		return block;
+	}
+	public void setBlock(Boolean block) {
+		this.block = block;
 	}
 	
 	

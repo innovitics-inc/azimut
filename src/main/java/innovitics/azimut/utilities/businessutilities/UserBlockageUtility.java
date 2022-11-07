@@ -35,23 +35,20 @@ public class UserBlockageUtility extends ParentUtility
 					if(this.getMinutesBefore(blockageDurationMinutes).before(userBlockage.getUpdatedAt()))	
 					{	
 						throw new BusinessException(ErrorCode.USER_BLOCKED);
-					}
-					
+					}					
 				}				
 				else				
 				{
 						
-							Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
-							userBlockage.setErrorCount(0);
-							this.updateUserBlockage(userBlockage);
-							return result;						
-				}				
-				
+					Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
+					userBlockage.setErrorCount(0);
+					this.updateUserBlockage(userBlockage);
+					return result;						
+				}								
 		}
 		else
 		{
 			Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
-			addUserBlockage(userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
 			return result;
 		}
 		return null;

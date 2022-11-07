@@ -215,8 +215,8 @@ public class ConfigProperties {
 		return blockageDurationInMinutes;
 	}
 	
-	public String getBlockageNumberOfTrials() {
-		return blockageNumberOfTrials;
+	public Integer getBlockageNumberOfTrials() {
+		return Integer.valueOf(blockageNumberOfTrials);
 	}
 	public String getProfilePictureMaximumSizeInBytes() {
 		return profilePictureMaximumSizeInBytes;

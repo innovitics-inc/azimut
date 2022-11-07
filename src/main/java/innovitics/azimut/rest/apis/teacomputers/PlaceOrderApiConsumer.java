@@ -13,7 +13,9 @@ import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderOutput;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderRequest;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderResponse;
+import innovitics.azimut.utilities.crosslayerenums.OrderType;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
@@ -76,7 +78,9 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 
 	@Override
 	protected String generateSignature(PlaceOrderRequest placeOrderRequest) {
-		return this.teaComputersSignatureGenerator.generateSignature(placeOrderRequest.getIdTypeId().toString(),placeOrderRequest.getIdNumber(),placeOrderRequest.getFundID().toString(),placeOrderRequest.getOrderValue().toString());
+		return this.teaComputersSignatureGenerator.generateSignature(placeOrderRequest.getIdTypeId().toString(),placeOrderRequest.getIdNumber(),
+				placeOrderRequest.getFundID().toString(),
+				NumberUtility.areLongValuesMatching(placeOrderRequest.getOrderTypeId(), Long.valueOf(OrderType.BUY.getTypeId()))? placeOrderRequest.getOrderValue().toString():"");
 	}
 
 	@Override

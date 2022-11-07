@@ -311,4 +311,21 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		}
 		
 	}
+	
+	@PostMapping(value="/getBalanceAndFundOwnership",
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getBalanceAndFundOwnership(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessAzimutClient businessAzimutClient) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBalanceAndFundOwnership(this.getCurrentRequestHolder(token),language,businessAzimutClient),null,null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException,language);
+		}
+		
+	}
 }

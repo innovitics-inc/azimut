@@ -37,6 +37,7 @@ public class BusinessAzimutClient extends BusinessUser{
 	private String reportType;
 	private Long currencyId;
 	private List<Currency> currency;
+	private Boolean owned;
 	
 	public Double getPendingAmount() {
 		return pendingAmount;
@@ -229,6 +230,14 @@ public class BusinessAzimutClient extends BusinessUser{
 
 	public void setCurrency(List<Currency> currency) {
 		this.currency = currency;
+	}
+
+	public Boolean getOwned() {
+		return owned;
+	}
+
+	public void setOwned(Boolean owned) {
+		this.owned = owned;
 	}
 
 	public BusinessAzimutClient(BusinessClientBankAccountDetails[] clientBankAccounts) {

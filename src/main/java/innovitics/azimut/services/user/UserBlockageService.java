@@ -22,14 +22,38 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	
 	public UserBlockage findByUserId(Long userId)
 	{
+		UserBlockage userBlockage=new UserBlockage();
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
-	    searchCriteriaList.add(new SearchCriteria("id",userId.toString(),SearchOperation.PARENT_EQUAL, "user"));		
-		return this.userBlockageRepository.findOne(this.userBlockageSpecification.findByCriteria(searchCriteriaList)).get();	
+	    searchCriteriaList.add(new SearchCriteria("id",userId.toString(),SearchOperation.PARENT_EQUAL, "user"));
+	    
+	    userBlockage= this.userBlockageRepository.findOne(this.userBlockageSpecification.findByCriteria(searchCriteriaList)).get();
+	    if(userBlockage!=null)
+	    {  
+	    	if(userBlockage.getErrorCount()>this.configProperties.getBlockageNumberOfTrials())
+	    	{
+	    		userBlockage.setBlock(true);
+	    	}
+	    	else
+	    	{
+	    		userBlockage.setBlock(false);
+	    	}
+	    }
+	    return userBlockage;
 	}
 	
 	public UserBlockage updateUserBlockage(UserBlockage userBlockage)
 	{
-		return this.userBlockageRepository.save(userBlockage);		
+		UserBlockage updatedUserBlockage= this.userBlockageRepository.save(userBlockage);
+		
+		if(updatedUserBlockage.getErrorCount()>this.configProperties.getBlockageNumberOfTrials())
+	    {
+			updatedUserBlockage.setBlock(true);
+	    }
+	    else
+	    {
+	    	updatedUserBlockage.setBlock(false);
+	    }
+		return updatedUserBlockage;		
 	}
 	
 	public UserBlockage addUserBlockage(User user)
@@ -41,6 +65,8 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 		userBlockage.setCreatedAt(new Date());
 		userBlockage.setUpdatedAt(new Date());
 		userBlockage.setUser(user);
-		return this.userBlockageRepository.save(userBlockage);	
+		userBlockage.setBlock(false);
+		this.userBlockageRepository.save(userBlockage);
+		return userBlockage;
 	}
 }

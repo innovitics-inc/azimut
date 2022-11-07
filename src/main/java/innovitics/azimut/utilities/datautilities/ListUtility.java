@@ -20,6 +20,10 @@ public class ListUtility<T> extends ParentUtility{
 	{
 		return this.isListPopulated(dataList)&&dataList.size()==1;
 	}
+	public boolean sizeGreaterThanOne(List<T> dataList)
+	{
+		return this.isListPopulated(dataList)&&dataList.size()>1;
+	}
 	
 	public boolean isListPopulated(List<T> dataList)
 	{
@@ -34,7 +38,7 @@ public class ListUtility<T> extends ParentUtility{
 	
 	public boolean isListEmptyOrNull(List<T> dataList)
 	{
-		return (dataList==null||dataList.isEmpty());
+		return (dataList==null||dataList.isEmpty()||(dataList!=null&&dataList.size()==0));
 	}
 	
 	public boolean isPaginatedListPopulated(PaginatedEntity<T> paginatedList)
