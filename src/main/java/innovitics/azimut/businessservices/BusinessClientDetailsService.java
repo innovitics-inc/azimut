@@ -1,5 +1,6 @@
 package innovitics.azimut.businessservices;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -480,7 +481,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		catch(Exception exception)
 		{
-			responseBusinessAzimutClient.setTotalPosition(0D);
+			responseBusinessAzimutClient.setTotalPosition(new BigDecimal(0));
 			responseBusinessAzimutClient.setBalance(0D);
 			responseBusinessAzimutClient.setBusinessClientFunds(clientFundListUtility.handleExceptionAndReturnEmptyList(exception, ErrorCode.INVALID_CLIENT));
 		}
@@ -835,7 +836,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 	  
 	 
-	  responseBusinessAzimutClient.setTotalPosition(totalPosition);
+	  //responseBusinessAzimutClient.setTotalPosition(totalPosition);
+	  responseBusinessAzimutClient.setTotalPosition(NumberUtility.changeFormat(new BigDecimal(totalPosition)));
 	  responseBusinessAzimutClient.setBusinessClientFunds(businessClientFunds);
   }
   

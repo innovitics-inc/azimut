@@ -1,5 +1,6 @@
 package innovitics.azimut.businessmodels.funds;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
@@ -19,7 +20,7 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	private Long currencyId;
 	private String currencyName;
 	private Double currencyRate;
-	private Double totalAmount;
+	private BigDecimal totalAmount;
 	private String lastPriceUpdateDate;
 	private String logo;
 	private List<BusinessFundTransaction> fundTransactions;
@@ -90,10 +91,10 @@ public class BusinessClientFund extends BaseBusinessEntity {
 	public void setCurrencyRate(Double currencyRate) {
 		this.currencyRate = currencyRate;
 	}
-	public Double getTotalAmount() {
+	public BigDecimal getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(Double totalAmount) {
+	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 	public String getLastPriceUpdateDate() {

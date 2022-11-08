@@ -1,5 +1,6 @@
 package innovitics.azimut.businessmodels.user;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class BusinessAzimutClient extends BusinessUser{
 	private AzimutDetails azimutDetails;
 	private List<BusinessClientFund> businessClientFunds;
 	private PaginatedEntity<BusinessClientFund> paginatedBusinessClientFunds;
-	private Double totalPosition;	
+	private BigDecimal totalPosition;	
 	private List<EportfolioDetail> eportfolioDetails;
 	private String reportType;
 	private Long currencyId;
@@ -192,11 +193,11 @@ public class BusinessAzimutClient extends BusinessUser{
 		this.paginatedBusinessClientFunds = paginatedBusinessClientFunds;
 	}
 
-	public Double getTotalPosition() {
+	public BigDecimal getTotalPosition() {
 		return totalPosition;
 	}
 
-	public void setTotalPosition(Double totalPosition) {
+	public void setTotalPosition(BigDecimal totalPosition) {
 		this.totalPosition = totalPosition;
 	}
 

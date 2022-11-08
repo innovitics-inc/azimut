@@ -1,5 +1,7 @@
 package innovitics.azimut.utilities.datautilities;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import org.slf4j.Logger;
@@ -72,5 +74,9 @@ public final class NumberUtility {
 		String str = decFormat.format(value);
 
 		return str;
+	}
+	public static BigDecimal changeFormat(BigDecimal value)
+	{
+		return  value.setScale(2, RoundingMode.HALF_EVEN);	
 	}
 }

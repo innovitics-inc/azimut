@@ -1,5 +1,6 @@
 package innovitics.azimut.rest.mappers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import innovitics.azimut.rest.entities.teacomputers.GetClientFundsOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientFundResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientFundsResponse;
 import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
@@ -109,11 +111,12 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 			businessClientFund.setQuantity(clientFundOutput.getQuantity());
 			if (clientFundOutput != null && StringUtility.isStringPopulated(clientFundOutput.getTradePrice())
 					&& clientFundOutput.getQuantity() != null && clientFundOutput.getCurrencyRate() != null) {
-				double totalAmount = clientFundOutput.getQuantity().doubleValue()
-						* Double.valueOf(clientFundOutput.getTradePrice()) * clientFundOutput.getCurrencyRate();
-				businessClientFund.setTotalAmount(totalAmount);
+			
+				double value=(clientFundOutput.getQuantity().doubleValue()* Double.valueOf(clientFundOutput.getTradePrice()) * clientFundOutput.getCurrencyRate());
+								
+				businessClientFund.setTotalAmount(NumberUtility.changeFormat(new BigDecimal(value)));
 			} else {
-				businessClientFund.setTotalAmount(0d);
+				businessClientFund.setTotalAmount(new BigDecimal(0));
 			}
 			return businessClientFund;
 		} else {
