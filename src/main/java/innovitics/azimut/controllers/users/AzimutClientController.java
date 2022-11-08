@@ -301,7 +301,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 	@GetMapping(value="/getCompanyBankAccounts",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getCompanyBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
-			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestParam("currencyId") Long currencyId) throws IOException, BusinessException, IntegrationException {
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestParam(name="currencyId",required=false) Long currencyId) throws IOException, BusinessException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getCompanyBankAccounts(currencyId),null,null);
