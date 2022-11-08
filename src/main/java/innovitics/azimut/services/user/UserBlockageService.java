@@ -29,14 +29,8 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	    userBlockage= this.userBlockageRepository.findOne(this.userBlockageSpecification.findByCriteria(searchCriteriaList)).get();
 	    if(userBlockage!=null)
 	    {  
-	    	if(userBlockage.getErrorCount()>this.configProperties.getBlockageNumberOfTrials())
-	    	{
-	    		userBlockage.setBlock(true);
-	    	}
-	    	else
-	    	{
-	    		userBlockage.setBlock(false);
-	    	}
+	    	detemineBlockage(userBlockage);
+	    	userBlockage.setUser(null);
 	    }
 	    return userBlockage;
 	}
@@ -45,14 +39,7 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	{
 		UserBlockage updatedUserBlockage= this.userBlockageRepository.save(userBlockage);
 		
-		if(updatedUserBlockage.getErrorCount()>this.configProperties.getBlockageNumberOfTrials())
-	    {
-			updatedUserBlockage.setBlock(true);
-	    }
-	    else
-	    {
-	    	updatedUserBlockage.setBlock(false);
-	    }
+		detemineBlockage(updatedUserBlockage);
 		return updatedUserBlockage;		
 	}
 	
@@ -68,5 +55,18 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 		userBlockage.setBlock(false);
 		this.userBlockageRepository.save(userBlockage);
 		return userBlockage;
+	}
+	
+	void detemineBlockage(UserBlockage userBlockage)
+	{
+	  	if(userBlockage.getErrorCount()>=this.configProperties.getBlockageNumberOfTrials())
+    	{
+    		userBlockage.setBlock(true);
+    	}
+    	else
+    	{
+    		userBlockage.setBlock(false);
+    	}
+  
 	}
 }

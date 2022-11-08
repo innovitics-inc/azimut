@@ -77,7 +77,9 @@ public class UserBlockageUtility extends ParentUtility
 		catch(Exception exception)
 		{
 			this.exceptionHandler.getNullIfNonExistent(exception);
-			return null;
+			UserBlockage userBlockage=new UserBlockage();
+			userBlockage.setBlock(false);
+			return userBlockage;
 		}
 		
 	}	
