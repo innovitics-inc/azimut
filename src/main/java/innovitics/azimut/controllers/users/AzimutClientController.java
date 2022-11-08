@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import innovitics.azimut.businessmodels.user.AzimutAccount;
@@ -299,10 +300,11 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 
 	@GetMapping(value="/getCompanyBankAccounts",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getCompanyBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessAzimutClient>> getCompanyBankAccounts(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestParam("currencyId") Long currencyId) throws IOException, BusinessException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getCompanyBankAccounts(),null,null);
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getCompanyBankAccounts(currencyId),null,null);
 		}
 		
 		catch(BusinessException businessException)

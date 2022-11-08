@@ -114,6 +114,7 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 			businessClientBankAccountDetails.setBranchId(clientBankAccountOutput.getBranchId());
 			businessClientBankAccountDetails.setBranchName(clientBankAccountOutput.getBranchName());			
 			businessClientBankAccountDetails.setCurrencyName(clientBankAccountOutput.getCurrencyName());
+			businessClientBankAccountDetails.setCurrencyId(clientBankAccountOutput.getCurrencyId());
 			businessClientBankAccountDetails.setAccountNumber(clientBankAccountOutput.getAccountNo());
 			businessClientBankAccountDetails.setIban(clientBankAccountOutput.getIban());
 			businessClientBankAccountDetails.setAccountId(clientBankAccountOutput.getAccountId());

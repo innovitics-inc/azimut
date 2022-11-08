@@ -93,6 +93,7 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 			businessClientFund.setFundName(clientFundOutput.getCertificateName());
 			
 			businessClientFund.setCurrencyName(clientFundOutput.getCurrencyName());
+			businessClientFund.setCurrencyId(clientFundOutput.getCurrencyId());
 			
 			if(clientFundOutput.getCurrencyId()!=null&&StringUtility.isStringPopulated(CurrencyType.getById(Long.valueOf(clientFundOutput.getCurrencyId())).getType()))
 			{

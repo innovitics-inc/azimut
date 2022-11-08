@@ -21,6 +21,7 @@ import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
+import innovitics.azimut.businessmodels.user.BusinessCompanyBankAccount;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessmodels.user.EportfolioDetail;
 import innovitics.azimut.exceptions.BusinessException;
@@ -54,8 +55,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 @Autowired ListUtility<BusinessTransaction> businessTransactionListUtility;
 @Autowired ListUtility<BusinessFundPrice> fundPricesListUtility;
-@Autowired ListUtility<BusinessClientFund> clientFundListUtility ;
-@Autowired ListUtility<BusinessClientCashBalance> clientCashBalanceListUtility ;
+@Autowired ListUtility<BusinessClientFund> clientFundListUtility;
+@Autowired ListUtility<BusinessClientCashBalance> clientCashBalanceListUtility;
+@Autowired ListUtility<BusinessClientBankAccountDetails> businessClientBankAccountDetailsListUtility;
 @Autowired CashTransactionSortCompare cashTransactionSortCompare;
 @Autowired FundTransactionSortCompare fundTransactionSortCompare;
 @Autowired GetBalanceAndTransactions getBalanceAndTransactions;
@@ -71,6 +73,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 @Autowired FundPriceMapper fundPriceMapper;
 @Autowired FundMapper fundMapper;
 @Autowired ListUtility<EportfolioDetail> eportfolioDetailListUtility;
+@Autowired ListUtility<BusinessCompanyBankAccount> companyBankAccountListUtility;
 
 
 	public BusinessAzimutClient getBalanceAndFundOwnership(BusinessUser tokenizedBusinessUser,String language,BusinessAzimutClient businessAzimutClient) throws BusinessException,IntegrationException
@@ -121,6 +124,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		
 		List<BusinessClientCashBalance> businessClientCashBalances=new ArrayList<BusinessClientCashBalance>();
+		List<BusinessClientCashBalance> businessClientCashBalancesWithCurrencies=new ArrayList<BusinessClientCashBalance>();
 		try 
 		{				
 			businessClientCashBalances=this.restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
@@ -151,7 +155,24 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			responseBusinessAzimutClient.setBusinessClientCashBalances(clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));						
 		}
 		
-		responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalances);
+		
+		if(clientCashBalanceListUtility.isListPopulated(businessClientCashBalances)&&businessAzimutClient.getCurrencyId()!=null)
+		{
+			for(BusinessClientCashBalance businessClientCashBalance: businessClientCashBalances)
+			{
+				if(businessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(businessClientCashBalance.getCurrencyID(),businessAzimutClient.getCurrencyId()))
+				{
+					businessClientCashBalancesWithCurrencies.add(businessClientCashBalance);
+				}
+			}
+			responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalancesWithCurrencies);
+		}
+		else
+		{
+			responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalances);	
+		}
+		
+		
 		return responseBusinessAzimutClient;
 
 	}
@@ -173,6 +194,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
+		List<BusinessClientBankAccountDetails> totalBankAccountsWithCurrencies=new ArrayList<BusinessClientBankAccountDetails>();
 		List<BusinessClientBankAccountDetails> totalBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
 		List<BusinessClientBankAccountDetails> teacomputersBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
 		try 
@@ -212,7 +234,24 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				throw this.exceptionHandler.handleException(exception);
 			}
 		}
-		responseBusinessAzimutClient.setBankList(totalBankAccounts);
+		
+		if(businessClientBankAccountDetailsListUtility.isListPopulated(totalBankAccounts)&&businessAzimutClient.getCurrencyId()!=null)
+		{
+			for(BusinessClientBankAccountDetails businessClientBankAccountDetails:totalBankAccounts)
+			{
+				if(businessClientBankAccountDetails!=null&&NumberUtility.areLongValuesMatching(businessClientBankAccountDetails.getCurrencyId(), businessAzimutClient.getCurrencyId()))
+				{
+					totalBankAccountsWithCurrencies.add(businessClientBankAccountDetails);
+				}
+			}
+			responseBusinessAzimutClient.setBankList(totalBankAccountsWithCurrencies);
+		}
+		else
+		{
+			responseBusinessAzimutClient.setBankList(totalBankAccounts);	
+		}
+		
+		
 		return responseBusinessAzimutClient;
 	}
 	
@@ -575,15 +614,36 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	
 	
-	public BusinessAzimutClient  getCompanyBankAccounts() throws BusinessException,IntegrationException
+	public BusinessAzimutClient  getCompanyBankAccounts(Long currencyId) throws BusinessException,IntegrationException
 	{
 		try 
 		{
 			BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
 			BusinessAzimutDataLookup businessAzimutDataLookup=new BusinessAzimutDataLookup();
 			
-			businessAzimutDataLookup.setCompanyBankAccounts(this.restManager.getCompanyBankAccountMapper.wrapBaseBusinessEntity(true, null, null).getDataList());
+			List<BusinessCompanyBankAccount> businessCompanyBankAccountsWithCurrency=new  ArrayList<BusinessCompanyBankAccount>();
 			
+			List<BusinessCompanyBankAccount> businessCompanyBankAccounts= this.restManager.getCompanyBankAccountMapper.wrapBaseBusinessEntity(true, null, null).getDataList();
+			
+			if(companyBankAccountListUtility.isListPopulated(businessCompanyBankAccounts)&&currencyId!=null)
+			{
+				for(BusinessCompanyBankAccount businessCompanyBankAccount:businessCompanyBankAccounts)
+				{
+					if(businessCompanyBankAccount!=null&&businessCompanyBankAccount.getCurrencyId()!=null)
+					{
+						if(NumberUtility.areLongValuesMatching(currencyId,Long.valueOf( businessCompanyBankAccount.getCurrencyId())))
+						{
+							businessCompanyBankAccountsWithCurrency.add(businessCompanyBankAccount);
+						}
+					}
+				}
+				businessAzimutDataLookup.setCompanyBankAccounts(businessCompanyBankAccountsWithCurrency);
+			}
+			else if(companyBankAccountListUtility.isListPopulated(businessCompanyBankAccounts)&&currencyId==null)
+			{
+				businessAzimutDataLookup.setCompanyBankAccounts(businessCompanyBankAccounts);
+			}
+		
 			businessAzimutClient.setLookupData(businessAzimutDataLookup);
 			
 			return businessAzimutClient;
