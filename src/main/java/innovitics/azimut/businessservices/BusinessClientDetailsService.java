@@ -806,9 +806,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 					  
 					  businessClientFund.setLogo(businessFundPrice.getLogo());
 					  
-					  if(businessClientFund.getTotalAmount()!=null)
+					  if(businessClientFund.getTotalAmount()!=null&&businessClientFund.getCurrencyRate()!=null)
 					  {
-						  totalFundPosition=totalFundPosition+(businessClientFund.getTotalAmount().doubleValue());
+						  totalFundPosition=totalFundPosition+(businessClientFund.getTotalAmount().doubleValue()* businessClientFund.getCurrencyRate().doubleValue());
 					  }
 					  
 				  }

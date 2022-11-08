@@ -112,7 +112,7 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 			if (clientFundOutput != null && StringUtility.isStringPopulated(clientFundOutput.getTradePrice())
 					&& clientFundOutput.getQuantity() != null && clientFundOutput.getCurrencyRate() != null) {
 			
-				double value=(clientFundOutput.getQuantity().doubleValue()* Double.valueOf(clientFundOutput.getTradePrice()) * clientFundOutput.getCurrencyRate());
+				double value=(clientFundOutput.getQuantity().doubleValue()* Double.valueOf(clientFundOutput.getTradePrice()));
 								
 				businessClientFund.setTotalAmount(NumberUtility.changeFormat(new BigDecimal(value)));
 			} else {

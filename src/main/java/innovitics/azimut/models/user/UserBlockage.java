@@ -37,7 +37,6 @@ public class UserBlockage extends BaseEntity{
 	private User user;
 
 	
-	private Boolean block;
 	public Long getId() {
 		return id;
 	}
@@ -86,12 +85,7 @@ public class UserBlockage extends BaseEntity{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public Boolean getBlock() {
-		return block;
-	}
-	public void setBlock(Boolean block) {
-		this.block = block;
-	}
+
 	
 	
 	

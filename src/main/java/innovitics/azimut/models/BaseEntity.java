@@ -24,7 +24,8 @@ public class BaseEntity {
 	protected Integer minimumOwnedUnits;
 	protected Double minimumInitialAmount;
 	protected Double minimumOwnedAmount;
-	
+	protected Boolean block;
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -103,8 +104,12 @@ public class BaseEntity {
 	public void setMinimumOwnedAmount(Double minimumOwnedAmount) {
 		this.minimumOwnedAmount = minimumOwnedAmount;
 	}
-
-
+	public Boolean getBlock() {
+		return block;
+	}
+	public void setBlock(Boolean block) {
+		this.block = block;
+	}
 	
 	
 }
