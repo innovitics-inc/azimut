@@ -20,7 +20,7 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
     private UserBlockage userBlockage;
     private Long moduleTypeId;
     private String fileBytes;
-    
+    private Integer threshold;
 	
 	public Long getOrderTypeId() {
 		return orderTypeId;
@@ -94,6 +94,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	}
 	public void setFileBytes(String fileBytes) {
 		this.fileBytes = fileBytes;
+	}
+	public Integer getThreshold() {
+		return threshold;
+	}
+	public void setThreshold(Integer threshold) {
+		this.threshold = threshold;
 	}
 	
 	

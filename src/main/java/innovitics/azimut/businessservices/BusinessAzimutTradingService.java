@@ -98,14 +98,28 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 			else
 			{
 				this.logger.info("User Blockage::" +userBlockage.toString());
-				if(userBlockage.getErrorCount()!=null)
+				if(this.getMinutesBefore(this.configProperties.getBlockageDurationInMinutes()).before(userBlockage.getUpdatedAt()))
 				{	
-					int oldUserCount= userBlockage.getErrorCount().intValue();
-					userBlockage.setErrorCount(oldUserCount+1);
-					userBlockage.setUser(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
-					this.userBlockageUtility.updateUserBlockage(userBlockage);
-					userBlockage.setUser(null);
+					
+					if(userBlockage.getErrorCount()!=null&&(userBlockage.getErrorCount()<this.configProperties.getBlockageNumberOfTrials()))
+					{
+						int oldUserCount= userBlockage.getErrorCount().intValue();
+						userBlockage.setErrorCount(oldUserCount+1);				
+					}
+					else if(NumberUtility.areIntegerValuesMatching(this.configProperties.getBlockageNumberOfTrials(), userBlockage.getErrorCount()))
+					{
+						userBlockage.setErrorCount(this.configProperties.getBlockageNumberOfTrials());
+					}				
 				}
+				else if(!this.getMinutesBefore(this.configProperties.getBlockageDurationInMinutes()).before(userBlockage.getUpdatedAt()))
+				{
+					userBlockage.setErrorCount(1);
+				}
+				
+				userBlockage.setUser(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+				this.userBlockageUtility.updateUserBlockage(userBlockage);
+				userBlockage.setUser(null);
+				
 				baseAzimutTrading.setUserBlockage(userBlockage);
 			}
 			return baseAzimutTrading;
@@ -158,6 +172,11 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		 }
 		
 		return addBaseAzimutTrading;
+	}
+
+	void populateThreshold(BaseAzimutTrading baseAzimutTrading)
+	{
+		baseAzimutTrading.setThreshold(this.configProperties.getBlockageNumberOfTrials());
 	}
 
 }

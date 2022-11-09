@@ -30,16 +30,12 @@ public class UserBlockageUtility extends ParentUtility
 		UserBlockage userBlockage=this.getUserBlockage(tokenizedBusinessUser.getId(),false);
 		if(userBlockage!=null)
 		{
-				if(userBlockage.getErrorCount()!=null&&userBlockage.getErrorCount()>=actualNumberOfTrials)
+				if((userBlockage.getErrorCount()!=null&&userBlockage.getErrorCount()>=actualNumberOfTrials)&&(this.getMinutesBefore(blockageDurationMinutes).before(userBlockage.getUpdatedAt())))
 				{
-					if(this.getMinutesBefore(blockageDurationMinutes).before(userBlockage.getUpdatedAt()))	
-					{	
-						throw new BusinessException(ErrorCode.USER_BLOCKED);
-					}					
+					throw new BusinessException(ErrorCode.USER_BLOCKED);					
 				}				
 				else				
-				{
-						
+				{		
 					Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
 					userBlockage.setErrorCount(0);
 					this.updateUserBlockage(userBlockage);
@@ -51,7 +47,6 @@ public class UserBlockageUtility extends ParentUtility
 			Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
 			return result;
 		}
-		return null;
 			
 	}
 	
@@ -80,7 +75,8 @@ public class UserBlockageUtility extends ParentUtility
 			}
 			else
 			{
-				return respondWithEmptyObject();
+				userBlockage.setBlock(false);
+				return userBlockage;
 			}
 			
 		}

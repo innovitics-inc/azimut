@@ -37,6 +37,7 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	
 	public UserBlockage updateUserBlockage(UserBlockage userBlockage)
 	{
+		userBlockage.setUpdatedAt(new Date());
 		UserBlockage updatedUserBlockage= this.userBlockageRepository.save(userBlockage);
 		
 		detemineBlockage(updatedUserBlockage);

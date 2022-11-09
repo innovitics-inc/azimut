@@ -81,8 +81,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validate(businessAzimutClient, getBalanceAndTransactions, BusinessAzimutClient.class.getName());
 		
+		responseBusinessAzimutClient=this.getBalanceAndTransactions(responseBusinessAzimutClient, tokenizedBusinessUser);
 		this.getFundOwnership(businessAzimutClient, tokenizedBusinessUser, responseBusinessAzimutClient);		
-		this.getBalance(businessAzimutClient, tokenizedBusinessUser, responseBusinessAzimutClient);
+		//this.getBalance(businessAzimutClient, tokenizedBusinessUser, responseBusinessAzimutClient);
 		
 		return responseBusinessAzimutClient;
 		
