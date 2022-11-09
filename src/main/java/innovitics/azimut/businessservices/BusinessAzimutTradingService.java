@@ -78,7 +78,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		{	
 			this.exceptionHandler.getNullIfNonExistent(exception);
 		}
-		
+		this.populateThreshold(baseAzimutTrading);
 		return  baseAzimutTrading;
 	}
 	
@@ -122,6 +122,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 				
 				baseAzimutTrading.setUserBlockage(userBlockage);
 			}
+			this.populateThreshold(baseAzimutTrading);
 			return baseAzimutTrading;
 		}
 		catch (Exception exception)
