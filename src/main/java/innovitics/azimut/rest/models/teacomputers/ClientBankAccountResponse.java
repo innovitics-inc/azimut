@@ -10,7 +10,7 @@ public class ClientBankAccountResponse extends TeaComputerResponse {
 	private String accountNo;
 	private Long accountID;
 	private String swiftCode;
-	private String iban;
+	private String iBAN;
 	private Long statusId;
 	private String accountStatus;
 	private String accountStatusName;
@@ -64,11 +64,12 @@ public class ClientBankAccountResponse extends TeaComputerResponse {
 	public void setSwiftCode(String swiftCode) {
 		this.swiftCode = swiftCode;
 	}
-	public String getIban() {
-		return iban;
+
+	public String getiBAN() {
+		return iBAN;
 	}
-	public void setIban(String iban) {
-		this.iban = iban;
+	public void setiBAN(String iBAN) {
+		this.iBAN = iBAN;
 	}
 	public Long getStatusId() {
 		return statusId;

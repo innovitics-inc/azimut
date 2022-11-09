@@ -85,6 +85,11 @@ public class UserBlockage extends BaseEntity{
 	public void setUser(User user) {
 		this.user = user;
 	}
+	@Override
+	public String toString() {
+		return "UserBlockage [id=" + id + ", userId=" + userId + ", userPhone=" + userPhone + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", errorCount=" + errorCount + ", user=" + user + "]";
+	}
 
 	
 	

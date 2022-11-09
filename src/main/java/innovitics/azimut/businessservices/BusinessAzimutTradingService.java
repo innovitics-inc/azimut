@@ -72,7 +72,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		
 		try 
 		{
-			baseAzimutTrading.setUserBlockage(this.userBlockageUtility.getUserBlockage(tokenizedBusinessUser.getId()));
+			baseAzimutTrading.setUserBlockage(this.userBlockageUtility.getUserBlockage(tokenizedBusinessUser.getId(),true));
 		}
 		catch(Exception exception)
 		{	
@@ -86,19 +86,18 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	{
 		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
 		try
-		{
-			
-			baseAzimutTrading=this.getUserBlockage(tokenizedBusinessUser);
-			UserBlockage userBlockage=baseAzimutTrading.getUserBlockage();
-			
+		{						
+			UserBlockage userBlockage=this.userBlockageUtility.getUserBlockage(tokenizedBusinessUser.getId(),false);	
 			if(userBlockage==null)
 			{
+				this.logger.info("User Blockage none existent::");
 				UserBlockage addedUserBlockage=this.userBlockageUtility.addUserBlockage(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
 				addedUserBlockage.setUser(null);
 				baseAzimutTrading.setUserBlockage(addedUserBlockage);
 			}
 			else
 			{
+				this.logger.info("User Blockage::" +userBlockage.toString());
 				if(userBlockage.getErrorCount()!=null)
 				{	
 					int oldUserCount= userBlockage.getErrorCount().intValue();
@@ -107,6 +106,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 					this.userBlockageUtility.updateUserBlockage(userBlockage);
 					userBlockage.setUser(null);
 				}
+				baseAzimutTrading.setUserBlockage(userBlockage);
 			}
 			return baseAzimutTrading;
 		}

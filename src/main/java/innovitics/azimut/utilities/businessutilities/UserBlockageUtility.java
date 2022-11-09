@@ -27,7 +27,7 @@ public class UserBlockageUtility extends ParentUtility
 		
 		this.logger.info("Checking User Blockage::::");
 		int actualNumberOfTrials= numberOfTrials!=null?numberOfTrials.intValue():0;
-		UserBlockage userBlockage=this.getUserBlockage(tokenizedBusinessUser.getId());
+		UserBlockage userBlockage=this.getUserBlockage(tokenizedBusinessUser.getId(),false);
 		if(userBlockage!=null)
 		{
 				if(userBlockage.getErrorCount()!=null&&userBlockage.getErrorCount()>=actualNumberOfTrials)
@@ -67,21 +67,41 @@ public class UserBlockageUtility extends ParentUtility
 		return this.userBlockageService.updateUserBlockage(userBlockage);
 		
 	}
-	public UserBlockage getUserBlockage(Long userId)
+	public UserBlockage getUserBlockage(Long userId,boolean shouldBeFull)
 	{	
 		
 		try 
 		{
-			return this.userBlockageService.findByUserId(userId);
+			UserBlockage userBlockage= this.userBlockageService.findByUserId(userId);
+			
+			if(this.getMinutesBefore(this.configProperties.getBlockageDurationInMinutes()).before(userBlockage.getUpdatedAt()))
+			{
+				return userBlockage;
+			}
+			else
+			{
+				return respondWithEmptyObject();
+			}
+			
 		}
 		catch(Exception exception)
 		{
 			this.exceptionHandler.getNullIfNonExistent(exception);
-			UserBlockage userBlockage=new UserBlockage();
-			userBlockage.setBlock(false);
-			return userBlockage;
+			if(shouldBeFull)
+			{
+				return respondWithEmptyObject();
+			}
+			
+			return null;
 		}
 		
-	}	
+	}
+	
+	UserBlockage respondWithEmptyObject()
+	{
+		UserBlockage userBlockage=new UserBlockage();
+		userBlockage.setBlock(false);
+		return userBlockage;
+	}
 	
 }

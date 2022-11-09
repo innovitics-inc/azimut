@@ -58,7 +58,7 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 						clientBankAccountOutput.setCurrencyId(StringUtility.isStringPopulated(clientBankAccountResponse.getCurrencyId())?Long.valueOf(clientBankAccountResponse.getCurrencyId()):null);
 						clientBankAccountOutput.setCurrencyName(clientBankAccountResponse.getCurrencyName());					
 						clientBankAccountOutput.setAccountNo(clientBankAccountResponse.getAccountNo());
-						clientBankAccountOutput.setIban(clientBankAccountResponse.getIban());
+						clientBankAccountOutput.setIban(clientBankAccountResponse.getiBAN());
 						clientBankAccountOutput.setAccountId(clientBankAccountResponse.getAccountID());
 						clientBankAccountOutput.setAccountStatus(StringUtility.isStringPopulated(clientBankAccountResponse.getAccountStatus())?Long.valueOf(clientBankAccountResponse.getAccountStatus()):null);
 						clientBankAccountOutput.setAccountStatusName(clientBankAccountResponse.getAccountStatusName());
