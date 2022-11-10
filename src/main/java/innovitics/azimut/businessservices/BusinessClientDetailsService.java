@@ -81,7 +81,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validate(businessAzimutClient, getBalanceAndTransactions, BusinessAzimutClient.class.getName());
 		
-		responseBusinessAzimutClient=this.getBalanceAndTransactions(responseBusinessAzimutClient, tokenizedBusinessUser);
+		responseBusinessAzimutClient=this.getBalanceAndTransactions(businessAzimutClient, tokenizedBusinessUser);
 		this.getFundOwnership(businessAzimutClient, tokenizedBusinessUser, responseBusinessAzimutClient);		
 		//this.getBalance(businessAzimutClient, tokenizedBusinessUser, responseBusinessAzimutClient);
 		
@@ -180,7 +180,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	public BusinessAzimutClient getTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,BusinessAzimutClient responseBusinessAzimutClient) throws BusinessException,IntegrationException
 	{
 		try 
-		{
+		{			
 			responseBusinessAzimutClient.setBusinessTransactions(this.restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
 		}
 		catch(Exception exception)

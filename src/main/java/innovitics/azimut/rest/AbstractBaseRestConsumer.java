@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.entities.BaseInput;
 import innovitics.azimut.rest.errorhandling.RestErrorHandler;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
@@ -44,7 +45,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	@Autowired protected ExceptionHandler exceptionHandler;
 	@Autowired protected ArrayUtility arrayUtility;
 	@Autowired protected RestErrorHandler restErrorHandler;
-
+	protected RES type;
 	protected abstract void populateResponse(String url,ResponseEntity<RES> responseEntity);
 	
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
@@ -67,7 +68,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				
 				
 				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
-				responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
+				responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params,input);
 				
 				this.populateResponse(url, responseEntity);
 				
@@ -87,7 +88,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				logger.info("URL:::"+url);
 				
 				//ResponseEntity<RES> responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params);
-				responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params);
+				responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params,input);
 				logger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
 				
 				this.validateResponse(responseEntity);
@@ -130,7 +131,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	
 	@Override
 	public
-	ResponseEntity<RES> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params) throws Exception,HttpClientErrorException, IntegrationException
+	ResponseEntity<RES> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException
 	{						
 		//this.logger.info("Request right before invocation::::"+httpEntity.toString());
 		this.logger.info("Method:::"+httpMethod);
@@ -143,7 +144,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	
 	@Override
 	public
-	ResponseEntity<RES> consumeURLEncodedRequestRestAPI(HttpEntity<MultiValueMap<String, String>> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params) throws Exception,HttpClientErrorException, IntegrationException
+	ResponseEntity<RES> consumeURLEncodedRequestRestAPI(HttpEntity<MultiValueMap<String, String>> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException
 	{						
 		this.logger.info("URL Encoded Request right before invocation::::"+httpEntity);
 		this.logger.info("Method:::"+httpMethod);
@@ -214,5 +215,6 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 		HttpEntity<String> httpEntity= new HttpEntity<String>(json, headers);
 		return httpEntity;
 	}
+
 	
 }

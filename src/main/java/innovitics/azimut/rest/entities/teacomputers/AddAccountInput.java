@@ -171,6 +171,12 @@ public class AddAccountInput extends TeaComputerInput {
 		this.mobile = mobile;
 	}
 	
-	
-	
+	/*
+	@Override
+	public String getUrl()
+	{
+		 return super.setBaseUrl()+"api";
+		
+	}
+	*/
 }

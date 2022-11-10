@@ -1,5 +1,13 @@
 package innovitics.azimut.rest.entities;
 
-public class BaseInput {
+import innovitics.azimut.AzimutParent;
 
+public class BaseInput extends AzimutParent {
+
+	protected String url;
+
+	//public abstract String getUrl();
+	//public abstract String setBaseUrl();
+	
+	
 }

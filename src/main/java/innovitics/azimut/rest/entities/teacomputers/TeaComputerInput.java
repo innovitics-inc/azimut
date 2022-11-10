@@ -2,7 +2,7 @@ package innovitics.azimut.rest.entities.teacomputers;
 
 import innovitics.azimut.rest.entities.BaseInput;
 
-public class TeaComputerInput extends BaseInput{
+public  class TeaComputerInput extends BaseInput{
 
 	protected String locale;
 	protected String idNumber;
@@ -12,6 +12,8 @@ public class TeaComputerInput extends BaseInput{
 	protected Long bankId;
 	protected Long fundId;
 
+	
+	
 	public String getLocale() {
 		return locale;
 	}
@@ -68,6 +70,18 @@ public class TeaComputerInput extends BaseInput{
 		this.fundId = fundId;
 	}
 	
-	
+	/*@Override
+	public String setBaseUrl()
+	{
+		return this.configProperties.getTeaComputersUrl()+"/";
+	}
+
+	@Override
+	public String getUrl() {
+		return null;
+		// TODO Auto-generated method stub
+		
+	}
+	*/
 	
 }

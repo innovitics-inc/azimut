@@ -20,9 +20,9 @@ import innovitics.azimut.exceptions.IntegrationException;
 	HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(I input);	
 	O generateOutPutFromResponse(ResponseEntity<RES> responseEntity);
 	
-	ResponseEntity<RES> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params) throws Exception,HttpClientErrorException, IntegrationException;
+	ResponseEntity<RES> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException;
 	
-	ResponseEntity<RES> consumeURLEncodedRequestRestAPI(HttpEntity<MultiValueMap<String, String>> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params) throws Exception,HttpClientErrorException, IntegrationException;
+	ResponseEntity<RES> consumeURLEncodedRequestRestAPI(HttpEntity<MultiValueMap<String, String>> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException;
 	
 	void validateResponse(ResponseEntity<RES> responseEntity) throws IntegrationException;
 	
