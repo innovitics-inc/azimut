@@ -11,10 +11,11 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.HoldClientBankAccountApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.HoldClientBankAccountInput;
 import innovitics.azimut.rest.entities.teacomputers.HoldClientBankAccountOutput;
+import innovitics.azimut.rest.models.teacomputers.HoldClientBankAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.HoldClientBankAccountResponse;
 
 @Component
-public class HoldClientBankAccountMapper extends RestMapper<HoldClientBankAccountInput, HoldClientBankAccountOutput, HoldClientBankAccountResponse, BusinessAzimutClient>{
+public class HoldClientBankAccountMapper extends RestMapper<HoldClientBankAccountInput, HoldClientBankAccountOutput,HoldClientBankAccountRequest,HoldClientBankAccountResponse, BusinessAzimutClient>{
 
 	@Autowired HoldClientBankAccountApiConsumer holdClientBankAccountApiConsumer;
 	@Override
@@ -48,6 +49,12 @@ public class HoldClientBankAccountMapper extends RestMapper<HoldClientBankAccoun
 	protected List<BusinessAzimutClient> createListBusinessEntityFromOutput(HoldClientBankAccountOutput BaseOutput) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void setConsumer(BusinessAzimutClient businessAzimutClient) {
+		this.consumer=holdClientBankAccountApiConsumer;
+		
 	}
 
 }

@@ -135,9 +135,9 @@ public class GetReportApiConsumer extends RestTeaComputerEportApiConsumer<GetRep
 	@Override
 	public String generateURL(String params) 
 	{
-		return super.generateURL(null)+"/"+params;
+		return super.generateBaseURL(params)+"/"+params;
 	}
-
+	
 	protected void populateResponse(String url,ResponseEntity<GetReportResponse> responseEntity)
 	{
 		if(responseEntity!=null&&StringUtility.isStringPopulated(url))
@@ -146,5 +146,11 @@ public class GetReportApiConsumer extends RestTeaComputerEportApiConsumer<GetRep
 			response.setUrl(url);
 			
 		}
+	}
+
+	@Override
+	public Class<GetReportResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return GetReportResponse.class;
 	};
 }

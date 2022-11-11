@@ -8,17 +8,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.BaseRestConsumer;
 import innovitics.azimut.rest.apis.teacomputers.CheckAccountApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.ClientAccountOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientAccountsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientAccountsOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientAccountResponse;
+import innovitics.azimut.rest.models.teacomputers.GetClientAccountsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetClientAccountsResponse;
 import innovitics.azimut.utilities.crosslayerenums.UserIdType;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 @Component
-public class CheckAccountMapper extends RestMapper<GetClientAccountsInput, GetClientAccountsOutput, GetClientAccountsResponse, AzimutAccount>{
+public class CheckAccountMapper extends RestMapper<GetClientAccountsInput, GetClientAccountsOutput,GetClientAccountsRequest,ClientAccountResponse[], AzimutAccount>{
 
 	@Autowired CheckAccountApiConsumer checkAccountApiConsumer;
 	@Autowired ListUtility<ClientAccountOutput> listUtility;
@@ -79,6 +81,12 @@ public class CheckAccountMapper extends RestMapper<GetClientAccountsInput, GetCl
 		azimutAccount.setUserIdTypeAr(UserIdType.getById(clientAccountOutput.getIdTypeId()).getTypeAr());
 		
 		return azimutAccount; 	
+	}
+
+	@Override
+	protected void setConsumer(AzimutAccount baseBusinessEntity) {
+		this.consumer=checkAccountApiConsumer;
+		
 	}
 
 }

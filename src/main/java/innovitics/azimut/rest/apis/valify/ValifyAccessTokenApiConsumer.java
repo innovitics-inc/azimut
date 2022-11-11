@@ -72,7 +72,7 @@ public class ValifyAccessTokenApiConsumer extends RestValifyApiConsumer<ValifyAc
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 		
 	}
 
@@ -88,5 +88,10 @@ MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
 		
 		HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<MultiValueMap<String, String>>(map, this.generateHeaders(null, 0));
 		return httpEntity;
+	}
+	@Override
+	public Class<ValifyAccessTokenResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return ValifyAccessTokenResponse.class;
 	}
 }

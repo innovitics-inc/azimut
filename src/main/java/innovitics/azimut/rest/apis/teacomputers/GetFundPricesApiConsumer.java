@@ -76,7 +76,7 @@ public class GetFundPricesApiConsumer extends RestTeaComputerApiConsumer<GetFund
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 	}
 
 	@Override
@@ -110,6 +110,12 @@ public class GetFundPricesApiConsumer extends RestTeaComputerApiConsumer<GetFund
 
 		}
 		
+	}
+
+	@Override
+	public Class<FundPriceResponse[]> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return FundPriceResponse[].class;
 	}
 
 }

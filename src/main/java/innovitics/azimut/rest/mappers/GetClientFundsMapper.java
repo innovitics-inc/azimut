@@ -15,6 +15,7 @@ import innovitics.azimut.rest.entities.teacomputers.ClientFundOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientFundsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientFundsOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientFundResponse;
+import innovitics.azimut.rest.models.teacomputers.GetClientFundsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetClientFundsResponse;
 import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
@@ -22,7 +23,7 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
 @Component
-public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetClientFundsOutput, GetClientFundsResponse, BusinessClientFund> 
+public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetClientFundsOutput,GetClientFundsRequest ,ClientFundResponse[], BusinessClientFund> 
 {
 
 	@Autowired GetClientFundsApiConsumer getClientFundsApiConsumer;
@@ -123,6 +124,12 @@ public class GetClientFundsMapper extends RestMapper<GetClientFundsInput, GetCli
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	protected void setConsumer(BusinessClientFund businessClientFund) {
+		this.consumer=getClientFundsApiConsumer;
+		
 	}
 
 }

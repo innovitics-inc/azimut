@@ -97,6 +97,12 @@ public class InjectWithdrawApiConsumer extends RestTeaComputerApiConsumer<Inject
 	@Override
 	public String generateURL(String params) 
 	{
-		return super.generateURL(null)+"/"+params;
+		return super.generateBaseURL(null)+"/"+params;
+	}
+
+	@Override
+	public Class<InjectWithdrawResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return InjectWithdrawResponse.class;
 	}
 }

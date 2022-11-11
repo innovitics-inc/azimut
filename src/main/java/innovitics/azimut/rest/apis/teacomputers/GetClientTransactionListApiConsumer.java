@@ -103,7 +103,7 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 	}
 
 	@Override
@@ -142,6 +142,12 @@ public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsu
 			throws IntegrationException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Class<TransactionResponse[]> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return TransactionResponse[].class;
 	}
 
 	

@@ -9,10 +9,12 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.BusinessTransaction;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.rest.apis.teacomputers.GetClientTransactionListApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.GetTransactionsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetTransactionsOutput;
 import innovitics.azimut.rest.entities.teacomputers.TransactionOutput;
+import innovitics.azimut.rest.models.teacomputers.GetTransactionsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetTransactionsResponse;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
 import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
@@ -23,7 +25,7 @@ import innovitics.azimut.utilities.crosslayerenums.TransactionType;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 @Service
-public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTransactionsOutput,GetTransactionsResponse,BusinessTransaction>{
+public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTransactionsOutput,GetTransactionsRequest,TransactionResponse[],BusinessTransaction>{
 
 	@Autowired GetClientTransactionListApiConsumer getClientTransactionListApiConsumer;
 	@Autowired ListUtility<TransactionOutput> listUtility;
@@ -102,5 +104,13 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 		}
 		return businessTransaction; 		
 	}
+
+	@Override
+	protected void setConsumer(BusinessTransaction businessTransaction) 
+	{
+		this.consumer=getClientTransactionListApiConsumer;
+	}
+
+	
 
 }

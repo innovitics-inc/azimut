@@ -136,7 +136,13 @@ public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsum
 	@Override
 	public String generateURL(String params) 
 	{
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
+	}
+
+	@Override
+	public Class<CompanyBankAccountResponse[]> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return CompanyBankAccountResponse[].class;
 	}
 	
 

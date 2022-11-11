@@ -108,7 +108,13 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
+	}
+
+	@Override
+	public Class<PlaceOrderResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return PlaceOrderResponse.class;
 	}
 
 }

@@ -7,12 +7,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.BaseRestConsumer;
 import innovitics.azimut.rest.apis.teacomputers.AddAccountApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.AddAccountInput;
 import innovitics.azimut.rest.entities.teacomputers.AddAccountOutput;
+import innovitics.azimut.rest.models.teacomputers.AddAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.AddAccountResponse;
 @Component
-public class AddAccountMapper extends RestMapper<AddAccountInput, AddAccountOutput, AddAccountResponse, AzimutAccount>{
+public class AddAccountMapper extends RestMapper<AddAccountInput, AddAccountOutput,AddAccountRequest ,AddAccountResponse, AzimutAccount>{
 
 	@Autowired AddAccountApiConsumer addAccountApiConsumer;
 	@Override
@@ -69,5 +71,13 @@ public class AddAccountMapper extends RestMapper<AddAccountInput, AddAccountOutp
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	protected void setConsumer(AzimutAccount baseBusinessEntity) {
+		this.consumer=addAccountApiConsumer;
+		
+	}
+
+	
 
 }

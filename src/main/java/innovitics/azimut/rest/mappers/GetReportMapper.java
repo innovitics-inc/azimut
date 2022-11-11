@@ -11,9 +11,10 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.GetReportApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.GetReportInput;
 import innovitics.azimut.rest.entities.teacomputers.GetReportOutput;
+import innovitics.azimut.rest.models.teacomputers.GetReportRequest;
 import innovitics.azimut.rest.models.teacomputers.GetReportResponse;
 @Component
-public class GetReportMapper extends RestMapper<GetReportInput, GetReportOutput, GetReportResponse, BusinessAzimutClient> {
+public class GetReportMapper extends RestMapper<GetReportInput, GetReportOutput,GetReportRequest ,GetReportResponse, BusinessAzimutClient> {
 	@Autowired GetReportApiConsumer getReportApiConsumer;
 	
 	@Override
@@ -54,6 +55,12 @@ public class GetReportMapper extends RestMapper<GetReportInput, GetReportOutput,
 	protected List<BusinessAzimutClient> createListBusinessEntityFromOutput(GetReportOutput getValuationReportOutput) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void setConsumer(BusinessAzimutClient businessAzimutClient) {
+		this.consumer=getReportApiConsumer;
+		
 	}
 
 }

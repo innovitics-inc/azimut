@@ -79,7 +79,7 @@ public class ValifyOCRPassportApiConsumer extends RestValifyApiConsumer<ValifyOC
 	
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 		
 	}
 
@@ -87,6 +87,12 @@ public class ValifyOCRPassportApiConsumer extends RestValifyApiConsumer<ValifyOC
 	public HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(ValifyOCRInput valifyInput) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Class<ValifyOCRPassportResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return ValifyOCRPassportResponse.class;
 	}
 
 	

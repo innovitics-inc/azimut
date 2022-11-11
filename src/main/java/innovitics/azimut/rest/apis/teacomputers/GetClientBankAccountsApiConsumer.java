@@ -109,7 +109,7 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 		
 	}
 
@@ -145,6 +145,12 @@ public class GetClientBankAccountsApiConsumer extends RestTeaComputerApiConsumer
 			throws IntegrationException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Class<ClientBankAccountResponse[]> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return ClientBankAccountResponse[].class;
 	}
 	
 

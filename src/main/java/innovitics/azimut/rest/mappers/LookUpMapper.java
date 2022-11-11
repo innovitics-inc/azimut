@@ -21,6 +21,7 @@ import innovitics.azimut.rest.apis.teacomputers.LookupApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.LookUpInput;
 import innovitics.azimut.rest.entities.teacomputers.LookUpOutput;
 import innovitics.azimut.rest.entities.teacomputers.LookUpOutputs;
+import innovitics.azimut.rest.models.teacomputers.LookupRequest;
 import innovitics.azimut.rest.models.teacomputers.LookupResponse;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.AzimutDataLookUpService;
@@ -28,7 +29,7 @@ import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 
 @Component
-public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResponse,BusinessAzimutClient>{
+public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupRequest,LookupResponse[],BusinessAzimutClient>{
 @Autowired LookupApiConsumer lookupApiConsumer;
 @Autowired AzimutDataLookUpService azimutDataLookUpService;
 @Autowired TeaComputerService  teaComputerService;
@@ -197,6 +198,12 @@ public class LookUpMapper extends RestMapper<LookUpInput,LookUpOutput,LookupResp
 			currencies.add(currency);
 		}
 		this.teaComputerService.saveAllCurrencies(currencies);
+	}
+
+	@Override
+	protected void setConsumer(BusinessAzimutClient businessAzimutClient) {
+		this.consumer=lookupApiConsumer;
+		
 	}
 	
 	

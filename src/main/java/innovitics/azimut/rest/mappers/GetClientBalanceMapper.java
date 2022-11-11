@@ -15,13 +15,14 @@ import innovitics.azimut.rest.entities.teacomputers.GetClientBalanceInput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientBalanceOutput;
 import innovitics.azimut.rest.entities.teacomputers.TransactionOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientCashBalanceResponse;
+import innovitics.azimut.rest.models.teacomputers.GetClientCashBalanceRequest;
 import innovitics.azimut.rest.models.teacomputers.GetClientCashBalanceResponse;
 import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 @Service
-public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, GetClientBalanceOutput, GetClientCashBalanceResponse, BusinessClientCashBalance>{
+public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, GetClientBalanceOutput,GetClientCashBalanceRequest,ClientCashBalanceResponse[], BusinessClientCashBalance>{
 
 	@Autowired GetClientCashBalanceApiConsumer getClientBalanceApiConsumer ;
 	@Autowired  ListUtility<ClientBalanceOutput> listUtility;
@@ -112,6 +113,12 @@ public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, Ge
 		
 		return businessClientCashBalances; 
 		
+		
+	}
+
+	@Override
+	protected void setConsumer(BusinessClientCashBalance businessClientBalance) {
+		this.consumer=getClientBalanceApiConsumer;
 		
 	}
 

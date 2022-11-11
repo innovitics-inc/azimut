@@ -115,7 +115,7 @@ public class LookupApiConsumer  extends RestTeaComputerApiConsumer<LookupRequest
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+"/lookups/"+params;
+		return super.generateBaseURL(params)+"/lookups/"+params;
 	}
 
 	@Override
@@ -160,6 +160,12 @@ public class LookupApiConsumer  extends RestTeaComputerApiConsumer<LookupRequest
 	protected void generateResponseListSignature(LookupResponse[] teaComputerResponse) throws IntegrationException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Class<LookupResponse[]> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return LookupResponse[].class;
 	}
 
 	

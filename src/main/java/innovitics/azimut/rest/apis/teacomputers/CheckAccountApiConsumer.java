@@ -93,7 +93,7 @@ public class CheckAccountApiConsumer extends RestTeaComputerApiConsumer<GetClien
 	
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 	}
 
 	@Override
@@ -141,6 +141,12 @@ public class CheckAccountApiConsumer extends RestTeaComputerApiConsumer<GetClien
 
 		}
 
+	}
+
+	@Override
+	public Class<ClientAccountResponse[]> getResponseClassType() {
+		
+		return ClientAccountResponse[].class;
 	}
 		
 }

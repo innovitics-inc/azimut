@@ -99,7 +99,13 @@ public class AddClientBankAccountApiConsumer extends RestTeaComputerApiConsumer<
 	}
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
+	}
+
+	@Override
+	public Class<AddClientBankAccountResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return AddClientBankAccountResponse.class;
 	}
 
 }

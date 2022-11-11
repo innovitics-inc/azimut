@@ -12,9 +12,10 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.PlaceOrderApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderOutput;
+import innovitics.azimut.rest.models.teacomputers.PlaceOrderRequest;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderResponse;
 @Component
-public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutput, PlaceOrderResponse, BaseAzimutTrading>{
+public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutput,PlaceOrderRequest,PlaceOrderResponse, BaseAzimutTrading>{
 
 	@Autowired PlaceOrderApiConsumer placeOrderApiConsumer;
 	
@@ -56,6 +57,12 @@ public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutp
 	protected List<BaseAzimutTrading> createListBusinessEntityFromOutput(PlaceOrderOutput placeOrderOutput) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void setConsumer(BaseAzimutTrading baseAzimutTrading) {
+		this.consumer=placeOrderApiConsumer;
+		
 	}
 
 }

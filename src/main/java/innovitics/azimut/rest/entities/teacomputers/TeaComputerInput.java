@@ -70,7 +70,7 @@ public  class TeaComputerInput extends BaseInput{
 		this.fundId = fundId;
 	}
 	
-	/*@Override
+	@Override
 	public String setBaseUrl()
 	{
 		return this.configProperties.getTeaComputersUrl()+"/";
@@ -82,6 +82,6 @@ public  class TeaComputerInput extends BaseInput{
 		// TODO Auto-generated method stub
 		
 	}
-	*/
+	
 	
 }

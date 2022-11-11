@@ -115,7 +115,13 @@ public class GetEportfolioApiConsumer extends RestTeaComputerEportApiConsumer<Ge
 	@Override
 	public String generateURL(String params) 
 	{
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
+	}
+
+	@Override
+	public Class<GetEportfolioResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return GetEportfolioResponse.class;
 	}
 
 }

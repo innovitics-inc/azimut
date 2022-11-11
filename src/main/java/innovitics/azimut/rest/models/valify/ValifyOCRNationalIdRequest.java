@@ -1,6 +1,6 @@
 package innovitics.azimut.rest.models.valify;
 
-public class ValifyOCRNationalIdRequest extends ValifyRequest{
+public class ValifyOCRNationalIdRequest extends ValifyOCRIdRequest{
 	private ValifyImageData data;
 	
 	

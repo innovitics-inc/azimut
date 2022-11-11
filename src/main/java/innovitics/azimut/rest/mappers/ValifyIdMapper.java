@@ -13,7 +13,9 @@ import innovitics.azimut.rest.apis.valify.ValifyOCRNationalIdApiConsumer;
 import innovitics.azimut.rest.apis.valify.ValifyOCRPassportApiConsumer;
 import innovitics.azimut.rest.entities.valify.ValifyOCRInput;
 import innovitics.azimut.rest.entities.valify.ValifyOCROutput;
+import innovitics.azimut.rest.models.valify.ValifyOCRIdRequest;
 import innovitics.azimut.rest.models.valify.ValifyOCRIdResponse;
+import innovitics.azimut.rest.models.valify.ValifyOCRNationalIdRequest;
 import innovitics.azimut.rest.models.valify.ValifyOCRNationalIdResponse;
 import innovitics.azimut.rest.models.valify.ValifyOCRPassportResponse;
 import innovitics.azimut.utilities.crosslayerenums.UserIdType;
@@ -21,11 +23,10 @@ import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @Component
-public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, ValifyOCRIdResponse, BusinessValify>  {
+public class ValifyIdMapper extends RestMapper<ValifyOCRInput, ValifyOCROutput, ValifyOCRNationalIdRequest, ValifyOCRNationalIdResponse, BusinessValify>  {
 
 
 	@Autowired ValifyOCRNationalIdApiConsumer valifyOCRNationalIdApiConsumer;
-	@Autowired ValifyOCRPassportApiConsumer valifyOCRPassportApiConsumer;
 	
 	@Override
 	public BusinessValify consumeRestService(BusinessValify businessValify, String params) throws HttpClientErrorException, Exception {
@@ -36,10 +37,7 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 			responseBusinessValify=this.createBusinessEntityFromOutput(this.valifyOCRNationalIdApiConsumer.invoke(this.createInput(businessValify), ValifyOCRNationalIdResponse.class, params));
 		}
 		
-		else if(this.isDocumentPassport(businessValify))
-		{
-			responseBusinessValify=this.createBusinessEntityFromOutput(this.valifyOCRPassportApiConsumer.invoke(this.createInput(businessValify), ValifyOCRPassportResponse.class, params));
-		}
+		
 		
 		return responseBusinessValify;
 	}
@@ -58,10 +56,6 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 		{
 			input.setFrontImage(businessValify.getFrontImage());
 			input.setBackImage(businessValify.getBackImage());
-		}
-		else if(this.isDocumentPassport(businessValify))
-		{
-			input.setImage(businessValify.getPassportImage());
 		}
 		input.setLang(businessValify.getLanguage());
 		input.setToken(businessValify.getToken());
@@ -113,34 +107,7 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 			businessValify.setAzIdType(UserIdType.NATIONAL_ID.getTypeId());
 	
 		}
-		else
-		{	
-			if(StringUtility.isStringPopulated(valifyOCROutput.getName()))
-			{
-				String value=valifyOCROutput.getName();
-				businessValify.setName(value.substring(0, value.indexOf(" ")));
-			}
-			
-			businessValify.setLastName(valifyOCROutput.getSurname());
-			businessValify.setPassportNumber(valifyOCROutput.getPassportNumber());
-			
-			
-			if(StringUtility.isStringPopulated(valifyOCROutput.getDateOfBirth()))
-				businessValify.setDateOfBirth(DateUtility.changeStringDateFormat(valifyOCROutput.getDateOfBirth().replace("'",""), new SimpleDateFormat("dd/mm/yy"), new SimpleDateFormat("dd-mm-yyyy")));
-				
-				
-			if(StringUtility.isStringPopulated(valifyOCROutput.getExpirationDate()))
-				businessValify.setExpirationDate(DateUtility.changeStringDateFormat(valifyOCROutput.getExpirationDate().replace("'", ""), new SimpleDateFormat("dd/mm/yy"), new SimpleDateFormat("dd-mm-yyyy")));
-				
-				
-			
-			
-			businessValify.setSex(valifyOCROutput.getSex());
-			businessValify.setNationality(valifyOCROutput.getNationality());
-			businessValify.setValidity(valifyOCROutput.getValidity());
-			businessValify.setUserId(valifyOCROutput.getPassportNumber());
-			businessValify.setAzIdType(UserIdType.PASSPORT.getTypeId());
-		}
+		
 		businessValify.setValifyTransactionId(valifyOCROutput.getTransactionId());
 		
 		
@@ -161,6 +128,14 @@ public class ValifyIdMapper extends RestMapper<ValifyOCRInput,ValifyOCROutput, V
 	boolean isDocumentPassport(BusinessValify businessValify)
 	{
 		return StringUtility.stringsMatch(businessValify.getDocumentType(), StringUtility.PASSPORT_DOCUMENT_TYPE);
+	}
+
+	@Override
+	protected void setConsumer(BusinessValify businessValify) {
+		if(this.isDocumentNationalId(businessValify))
+		{
+			this.consumer=valifyOCRNationalIdApiConsumer;
+		}			
 	}
 	
 }

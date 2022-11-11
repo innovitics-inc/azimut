@@ -18,10 +18,11 @@ import innovitics.azimut.rest.entities.teacomputers.GetFundsPricesInput;
 import innovitics.azimut.rest.entities.teacomputers.GetFundsPricesOutput;
 import innovitics.azimut.rest.entities.teacomputers.TransactionOutput;
 import innovitics.azimut.rest.models.teacomputers.FundPriceResponse;
+import innovitics.azimut.rest.models.teacomputers.GetFundsPricesRequest;
 import innovitics.azimut.rest.models.teacomputers.GetFundsPricesResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 @Component
-public class GetFundPricesMapper extends RestMapper<GetFundsPricesInput, GetFundsPricesOutput, GetFundsPricesResponse, BusinessFundPrice>{
+public class GetFundPricesMapper extends RestMapper<GetFundsPricesInput, GetFundsPricesOutput,GetFundsPricesRequest ,FundPriceResponse[], BusinessFundPrice>{
 	@Autowired GetFundPricesApiConsumer getFundPricesApiConsumer; 
 	@Autowired ListUtility<FundPriceOutput> listUtility;
 	@Override
@@ -72,6 +73,12 @@ public class GetFundPricesMapper extends RestMapper<GetFundsPricesInput, GetFund
 			businessFundPrice.setPriceDate(fundPriceOutput.getPriceDate());
 		}
 		return businessFundPrice;		
+	}
+
+	@Override
+	protected void setConsumer(BusinessFundPrice businessFundPrice) {
+		this.consumer=getFundPricesApiConsumer;
+		
 	}
 
 	

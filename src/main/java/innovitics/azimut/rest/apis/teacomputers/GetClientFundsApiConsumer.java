@@ -116,7 +116,7 @@ public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetCli
 	@Override
 	public String generateURL(String params) 
 	{
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 	}
 	
 	@Override
@@ -162,6 +162,14 @@ public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetCli
 		}
 
 		
+	}
+
+
+
+	@Override
+	public Class<ClientFundResponse[]> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return ClientFundResponse[].class;
 	}
 
 }

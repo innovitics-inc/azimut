@@ -20,6 +20,7 @@ import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.rest.mappers.ValifyAccessTokenMapper;
 import innovitics.azimut.rest.mappers.ValifyFacialImageMapper;
 import innovitics.azimut.rest.mappers.ValifyIdMapper;
+import innovitics.azimut.rest.mappers.ValifyPassportIdMapper;
 import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.utilities.crosslayerenums.UserImageType;
@@ -36,9 +37,7 @@ import innovitics.azimut.validations.validators.valify.ValifyIdImages;
 
 @Service
 public class BusinessValifyService extends AbstractBusinessService <BusinessValify>{
-	@Autowired  ValifyAccessTokenMapper valifyAccessTokenMapper;
-	@Autowired ValifyFacialImageMapper valifyFacialImageMapper;
-	@Autowired ValifyIdMapper valifyIdMapper;
+
 	@Autowired ValifyIdImages valifyIdImages;
 	@Autowired ValifyFacialImages valifyFacialImages;
 	@Autowired UserImageService userImageService;
@@ -114,7 +113,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		
 		try 
 		{
-		  businessValifyResponse=this.valifyFacialImageMapper.consumeRestService(this.determineFacialType(businessValify), null);
+		  businessValifyResponse=this.restManager.valifyFacialImageMapper.consumeRestService(this.determineFacialType(businessValify), null);
 		  updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages,null);
 		}
 		catch (Exception exception) 
@@ -177,7 +176,14 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		
 		try 
 		{
-			businessValifyResponse=this.valifyIdMapper.consumeRestService(businessValify, null);
+			if(frontImage!=null&&backImage!=null)
+			{
+				businessValifyResponse=this.restManager.valifyIdMapper.consumeRestService(businessValify, null);
+			}
+			if(passportImage!=null)
+			{
+				businessValifyResponse=this.restManager.valifyPassportIdMapper.consumeRestService(businessValify, null);
+			}
 			updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages,isEgyptian);
 			
 		}

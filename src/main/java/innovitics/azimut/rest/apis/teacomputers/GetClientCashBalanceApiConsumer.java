@@ -129,8 +129,14 @@ public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 		
+	}
+
+	@Override
+	public Class<ClientCashBalanceResponse[]> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return ClientCashBalanceResponse[].class;
 	}
 
 }

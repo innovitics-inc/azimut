@@ -11,9 +11,10 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.valify.ValifyAccessTokenApiConsumer;
 import innovitics.azimut.rest.entities.valify.ValifyAccessTokenInput;
 import innovitics.azimut.rest.entities.valify.ValifyAccessTokenOutput;
+import innovitics.azimut.rest.models.valify.ValifyAccessTokenRequest;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenResponse;
 @Component
-public class ValifyAccessTokenMapper extends RestMapper<ValifyAccessTokenInput,ValifyAccessTokenOutput, ValifyAccessTokenResponse, BusinessValify> {
+public class ValifyAccessTokenMapper extends RestMapper<ValifyAccessTokenInput,ValifyAccessTokenOutput,ValifyAccessTokenRequest ,ValifyAccessTokenResponse, BusinessValify> {
 
 	@Autowired ValifyAccessTokenApiConsumer valifyAccessTokenApiConsumer;
 	
@@ -52,6 +53,12 @@ public class ValifyAccessTokenMapper extends RestMapper<ValifyAccessTokenInput,V
 	protected List<BusinessValify> createListBusinessEntityFromOutput(ValifyAccessTokenOutput BaseOutput) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void setConsumer(BusinessValify baseBusinessEntity) {
+		this.consumer=valifyAccessTokenApiConsumer;
+		
 	}
 
 }

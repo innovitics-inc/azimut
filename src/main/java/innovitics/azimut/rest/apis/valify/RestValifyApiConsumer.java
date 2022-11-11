@@ -68,11 +68,12 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 	
 
 	@Override
-	public String generateURL(String params)
+	public String generateBaseURL(String params)
 	{
 		return this.configProperties.getValifyUrl();
 		
 	}
+	
 	protected void populateGeneralRequestDetails(innovitics.azimut.rest.models.valify.ValifyRequest request,innovitics.azimut.rest.models.valify.ValifyData data,innovitics.azimut.rest.entities.valify.ValifyInput input) 
 	{
 	

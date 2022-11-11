@@ -12,12 +12,13 @@ import innovitics.azimut.rest.apis.teacomputers.GetEportfolioApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.EportfolioOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetEportfolioInput;
 import innovitics.azimut.rest.entities.teacomputers.GetEportfolioOutput;
+import innovitics.azimut.rest.models.teacomputers.GetEportfolioRequest;
 import innovitics.azimut.rest.models.teacomputers.GetEportfolioResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 
 
 @Component
-public class GetEportfolioMapper extends RestMapper<GetEportfolioInput, GetEportfolioOutput, GetEportfolioResponse, EportfolioDetail>{
+public class GetEportfolioMapper extends RestMapper<GetEportfolioInput, GetEportfolioOutput,GetEportfolioRequest ,GetEportfolioResponse, EportfolioDetail>{
 
 	@Autowired GetEportfolioApiConsumer getEportfolioApiConsumer;
 	@Autowired ListUtility<EportfolioOutput> eportfolioOutputListUtility;
@@ -66,6 +67,12 @@ public class GetEportfolioMapper extends RestMapper<GetEportfolioInput, GetEport
 		}
 		
 		return eportfolioDetails;
+	}
+
+	@Override
+	protected void setConsumer(EportfolioDetail eportfolioDetail) {
+		this.consumer=getEportfolioApiConsumer;
+		
 	}
 
 }

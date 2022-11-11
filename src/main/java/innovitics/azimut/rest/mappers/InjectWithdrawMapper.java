@@ -14,13 +14,14 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.InjectWithdrawApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.InjectWithdrawInput;
 import innovitics.azimut.rest.entities.teacomputers.InjectWithdrawOutput;
+import innovitics.azimut.rest.models.teacomputers.InjectWithdrawRequest;
 import innovitics.azimut.rest.models.teacomputers.InjectWithdrawResponse;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
 
 @Component
-public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, InjectWithdrawOutput, InjectWithdrawResponse, BaseAzimutTrading> {
+public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, InjectWithdrawOutput,InjectWithdrawRequest ,InjectWithdrawResponse, BaseAzimutTrading> {
 
 	@Autowired InjectWithdrawApiConsumer injectWithdrawApiConsumer;
 	
@@ -57,5 +58,11 @@ public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, Inject
 	@Override
 	protected List<BaseAzimutTrading> createListBusinessEntityFromOutput(InjectWithdrawOutput BaseOutput) {
 		return null;
+	}
+
+	@Override
+	protected void setConsumer(BaseAzimutTrading baseAzimutTrading) {
+		this.consumer=injectWithdrawApiConsumer;
+		
 	}
 }

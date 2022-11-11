@@ -93,8 +93,9 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		request.setPassword(this.configProperties.getTeaComputersPassword());
 	}
 	
+
 	@Override
-	public String generateURL(String params)
+	public String generateBaseURL(String params)
 	{
 		return this.configProperties.getTeaComputersUrl();
 		

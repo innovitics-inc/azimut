@@ -11,11 +11,12 @@ import innovitics.azimut.rest.entities.teacomputers.GetFundByIdInput;
 import innovitics.azimut.rest.entities.teacomputers.GetFundByIdOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetFundOutput;
 import innovitics.azimut.rest.models.BaseRestResponse;
+import innovitics.azimut.rest.models.teacomputers.GetFundRequest;
 import innovitics.azimut.rest.models.teacomputers.GetFundResponse;
 import innovitics.azimut.rest.models.teacomputers.GetSingleFundResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 
-public class GetFundMapper extends RestMapper<GetFundByIdInput,GetFundOutput, GetFundResponse, BusinessFund> {
+public class GetFundMapper extends RestMapper<GetFundByIdInput,GetFundOutput,GetFundRequest,GetFundResponse, BusinessFund> {
 	
 	@Override
 	BusinessFund consumeRestService(BusinessFund businessFund, String params) throws IntegrationException {
@@ -52,6 +53,12 @@ public class GetFundMapper extends RestMapper<GetFundByIdInput,GetFundOutput, Ge
 	{
 		
 		return null; 
+		
+	}
+
+	@Override
+	protected void setConsumer(BusinessFund businessFund) {
+		// TODO Auto-generated method stub
 		
 	}
 	

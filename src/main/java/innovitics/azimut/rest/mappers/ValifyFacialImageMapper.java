@@ -11,9 +11,10 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.valify.ValifyFaceMatchApiConsumer;
 import innovitics.azimut.rest.entities.valify.ValifyFacialImageInput;
 import innovitics.azimut.rest.entities.valify.ValifyFacialImageOutput;
+import innovitics.azimut.rest.models.valify.ValifyFacialImageRequest;
 import innovitics.azimut.rest.models.valify.ValifyFacialImageResponse;
 @Component
-public class ValifyFacialImageMapper extends RestMapper<ValifyFacialImageInput,ValifyFacialImageOutput, ValifyFacialImageResponse, BusinessValify>   {
+public class ValifyFacialImageMapper extends RestMapper<ValifyFacialImageInput,ValifyFacialImageOutput,ValifyFacialImageRequest,ValifyFacialImageResponse, BusinessValify>   {
 
 	@Autowired ValifyFaceMatchApiConsumer valifyFaceMatchApiConsumer;
 	@Override
@@ -54,6 +55,12 @@ public class ValifyFacialImageMapper extends RestMapper<ValifyFacialImageInput,V
 	protected List<BusinessValify> createListBusinessEntityFromOutput(ValifyFacialImageOutput BaseOutput) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void setConsumer(BusinessValify baseBusinessEntity) {
+		this.consumer=valifyFaceMatchApiConsumer;
+		
 	}
 
 }

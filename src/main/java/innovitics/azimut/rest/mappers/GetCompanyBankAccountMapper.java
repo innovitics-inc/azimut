@@ -13,11 +13,12 @@ import innovitics.azimut.rest.entities.teacomputers.CompanyBankAccountOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetCompanyBankAccountsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetCompanyBankAccountsOutput;
 import innovitics.azimut.rest.models.teacomputers.CompanyBankAccountResponse;
+import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 
 @Component
-public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput, GetCompanyBankAccountResponse, BusinessCompanyBankAccount> {
+public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput,GetCompanyBankAccountRequest ,CompanyBankAccountResponse[], BusinessCompanyBankAccount> {
 
 	@Autowired GetCompanyBankAccountsApiConsumer getCompanyBankAccountsApiConsumer;
 	
@@ -80,6 +81,12 @@ public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccoun
 				
 		}
 		return businessCompanyBankAccount; 
+		
+	}
+
+	@Override
+	protected void setConsumer(BusinessCompanyBankAccount businessCompanyBankAccount) {
+		this.consumer=getCompanyBankAccountsApiConsumer;
 		
 	}
 

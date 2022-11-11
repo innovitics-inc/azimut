@@ -8,14 +8,17 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
+import innovitics.azimut.businessmodels.user.BusinessClientCashBalance;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.BaseRestConsumer;
 import innovitics.azimut.rest.apis.teacomputers.AddClientBankAccountApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.AddClientBankAccountInput;
 import innovitics.azimut.rest.entities.teacomputers.AddClientBankAccountOutput;
+import innovitics.azimut.rest.models.teacomputers.AddClientBankAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.AddClientBankAccountResponse;
 @Component
-public class AddClientBankAccountMapper extends RestMapper<AddClientBankAccountInput, AddClientBankAccountOutput, AddClientBankAccountResponse, BusinessClientBankAccountDetails>{
+public class AddClientBankAccountMapper extends RestMapper<AddClientBankAccountInput, AddClientBankAccountOutput,AddClientBankAccountRequest ,AddClientBankAccountResponse, BusinessClientBankAccountDetails>{
 
 	@Autowired AddClientBankAccountApiConsumer addClientBankAccountApiConsumer;
 
@@ -71,6 +74,14 @@ public class AddClientBankAccountMapper extends RestMapper<AddClientBankAccountI
 			AddClientBankAccountOutput BaseOutput) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	@Override
+	protected void setConsumer(BusinessClientBankAccountDetails businessClientBankAccountDetails) {
+		this.consumer=addClientBankAccountApiConsumer;
+		
 	}
 	
 	

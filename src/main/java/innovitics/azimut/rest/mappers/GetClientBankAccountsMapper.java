@@ -14,6 +14,7 @@ import innovitics.azimut.rest.entities.teacomputers.ClientBankAccountOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientBankAccountsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetClientBankAccountsOutput;
 import innovitics.azimut.rest.models.teacomputers.ClientBankAccountResponse;
+import innovitics.azimut.rest.models.teacomputers.GetClientBankAccountsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetClientBankAccountsResponse;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
 import innovitics.azimut.utilities.crosslayerenums.ClientBankAccountStatus;
@@ -22,10 +23,11 @@ import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 @Component
-public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccountsInput, GetClientBankAccountsOutput, GetClientBankAccountsResponse, BusinessClientBankAccountDetails>{
+public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccountsInput, GetClientBankAccountsOutput,GetClientBankAccountsRequest ,ClientBankAccountResponse[], BusinessClientBankAccountDetails>{
 
 @Autowired ListUtility<ClientBankAccountOutput> listUtility;
 @Autowired GetClientBankAccountsApiConsumer getClientBankAccountsApiConsumer;
+
 	@Override
 	BusinessClientBankAccountDetails consumeRestService(BusinessClientBankAccountDetails businessClientBankAccountDetails,
 			String params) throws HttpClientErrorException, Exception {
@@ -126,6 +128,12 @@ public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccount
 			this.logger.info("BusinessClientBankAccountDetails::::"+businessClientBankAccountDetails.toString());
 		}
 		return businessClientBankAccountDetails;		
+	}
+
+	@Override
+	protected void setConsumer(BusinessClientBankAccountDetails businessClientBankAccountDetails) {
+		this.consumer=getClientBankAccountsApiConsumer;
+		
 	}
 
 }

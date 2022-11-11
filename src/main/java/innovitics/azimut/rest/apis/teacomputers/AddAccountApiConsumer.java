@@ -117,7 +117,12 @@ public class AddAccountApiConsumer extends RestTeaComputerApiConsumer<AddAccount
 	}
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return this.generateBaseURL(params)+PATH;
+	}
+
+	@Override
+	public Class<AddAccountResponse> getResponseClassType() {
+		return AddAccountResponse.class;
 	}
 
 }

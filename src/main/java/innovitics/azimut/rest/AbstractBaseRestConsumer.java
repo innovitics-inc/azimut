@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.SerializationUtils;
@@ -37,7 +38,7 @@ import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 
-@Service
+@Component
 public abstract class AbstractBaseRestConsumer<REQ,RES,I,O>
 implements BaseRestConsumer<REQ,RES,I,O> {
 
@@ -47,6 +48,8 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	@Autowired protected RestErrorHandler restErrorHandler;
 	protected RES type;
 	protected abstract void populateResponse(String url,ResponseEntity<RES> responseEntity);
+	public abstract Class<RES> getResponseClassType();
+	
 	
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
 		logger.info("Input::" + input);
@@ -216,5 +219,4 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 		return httpEntity;
 	}
 
-	
 }

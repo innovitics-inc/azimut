@@ -26,7 +26,7 @@ public class ValifyInput extends BaseInput {
 		this.lang = lang;
 	}
 	
-	/*@Override
+	@Override
 	public String getUrl() {
 		// TODO Auto-generated method stub
 		return null;
@@ -35,7 +35,7 @@ public class ValifyInput extends BaseInput {
 	public String setBaseUrl() {
 		return this.configProperties.getValifyUrl()+"/";
 	}
-	*/
+	
 	
 	
 	

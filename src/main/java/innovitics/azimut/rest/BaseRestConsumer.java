@@ -31,8 +31,14 @@ import innovitics.azimut.exceptions.IntegrationException;
 	IntegrationException handleException(Exception exception);
 		
 	String generateURL(String params);
+	String generateBaseURL(String params);
 	
 	HttpMethod chooseHttpMethod();
 	
 	IntegrationException handleError(HttpClientErrorException httpClientErrorException) throws IntegrationException;
+	
+	O invoke (I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception;
+	
+	Class<RES> getResponseClassType();
+	
 }

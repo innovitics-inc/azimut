@@ -90,13 +90,19 @@ public class HoldClientBankAccountApiConsumer extends RestTeaComputerApiConsumer
 
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 	}
 
 	@Override
 	protected void generateResponseListSignature(HoldClientBankAccountResponse teaComputerResponse) throws IntegrationException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Class<HoldClientBankAccountResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return HoldClientBankAccountResponse.class;
 	}
 
 }

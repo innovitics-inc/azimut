@@ -14,6 +14,7 @@ import innovitics.azimut.rest.entities.teacomputers.FundTransactionOutput;
 import innovitics.azimut.rest.entities.teacomputers.GetFundTransactionsInput;
 import innovitics.azimut.rest.entities.teacomputers.GetFundTransactionsOutput;
 import innovitics.azimut.rest.models.teacomputers.FundTransactionResponse;
+import innovitics.azimut.rest.models.teacomputers.GetFundTransactionsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetFundTransactionsResponse;
 import innovitics.azimut.utilities.crosslayerenums.OrderStatus;
 import innovitics.azimut.utilities.crosslayerenums.OrderType;
@@ -21,7 +22,7 @@ import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 
 @Component
-public class GetFundTransactionsMapper extends RestMapper<GetFundTransactionsInput, GetFundTransactionsOutput, GetFundTransactionsResponse, BusinessFundTransaction> {
+public class GetFundTransactionsMapper extends RestMapper<GetFundTransactionsInput, GetFundTransactionsOutput,GetFundTransactionsRequest ,FundTransactionResponse[], BusinessFundTransaction> {
 
 	public static final String EXECUTED_ORDERS="GetExecutedOrders";
 	public static final String PENDING_ORDERS="GetPendingOrders";
@@ -104,6 +105,12 @@ public class GetFundTransactionsMapper extends RestMapper<GetFundTransactionsInp
 			
 		}
 		return businessFundTransactions;
+	}
+
+	@Override
+	protected void setConsumer(BusinessFundTransaction businessFundTransaction) {
+		this.consumer=getFundTransactionsApiConsumer;
+		
 	}
 
 }

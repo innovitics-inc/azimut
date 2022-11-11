@@ -88,13 +88,19 @@ public class ValifyOCRNationalIdApiConsumer extends RestValifyApiConsumer<Valify
 	
 	@Override
 	public String generateURL(String params) {
-		return super.generateURL(params)+PATH;
+		return super.generateBaseURL(params)+PATH;
 		
 	}
 	@Override
 	public HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(ValifyOCRInput input) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Class<ValifyOCRNationalIdResponse> getResponseClassType() {
+		// TODO Auto-generated method stub
+		return ValifyOCRNationalIdResponse.class;
 	}
 
 	 

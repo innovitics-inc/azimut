@@ -19,7 +19,10 @@ import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.businessutilities.SearchFilter;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.rest.entities.BaseInput;
+import innovitics.azimut.rest.entities.BaseOutput;
 import innovitics.azimut.rest.mappers.RestManager;
+import innovitics.azimut.rest.mappers.RestMapper;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
@@ -37,6 +40,7 @@ import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
 import innovitics.azimut.utilities.fileutilities.FileUtility;
 import innovitics.azimut.validations.Validation;
 
+@SuppressWarnings("rawtypes")
 @Service
 public abstract class AbstractBusinessService <T extends BaseBusinessEntity> extends AzimutParent {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractBusinessService.class);
@@ -165,5 +169,5 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 			searchBusinessFundPrice.setSearchToDate(DateUtility.getCurrentDayMonthYear());
 			return searchBusinessFundPrice;
 		}
-	 
+		
 }
