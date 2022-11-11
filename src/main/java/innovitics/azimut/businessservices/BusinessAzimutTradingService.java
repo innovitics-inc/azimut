@@ -28,12 +28,13 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 
 	public BaseAzimutTrading placeOrder(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{				
+		
 		@SuppressWarnings("unchecked")
 		BaseAzimutTrading responseBaseAzimutTrading=		
 		 (BaseAzimutTrading)(this.userBlockageUtility.
-		 checkUserBlockage(Integer.valueOf(this.configProperties.getBlockageNumberOfTrials()),this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,this.restManager.placeOrderMapper,"consumeRestService",
-				 new Object[]{this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading),null},
-				 new Class<?>[]{BaseAzimutTrading.class,String.class},
+		 checkUserBlockage(Integer.valueOf(this.configProperties.getBlockageNumberOfTrials()),this.configProperties.getBlockageDurationInMinutes(),tokenizedBusinessUser,userMapper,restContract,"getData",
+				 new Object[]{restContract.placeOrderMapper,this.prepareOrderPlacingInputs(tokenizedBusinessUser,baseAzimutTrading),null},
+				 new Class<?>[]{PlaceOrderMapper.class,BaseAzimutTrading.class,String.class},
 				 ErrorCode.OPERATION_FAILURE));
 		return responseBaseAzimutTrading;
 		 

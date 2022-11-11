@@ -130,7 +130,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		{				
 			//businessClientCashBalances=this.restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
 			//businessClientCashBalances=this.restManager.getClientBalanceMapper.wrapAdvancedBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
-			businessClientCashBalances=this.restContract.getDataList(this.restManager.getClientBalanceMapper,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null);
+			businessClientCashBalances=restContract.getDataList(restContract.getClientBalanceMapper,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null);
 			if(clientCashBalanceListUtility.isListEmptyOrNull(businessClientCashBalances))
 			{
 				this.logger.info("Empty List");
