@@ -331,7 +331,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> setUserIdAndIdType(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody BusinessUser businessUser) throws BusinessException, IOException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.setUserIdAndUserIdType(this.getCurrentRequestHolder(token),businessUser),null,null);
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.beautifyUser(this.businessUserService.setUserIdAndUserIdType(this.getCurrentRequestHolder(token),businessUser)),null,null);
 		}
 		
 		catch(BusinessException businessException)

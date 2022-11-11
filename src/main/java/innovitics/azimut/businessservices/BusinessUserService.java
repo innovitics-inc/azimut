@@ -346,7 +346,8 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			searchedForBusinessUser=new BusinessUser();			
 			try 
 			{
-				List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
+				//List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
+				List<AzimutAccount> azimutAccounts=this.restContract.getDataList(this.restContract.checkAccountMapper, this.prepareAccountRetrievalInputs(null, businessUser), null);
 				if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
 				{
 					searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);					
@@ -608,7 +609,8 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
 		try 
 		{			
-			responseBusinessAzimutClient.setAzimutAccounts(this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());	
+			//responseBusinessAzimutClient.setAzimutAccounts(this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
+			responseBusinessAzimutClient.setAzimutAccounts(this.restContract.getDataList(this.restContract.checkAccountMapper, this.prepareAccountRetrievalInputs(businessAzimutClient, tokenizedBusinessUser), null));
 		}
 		catch(Exception exception)
 		{
@@ -757,7 +759,8 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		{
 			try 
 			{
-				List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser),null).getDataList();
+				//List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser),null).getDataList();
+				List<AzimutAccount> azimutAccounts=this.restContract.getDataList(this.restContract.checkAccountMapper, this.prepareAccountRetrievalInputs(null, businessUser), null);
 				boolean isListPopulated=azimutAccountListUtility.isListPopulated(azimutAccounts);
 				
 				if(isListPopulated&&azimutAccounts.size()==1)

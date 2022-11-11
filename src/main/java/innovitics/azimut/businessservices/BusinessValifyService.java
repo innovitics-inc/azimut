@@ -49,12 +49,34 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	@Autowired GenderService genderService;
 	public BusinessValify getValifyToken() throws BusinessException, IntegrationException
 	{
-		String token=(String)this.cachingLayer.getValueIfExisting(valifyUtility,"getToken",new Object[]{1l},new Class<?>[]{Long.class},"valifyToken",60,600);
+		String token=(String)this.cachingLayer.getValueIfExisting(this,"getToken",
+				new Object[]{1l},
+				new Class<?>[]{Long.class},
+				"valifyToken",60,600);
 		BusinessValify businessValify=new BusinessValify();
 		businessValify.setToken(token);
 		return businessValify;
 	}
-	
+	public String getToken(Long id)throws BusinessException,IntegrationException
+	{
+		String token="";
+		BusinessValify businessValify=new BusinessValify();
+		try 
+		{
+			//businessValify= this.valifyAccessTokenMapper.consumeRestService(null, null);
+			businessValify=(BusinessValify) this.restContract.getData(this.restContract.valifyAccessTokenMapper, null, null);
+			token=businessValify.getToken();
+			return token;
+			
+		} 
+		catch (Exception exception) 
+		{
+			if(exception instanceof IntegrationException)
+				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
+				else		
+				throw this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
+		}
+	}
 	
 	public BusinessValify valifyFacial (BusinessUser  businessUser,BusinessValify RequestBusinessValify,MultipartFile straightFace,MultipartFile smilingFace,MultipartFile leftSide,MultipartFile rightSide,Integer userStep,String language) throws BusinessException,IntegrationException, IOException
 	{		
@@ -64,7 +86,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		BusinessValify businessValify=new BusinessValify();
 		BusinessValify businessValifyResponse=new BusinessValify();
 		this.userUtility.removeImagesFromBlobAndDb(businessUser, false);
-		businessValify.setToken(valifyUtility.getToken(0L));
+		businessValify.setToken(/* valifyUtility.getToken(0L) */this.getValifyToken().getToken());
 		try {
 		if(straightFace!=null&&smilingFace!=null)
 		{
@@ -113,7 +135,8 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		
 		try 
 		{
-		  businessValifyResponse=this.restManager.valifyFacialImageMapper.consumeRestService(this.determineFacialType(businessValify), null);
+		  //businessValifyResponse=this.restManager.valifyFacialImageMapper.consumeRestService(this.determineFacialType(businessValify), null);
+		  businessValifyResponse=(BusinessValify) this.restContract.getData(this.restContract.valifyFacialImageMapper, this.determineFacialType(businessValify), null);
 		  updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages,null);
 		}
 		catch (Exception exception) 
@@ -135,7 +158,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		BusinessValify businessValifyResponse=new BusinessValify();
 		this.validation.validateImagesTaken(businessUser,frontImage,backImage,passportImage,userStep,language,documentType,incrementFailure);
 		this.userUtility.removeImagesFromBlobAndDb(businessUser, true);		
-		businessValify.setToken(valifyUtility.getToken(0L));
+		businessValify.setToken(/* valifyUtility.getToken(0L) */this.getValifyToken().getToken());
 		boolean isEgyptian=true;
 		try 
 		{
@@ -178,11 +201,13 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		{
 			if(frontImage!=null&&backImage!=null)
 			{
-				businessValifyResponse=this.restManager.valifyIdMapper.consumeRestService(businessValify, null);
+				//businessValifyResponse=this.restManager.valifyIdMapper.consumeRestService(businessValify, null);
+				businessValifyResponse=(BusinessValify) this.restContract.getData(this.restContract.valifyIdMapper, businessValify, null);
 			}
 			if(passportImage!=null)
 			{
-				businessValifyResponse=this.restManager.valifyPassportIdMapper.consumeRestService(businessValify, null);
+				//businessValifyResponse=this.restManager.valifyPassportIdMapper.consumeRestService(businessValify, null);
+				businessValifyResponse=(BusinessValify) this.restContract.getData(this.restContract.valifyPassportIdMapper, businessValify, null);
 			}
 			updateUserDetailsAndSaveUserImages(businessUser,businessValify,businessValifyResponse,userImages,isEgyptian);
 			

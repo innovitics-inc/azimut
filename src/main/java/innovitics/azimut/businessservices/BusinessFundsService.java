@@ -35,7 +35,8 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 		List<Nav> insertedNavs=new ArrayList<Nav>();
 		try 
 		{
-			businessFundPrices = this.restManager.getFundPricesMapper.wrapBaseBusinessEntity(true, this.prepareBusinessFundPriceInput(null), null).getDataList();
+			//businessFundPrices = this.restManager.getFundPricesMapper.wrapBaseBusinessEntity(true, this.prepareBusinessFundPriceInput(null), null).getDataList();
+			businessFundPrices=this.restContract.getDataList(this.restContract.getFundPricesMapper, this.prepareBusinessFundPriceInput(null), null);
 			fundsWithoutNavs=this.fundService.getFundsWithoutNavs();
 		
 			for(Fund fund:fundsWithoutNavs) 

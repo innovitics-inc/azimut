@@ -112,7 +112,7 @@ public class ValifyController extends BaseGenericRestController<BusinessValify,S
 	
 	@GetMapping(value="/getToken",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessValify>> downloadContract(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<BusinessValify>> getValifyToken(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(BusinessValify.class,businessValifyService.getValifyToken(),null,null);
