@@ -29,7 +29,9 @@ public class AddClientBankAccountMapper extends RestMapper<AddClientBankAccountI
 		{ 
 			businessClientBankAccountDetails.setAzId(azId);
 			businessClientBankAccountDetails.setAzIdType(azIdType);
-			this.consumeRestService(businessClientBankAccountDetails, null);
+			//this.consumeRestService(businessClientBankAccountDetails, null);
+			
+			this.wrapAdvancedBaseBusinessEntity(false, businessClientBankAccountDetails, null);
 		}
 	}
 	

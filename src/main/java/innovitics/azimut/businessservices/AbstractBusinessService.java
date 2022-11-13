@@ -55,7 +55,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected UserTypeService userTypeService;
 	@Autowired UserBlockageUtility userBlockageUtility;
 	@Autowired AES aes;
-	@Autowired protected  RestManager restManager;
+	//@Autowired protected  RestManager restManager;
 	
 	protected  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
 	{

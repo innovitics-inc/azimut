@@ -182,7 +182,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		try 
 		{			
-			responseBusinessAzimutClient.setBusinessTransactions(this.restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
+			//responseBusinessAzimutClient.setBusinessTransactions(this.restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
+			responseBusinessAzimutClient.setBusinessTransactions((List<BusinessTransaction>) this.restContract.getDataList(this.restContract.getTransactionsMapper, this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null));
 		}
 		catch(Exception exception)
 		{
@@ -214,7 +215,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 					}
 				}
 				
-				teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
+				//teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
+				teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;
 				totalBankAccounts.addAll(teacomputersBankAccounts);	
 			}
 			else if(!isList)
@@ -225,7 +227,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				}
 				else
 				{
-					responseBusinessAzimutClient.setBankAccountDetails(this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getData());
+					//responseBusinessAzimutClient.setBankAccountDetails(this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getData());
+					responseBusinessAzimutClient.setBankAccountDetails((BusinessClientBankAccountDetails) this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null));
 				}
 			}	
 		}
@@ -265,7 +268,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		{			
 			if(BooleanUtility.isTrue(businessAzimutClient.getIsLocal()))
 			{
-				responseBusinessAzimutClient=this.restManager.holdClientBankAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();
+				//responseBusinessAzimutClient=this.restManager.holdClientBankAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();
+				responseBusinessAzimutClient=(BusinessAzimutClient) this.restContract.getData(this.restContract.holdClientBankAccountMapper, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null);
 			}
 			else
 			{
@@ -297,7 +301,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
 		try 
 		{			
-			responseBusinessAzimutClient.setAzimutAccounts(this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());	
+			//responseBusinessAzimutClient.setAzimutAccounts(this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());	
+			responseBusinessAzimutClient.setAzimutAccounts((List<AzimutAccount>) this.restContract.getData(this.restContract.checkAccountMapper,this.prepareAccountRetrievalInputs(businessAzimutClient,tokenizedBusinessUser), null));
 		}
 		catch(Exception exception)
 		{
@@ -329,12 +334,17 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		this.validation.validateUser(azimutAccount.getId(), tokenizedBusinessUser);
 		try 
 		{			
-			this.restManager.addAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null).getData();
+			//this.restManager.addAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null).getData();
+			
+			this.restContract.getData(this.restContract.addAccountMapper, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null);
+			
 			tokenizedBusinessUser.setIsVerified(true);
+			
 			this.businessUserService.editUser(tokenizedBusinessUser);
 			
-			this.restManager.addClientBankAccountMapper.consumeRestServiceInALoop(new BusinessAzimutClient(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)),
+			this.restContract.addClientBankAccountMapper.consumeRestServiceInALoop(new BusinessAzimutClient(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)),
 					tokenizedBusinessUser.getUserId(),this.getAzimutUserTypeId(tokenizedBusinessUser));
+			
 			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
 		}
 		catch(Exception exception)
@@ -416,7 +426,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			BusinessClientBankAccountDetails request=businessAzimutClient.getClientBankAccounts()[0];
 			request.setAzId(tokenizedBusinessUser.getUserId());
 			request.setAzIdType(tokenizedBusinessUser.getIdType());
-			this.restManager.addClientBankAccountMapper.wrapBaseBusinessEntity(false,request, null);
+			//this.restManager.addClientBankAccountMapper.wrapBaseBusinessEntity(false,request, null);
+			this.restContract.getData(this.restContract.addClientBankAccountMapper, request, null);
 		}
 		catch(Exception exception)
 		{
@@ -473,7 +484,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessAzimutClient businessAzimutClient=new BusinessAzimutClient();
 		try 
 			{	
-				List<BusinessClientBankAccountDetails> clientTeacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(true,this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,true), null).getDataList();
+				//List<BusinessClientBankAccountDetails> clientTeacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(true,this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,true), null).getDataList();
+				List<BusinessClientBankAccountDetails> clientTeacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper,this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,true), null);
 				BusinessClientBankAccountDetails [] tempClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
 				if(arrayUtility.isArrayPopulated(tempClientTeacomputersBankAccounts))
 				{	
@@ -536,8 +548,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		Map <String,Object> clientFundPriceMap= new HashMap<String,Object>();
 		List<BusinessFundPrice> businessFundPrices=new ArrayList<BusinessFundPrice>();
 		List<BusinessClientFund> businessClientFunds=new ArrayList<BusinessClientFund>();
-		businessClientFunds=this.restManager.getClientFundsMapper.wrapBaseBusinessEntity(true, this.prepareClientFundInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
-		
+		//businessClientFunds=this.restManager.getClientFundsMapper.wrapBaseBusinessEntity(true, this.prepareClientFundInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
+		businessClientFunds=this.restContract.getDataList(this.restContract.getClientFundsMapper, this.prepareClientFundInputs(tokenizedBusinessUser,businessAzimutClient), null);
 			
 		if(businessAzimutClient!=null&&businessAzimutClient.getTeacomputerId()!=null)
 		{
@@ -548,7 +560,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		else
 		{
-			List<BusinessClientCashBalance> businessClientCashBalances=this.restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
+			//List<BusinessClientCashBalance> businessClientCashBalances=this.restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
+			List<BusinessClientCashBalance> businessClientCashBalances=this.restContract.getDataList(this.restContract.getClientBalanceMapper,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null);
 			clientFundPriceMap.put(BusinessClientCashBalance.class.getName(), businessClientCashBalances);
 		}
 		
@@ -569,7 +582,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	public void getClientFundDetails(BusinessClientFund businessClientFund,BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
 	{	
-		List<BusinessFundTransaction> businessFundTransactions=this.restManager.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();	
+		//List<BusinessFundTransaction> businessFundTransactions=this.restManager.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
+		List<BusinessFundTransaction> businessFundTransactions=this.restContract.getDataList(this.restContract.getFundTransactionsMapper,this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null);
+		
 		this.beautifyBusinessClientFundTransactions(businessClientFund,businessFundTransactions,businessAzimutClient);
 	
 	}
@@ -582,7 +597,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			
 		try {
 		
-		responseBusinessAzimutClient.setEportfolioDetails(this.restManager.getEportfolioMapper.wrapBaseBusinessEntity(true,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
+		//responseBusinessAzimutClient.setEportfolioDetails(this.restManager.getEportfolioMapper.wrapBaseBusinessEntity(true,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
+		responseBusinessAzimutClient.setEportfolioDetails(this.restContract.getDataList(this.restContract.getEportfolioMapper,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null));
 			}
 		catch(Exception exception)
 		{
@@ -605,7 +621,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		try {
-				responseBusinessAzimutClient= this.restManager.getReportMapper.wrapBaseBusinessEntity(false,this.prepareGetReportInputs(tokenizedBusinessUser,language,reportType,businessAzimutClient), reportType).getData();
+				//responseBusinessAzimutClient= this.restManager.getReportMapper.wrapBaseBusinessEntity(false,this.prepareGetReportInputs(tokenizedBusinessUser,language,reportType,businessAzimutClient), reportType).getData();
+			responseBusinessAzimutClient=(BusinessAzimutClient) this.restContract.getData(this.restContract.getReportMapper, this.prepareGetReportInputs(tokenizedBusinessUser,language,reportType,businessAzimutClient), reportType);
 			}
 		catch(Exception exception)
 		{
@@ -625,8 +642,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			
 			List<BusinessCompanyBankAccount> businessCompanyBankAccountsWithCurrency=new  ArrayList<BusinessCompanyBankAccount>();
 			
-			List<BusinessCompanyBankAccount> businessCompanyBankAccounts= this.restManager.getCompanyBankAccountMapper.wrapBaseBusinessEntity(true, null, null).getDataList();
-			
+			//List<BusinessCompanyBankAccount> businessCompanyBankAccounts= this.restManager.getCompanyBankAccountMapper.wrapBaseBusinessEntity(true, null, null).getDataList();
+			List<BusinessCompanyBankAccount> businessCompanyBankAccounts=this.restContract.getDataList(this.restContract.getCompanyBankAccountMapper, null, null);
 			if(companyBankAccountListUtility.isListPopulated(businessCompanyBankAccounts)&&currencyId!=null)
 			{
 				for(BusinessCompanyBankAccount businessCompanyBankAccount:businessCompanyBankAccounts)
