@@ -154,7 +154,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-			responseBusinessAzimutClient.setBusinessClientCashBalances(clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));						
+			businessClientCashBalances=clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT);						
 		}
 		
 		

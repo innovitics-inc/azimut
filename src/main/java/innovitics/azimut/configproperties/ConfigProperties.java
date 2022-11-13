@@ -148,6 +148,23 @@ public class ConfigProperties {
     private String pageSize;
     
     
+    @Value("${paytabs.url}")
+    private String paytabsUrl;
+    
+    @Value("${paytabs.profile.id}")
+    private String paytabsProfileId;
+    
+    @Value("${paytabs.merchant.id}")
+    private String paytabsMerchantId;
+    
+    @Value("${paytabs.server.key}")
+    private String paytabsServerKey;
+    
+    @Value("${paytabs.client.key}")
+    private String paytabsClientKey;    
+    
+    
+    
 	public String getBlobConnectionString() {
 		return blobConnectionString;
 	}
@@ -284,6 +301,21 @@ public class ConfigProperties {
 	}
 	public String getPageSize() {
 		return pageSize;
+	}
+	public String getPaytabsUrl() {
+		return paytabsUrl;
+	}
+	public String getPaytabsProfileId() {
+		return paytabsProfileId;
+	}
+	public String getPaytabsMerchantId() {
+		return paytabsMerchantId;
+	}
+	public String getPaytabsServerKey() {
+		return paytabsServerKey;
+	}
+	public String getPaytabsClientKey() {
+		return paytabsClientKey;
 	}
     
     

@@ -70,18 +70,5 @@ public  class TeaComputerInput extends BaseInput{
 		this.fundId = fundId;
 	}
 	
-	@Override
-	public String setBaseUrl()
-	{
-		return this.configProperties.getTeaComputersUrl()+"/";
-	}
-
-	@Override
-	public String getUrl() {
-		return null;
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 }
