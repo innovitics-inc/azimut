@@ -108,9 +108,7 @@ public class GetFundTransactionsMapper extends RestMapper<GetFundTransactionsInp
 				
 				businessFundTransaction.setOrderStatusId(getFundTransactionsOutput.getOrderStatus().getTypeId());
 				businessFundTransaction.setOrderStatus(getFundTransactionsOutput.getOrderStatus().getType());
-				businessFundTransactions.add(businessFundTransaction);
-				
-				businessFundTransactions.add(businessFundTransaction);
+				businessFundTransactions.add(businessFundTransaction);				
 			}
 		}
 		return businessFundTransactions;
