@@ -154,7 +154,9 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		catch(Exception exception)
 		{
-			businessClientCashBalances=clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT);						
+			businessClientCashBalances=clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT);
+			businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
+			businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
 		}
 		
 		
