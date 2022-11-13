@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
 import innovitics.azimut.businessmodels.funds.BusinessFundTransaction;
+import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
+import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.apis.teacomputers.GetFundTransactionsApiConsumer;
 import innovitics.azimut.rest.entities.teacomputers.FundTransactionOutput;
@@ -29,6 +31,14 @@ public class GetFundTransactionsMapper extends RestMapper<GetFundTransactionsInp
 	
 	@Autowired GetFundTransactionsApiConsumer getFundTransactionsApiConsumer;
 	@Autowired ListUtility<FundTransactionOutput> listUtility;
+	
+	public void consumeRestServiceInALoop(BusinessFundTransaction businessFundTransaction,String azId,Long azIdType) throws HttpClientErrorException, IntegrationException, Exception
+	{
+		//this.wrapAdvancedBaseBusinessEntity(true, businessFundTransaction, EXECUTED_ORDERS);
+		//this.wrapAdvancedBaseBusinessEntity(true, businessFundTransaction, PENDING_ORDERS);
+	}
+	
+	
 	@Override
 	BusinessFundTransaction consumeRestService(BusinessFundTransaction businessFundTransaction, String params) throws IntegrationException, HttpClientErrorException, Exception {
 		// TODO Auto-generated method stub
@@ -59,6 +69,7 @@ public class GetFundTransactionsMapper extends RestMapper<GetFundTransactionsInp
 		input.setIdTypeId(businessFundTransaction.getAzIdType());
 		input.setIdNumber(businessFundTransaction.getAzId());
 		input.setFundId(businessFundTransaction.getFundId());
+		input.setOrderStatus(businessFundTransaction.getStatus());
 		return input;
 	}
 
@@ -70,7 +81,39 @@ public class GetFundTransactionsMapper extends RestMapper<GetFundTransactionsInp
 
 	@Override
 	protected List<BusinessFundTransaction> createListBusinessEntityFromOutput(GetFundTransactionsOutput getFundTransactionsOutput) {	
-		return null;
+		List<BusinessFundTransaction> businessFundTransactions=new ArrayList<BusinessFundTransaction>();		
+		if(getFundTransactionsOutput!=null&&this.listUtility.isListPopulated(getFundTransactionsOutput.getFundTransactionOutputs()))
+		{
+			for(FundTransactionOutput fundTransactionOutput:getFundTransactionsOutput.getFundTransactionOutputs())
+			{
+				BusinessFundTransaction businessFundTransaction=new BusinessFundTransaction();
+				businessFundTransaction.setTransactionId(fundTransactionOutput.getTransactionId());
+				businessFundTransaction.setFundId(fundTransactionOutput.getFundId());
+				businessFundTransaction.setOrderDate(fundTransactionOutput.getOrderDate());
+				businessFundTransaction.setOrderValue(fundTransactionOutput.getOrderValue());
+				businessFundTransaction.setQuantity(fundTransactionOutput.getQuantity());
+				businessFundTransaction.setOrderTypeId(fundTransactionOutput.getOrderTypeId());
+				if(fundTransactionOutput!=null&&NumberUtility.areIntegerValuesMatching(fundTransactionOutput.getOrderTypeId(), OrderType.SELL.getTypeId()))
+				{
+					businessFundTransaction.setOrderStatus(OrderType.SELL.getType());
+				}
+				else if(fundTransactionOutput!=null&&NumberUtility.areIntegerValuesMatching(fundTransactionOutput.getOrderTypeId(), OrderType.BUY.getTypeId()))
+				{
+					businessFundTransaction.setOrderStatus(OrderType.BUY.getType());
+				}
+				else
+				{
+					businessFundTransaction.setOrderStatus(OrderType.OTHER.getType());
+				}
+				
+				businessFundTransaction.setOrderStatusId(getFundTransactionsOutput.getOrderStatus().getTypeId());
+				businessFundTransaction.setOrderStatus(getFundTransactionsOutput.getOrderStatus().getType());
+				businessFundTransactions.add(businessFundTransaction);
+				
+				businessFundTransactions.add(businessFundTransaction);
+			}
+		}
+		return businessFundTransactions;
 	}
 	protected List<BusinessFundTransaction> createListBusinessEntityFromOutput(GetFundTransactionsOutput getFundTransactionsOutput,OrderStatus orderStatus) 
 	{

@@ -1,6 +1,7 @@
 package innovitics.azimut.businessmodels.funds;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.utilities.crosslayerenums.OrderStatus;
 
 public class BusinessFundTransaction extends BaseBusinessEntity{
 
@@ -13,6 +14,7 @@ public class BusinessFundTransaction extends BaseBusinessEntity{
 	private Integer orderStatusId;
 	private Long transactionId;
 	private Long fundId;
+	private OrderStatus status;
 	
 	public String getOrderDate() {
 		return orderDate;
@@ -67,6 +69,13 @@ public class BusinessFundTransaction extends BaseBusinessEntity{
 	}
 	public void setFundId(Long fundId) {
 		this.fundId = fundId;
+	}
+	
+	public OrderStatus getStatus() {
+		return status;
+	}
+	public void setStatus(OrderStatus status) {
+		this.status = status;
 	}
 	@Override
 	public String toString() {

@@ -49,7 +49,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	protected RES type;
 	protected abstract void populateResponse(String url,ResponseEntity<RES> responseEntity);
 	public abstract Class<RES> getResponseClassType();
-	
+	public abstract void transferFromInputToOutput(I input,O output);
 	
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
 		logger.info("Input::" + input);
@@ -80,6 +80,9 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				this.validateResponse(responseEntity);
 				
 				O output=this.generateOutPutFromResponse(responseEntity);
+				
+				this.transferFromInputToOutput(input, output);
+				
 				logger.info("Output:::" +output!=null?output.toString():null);
 				return output;
 			}

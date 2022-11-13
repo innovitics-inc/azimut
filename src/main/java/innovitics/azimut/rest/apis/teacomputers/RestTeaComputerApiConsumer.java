@@ -158,5 +158,9 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		
 	};
 
-	
+	@Override
+	public void transferFromInputToOutput(TeaComputerInput input,TeaComputerOutput output)
+	{
+		
+	}
 }

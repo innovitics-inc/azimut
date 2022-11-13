@@ -33,6 +33,7 @@ import innovitics.azimut.utilities.businessutilities.CashTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.FundTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.Sorting;
 import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
+import innovitics.azimut.utilities.crosslayerenums.OrderStatus;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
@@ -344,8 +345,17 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			
 			this.businessUserService.editUser(tokenizedBusinessUser);
 			
-			this.restContract.addClientBankAccountMapper.consumeRestServiceInALoop(new BusinessAzimutClient(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)),
-					tokenizedBusinessUser.getUserId(),this.getAzimutUserTypeId(tokenizedBusinessUser));
+			BusinessClientBankAccountDetails[] businessClientBankAccountDetailsArray= this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
+					
+			if(arrayUtility.isArrayPopulated(businessClientBankAccountDetailsArray))
+			{
+				for(BusinessClientBankAccountDetails businessClientBankAccountDetails:businessClientBankAccountDetailsArray)
+				{
+					businessClientBankAccountDetails.setAzId(tokenizedBusinessUser.getUserId());
+					businessClientBankAccountDetails.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
+				}
+						this.restContract.loopConsumption(this.restContract.addClientBankAccountMapper, this.arrayUtility.generateObjectListFromObjectArray(businessClientBankAccountDetailsArray));
+			 }
 			
 			this.teaComputerService.deleteClientBankAccounts(tokenizedBusinessUser.getId());
 		}
@@ -585,9 +595,12 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	public void getClientFundDetails(BusinessClientFund businessClientFund,BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
 	{	
 		//List<BusinessFundTransaction> businessFundTransactions=this.restManager.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
-		List<BusinessFundTransaction> businessFundTransactions=this.restContract.getDataList(this.restContract.getFundTransactionsMapper,this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null);
+		List<BusinessFundTransaction> allTransactions=new ArrayList<BusinessFundTransaction>();
 		
-		this.beautifyBusinessClientFundTransactions(businessClientFund,businessFundTransactions,businessAzimutClient);
+		allTransactions.addAll(this.restContract.getDataList(this.restContract.getFundTransactionsMapper,this.prepareBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient,OrderStatus.EXECUTED),StringUtility.EXECUTED_ORDERS));
+		allTransactions.addAll(this.restContract.getDataList(this.restContract.getFundTransactionsMapper,this.prepareBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient,OrderStatus.PENDING),StringUtility.PENDING_ORDERS));
+		
+		this.beautifyBusinessClientFundTransactions(businessClientFund,allTransactions,businessAzimutClient);
 	
 	}
 	
@@ -856,12 +869,13 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
   
   
-  BusinessFundTransaction prepareBusinessBusinessFundTransactionRetrievalInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient)
+  BusinessFundTransaction prepareBusinessFundTransactionRetrievalInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient,OrderStatus orderStatus)
   {
 	  BusinessFundTransaction searchBusinessFundTransaction=new BusinessFundTransaction();
 	  searchBusinessFundTransaction.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
 	  searchBusinessFundTransaction.setAzId(tokenizedBusinessUser.getUserId());
 	  searchBusinessFundTransaction.setFundId(businessAzimutClient.getTeacomputerId());
+	  searchBusinessFundTransaction.setStatus(orderStatus);
 	  return searchBusinessFundTransaction;
   }
   

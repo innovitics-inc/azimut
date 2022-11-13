@@ -1,5 +1,7 @@
 package innovitics.azimut.rest.entities.teacomputers;
 
+import innovitics.azimut.utilities.crosslayerenums.OrderStatus;
+
 public class FundTransactionOutput {
 
 	private Long transactionId;
@@ -9,6 +11,8 @@ public class FundTransactionOutput {
 	private Integer quantity;
 	private Integer orderTypeId;
 	private Double orderValue;
+
+	
 	public Long getTransactionId() {
 		return transactionId;
 	}
@@ -51,6 +55,7 @@ public class FundTransactionOutput {
 	public void setOrderValue(Double orderValue) {
 		this.orderValue = orderValue;
 	}
+
 	@Override
 	public String toString() {
 		return "FundTransactionOutput [transactionId=" + transactionId + ", fundId=" + fundId + ", orderDate="

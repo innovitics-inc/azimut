@@ -135,6 +135,13 @@ public class GetFundTransactionsApiConsumer extends RestTeaComputerApiConsumer<G
 		return FundTransactionResponse[].class;
 	}
 		
-	
+	@Override
+	public void transferFromInputToOutput(GetFundTransactionsInput input,GetFundTransactionsOutput output)
+	{
+		if(input!=null&&output!=null)
+		{
+			output.setOrderStatus(input.getOrderStatus());
+		}
+	}
 
 }

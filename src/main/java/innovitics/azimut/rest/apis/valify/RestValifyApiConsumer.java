@@ -164,5 +164,9 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 		IntegrationException integrationException=new IntegrationException(errorCode, new Date(), errorMessage,null, errorMessage,httpClientErrorException.getStackTrace());
 		return  integrationException; 
 }
-	
+	@Override
+	public void transferFromInputToOutput(ValifyInput input,ValifyOutput output)
+	{
+		
+	}
 }

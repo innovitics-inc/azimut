@@ -1,5 +1,6 @@
 package innovitics.azimut.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,12 +58,44 @@ public class RestContract<I, O, REQ, RES, B extends BaseBusinessEntity>
 	@Autowired public ValifyPassportIdMapper valifyPassportIdMapper;
 
 
-	public B getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String params) throws IntegrationException
+	public B getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String param) throws IntegrationException
 	{
-		return restMapper.wrapAdvancedBaseBusinessEntity(false, baseBusinessEntity, params).getData();
+		return restMapper.wrapAdvancedBaseBusinessEntity(false, baseBusinessEntity, param,null).getData();
 	}	
-	public List <B> getDataList(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String params) throws IntegrationException
+	public List <B> getDataList(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String param) throws IntegrationException
 	{
-		return restMapper.wrapAdvancedBaseBusinessEntity(true, baseBusinessEntity, params).getDataList();
+		return restMapper.wrapAdvancedBaseBusinessEntity(true, baseBusinessEntity, param,null).getDataList();
 	}
+	
+	public List<B> getDataList(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,boolean mulptipleInvocations,List<String>params) throws IntegrationException
+	{
+		List<B> data=new ArrayList<B>();
+		for(String param:params)
+		{
+			WrapperBusinessEntity<B> wrapperBusinessEntity=restMapper.wrapAdvancedBaseBusinessEntity(true, baseBusinessEntity, param,null);
+			if(wrapperBusinessEntity!=null)
+			data.addAll(wrapperBusinessEntity.getDataList());
+		}
+		return data;
+	}
+	
+	public void loopConsumption(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,List<B> baseBusinessEntities) throws IntegrationException
+	{
+		for(B baseBusinessEntity:baseBusinessEntities)
+		{
+			restMapper.wrapAdvancedBaseBusinessEntity(false,baseBusinessEntity, null,null);
+		}
+	}
+	
+	
+	/*
+	public List <B> getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,List<String> params) throws IntegrationException
+	{
+		return restMapper.wrapAdvancedBaseBusinessEntity(false, baseBusinessEntity,null,params).getDataList();
+	}
+	public List <B> getDataList(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,List<String> params) throws IntegrationException
+	{
+		return restMapper.wrapAdvancedBaseBusinessEntity(true, baseBusinessEntity,null,params).getDataList();
+	}
+	*/
 }
