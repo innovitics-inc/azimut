@@ -76,6 +76,7 @@ public class UserBlockageUtility extends ParentUtility
 			else
 			{
 				userBlockage.setBlock(false);
+				userBlockage.setErrorCount(0);
 				return userBlockage;
 			}
 			
@@ -96,6 +97,7 @@ public class UserBlockageUtility extends ParentUtility
 	UserBlockage respondWithEmptyObject()
 	{
 		UserBlockage userBlockage=new UserBlockage();
+		userBlockage.setErrorCount(0);
 		userBlockage.setBlock(false);
 		return userBlockage;
 	}

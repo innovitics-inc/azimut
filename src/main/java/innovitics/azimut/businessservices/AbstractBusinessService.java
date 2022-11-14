@@ -21,7 +21,6 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.entities.BaseInput;
 import innovitics.azimut.rest.entities.BaseOutput;
-import innovitics.azimut.rest.mappers.RestManager;
 import innovitics.azimut.rest.mappers.RestMapper;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
@@ -55,7 +54,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected UserTypeService userTypeService;
 	@Autowired UserBlockageUtility userBlockageUtility;
 	@Autowired AES aes;
-	//@Autowired protected  RestManager restManager;
+	
 	
 	protected  BusinessException handleBusinessException(Exception exception,ErrorCode errorCode)
 	{
