@@ -32,6 +32,7 @@ import innovitics.azimut.services.user.AzimutDataLookUpService;
 import innovitics.azimut.utilities.businessutilities.CashTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.FundTransactionSortCompare;
 import innovitics.azimut.utilities.businessutilities.Sorting;
+import innovitics.azimut.utilities.crosslayerenums.BankAccountStatus;
 import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 import innovitics.azimut.utilities.crosslayerenums.OrderStatus;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
@@ -216,11 +217,22 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 					{	
 						totalBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
 					}
+					teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;
+					totalBankAccounts.addAll(teacomputersBankAccounts);
 				}
-				
+				else
+				{
+					teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;		
+					for(BusinessClientBankAccountDetails businessClientBankAccountDetails:teacomputersBankAccounts)
+					{
+						if(businessClientBankAccountDetails!=null&&NumberUtility.areLongValuesMatching((Long.valueOf(businessClientBankAccountDetails.getAccountStatus().intValue())),BankAccountStatus.ACTIVE.getStatusId()))
+						totalBankAccounts.add(businessClientBankAccountDetails);	
+					}
+						
+				}
 				//teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
-				teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;
-				totalBankAccounts.addAll(teacomputersBankAccounts);	
+				
+					
 			}
 			else if(!isList)
 			{
@@ -238,7 +250,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				else
 				{
 					//responseBusinessAzimutClient.setBankAccountDetails(this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getData());
-					responseBusinessAzimutClient.setBankAccountDetails((BusinessClientBankAccountDetails) this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null));
+					responseBusinessAzimutClient.setBankAccountDetails((BusinessClientBankAccountDetails) this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).get(0));
 				}
 			}	
 		}
