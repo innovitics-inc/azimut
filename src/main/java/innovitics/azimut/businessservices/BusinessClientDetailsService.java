@@ -196,7 +196,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return responseBusinessAzimutClient;
 	}
 	
-	public BusinessAzimutClient getBankAccountsWithDetails(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,boolean isList) throws BusinessException,IntegrationException
+	public BusinessAzimutClient getBankAccountsWithDetails(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,boolean isList,Long accountId) throws BusinessException,IntegrationException
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
@@ -226,7 +226,14 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			{
 				if(BooleanUtility.isTrue(businessAzimutClient.getIsLocal()))
 				{
-					responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)[0]);
+					if(accountId!=null)
+					{
+						responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getKYCClientBankAccountData(tokenizedBusinessUser, accountId));
+					}
+					else
+					{
+						responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)[0]);
+					}
 				}
 				else
 				{
@@ -269,7 +276,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
 		try 
 		{			
-			if(BooleanUtility.isTrue(businessAzimutClient.getIsLocal()))
+			if(BooleanUtility.isFalse(businessAzimutClient.getIsLocal()))
 			{
 				//responseBusinessAzimutClient=this.restManager.holdClientBankAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null).getData();
 				responseBusinessAzimutClient=(BusinessAzimutClient) this.restContract.getData(this.restContract.holdClientBankAccountMapper, this.prepareAccountHoldingInputs(businessAzimutClient,tokenizedBusinessUser), null);

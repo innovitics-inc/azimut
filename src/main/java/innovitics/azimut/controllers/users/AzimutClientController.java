@@ -70,7 +70,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 		try
 		{
 			Long accountId=(searchBusinessAzimutClient!=null&&searchBusinessAzimutClient.getAccountId()!=null)?searchBusinessAzimutClient.getAccountId().longValue():null;
-			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBankAccountsWithDetails(searchBusinessAzimutClient,this.getCurrentRequestHolder(token),accountId==null),null,null);
+			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBankAccountsWithDetails(searchBusinessAzimutClient,this.getCurrentRequestHolder(token),accountId==null,accountId),null,null);
 		}		
 		catch(BusinessException businessException)
 		{

@@ -132,6 +132,14 @@ public class TeaComputerService extends AbstractService<Country, String> {
 		this.currencyDynamicRepository.deleteAllInBatch();
 	}
 	
+	public List<ClientBankAccount> getUserClientBankAccounts(Long userId,Long accountId)
+	{
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("userId",userId,SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("id",accountId,SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("deletedAt","",SearchOperation.IS_NULL,null));
+		return this.clientBankAccountDynamicRepository.findAll(this.clientBankAccountEntitySpecification.findByCriteria(searchCriteriaList));
+	}
 	public List<ClientBankAccount> getUserClientBankAccounts(Long userId)
 	{
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();

@@ -78,6 +78,28 @@ public void syncTeaComputersData() throws IntegrationException
 		this.teaComputerService.saveClientBankAccountsTemporarily(clientBankAccounts);	
 	}
 
+	public BusinessClientBankAccountDetails getKYCClientBankAccountData(BusinessUser businessUser,Long accountId)
+	{
+		List<ClientBankAccount> clientBankAccounts=new  ArrayList<ClientBankAccount>();
+		try {
+			clientBankAccounts=this.teaComputerService.getUserClientBankAccounts(businessUser.getId(),accountId);
+		}
+		catch (Exception exception) {
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				return null;
+			}
+		}
+		if(clientBankAccountListUtility.isListPopulated(clientBankAccounts))
+		{
+			return this.convertClientBankAccountToBusinAccountDetails(clientBankAccounts.get(0));
+		}
+		else
+		{
+			return new BusinessClientBankAccountDetails();
+		}
+	}
+	
 	public BusinessClientBankAccountDetails[] getKYCClientBankAccountData(BusinessUser businessUser)
 	{
 		return this.getData(businessUser, true);
@@ -319,4 +341,30 @@ public BusinessAzimutDataLookup getLookups(BusinessAzimutDataLookup businessAzim
 			return null;
 	 }
 
+	
+	
+	BusinessClientBankAccountDetails convertClientBankAccountToBusinAccountDetails(ClientBankAccount clientBankAccount)
+	{
+		BusinessClientBankAccountDetails businessClientBankAccountDetails=new BusinessClientBankAccountDetails();
+		businessClientBankAccountDetails.setAccountId(clientBankAccount.getId());
+		businessClientBankAccountDetails.setBankId(clientBankAccount.getBankId());
+		businessClientBankAccountDetails.setBranchId(clientBankAccount.getBranchId());
+		businessClientBankAccountDetails.setCurrencyId(clientBankAccount.getCurrencyId());
+		businessClientBankAccountDetails.setIban(clientBankAccount.getIban());
+		businessClientBankAccountDetails.setSwiftCode(clientBankAccount.getSwiftCode());
+		businessClientBankAccountDetails.setAccountNumber(clientBankAccount.getAccountNo());
+		businessClientBankAccountDetails.setEnglishBankName(clientBankAccount.getEnglishBankName());
+		businessClientBankAccountDetails.setArabicBankName(clientBankAccount.getArabicBankName());
+		businessClientBankAccountDetails.setEnglishBranchName(clientBankAccount.getEnglishBranchName());
+		businessClientBankAccountDetails.setArabicBranchName(clientBankAccount.getArabicBranchName());
+		businessClientBankAccountDetails.setEnglishCurrencyName(clientBankAccount.getEnglishCurrencyName());
+		businessClientBankAccountDetails.setArabicCurrencyName(clientBankAccount.getArabicCurrencyName());
+		businessClientBankAccountDetails.setStatus(BankAccountStatus.PENDING.getStatusId());
+		businessClientBankAccountDetails.setAccountStatus(BankAccountStatus.PENDING.getStatusId());
+		businessClientBankAccountDetails.setStatusName(BankAccountStatus.PENDING.getStatus());
+		businessClientBankAccountDetails.setIsLocal(true);
+		
+		return businessClientBankAccountDetails;
+	}
+	
 }
