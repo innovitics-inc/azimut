@@ -128,71 +128,102 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		List<BusinessClientCashBalance> businessClientCashBalances=new ArrayList<BusinessClientCashBalance>();
 		List<BusinessClientCashBalance> businessClientCashBalancesWithCurrencies=new ArrayList<BusinessClientCashBalance>();
-		try 
-		{				
-			//businessClientCashBalances=this.restManager.getClientBalanceMapper.wrapBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
-			//businessClientCashBalances=this.restManager.getClientBalanceMapper.wrapAdvancedBaseBusinessEntity(true,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList();
-			businessClientCashBalances=restContract.getDataList(restContract.getClientBalanceMapper,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null);
-			if(clientCashBalanceListUtility.isListEmptyOrNull(businessClientCashBalances))
+		if(tokenizedBusinessUser!=null&&StringUtility.isStringPopulated(tokenizedBusinessUser.getUserId()))
+		{
+		
+			try 
+			{				
+				businessClientCashBalances=restContract.getDataList(restContract.getClientBalanceMapper,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null);
+				if(clientCashBalanceListUtility.isListEmptyOrNull(businessClientCashBalances))
+				{
+					this.logger.info("Empty List");
+					businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
+					businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
+				}
+				else if(clientCashBalanceListUtility.sizeIsOne(businessClientCashBalances))
+				{
+					this.logger.info("One Element List");
+					BusinessClientCashBalance existingBusinessClientCashBalance=businessClientCashBalances.get(0);
+					if(existingBusinessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(existingBusinessClientCashBalance.getCurrencyID().longValue(), CurrencyType.EGYPTIAN_POUND.getTypeId()))
+					{
+						businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
+					}
+					else if(existingBusinessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(existingBusinessClientCashBalance.getCurrencyID().longValue(), CurrencyType.US_DOLLAR.getTypeId()))
+					{
+						businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
+					}
+				}
+
+			}
+			catch(Exception exception)
 			{
-				this.logger.info("Empty List");
+				businessClientCashBalances=clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT);
 				businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
 				businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
 			}
-			else if(clientCashBalanceListUtility.sizeIsOne(businessClientCashBalances))
-			{
-				this.logger.info("One Element List");
-				BusinessClientCashBalance existingBusinessClientCashBalance=businessClientCashBalances.get(0);
-				if(existingBusinessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(existingBusinessClientCashBalance.getCurrencyID().longValue(), CurrencyType.EGYPTIAN_POUND.getTypeId()))
-				{
-					businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
-				}
-				else if(existingBusinessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(existingBusinessClientCashBalance.getCurrencyID().longValue(), CurrencyType.US_DOLLAR.getTypeId()))
-				{
-					businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
-				}
-			}
-
-		}
-		catch(Exception exception)
-		{
-			businessClientCashBalances=clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT);
-			businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
-			businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
-		}
 		
 		
-		if(clientCashBalanceListUtility.isListPopulated(businessClientCashBalances)&&businessAzimutClient.getCurrencyId()!=null)
-		{
-			for(BusinessClientCashBalance businessClientCashBalance: businessClientCashBalances)
+			if(clientCashBalanceListUtility.isListPopulated(businessClientCashBalances)&&businessAzimutClient.getCurrencyId()!=null)
 			{
-				if(businessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(businessClientCashBalance.getCurrencyID(),businessAzimutClient.getCurrencyId()))
+				for(BusinessClientCashBalance businessClientCashBalance: businessClientCashBalances)
 				{
-					businessClientCashBalancesWithCurrencies.add(businessClientCashBalance);
+					if(businessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(businessClientCashBalance.getCurrencyID(),businessAzimutClient.getCurrencyId()))
+					{
+						businessClientCashBalancesWithCurrencies.add(businessClientCashBalance);
+					}
 				}
+				responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalancesWithCurrencies);
 			}
-			responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalancesWithCurrencies);
+			else
+			{
+				responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalances);	
+			}
+		
 		}
 		else
 		{
-			responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalances);	
+			businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
+			businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
+			if(clientCashBalanceListUtility.isListPopulated(businessClientCashBalances)&&businessAzimutClient.getCurrencyId()!=null)
+			{
+				for(BusinessClientCashBalance businessClientCashBalance: businessClientCashBalances)
+				{
+					if(businessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(businessClientCashBalance.getCurrencyID(),businessAzimutClient.getCurrencyId()))
+					{
+						businessClientCashBalancesWithCurrencies.add(businessClientCashBalance);
+					}
+				}
+				responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalancesWithCurrencies);
+			}
+			else
+			{
+				responseBusinessAzimutClient.setBusinessClientCashBalances(businessClientCashBalances);	
+			}
+				
 		}
-		
 		
 		return responseBusinessAzimutClient;
 
 	}
 	public BusinessAzimutClient getTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,BusinessAzimutClient responseBusinessAzimutClient) throws BusinessException,IntegrationException
 	{
-		try 
-		{			
-			//responseBusinessAzimutClient.setBusinessTransactions(this.restManager.getTransactionsMapper.wrapBaseBusinessEntity(true,this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null).getDataList());
-			responseBusinessAzimutClient.setBusinessTransactions((List<BusinessTransaction>) this.restContract.getDataList(this.restContract.getTransactionsMapper, this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null));
+		if(tokenizedBusinessUser!=null&&StringUtility.isStringPopulated(tokenizedBusinessUser.getUserId()))
+		{
+			try 
+			{			
+				responseBusinessAzimutClient.setBusinessTransactions((List<BusinessTransaction>) this.restContract.getDataList(this.restContract.getTransactionsMapper, this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null));
+			}
+			catch(Exception exception)
+			{
+				responseBusinessAzimutClient.setLastTransactionDate("No transactions yet.");
+				responseBusinessAzimutClient.setBusinessTransactions(businessTransactionListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));
+			}
 		}
-		catch(Exception exception)
+		else
 		{
 			responseBusinessAzimutClient.setLastTransactionDate("No transactions yet.");
-			responseBusinessAzimutClient.setBusinessTransactions(businessTransactionListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));
+			responseBusinessAzimutClient.setBusinessTransactions(new ArrayList<BusinessTransaction>());
+			
 		}
 		return responseBusinessAzimutClient;
 	}
@@ -552,24 +583,32 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
-		
-		try 
+		if(tokenizedBusinessUser!=null&&StringUtility.isStringPopulated(tokenizedBusinessUser.getUserId()))
 		{
-			Map <String,Object> clientFundPriceMap= this.getClientFunds(tokenizedBusinessUser, businessAzimutClient,getDetails);
+			try 
+			{
+				Map <String,Object> clientFundPriceMap= this.getClientFunds(tokenizedBusinessUser, businessAzimutClient,getDetails);
 			
-			this.beautifyBusinessClientFunds(responseBusinessAzimutClient,
+				this.beautifyBusinessClientFunds(responseBusinessAzimutClient,
 					(List<BusinessClientFund>)clientFundPriceMap.get(BusinessClientFund.class.getName()),
 					(List<BusinessFundPrice>)clientFundPriceMap.get(BusinessFundPrice.class.getName()),
 					(List<BusinessClientCashBalance>)clientFundPriceMap.get(BusinessClientCashBalance.class.getName()));
-		}
+			}
 		
-		catch(Exception exception)
+			catch(Exception exception)
+			{
+				responseBusinessAzimutClient.setTotalPosition(new BigDecimal(0));
+				responseBusinessAzimutClient.setBalance(0D);
+				responseBusinessAzimutClient.setBusinessClientFunds(clientFundListUtility.handleExceptionAndReturnEmptyList(exception, ErrorCode.INVALID_CLIENT));
+			}
+		}
+		else
 		{
 			responseBusinessAzimutClient.setTotalPosition(new BigDecimal(0));
 			responseBusinessAzimutClient.setBalance(0D);
-			responseBusinessAzimutClient.setBusinessClientFunds(clientFundListUtility.handleExceptionAndReturnEmptyList(exception, ErrorCode.INVALID_CLIENT));
-		}
+			responseBusinessAzimutClient.setBusinessClientFunds(new ArrayList<BusinessClientFund>());
 		
+		}
 		return responseBusinessAzimutClient;
 	}
 			
@@ -628,17 +667,23 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	public BusinessAzimutClient getEportfolio(BusinessUser tokenizedBusinessUser,String language) throws BusinessException, IntegrationException
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
-			
-		try {
 		
-		//responseBusinessAzimutClient.setEportfolioDetails(this.restManager.getEportfolioMapper.wrapBaseBusinessEntity(true,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null).getDataList());
-		responseBusinessAzimutClient.setEportfolioDetails(this.restContract.getDataList(this.restContract.getEportfolioMapper,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null));
-			}
-		catch(Exception exception)
+		if(tokenizedBusinessUser!=null&&StringUtility.isStringPopulated(tokenizedBusinessUser.getUserId()))
 		{
-			responseBusinessAzimutClient.setEportfolioDetails(eportfolioDetailListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));
-			//throw this.exceptionHandler.handleException(exception);		
+			try 
+			{
+			responseBusinessAzimutClient.setEportfolioDetails(this.restContract.getDataList(this.restContract.getEportfolioMapper,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null));
+			}
+			catch(Exception exception)
+			{
+				responseBusinessAzimutClient.setEportfolioDetails(eportfolioDetailListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));		
+			}
 		}
+		else
+		{
+			responseBusinessAzimutClient.setEportfolioDetails(new ArrayList<EportfolioDetail>());
+		}
+		
 		return responseBusinessAzimutClient;
 	}
 	
