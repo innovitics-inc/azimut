@@ -116,10 +116,20 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 	
 	@GetMapping(value="/incrementUserBlockage",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> incrementUserBlockage(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> incrementUserBlockage(
+			
+			@RequestHeader(name=StringUtility.AUTHORIZATION_HEADER,required=false) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestParam(name="countryPhoneCode",required=false) String countryPhoneCode,
+			@RequestParam(name="phoneNumber",required=false) String phoneNumber
+			
+			) throws IOException, BusinessException {
 		try
 		{
-			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.incrementUserBlockage(this.getCurrentRequestHolder(token)),null,null);
+			;
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,
+					this.businessAzimutTradingService.incrementUserBlockage(StringUtility.isStringPopulated(token)?this.getCurrentRequestHolder(token):null,
+					this.businessAzimutTradingService.getConcatenatedValue(countryPhoneCode, phoneNumber)),null,null);
 		}
 		
 		catch(BusinessException businessException)
@@ -131,10 +141,17 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 	
 	@GetMapping(value="/getUserBlockage",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> getUserBlockage(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
+	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> getUserBlockage(
+			@RequestHeader(name=StringUtility.AUTHORIZATION_HEADER,required=false) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestParam(name="countryPhoneCode",required=false) String countryPhoneCode,
+			@RequestParam(name="phoneNumber",required=false) String phoneNumber
+			) throws IOException, BusinessException {
 		try
-		{
-			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.getUserBlockage(this.getCurrentRequestHolder(token)),null,null);
+		{			
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,
+					this.businessAzimutTradingService.getUserBlockage(StringUtility.isStringPopulated(token)?this.getCurrentRequestHolder(token):null,
+					this.businessAzimutTradingService.getConcatenatedValue(countryPhoneCode, phoneNumber)),null,null);
 		}
 		
 		catch(BusinessException businessException)

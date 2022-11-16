@@ -39,7 +39,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter
 	protected void configure(HttpSecurity httpSecurity) throws Exception
 	{
 		httpSecurity.csrf().disable()
-		.authorizeRequests().antMatchers("/api/authenticate","/api/forgotPassword","/api/user/getByUserPhone","/api/saveUserTemporarily","/api/azimut/user/getAzimutLookUpData").permitAll()
+		.authorizeRequests().antMatchers("/api/authenticate","/api/forgotPassword","/api/user/getByUserPhone","/api/saveUserTemporarily","/api/azimut/user/getAzimutLookUpData",
+				"/api/azimut/trading/incrementUserBlockage",
+				"/api/azimut/trading/getUserBlockage"
+				
+				).permitAll()
 		.anyRequest().authenticated()
 		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		httpSecurity.addFilterBefore(jwtRequestFilter,UsernamePasswordAuthenticationFilter.class);

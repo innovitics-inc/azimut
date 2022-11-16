@@ -19,7 +19,7 @@ import innovitics.azimut.utilities.mapping.UserMapper;
 public class UserBlockageUtility extends ParentUtility
 
 {
-	@Autowired UserBlockageService userBlockageService; 
+	@Autowired protected UserBlockageService userBlockageService; 
 
 	
 	public Object checkUserBlockage(Integer numberOfTrials,String blockageDurationMinutes,BusinessUser tokenizedBusinessUser,UserMapper userMapper,Object object, String methodName,Object[] parameters,Class<?>[] paramterTypes,ErrorCode errorCode) throws BusinessException
@@ -37,6 +37,7 @@ public class UserBlockageUtility extends ParentUtility
 				else				
 				{		
 					Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
+					userBlockage.setUser(userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
 					userBlockage.setErrorCount(0);
 					this.updateUserBlockage(userBlockage);
 					return result;						

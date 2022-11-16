@@ -25,6 +25,7 @@ import innovitics.azimut.rest.mappers.RestMapper;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
+import innovitics.azimut.utilities.businessutilities.PhoneNumberBlockageUtility;
 import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
@@ -52,7 +53,9 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected UserUtility userUtility;
 	@Autowired protected UserTypeService userTypeService;
-	@Autowired UserBlockageUtility userBlockageUtility;
+	@Autowired protected UserBlockageUtility userBlockageUtility;
+	@Autowired protected PhoneNumberBlockageUtility phoneNumberBlockageUtility;
+
 	@Autowired AES aes;
 	
 	

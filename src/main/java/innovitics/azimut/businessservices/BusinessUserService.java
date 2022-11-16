@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
 import innovitics.azimut.businessmodels.user.AuthenticationRequest;
 import innovitics.azimut.businessmodels.user.AzimutAccount;
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
@@ -26,6 +27,7 @@ import innovitics.azimut.services.kyc.UserAnswerSubmissionService;
 import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.UserService;
+import innovitics.azimut.utilities.businessutilities.PhoneNumberBlockageUtility;
 import innovitics.azimut.utilities.crosslayerenums.AnswerType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
@@ -64,6 +66,8 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	@Autowired KYCPageService kycPageService;
 	@Autowired ListUtility<AzimutAccount> azimutAccountListUtility;
 	@Autowired SaveUserLocation saveUserLocation;
+	@Autowired PhoneNumberBlockageUtility phoneNumberBlockageUtility;
+	
 	
 	public static final String PROFILE_PICTURE_PARAMETER="profilePicture";
 	public static final String SIGNED_PDF_PARAMETER="signedPdf";
@@ -84,6 +88,21 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	}
 	
 
+	public BusinessUser saveUser(BusinessUser businessUser,boolean checkBlockage) throws BusinessException
+	{
+		businessUser.concatinate();
+		return (BusinessUser) this.phoneNumberBlockageUtility.checkUserBlockage
+				(
+				this.configProperties.getBlockageNumberOfTrials(),
+				this.configProperties.getBlockageDurationInMinutes(),businessUser.getUserPhone(),
+				this,"saveUser",
+				new Object[]{businessUser},
+				new Class<?>[]{BusinessUser.class},
+				ErrorCode.OPERATION_FAILURE
+				);
+		
+	}
+	
 	public BusinessUser saveUser(BusinessUser businessUser) throws BusinessException
 	{
 		businessUser.concatinate();
@@ -204,6 +223,18 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		
 	}
 	
+	public BusinessUser editUserPassword(BusinessUser businessUser,BusinessUser tokenizedBusinessUser,boolean checkBlockage) throws BusinessException
+	{
+		return (BusinessUser) this.userBlockageUtility.checkUserBlockage
+		(this.configProperties.getBlockageNumberOfTrials(),
+		 this.configProperties.getBlockageDurationInMinutes(), 
+		 tokenizedBusinessUser, 
+		 userMapper,this, "editUserPassword",
+		 new Object[]{businessUser,tokenizedBusinessUser},
+		 new Class<?>[]{BusinessUser.class,BusinessUser.class},
+		 ErrorCode.OPERATION_FAILURE);
+	}
+	
 	public BusinessUser editUserPassword(BusinessUser businessUser,BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
 		this.validate(businessUser,changeUserPassword,BusinessUser.class.getName());
@@ -249,6 +280,19 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 
 		return updatedBusinessUser;
 	
+	}
+	
+	public BusinessUser forgotUserPassword(AuthenticationRequest authenticationRequest,boolean checkBlockage) throws BusinessException
+	{
+		return (BusinessUser) this.phoneNumberBlockageUtility.checkUserBlockage
+				(
+				this.configProperties.getBlockageNumberOfTrials(),
+				this.configProperties.getBlockageDurationInMinutes(),authenticationRequest.getCountryPhoneCode()+authenticationRequest.getPhoneNumber(),
+				this,"forgotUserPassword",
+				new Object[]{authenticationRequest},
+				new Class<?>[]{AuthenticationRequest.class},
+				ErrorCode.OPERATION_FAILURE
+				);
 	}
 	
 	public BusinessUser forgotUserPassword(AuthenticationRequest authenticationRequest) throws BusinessException

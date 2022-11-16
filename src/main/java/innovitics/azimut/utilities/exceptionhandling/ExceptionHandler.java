@@ -170,7 +170,9 @@ public class ExceptionHandler{
 		{
 			if(exception instanceof IntegrationException)
 				return this.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
-			else		
+			else if(exception instanceof BusinessException)
+				return (BusinessException)exception;		
+			else
 				return this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
 		}
 	

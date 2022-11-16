@@ -74,7 +74,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> forgotPassword(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody AuthenticationRequest authenticationRequest) throws BusinessException {
 		try
 		{
-			BusinessUser businessUser=this.businessUserService.beautifyUser(this.businessUserService.forgotUserPassword(authenticationRequest));
+			BusinessUser businessUser=this.businessUserService.beautifyUser(this.businessUserService.forgotUserPassword(authenticationRequest,true));
 			return this.generateBaseGenericResponse(AuthenticationResponse.class,new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);
 		}
 		
@@ -91,7 +91,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	protected ResponseEntity<BaseGenericResponse<AuthenticationResponse>> saveUserTemporarily(@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,@RequestBody BusinessUser businessUser) throws BusinessException {
 		try
 		{
-			BusinessUser responseBusinessUser=this.businessUserService.saveUser(businessUser);
+			BusinessUser responseBusinessUser=this.businessUserService.saveUser(businessUser,true);
 			return this.generateBaseGenericResponse(AuthenticationResponse.class,new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(responseBusinessUser),responseBusinessUser),null,null);
 		}
 		

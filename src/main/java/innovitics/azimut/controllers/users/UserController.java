@@ -158,7 +158,7 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 			@RequestBody BusinessUser businessUser) throws BusinessException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.beautifyUser(this.businessUserService.editUserPassword(businessUser,this.getCurrentRequestHolder(token))),null,null);
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.beautifyUser(this.businessUserService.editUserPassword(businessUser,this.getCurrentRequestHolder(token),true)),null,null);
 		}
 		
 		catch(BusinessException businessException)

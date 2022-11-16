@@ -105,13 +105,17 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	}
 	
 	
-	public BaseAzimutTrading getUserBlockage(BusinessUser tokenizedBusinessUser)
+
+	public BaseAzimutTrading getUserBlockage(BusinessUser tokenizedBusinessUser,String userPhone)
 	{
 		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
 		
 		try 
 		{
+			if(!StringUtility.isStringPopulated(userPhone))
 			baseAzimutTrading.setUserBlockage(this.userBlockageUtility.getUserBlockage(tokenizedBusinessUser.getId(),true));
+			else
+			baseAzimutTrading.setUserBlockage(this.phoneNumberBlockageUtility.getUserBlockage(userPhone,true));
 		}
 		catch(Exception exception)
 		{	
@@ -121,16 +125,48 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		return  baseAzimutTrading;
 	}
 	
+	
+	
+	
+	
 	public BaseAzimutTrading incrementUserBlockage(BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
+		return null;
+	}
+	
+	public BaseAzimutTrading incrementUserBlockage(BusinessUser tokenizedBusinessUser,String userPhone) throws BusinessException
+	{
+		boolean hasToken=tokenizedBusinessUser!=null&&!StringUtility.isStringPopulated(userPhone);
+		
 		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
+		UserBlockage userBlockage=new UserBlockage();
 		try
 		{						
-			UserBlockage userBlockage=this.userBlockageUtility.getUserBlockage(tokenizedBusinessUser.getId(),false);	
+			if(hasToken)
+			{
+				userBlockage=this.userBlockageUtility.getUserBlockage(tokenizedBusinessUser.getId(),false);	
+			}
+			else
+			{
+				userBlockage=this.phoneNumberBlockageUtility.getUserBlockage(userPhone,false);	
+			}
+			
+			
 			if(userBlockage==null)
 			{
+				
 				this.logger.info("User Blockage none existent::");
-				UserBlockage addedUserBlockage=this.userBlockageUtility.addUserBlockage(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+				UserBlockage addedUserBlockage=new UserBlockage();
+				
+				if(hasToken)
+				{
+					addedUserBlockage=this.userBlockageUtility.addUserBlockage(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));					
+				}
+				else
+				{
+					addedUserBlockage=this.phoneNumberBlockageUtility.addUserBlockage(userPhone);					
+				}
+				
 				addedUserBlockage.setUser(null);
 				baseAzimutTrading.setUserBlockage(addedUserBlockage);
 			}
@@ -155,10 +191,64 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 					userBlockage.setErrorCount(1);
 				}
 				
-				userBlockage.setUser(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+				if(hasToken)
+				{
+					userBlockage.setUser(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false));
+				}
+
 				this.userBlockageUtility.updateUserBlockage(userBlockage);
 				userBlockage.setUser(null);
 				
+				
+				baseAzimutTrading.setUserBlockage(userBlockage);
+			}
+			
+			this.populateThreshold(baseAzimutTrading);
+			return baseAzimutTrading;
+		}
+		catch (Exception exception)
+		{
+			throw this.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
+		}
+		
+	}
+	
+	
+	
+	public BaseAzimutTrading incrementUserBlockageUsingPhoneNumber(String userPhone) throws BusinessException
+	{
+		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
+		try
+		{						
+			UserBlockage userBlockage=this.phoneNumberBlockageUtility.getUserBlockage(userPhone,false);	
+			if(userBlockage==null)
+			{
+				this.logger.info("User Blockage none existent::");
+				UserBlockage addedUserBlockage=this.phoneNumberBlockageUtility.addUserBlockage(userPhone);
+				addedUserBlockage.setUser(null);
+				baseAzimutTrading.setUserBlockage(addedUserBlockage);
+			}
+			else
+			{
+				this.logger.info("User Blockage::" +userBlockage.toString());
+				if(this.getMinutesBefore(this.configProperties.getBlockageDurationInMinutes()).before(userBlockage.getUpdatedAt()))
+				{	
+					
+					if(userBlockage.getErrorCount()!=null&&(userBlockage.getErrorCount()<this.configProperties.getBlockageNumberOfTrials()))
+					{
+						int oldUserCount= userBlockage.getErrorCount().intValue();
+						userBlockage.setErrorCount(oldUserCount+1);				
+					}
+					else if(NumberUtility.areIntegerValuesMatching(this.configProperties.getBlockageNumberOfTrials(), userBlockage.getErrorCount()))
+					{
+						userBlockage.setErrorCount(this.configProperties.getBlockageNumberOfTrials());
+					}				
+				}
+				else if(!this.getMinutesBefore(this.configProperties.getBlockageDurationInMinutes()).before(userBlockage.getUpdatedAt()))
+				{
+					userBlockage.setErrorCount(1);
+				}
+				this.phoneNumberBlockageUtility.updateUserBlockage(userBlockage);
 				baseAzimutTrading.setUserBlockage(userBlockage);
 			}
 			this.populateThreshold(baseAzimutTrading);
@@ -219,4 +309,14 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		baseAzimutTrading.setThreshold(this.configProperties.getBlockageNumberOfTrials());
 	}
 
+	public String getConcatenatedValue(String countryPhoneCode,String phoneNumber)
+	{
+		String userPhone=StringUtility.isStringPopulated(countryPhoneCode)&&StringUtility.isStringPopulated(phoneNumber)?countryPhoneCode+phoneNumber:null;
+		if(StringUtility.isStringPopulated(userPhone))
+		{
+			String withPlus ="+"+userPhone.substring(1);
+			return withPlus;
+		}
+		return userPhone;
+	}
 }

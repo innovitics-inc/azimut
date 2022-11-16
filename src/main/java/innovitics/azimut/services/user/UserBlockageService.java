@@ -20,6 +20,21 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	@Autowired UserBlockageRepository userBlockageRepository;
 	@Autowired UserBlockageSpecification userBlockageSpecification;
 	
+	public UserBlockage findByUserPhone(String userPhone)
+	{
+		UserBlockage userBlockage=new UserBlockage();
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+	    searchCriteriaList.add(new SearchCriteria("userPhone",userPhone,SearchOperation.EQUAL,null));
+	    searchCriteriaList.add(new SearchCriteria("userId",null,SearchOperation.IS_NULL,null));
+	    userBlockage= this.userBlockageRepository.findOne(this.userBlockageSpecification.findByCriteria(searchCriteriaList)).get();
+	    if(userBlockage!=null)
+	    {  
+	    	detemineBlockage(userBlockage);
+	    	userBlockage.setUser(null);
+	    }
+	    return userBlockage;
+	}
+	
 	public UserBlockage findByUserId(Long userId)
 	{
 		UserBlockage userBlockage=new UserBlockage();
@@ -37,6 +52,7 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	
 	public UserBlockage updateUserBlockage(UserBlockage userBlockage)
 	{
+		this.logger.info("user phone:::::"+userBlockage.getUserPhone());
 		userBlockage.setUpdatedAt(new Date());
 		UserBlockage updatedUserBlockage= this.userBlockageRepository.save(userBlockage);
 		
@@ -53,6 +69,19 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 		userBlockage.setCreatedAt(new Date());
 		userBlockage.setUpdatedAt(new Date());
 		userBlockage.setUser(user);
+		userBlockage.setBlock(false);
+		this.userBlockageRepository.save(userBlockage);
+		return userBlockage;
+	}
+	
+	public UserBlockage addUserBlockage(String userPhone)
+	{
+		this.logger.info("user phone:::::"+userPhone);
+		UserBlockage userBlockage=new UserBlockage();	
+		userBlockage.setErrorCount(1);
+		userBlockage.setUserPhone(userPhone);
+		userBlockage.setCreatedAt(new Date());
+		userBlockage.setUpdatedAt(new Date());
 		userBlockage.setBlock(false);
 		this.userBlockageRepository.save(userBlockage);
 		return userBlockage;
