@@ -163,6 +163,13 @@ public class ConfigProperties {
     @Value("${paytabs.client.key}")
     private String paytabsClientKey;    
     
+    @Value("${paytabs.callback.url}")
+    private String paytabsCallBackUrl;    
+    
+  
+    @Value("${paytabs.return.url}")
+    private String paytabsReturnUrl;    
+    
     
     
 	public String getBlobConnectionString() {
@@ -316,6 +323,12 @@ public class ConfigProperties {
 	}
 	public String getPaytabsClientKey() {
 		return paytabsClientKey;
+	}
+	public String getPaytabsCallBackUrl() {
+		return paytabsCallBackUrl;
+	}
+	public String getPaytabsReturnUrl() {
+		return paytabsReturnUrl;
 	}
     
     

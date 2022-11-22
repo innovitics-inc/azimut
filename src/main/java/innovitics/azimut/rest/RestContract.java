@@ -25,6 +25,7 @@ import innovitics.azimut.rest.mappers.GetReportMapper;
 import innovitics.azimut.rest.mappers.GetTransactionsMapper;
 import innovitics.azimut.rest.mappers.HoldClientBankAccountMapper;
 import innovitics.azimut.rest.mappers.InjectWithdrawMapper;
+import innovitics.azimut.rest.mappers.PaytabsInitiatePaymentMapper;
 import innovitics.azimut.rest.mappers.PlaceOrderMapper;
 import innovitics.azimut.rest.mappers.RestMapper;
 import innovitics.azimut.rest.mappers.ValifyAccessTokenMapper;
@@ -56,6 +57,7 @@ public class RestContract<I, O, REQ, RES, B extends BaseBusinessEntity>
 	@Autowired public ValifyFacialImageMapper valifyFacialImageMapper;
 	@Autowired public ValifyIdMapper valifyIdMapper;
 	@Autowired public ValifyPassportIdMapper valifyPassportIdMapper;
+	@Autowired public PaytabsInitiatePaymentMapper paytabsInitiatePaymentMapper;
 
 
 	public B getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String param) throws IntegrationException
@@ -87,15 +89,4 @@ public class RestContract<I, O, REQ, RES, B extends BaseBusinessEntity>
 		}
 	}
 	
-	
-	/*
-	public List <B> getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,List<String> params) throws IntegrationException
-	{
-		return restMapper.wrapAdvancedBaseBusinessEntity(false, baseBusinessEntity,null,params).getDataList();
-	}
-	public List <B> getDataList(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,List<String> params) throws IntegrationException
-	{
-		return restMapper.wrapAdvancedBaseBusinessEntity(true, baseBusinessEntity,null,params).getDataList();
-	}
-	*/
 }

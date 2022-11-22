@@ -38,6 +38,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
 import innovitics.azimut.utilities.fileutilities.FileUtility;
+import innovitics.azimut.utilities.mapping.UserMapper;
 import innovitics.azimut.validations.Validation;
 
 @SuppressWarnings("rawtypes")
@@ -50,6 +51,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired ListUtility<T> listUtility;
 	@Autowired Validation<T> validation;
 	@Autowired BlobFileUtility blobFileUtility;
+	@Autowired protected UserMapper userMapper;
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected UserUtility userUtility;
 	@Autowired protected UserTypeService userTypeService;

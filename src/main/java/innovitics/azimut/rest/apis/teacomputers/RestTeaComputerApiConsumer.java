@@ -86,7 +86,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		return this.handleError(clientErrorException);		
 	}
 	
-
+	
 	protected void populateCredentials(innovitics.azimut.rest.models.teacomputers.TeaComputerRequest request)
 	{
 		request.setUserName(this.configProperties.getTeaComputersUsername());

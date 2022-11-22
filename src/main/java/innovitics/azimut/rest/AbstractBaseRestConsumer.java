@@ -50,6 +50,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	protected abstract void populateResponse(String url,ResponseEntity<RES> responseEntity);
 	public abstract Class<RES> getResponseClassType();
 	public abstract void transferFromInputToOutput(I input,O output);
+
 	
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
 		logger.info("Input::" + input);

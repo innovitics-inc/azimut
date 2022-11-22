@@ -314,7 +314,7 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		String userPhone=StringUtility.isStringPopulated(countryPhoneCode)&&StringUtility.isStringPopulated(phoneNumber)?countryPhoneCode+phoneNumber:null;
 		if(StringUtility.isStringPopulated(userPhone))
 		{
-			String withPlus ="+"+userPhone.substring(1);
+			String withPlus ="+"+userPhone;
 			return withPlus;
 		}
 		return userPhone;

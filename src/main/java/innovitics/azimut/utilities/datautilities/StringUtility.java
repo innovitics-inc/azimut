@@ -20,6 +20,7 @@ public final class StringUtility extends ParentUtility{
 	public static final String SUCCESS="success";
 	public static final int SUCCESS_CODE=0;
 	public static final String AUTHORIZATION_HEADER="Authorization";
+	public static final String PAYTABS_AUTHORIZATION_HEADER="authorization";
 	public static final String USER_CLASS_NAME="user";
 	public static final String AZIMUT_Client_CLASS_NAME="azimut client";
 	public static final String AUTHENTICATION_CLASS_NAME="authentication request";

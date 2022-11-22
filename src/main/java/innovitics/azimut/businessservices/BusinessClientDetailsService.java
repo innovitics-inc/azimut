@@ -232,84 +232,87 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	{
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
-		List<BusinessClientBankAccountDetails> totalBankAccountsWithCurrencies=new ArrayList<BusinessClientBankAccountDetails>();
-		List<BusinessClientBankAccountDetails> totalBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
-		List<BusinessClientBankAccountDetails> teacomputersBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
-		try 
-		{			
-			if(isList)
-			{
+		if(tokenizedBusinessUser!=null&&StringUtility.isStringPopulated(tokenizedBusinessUser.getUserId()))
+		{	
+			List<BusinessClientBankAccountDetails> totalBankAccountsWithCurrencies=new ArrayList<BusinessClientBankAccountDetails>();
+			List<BusinessClientBankAccountDetails> totalBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
+			List<BusinessClientBankAccountDetails> teacomputersBankAccounts=new ArrayList<BusinessClientBankAccountDetails>();
+			try 
+			{			
+				if(isList)
+				{
 			
-				if(BooleanUtility.isFalse(businessAzimutClient.getIsActive()))
-				{
-					BusinessClientBankAccountDetails [] localClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
-				
-					if(arrayUtility.isArrayPopulated(localClientTeacomputersBankAccounts))
-					{	
-						totalBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
-					}
-					teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;
-					totalBankAccounts.addAll(teacomputersBankAccounts);
-				}
-				else
-				{
-					teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;		
-					for(BusinessClientBankAccountDetails businessClientBankAccountDetails:teacomputersBankAccounts)
+					if(BooleanUtility.isFalse(businessAzimutClient.getIsActive()))
 					{
-						if(businessClientBankAccountDetails!=null&&NumberUtility.areLongValuesMatching((Long.valueOf(businessClientBankAccountDetails.getAccountStatus().intValue())),BankAccountStatus.ACTIVE.getStatusId()))
-						totalBankAccounts.add(businessClientBankAccountDetails);	
-					}
-						
-				}
-				//teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();
+						BusinessClientBankAccountDetails [] localClientTeacomputersBankAccounts=this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
 				
-					
-			}
-			else if(!isList)
-			{
-				if(BooleanUtility.isTrue(businessAzimutClient.getIsLocal()))
-				{
-					if(accountId!=null)
-					{
-						responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getKYCClientBankAccountData(tokenizedBusinessUser, accountId));
+						if(arrayUtility.isArrayPopulated(localClientTeacomputersBankAccounts))
+						{	
+							totalBankAccounts.addAll(Arrays.asList(localClientTeacomputersBankAccounts));
+						}
+						teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;
+						totalBankAccounts.addAll(teacomputersBankAccounts);
 					}
 					else
 					{
-						responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)[0]);
+						teacomputersBankAccounts=this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null) ;		
+						for(BusinessClientBankAccountDetails businessClientBankAccountDetails:teacomputersBankAccounts)
+						{
+							if(businessClientBankAccountDetails!=null&&NumberUtility.areLongValuesMatching((Long.valueOf(businessClientBankAccountDetails.getAccountStatus().intValue())),BankAccountStatus.ACTIVE.getStatusId()))
+								totalBankAccounts.add(businessClientBankAccountDetails);	
+						}
+						
+					}
+					//teacomputersBankAccounts=this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getDataList();		
+				}
+				else if(!isList)
+				{
+					if(BooleanUtility.isTrue(businessAzimutClient.getIsLocal()))
+					{
+						if(accountId!=null)
+						{
+							responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getKYCClientBankAccountData(tokenizedBusinessUser, accountId));
+						}
+						else
+						{
+							responseBusinessAzimutClient.setBankAccountDetails(this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser)[0]);
+						}
+					}	
+					else
+					{
+					//responseBusinessAzimutClient.setBankAccountDetails(this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getData());
+						responseBusinessAzimutClient.setBankAccountDetails((BusinessClientBankAccountDetails) this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).get(0));
+					}
+				}	
+			}
+			catch(Exception exception)
+			{
+				if(!this.exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(exception,ErrorCode.INVALID_CLIENT)&&BooleanUtility.isFalse(tokenizedBusinessUser.getIsVerified()))
+				{
+					throw this.exceptionHandler.handleException(exception);
+				}
+			}
+		
+			if(businessClientBankAccountDetailsListUtility.isListPopulated(totalBankAccounts)&&businessAzimutClient.getCurrencyId()!=null)
+			{
+				for(BusinessClientBankAccountDetails businessClientBankAccountDetails:totalBankAccounts)
+				{
+					if(businessClientBankAccountDetails!=null&&NumberUtility.areLongValuesMatching(businessClientBankAccountDetails.getCurrencyId(), businessAzimutClient.getCurrencyId()))
+					{
+						totalBankAccountsWithCurrencies.add(businessClientBankAccountDetails);
 					}
 				}
-				else
-				{
-					//responseBusinessAzimutClient.setBankAccountDetails(this.restManager.getClientBankAccountsMapper.wrapBaseBusinessEntity(isList, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).getData());
-					responseBusinessAzimutClient.setBankAccountDetails((BusinessClientBankAccountDetails) this.restContract.getDataList(this.restContract.getClientBankAccountsMapper, this.prepareClientBankAccountDetailsInputs(businessAzimutClient,tokenizedBusinessUser,isList), null).get(0));
-				}
-			}	
-		}
-		catch(Exception exception)
-		{
-			if(!this.exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(exception,ErrorCode.INVALID_CLIENT)&&BooleanUtility.isFalse(tokenizedBusinessUser.getIsVerified()))
-			{
-				throw this.exceptionHandler.handleException(exception);
+				responseBusinessAzimutClient.setBankList(totalBankAccountsWithCurrencies);
 			}
-		}
-		
-		if(businessClientBankAccountDetailsListUtility.isListPopulated(totalBankAccounts)&&businessAzimutClient.getCurrencyId()!=null)
-		{
-			for(BusinessClientBankAccountDetails businessClientBankAccountDetails:totalBankAccounts)
+			else
 			{
-				if(businessClientBankAccountDetails!=null&&NumberUtility.areLongValuesMatching(businessClientBankAccountDetails.getCurrencyId(), businessAzimutClient.getCurrencyId()))
-				{
-					totalBankAccountsWithCurrencies.add(businessClientBankAccountDetails);
-				}
+				responseBusinessAzimutClient.setBankList(totalBankAccounts);	
 			}
-			responseBusinessAzimutClient.setBankList(totalBankAccountsWithCurrencies);
 		}
 		else
 		{
-			responseBusinessAzimutClient.setBankList(totalBankAccounts);	
+			responseBusinessAzimutClient.setBankList(new ArrayList<BusinessClientBankAccountDetails>());
 		}
-		
-		
 		return responseBusinessAzimutClient;
 	}
 	
@@ -672,7 +675,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		{
 			try 
 			{
-			responseBusinessAzimutClient.setEportfolioDetails(this.restContract.getDataList(this.restContract.getEportfolioMapper,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null));
+				responseBusinessAzimutClient.setEportfolioDetails(this.restContract.getDataList(this.restContract.getEportfolioMapper,this.prepareGetEportfolioInputs(tokenizedBusinessUser,language), null));
 			}
 			catch(Exception exception)
 			{
