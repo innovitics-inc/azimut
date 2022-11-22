@@ -6,7 +6,7 @@ import innovitics.azimut.businessmodels.BaseBusinessEntity;
 
 public class PaytabsCallbackRequest extends BaseBusinessEntity {
 
-	@JsonProperty("transaction_ref")
+	@JsonProperty("tran_ref")
 	private String transactionReference;
 	@JsonProperty
 	private PaymentResult paymentResult;
