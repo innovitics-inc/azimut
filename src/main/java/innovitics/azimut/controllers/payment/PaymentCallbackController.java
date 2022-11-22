@@ -24,16 +24,14 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 	@Autowired BusinessPaymentService businessPaymentService;
 	@PostMapping(value="/callback",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<PaytabsCallbackRequest>> callback(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
-			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
-			@RequestBody PaytabsCallbackRequest paytabsCallbackRequest) throws BusinessException, IOException, IntegrationException {
+	protected ResponseEntity<BaseGenericResponse<PaytabsCallbackRequest>> callback(@RequestBody PaytabsCallbackRequest paytabsCallbackRequest) throws BusinessException, IOException, IntegrationException {
 		try
 		{
 			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest),null, null);
 		}		
 		catch(BusinessException businessException)
 		{
-			return this.handleBaseGenericResponseException(businessException,language);
+			return this.handleBaseGenericResponseException(businessException);
 		}
 		
 	}
