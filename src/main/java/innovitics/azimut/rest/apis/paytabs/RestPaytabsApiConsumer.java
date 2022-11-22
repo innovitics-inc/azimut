@@ -61,7 +61,6 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 		// TODO Auto-generated method stub
 		
 	}
-	
 	@Override
 	public void validateResponse(ResponseEntity<PaytabsResponse> responseEntity) throws IntegrationException {
 		if(!this.validateResponseStatus(responseEntity))
@@ -70,6 +69,33 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 		}
 	}
 	
+	@Override
+	public IntegrationException handleException(Exception exception) 
+	{
+		return this.validateExceptionType(exception);
+	}
+	protected IntegrationException validateExceptionType(Exception exception)
+	{
+		this.logger.info("Stack trace:::");
+		
+		exception.printStackTrace();
+		
+		if(exception instanceof IntegrationException)
+		{
+			return (IntegrationException)exception;
+		}
+		
+		if(exception instanceof HttpClientErrorException)
+		{
+			
+			IntegrationException integrationException=this.handleError((HttpClientErrorException)exception);			
+			return  integrationException;
+		}
+		
+		
+		return  new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
+	
+	}	
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
 		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
@@ -94,21 +120,7 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 		
 		IntegrationException integrationException=new IntegrationException(errorCode, new Date(), errorMessage,errorMessage, errorMessage,httpClientErrorException.getStackTrace());
 		return  integrationException; 
-	}
-
-	@Override
-	public IntegrationException handleException(Exception exception) 
-	{
-		this.logger.info("Handling the Exception in the Get Company Bank Accounts API:::");
-		if(exception instanceof IntegrationException)
-		{
-			IntegrationException integrationException=(IntegrationException)exception;			
-			return integrationException;
-		}
-		else
-		return this.exceptionHandler.handleAsIntegrationException(exception, ErrorCode.FAILED_TO_INTEGRATE);
-	}
-	
+	}	
 	@Override
 	protected void populateResponse(String url, ResponseEntity<PaytabsResponse> responseEntity) {
 		// TODO Auto-generated method stub

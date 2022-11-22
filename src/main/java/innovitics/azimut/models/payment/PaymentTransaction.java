@@ -7,10 +7,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import innovitics.azimut.models.BaseEntity;
 import innovitics.azimut.models.user.User;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
+@Table(name="payment_transactions")
 public class PaymentTransaction extends BaseEntity{
 
 	@Id
@@ -22,7 +27,7 @@ public class PaymentTransaction extends BaseEntity{
 	
 	private Double transactionAmount;
 	
-	private Integer status;
+	private String status;
 	
 	private String referenceTransactionId;
 	
@@ -54,11 +59,11 @@ public class PaymentTransaction extends BaseEntity{
 		this.transactionAmount = transactionAmount;
 	}
 
-	public Integer getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

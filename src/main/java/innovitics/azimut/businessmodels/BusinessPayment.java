@@ -1,7 +1,8 @@
 package innovitics.azimut.businessmodels;
 
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
-
+import innovitics.azimut.utilities.CustomJsonRootName;
+@CustomJsonRootName(plural = "response", singular = "response")
 public class BusinessPayment extends BusinessAzimutClient{
 	
 	private Double amount;

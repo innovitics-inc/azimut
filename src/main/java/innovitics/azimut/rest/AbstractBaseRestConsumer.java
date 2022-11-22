@@ -140,7 +140,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	public
 	ResponseEntity<RES> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException
 	{						
-		//this.logger.info("Request right before invocation::::"+httpEntity.toString());
+		this.logger.info("Request right before invocation::::"+httpEntity.toString());
 		this.logger.info("Method:::"+httpMethod);
 		this.logger.info("Class:::"+clazz.getName());
 

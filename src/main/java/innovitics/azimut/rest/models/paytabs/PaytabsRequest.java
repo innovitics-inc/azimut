@@ -8,9 +8,9 @@ public class PaytabsRequest extends BaseRestRequest{
 
 	@JsonProperty("profile_id")
 	protected Integer profileId;
-	@JsonProperty("trans_type")
+	@JsonProperty("tran_type")
 	protected String transType;
-	@JsonProperty("trans_class")
+	@JsonProperty("tran_class")
 	protected String transClass;
 	@JsonProperty("paypage_lang")
 	protected String payPageLang;

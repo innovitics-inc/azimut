@@ -3,6 +3,7 @@ package innovitics.azimut.rest.apis.paytabs;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -16,6 +17,7 @@ import innovitics.azimut.rest.models.paytabs.ShippingDetails;
 import innovitics.azimut.rest.models.teacomputers.AddClientBankAccountRequest;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
+@Service
 public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiatePaymentRequest, InitiatePaymentResponse, InitiatePaymentInput, InitiatePaymentOutput>{
 
 	private static final String PATH="/payment/request";
@@ -24,6 +26,7 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 	public HttpEntity<String> generateRequestFromInput(InitiatePaymentInput input) {
 		
 		InitiatePaymentRequest request=new InitiatePaymentRequest();
+		this.populateCredentials(request, input);
 		request.setCartId(input.getCartId());
 		request.setCartAmount(input.getCartAmount());
 		request.setCartCurrency(input.getCartCurrency());
@@ -70,6 +73,8 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 	public String generateURL(String params) {
 		// TODO Auto-generated method stub
 		return super.generateBaseURL(params)+PATH;
+		
+	   //return "https://webhook.site/5373de39-bcd9-4ee2-b385-16d4e6d3c90f";
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		paymentTransaction.setUser(user);
 		paymentTransaction.setTransactionAmount(amount);
 		paymentTransaction.setPaymentGateway(paymentGateway.getId());
-		paymentTransaction.setStatus(PaymentTransactionStatus.PENDING.getStatusId());
+		paymentTransaction.setStatus(PaymentTransactionStatus.I.getStatusId());
 		
 		return this.saveTransaction(paymentTransaction);
 	}
@@ -55,10 +55,17 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		return this.paymentTransactionRepository.findOne(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList)).get();
 	}
 	
-	public PaymentTransaction getTransactionByReferneceId(String referenceTransactionId,Long paymentGateway,Long userId)
+	public PaymentTransaction getTransactionByReferneceId(String referenceTransactionId,PaymentGateway paymentGateway)
 	{
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
-		searchCriteriaList.add(new SearchCriteria("paymentGateway", paymentGateway,SearchOperation.EQUAL, null));
+		searchCriteriaList.add(new SearchCriteria("paymentGateway", paymentGateway.getId(),SearchOperation.EQUAL, null));
+		searchCriteriaList.add(new SearchCriteria("referenceTransactionId", referenceTransactionId,SearchOperation.EQUAL, null));
+		return this.paymentTransactionRepository.findOne(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList)).get();
+	}
+	public PaymentTransaction getTransactionByReferneceId(String referenceTransactionId,PaymentGateway paymentGateway,Long userId)
+	{
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("paymentGateway", paymentGateway.getId(),SearchOperation.EQUAL, null));
 		searchCriteriaList.add(new SearchCriteria("referenceTransactionId", referenceTransactionId,SearchOperation.EQUAL, null));
 		searchCriteriaList.add(new SearchCriteria("id", userId,SearchOperation.EQUAL, "user"));
 		return this.paymentTransactionRepository.findOne(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList)).get();

@@ -2,7 +2,9 @@ package innovitics.azimut.businessmodels.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PaytabsCallbackRequest {
+import innovitics.azimut.businessmodels.BaseBusinessEntity;
+
+public class PaytabsCallbackRequest extends BaseBusinessEntity {
 
 	@JsonProperty("transaction_ref")
 	private String transactionReference;

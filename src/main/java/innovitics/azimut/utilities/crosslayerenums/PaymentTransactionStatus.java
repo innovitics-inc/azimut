@@ -1,27 +1,32 @@
 package innovitics.azimut.utilities.crosslayerenums;
 
+import innovitics.azimut.utilities.datautilities.StringUtility;
+
 public enum PaymentTransactionStatus {
 
 	
-	PENDING(1,"Transaction Pending","العملية معلقة"),
-	PENDING_AT_GATEWAY(2,"Transaction Successful at the Gateway","تم بدأ العملية بنجاح"),
-	SUCCESS(3,"Payment made successfully","تمت العملية بنجاح"),
-	FAILED(4,"Transaction failed","لم تنجح العملية"),
-	CANCELED(5,"Transaction cancelled","الغاء"),
-	OTHER(6,"OTHER","أخرى")
+	I("I","Transaction Pending at Azimut","العملية معلقة"),
+	PG("PG","Transaction Pending Paytabs","العملية معلقة"),
+	A("A","Payment Authorized","تمت العملية بنجاح"),
+	H("H","Transaction on Hold (Authorised but on hold for further anti-fraud review)",""),
+	P("P","Transaction Pending (for refunds)",""),
+	V("V","Transaction Voided",""),
+	E("E","An Error has occured",""),
+	D("D","Transaction Declined",""),
+	OTHER("O","OTHER","أخرى"),
 	;
 
-	PaymentTransactionStatus(int statusId,String status,String statusAr) {
+	PaymentTransactionStatus(String statusId,String status,String statusAr) {
 		this.statusId=statusId;
 		this.status=status;
 		this.statusAr = statusAr;
 	}
 
-	private final int statusId;
+	private final String statusId;
 	private final String status;
 	private final String statusAr;
 	
-	public int getStatusId() {
+	public String getStatusId() {
 		return statusId;
 	}
 	public String getStatus() {
@@ -32,11 +37,11 @@ public enum PaymentTransactionStatus {
 		return statusAr;
 	}
 	
-	public static PaymentTransactionStatus getById(int id) 
+	public static PaymentTransactionStatus getById(String id) 
 	{
 		 for(PaymentTransactionStatus paymentTransactionStatus : values()) 
 		    {
-		        if(paymentTransactionStatus.statusId==id)
+		        if(StringUtility.stringsMatch(paymentTransactionStatus.statusId, id))
 		        {
 		        	return paymentTransactionStatus;
 		        }
