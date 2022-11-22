@@ -8,7 +8,7 @@ public class PaytabsCallbackRequest extends BaseBusinessEntity {
 
 	@JsonProperty("tran_ref")
 	private String transactionReference;
-	@JsonProperty
+	@JsonProperty("payment_result")
 	private PaymentResult paymentResult;
 	@JsonProperty("payment_info")
 	private PaymentInfo paymentInfo;

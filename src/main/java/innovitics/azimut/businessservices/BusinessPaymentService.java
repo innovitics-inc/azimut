@@ -13,6 +13,7 @@ import innovitics.azimut.rest.mappers.PaytabsInitiatePaymentMapper;
 import innovitics.azimut.services.payment.PaymentService;
 import innovitics.azimut.utilities.crosslayerenums.PaymentGateway;
 import innovitics.azimut.utilities.crosslayerenums.PaymentTransactionStatus;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
 @Service
@@ -66,8 +67,15 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		
 		try 
 		{
-			paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
-			if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentInfo()!=null)
+			if(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId()))
+			{
+				paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,Long.valueOf(paytabsCallbackRequest.getCartId()));
+			}
+			else
+			{
+				paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
+			}
+			if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentResult()!=null)
 			{
 				if(paytabsCallbackRequest.getPaymentResult().getResponseStatus()!=null)
 				{
