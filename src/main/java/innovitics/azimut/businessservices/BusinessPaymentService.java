@@ -26,7 +26,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		{
 			PaymentTransaction paymentTransaction=this.paymentService.addPayment(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false), businessPayment.getAmount(), PaymentGateway.PAYTABS);
 		
-			businessPayment=(BusinessPayment)this.restContract.getData(paytabsinitiatePaymentMapper, this.preparePaymentInputs(tokenizedBusinessUser,businessPayment,language), null);
+			businessPayment=(BusinessPayment)this.restContract.getData(paytabsinitiatePaymentMapper, this.preparePaymentInputs(paymentTransaction,tokenizedBusinessUser,businessPayment,language), null);
 		
 			this.updateTransactionAfterGatewayCall(businessPayment, paymentTransaction);
 		}
@@ -39,8 +39,9 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 	}
 	
 	
-	private BusinessPayment preparePaymentInputs(BusinessUser tokenizedBusinessUser, BusinessPayment businessPayment,String language) {
+	private BusinessPayment preparePaymentInputs(PaymentTransaction paymentTransaction,BusinessUser tokenizedBusinessUser, BusinessPayment businessPayment,String language) {
 		
+		businessPayment.setTransactionId(paymentTransaction.getId());
 		businessPayment.setUserPhone(tokenizedBusinessUser.getUserPhone());
 		businessPayment.setCity(tokenizedBusinessUser.getCity());
 		businessPayment.setCountry(tokenizedBusinessUser.getCountry());

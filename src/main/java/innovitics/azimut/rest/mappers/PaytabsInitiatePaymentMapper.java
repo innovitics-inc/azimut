@@ -38,6 +38,8 @@ public class PaytabsInitiatePaymentMapper extends RestMapper<InitiatePaymentInpu
 	@Override
 	InitiatePaymentInput createInput(BusinessPayment businessPayment) {
 		InitiatePaymentInput initiatePaymentInput=new InitiatePaymentInput();
+		initiatePaymentInput.setCartId((businessPayment!=null&&businessPayment.getTransactionId()!=null)?String.valueOf(businessPayment.getTransactionId()):null);
+		
 		initiatePaymentInput.setCartAmount(businessPayment.getAmount());
 		initiatePaymentInput.setCartCurrency(CurrencyType.getById(businessPayment.getCurrencyId()).getType());
 		initiatePaymentInput.setCity(businessPayment.getCity());
@@ -53,7 +55,7 @@ public class PaytabsInitiatePaymentMapper extends RestMapper<InitiatePaymentInpu
 		initiatePaymentInput.setShippingZip(null);
 		initiatePaymentInput.setShippingEmail(businessPayment.getEmailAddress());
 		initiatePaymentInput.setShippingPhone(businessPayment.getUserPhone());
-		
+		initiatePaymentInput.setCartDescription("Cart with transaction id"+" "+initiatePaymentInput.getCartId()+" from Innovitics");
 		
 		return initiatePaymentInput;
 	}
