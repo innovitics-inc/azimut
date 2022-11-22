@@ -62,7 +62,6 @@ public class PaytabsInitiatePaymentMapper extends RestMapper<InitiatePaymentInpu
 	BusinessPayment createBusinessEntityFromOutput(InitiatePaymentOutput initiatePaymentOutput) {
 		BusinessPayment businessPayment=new BusinessPayment();
 		businessPayment.setReferenceTransactionId(initiatePaymentOutput.getReferenceTransaction());
-		businessPayment.setTransactionStatus(PaymentTransactionStatus.PENDING_AT_GATEWAY.getStatusId());
 		businessPayment.setRedirectUrl(initiatePaymentOutput.getRedirectUrl());
 		return businessPayment;
 	}
