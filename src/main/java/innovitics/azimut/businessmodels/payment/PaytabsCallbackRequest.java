@@ -3,7 +3,8 @@ package innovitics.azimut.businessmodels.payment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
-
+import innovitics.azimut.utilities.CustomJsonRootName;
+@CustomJsonRootName(plural = "response", singular = "response")
 public class PaytabsCallbackRequest extends BaseBusinessEntity {
 
 	@JsonProperty("tran_ref")

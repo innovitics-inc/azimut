@@ -1,5 +1,7 @@
 package innovitics.azimut.models.payment;
 
+import java.util.Date;
+
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,6 +36,12 @@ public class PaymentTransaction extends BaseEntity{
 	private Long paymentGateway;
 	
 	private String paymentMethod;
+	
+	private Date createdAt;
+	
+	private Date updatedAt;
+	
+	private Date deletedAt;
 
 	public Long getId() {
 		return id;
@@ -89,6 +97,30 @@ public class PaymentTransaction extends BaseEntity{
 
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Date getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Date deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 	
 	

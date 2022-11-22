@@ -30,7 +30,8 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		paymentTransaction.setTransactionAmount(amount);
 		paymentTransaction.setPaymentGateway(paymentGateway.getId());
 		paymentTransaction.setStatus(PaymentTransactionStatus.I.getStatusId());
-		
+		paymentTransaction.setCreatedAt(new Date());
+		paymentTransaction.setUpdatedAt(new Date());
 		return this.saveTransaction(paymentTransaction);
 	}
 	

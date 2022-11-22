@@ -75,15 +75,22 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			{
 				paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
 			}
+			
 			if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentResult()!=null)
 			{
 				if(paytabsCallbackRequest.getPaymentResult().getResponseStatus()!=null)
 				{
 					paymentTransaction.setStatus(paytabsCallbackRequest.getPaymentResult().getResponseStatus());
+					
 					this.paymentService.updateTransaction(paymentTransaction);
 				}
+				if(paytabsCallbackRequest.getPaymentInfo()!=null&&StringUtility.isStringPopulated(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod()))
+				{
+					paymentTransaction.setPaymentMethod(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod());
+				}
 			}
-		
+			this.paymentService.updateTransaction(paymentTransaction);
+
 		}
 		catch (Exception exception)
 		{
