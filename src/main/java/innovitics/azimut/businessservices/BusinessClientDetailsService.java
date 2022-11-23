@@ -996,7 +996,10 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		  	responseBusinessAzimutClient.setBalance(clientCashBalanceInAllCurrencies);
 		  	totalPosition=totalPosition+clientCashBalanceInAllCurrencies;
 		}
-	  
+	  else
+	  {
+		  responseBusinessAzimutClient.setBalance(0.0D);
+	  }
 	 
 	  //responseBusinessAzimutClient.setTotalPosition(totalPosition);
 	  responseBusinessAzimutClient.setTotalPosition(NumberUtility.changeFormat(new BigDecimal(totalPosition)));
