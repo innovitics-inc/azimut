@@ -15,7 +15,8 @@ public class PaytabsCallbackRequest extends BaseBusinessEntity {
 	private PaymentInfo paymentInfo;
 	@JsonProperty("cart_id")
 	private String cartId;
-	
+	@JsonProperty("cart_amount")
+	private String cartAmount;
 	public String getTransactionReference() {
 		return transactionReference;
 	}
@@ -39,6 +40,12 @@ public class PaytabsCallbackRequest extends BaseBusinessEntity {
 	}
 	public void setCartId(String cartId) {
 		this.cartId = cartId;
+	}
+	public String getCartAmount() {
+		return cartAmount;
+	}
+	public void setCartAmount(String cartAmount) {
+		this.cartAmount = cartAmount;
 	}
 	@Override
 	public String toString() {

@@ -61,40 +61,51 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		
 	}
 	
-	public PaytabsCallbackRequest updateTransactionAfterGatewayCallback(PaytabsCallbackRequest paytabsCallbackRequest) throws BusinessException
+	public PaytabsCallbackRequest updateTransactionAfterGatewayCallback(PaytabsCallbackRequest paytabsCallbackRequest,String serial) throws BusinessException
 	{
 		PaymentTransaction paymentTransaction=new PaymentTransaction();
 		
-		try 
+		boolean areParamsPopulated=paytabsCallbackRequest!=null&&(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId())&&StringUtility.isStringPopulated(paytabsCallbackRequest.getCartAmount()));
+		String valueToHash=areParamsPopulated?paytabsCallbackRequest.getCartId()+paytabsCallbackRequest.getCartAmount():null;
+		if(StringUtility.stringsMatch(serial, this.aes.hashString(valueToHash)))
 		{
-			if(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId()))
+			try 
 			{
-				paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,Long.valueOf(paytabsCallbackRequest.getCartId()));
-			}
-			else
-			{
-				paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
-			}
+				if(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId()))
+				{
+					paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,Long.valueOf(paytabsCallbackRequest.getCartId()));
+				}
+				else
+				{
+					paymentTransaction=this.paymentService.getTransactionByReferneceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
+				}
 			
-			if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentResult()!=null)
-			{
-				if(paytabsCallbackRequest.getPaymentResult().getResponseStatus()!=null)
+				if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentResult()!=null)
 				{
-					paymentTransaction.setStatus(paytabsCallbackRequest.getPaymentResult().getResponseStatus());
-					
-					this.paymentService.updateTransaction(paymentTransaction);
-				}
-				if(paytabsCallbackRequest.getPaymentInfo()!=null&&StringUtility.isStringPopulated(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod()))
-				{
+					if(paytabsCallbackRequest.getPaymentResult().getResponseStatus()!=null)
+					{
+						paymentTransaction.setStatus(paytabsCallbackRequest.getPaymentResult().getResponseStatus());					
+					}
+					if(paytabsCallbackRequest.getPaymentResult().getResponseMessage()!=null) 
+					{
+						paymentTransaction.setMessage(paytabsCallbackRequest.getPaymentResult().getResponseMessage());
+					}
+					if(paytabsCallbackRequest.getPaymentInfo()!=null&&StringUtility.isStringPopulated(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod()))
+					{
 					paymentTransaction.setPaymentMethod(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod());
+					}
 				}
-			}
-			this.paymentService.updateTransaction(paymentTransaction);
+				this.paymentService.updateTransaction(paymentTransaction);
 
+			}
+			catch (Exception exception)
+			{
+				throw this.handleBusinessException(exception,ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
+			}
 		}
-		catch (Exception exception)
+		else
 		{
-			throw this.handleBusinessException(exception,ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
+			throw new BusinessException(ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
 		}
 		
 		return new PaytabsCallbackRequest();

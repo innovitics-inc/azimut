@@ -42,6 +42,8 @@ public class PaymentTransaction extends BaseEntity{
 	private Date updatedAt;
 	
 	private Date deletedAt;
+	
+	private String message;
 
 	public Long getId() {
 		return id;
@@ -121,6 +123,14 @@ public class PaymentTransaction extends BaseEntity{
 
 	public void setDeletedAt(Date deletedAt) {
 		this.deletedAt = deletedAt;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 	

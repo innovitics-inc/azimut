@@ -53,6 +53,7 @@ public final class StringUtility extends ParentUtility{
 	public final static String SEARCH_TO_TRANSACTION_DATE="12-12-2050";
 	public final static String MIN_INITIAL="Min. Initial";
 	public final static String ADDITIONAL_SUBSCRIPTION_UNITS="Additional Subscription Units";
+	public final static String TRANSACTION_SERIAL_PARAM_NAME="serial";
 	
 	public static String getClassName(Object object)
 	{

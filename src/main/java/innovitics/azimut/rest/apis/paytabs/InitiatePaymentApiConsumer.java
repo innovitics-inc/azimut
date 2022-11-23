@@ -1,5 +1,6 @@
 package innovitics.azimut.rest.apis.paytabs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,14 @@ import innovitics.azimut.rest.models.paytabs.InitiatePaymentRequest;
 import innovitics.azimut.rest.models.paytabs.InitiatePaymentResponse;
 import innovitics.azimut.rest.models.paytabs.ShippingDetails;
 import innovitics.azimut.rest.models.teacomputers.AddClientBankAccountRequest;
+import innovitics.azimut.security.AES;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
 @Service
 public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiatePaymentRequest, InitiatePaymentResponse, InitiatePaymentInput, InitiatePaymentOutput>{
 
+	@Autowired AES aes;
 	private static final String PATH="/payment/request";
 	
 	@Override
@@ -49,7 +53,7 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 		shippingDetails.setStreet(input.getStreet());
 		shippingDetails.setZip(input.getZip());
 		request.setShippingDetails(shippingDetails);
-		
+		request.setCallbackUrl(this.configProperties.getPaytabsCallBackUrl()+"?"+StringUtility.TRANSACTION_SERIAL_PARAM_NAME+"="+this.generateSerial(input));
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getPayPageLang(), this.getContentLength(request)));
 		return httpEntity;
 	}
@@ -71,10 +75,7 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 
 	@Override
 	public String generateURL(String params) {
-		// TODO Auto-generated method stub
 		return super.generateBaseURL(params)+PATH;
-		
-	   //return "https://webhook.site/5373de39-bcd9-4ee2-b385-16d4e6d3c90f";
 	}
 
 	@Override
@@ -87,6 +88,17 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 		return InitiatePaymentResponse.class;
 	}
 
+	String generateSerial(InitiatePaymentInput initiatePaymentInput) 
+	{
+		if(initiatePaymentInput!=null&&StringUtility.isStringPopulated(initiatePaymentInput.getCartId())&&initiatePaymentInput.getCartAmount()!=null)
+		{
+			return aes.hashString(initiatePaymentInput.getCartId()+String.valueOf(initiatePaymentInput.getCartAmount()));
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 
 

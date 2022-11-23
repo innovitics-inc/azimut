@@ -53,7 +53,7 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 		request.setPayPageLang(input.getPayPageLang());
 		request.setTransType(TRANSACTION_TYPE);
 		request.setTransClass(TRANSACTION_CLASS);
-		request.setCallbackUrl(this.configProperties.getPaytabsCallBackUrl());
+		
 		request.setReturnUrl(this.configProperties.getPaytabsReturnUrl());
 	}
 	@Override
