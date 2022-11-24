@@ -26,6 +26,7 @@ import innovitics.azimut.rest.mappers.GetTransactionsMapper;
 import innovitics.azimut.rest.mappers.HoldClientBankAccountMapper;
 import innovitics.azimut.rest.mappers.InjectWithdrawMapper;
 import innovitics.azimut.rest.mappers.PaytabsInitiatePaymentMapper;
+import innovitics.azimut.rest.mappers.PaytabsQueryPaymentMapper;
 import innovitics.azimut.rest.mappers.PlaceOrderMapper;
 import innovitics.azimut.rest.mappers.RestMapper;
 import innovitics.azimut.rest.mappers.ValifyAccessTokenMapper;
@@ -58,7 +59,7 @@ public class RestContract<I, O, REQ, RES, B extends BaseBusinessEntity>
 	@Autowired public ValifyIdMapper valifyIdMapper;
 	@Autowired public ValifyPassportIdMapper valifyPassportIdMapper;
 	@Autowired public PaytabsInitiatePaymentMapper paytabsInitiatePaymentMapper;
-
+	@Autowired public PaytabsQueryPaymentMapper paytabsQueryPaymentMapper;
 
 	public B getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String param) throws IntegrationException
 	{

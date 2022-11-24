@@ -58,11 +58,6 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 		return httpEntity;
 	}
 
-	@Override
-	public HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(InitiatePaymentInput input) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public InitiatePaymentOutput generateOutPutFromResponse(ResponseEntity<InitiatePaymentResponse> responseEntity) {

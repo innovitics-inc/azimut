@@ -3,9 +3,11 @@ package innovitics.azimut.rest.apis.paytabs;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,6 +19,7 @@ import innovitics.azimut.rest.entities.paytabs.InitiatePaymentInput;
 import innovitics.azimut.rest.entities.paytabs.InitiatePaymentOutput;
 import innovitics.azimut.rest.entities.paytabs.PaytabsInput;
 import innovitics.azimut.rest.entities.paytabs.PaytabsOutput;
+import innovitics.azimut.rest.entities.paytabs.QueryPaymentInput;
 import innovitics.azimut.rest.models.paytabs.InitiatePaymentResponse;
 import innovitics.azimut.rest.models.paytabs.PaytabsRequest;
 import innovitics.azimut.rest.models.paytabs.PaytabsResponse;
@@ -47,6 +50,12 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 		return this.configProperties.getPaytabsUrl();
 	}
 	
+	@Override
+	public HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(PaytabsInput input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	protected void populateCredentials(innovitics.azimut.rest.models.paytabs.PaytabsRequest request,innovitics.azimut.rest.entities.paytabs.PaytabsInput input)
 	{
 		request.setProfileId(Integer.valueOf(this.configProperties.getPaytabsProfileId()));

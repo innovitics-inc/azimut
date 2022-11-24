@@ -1,6 +1,7 @@
 package innovitics.azimut.businessmodels;
 
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
+import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.utilities.CustomJsonRootName;
 @CustomJsonRootName(plural = "response", singular = "response")
 public class BusinessPayment extends BusinessAzimutClient{
@@ -9,7 +10,7 @@ public class BusinessPayment extends BusinessAzimutClient{
 	private String notes;
 	private String referenceTransactionId;
 	private Long transactionId;
-	private Integer transactionStatus;
+	private String transactionStatus;
 	private String redirectUrl;
 	
 	public Double getAmount() {
@@ -36,10 +37,10 @@ public class BusinessPayment extends BusinessAzimutClient{
 	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
 	}
-	public Integer getTransactionStatus() {
+	public String getTransactionStatus() {
 		return transactionStatus;
 	}
-	public void setTransactionStatus(Integer transactionStatus) {
+	public void setTransactionStatus(String transactionStatus) {
 		this.transactionStatus = transactionStatus;
 	}
 	public String getRedirectUrl() {
@@ -48,8 +49,14 @@ public class BusinessPayment extends BusinessAzimutClient{
 	public void setRedirectUrl(String redirectUrl) {
 		this.redirectUrl = redirectUrl;
 	}
+	public BusinessPayment(String referenceTransactionId) {
 	
+		this.referenceTransactionId = referenceTransactionId;
+	}
 	
+	public BusinessPayment() {
+		
+	}
 	
 
 }

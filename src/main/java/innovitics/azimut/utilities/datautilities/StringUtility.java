@@ -33,6 +33,7 @@ public final class StringUtility extends ParentUtility{
 	public final static long CLIENT_AML=1L;
 	public final static String OCCUPATION="NULL";
 	public final static String ZERO="0";
+	public final static String SPACE=" ";
 	public final static String ENGLISH="en";
 	public final static String ARABIC="ar";
 	public final static String LANGUAGE="lang";
@@ -54,6 +55,7 @@ public final class StringUtility extends ParentUtility{
 	public final static String MIN_INITIAL="Min. Initial";
 	public final static String ADDITIONAL_SUBSCRIPTION_UNITS="Additional Subscription Units";
 	public final static String TRANSACTION_SERIAL_PARAM_NAME="serial";
+	
 	
 	public static String getClassName(Object object)
 	{

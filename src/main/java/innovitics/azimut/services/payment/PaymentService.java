@@ -56,14 +56,14 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		return this.paymentTransactionRepository.findOne(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList)).get();
 	}
 	
-	public PaymentTransaction getTransactionByReferneceId(String referenceTransactionId,PaymentGateway paymentGateway)
+	public PaymentTransaction getTransactionByReferenceId(String referenceTransactionId,PaymentGateway paymentGateway)
 	{
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
 		searchCriteriaList.add(new SearchCriteria("paymentGateway", paymentGateway.getId(),SearchOperation.EQUAL, null));
 		searchCriteriaList.add(new SearchCriteria("referenceTransactionId", referenceTransactionId,SearchOperation.EQUAL, null));
 		return this.paymentTransactionRepository.findOne(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList)).get();
 	}
-	public PaymentTransaction getTransactionByReferneceId(String referenceTransactionId,PaymentGateway paymentGateway,Long transactionId)
+	public PaymentTransaction getTransactionByReferenceId(String referenceTransactionId,PaymentGateway paymentGateway,Long transactionId)
 	{
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
 		searchCriteriaList.add(new SearchCriteria("id", transactionId,SearchOperation.EQUAL, null));

@@ -51,6 +51,7 @@ import innovitics.azimut.validations.validators.azimutclient.GetBalanceAndTransa
 import innovitics.azimut.validations.validators.azimutclient.RemoveClientBankAccount;
 import innovitics.azimut.validations.validators.azimutclient.SaveClientBankAccountTemporarily;
 import innovitics.azimut.validations.validators.azimutclient.SaveClientBankAccountsTemporarily;
+@SuppressWarnings("unchecked")
 @Service
 public class BusinessClientDetailsService extends AbstractBusinessService<BusinessAzimutClient> {
 
@@ -782,8 +783,8 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
 	{
-		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+businessUser.getLastName());
-		azimutAccount.setCustomerNameAr(businessUser.getFirstName()+businessUser.getLastName());
+		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+StringUtility.SPACE+businessUser.getLastName());
+		azimutAccount.setCustomerNameAr(businessUser.getFirstName()+StringUtility.SPACE+businessUser.getLastName());
 		azimutAccount.setIdType(this.getAzimutUserTypeId(businessUser));
 		azimutAccount.setUserId(businessUser.getUserId());
 		azimutAccount.setIdMaturityDate(businessUser.getDateOfIdExpiry());

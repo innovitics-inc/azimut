@@ -48,7 +48,8 @@ public enum ErrorCode {
 	PDF_GENERATION_FAILED(31117,"Could not download the contract.",""),
 	KYC_INCOMPLETE(31118,"Please Complete the KYC Form.",""),
 	KYC_SUBMITTED(31119,"KYC Form submitted.",""),
-	PAYMENT_TRANSACTION_NOT_FOUND(4000,"","")
+	PAYMENT_TRANSACTION_NOT_FOUND(4000,"Transaction not found",""),
+	PAYMENT_TRANSACTION_CORRUPTED(4001,"Transaction corrupted","")
 	
 	;
 	
