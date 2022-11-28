@@ -45,9 +45,15 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 	}
 
 	@Override
-	public PlaceOrderOutput generateOutPutFromResponse(ResponseEntity<PlaceOrderResponse> responseEntity) {
-		
-		return new PlaceOrderOutput();
+	public PlaceOrderOutput generateOutPutFromResponse(ResponseEntity<PlaceOrderResponse> responseEntity) 
+	{
+		PlaceOrderOutput placeOrderOutput=new PlaceOrderOutput();
+		if(this.validateResponseStatus(responseEntity)&&responseEntity.hasBody())
+		{
+			placeOrderOutput.setTransactionId(responseEntity.getBody().getTransactionID());
+			placeOrderOutput.setMessage(responseEntity.getBody().getMessage());
+		}
+		return placeOrderOutput;
 	}
 
 	@Override

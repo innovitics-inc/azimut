@@ -51,7 +51,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	public abstract Class<RES> getResponseClassType();
 	public abstract void transferFromInputToOutput(I input,O output);
 
-	
+	@Override
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
 		logger.info("Input::" + input);
 		ResponseEntity<RES> responseEntity=null;

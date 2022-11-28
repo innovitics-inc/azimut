@@ -48,9 +48,14 @@ public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutp
 	}
 
 	@Override
-	BaseAzimutTrading createBusinessEntityFromOutput(PlaceOrderOutput placeOrderOutput) {
-		
-		return new BaseAzimutTrading();
+	BaseAzimutTrading createBusinessEntityFromOutput(PlaceOrderOutput placeOrderOutput) 
+	{
+		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
+		if(placeOrderOutput!=null)
+		{
+			baseAzimutTrading.setTransactionId(placeOrderOutput.getTransactionId());
+		}
+		return baseAzimutTrading;
 	}
 
 	@Override

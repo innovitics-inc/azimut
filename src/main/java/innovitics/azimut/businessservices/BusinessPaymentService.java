@@ -66,10 +66,14 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 	public PaytabsCallbackRequest updateTransactionAfterGatewayCallback(PaytabsCallbackRequest paytabsCallbackRequest,String serial) throws BusinessException
 	{
 		PaymentTransaction paymentTransaction=new PaymentTransaction();
-		
+		String valueToEncrypt="";
 		boolean areParamsPopulated=paytabsCallbackRequest!=null&&(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId())&&StringUtility.isStringPopulated(paytabsCallbackRequest.getCartAmount()));
-		String valueToHash=areParamsPopulated?paytabsCallbackRequest.getCartId()+paytabsCallbackRequest.getCartAmount():null;
-		if(StringUtility.stringsMatch(serial, this.aes.hashString(valueToHash)))
+		if(areParamsPopulated)
+		{
+			String amountWithoutDecimalPoint=(StringUtility.splitStringUsingCharacter(String.valueOf(paytabsCallbackRequest.getCartAmount()), "\\.")).get(0);
+			valueToEncrypt=areParamsPopulated?amountWithoutDecimalPoint:null;
+		}
+		if(StringUtility.stringsMatch(serial,StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
 		{
 			this.checkPaymentStatus(paytabsCallbackRequest.getTransactionReference(),Double.valueOf(paytabsCallbackRequest.getCartAmount()),paytabsCallbackRequest.getPaymentResult().getResponseStatus());
 			try 

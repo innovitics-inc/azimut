@@ -21,6 +21,8 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
     private Long moduleTypeId;
     private String fileBytes;
     private Integer threshold;
+    private Long transactionId;
+    
 	
 	public Long getOrderTypeId() {
 		return orderTypeId;
@@ -100,6 +102,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	}
 	public void setThreshold(Integer threshold) {
 		this.threshold = threshold;
+	}
+	public Long getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(Long transactionId) {
+		this.transactionId = transactionId;
 	}
 	
 	

@@ -4,8 +4,8 @@ public class PlaceOrderInput extends TeaComputerInput{
 
 	private Long orderTypeId;
 	private Double orderValue;
-	private Integer Quantity;
-	private String ExternalOrderID;
+	private Integer quantity;
+	private String externalOrderID;
 
 	public Long getOrderTypeId() {
 		return orderTypeId;
@@ -24,19 +24,19 @@ public class PlaceOrderInput extends TeaComputerInput{
 	}
 
 	public Integer getQuantity() {
-		return Quantity;
+		return quantity;
 	}
 
 	public void setQuantity(Integer quantity) {
-		Quantity = quantity;
+		this.quantity = quantity;
 	}
 
 	public String getExternalOrderID() {
-		return ExternalOrderID;
+		return externalOrderID;
 	}
 
 	public void setExternalOrderID(String externalOrderID) {
-		ExternalOrderID = externalOrderID;
+		this.externalOrderID = externalOrderID;
 	}
 	
 }
