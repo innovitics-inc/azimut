@@ -1,17 +1,22 @@
 package innovitics.azimut.businessmodels;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessClientBankAccountDetails;
 import innovitics.azimut.utilities.CustomJsonRootName;
 @CustomJsonRootName(plural = "response", singular = "response")
 public class BusinessPayment extends BusinessAzimutClient{
 	
+	@JsonProperty("orderValue")
 	private Double amount;
 	private String notes;
 	private String referenceTransactionId;
 	private Long transactionId;
 	private String transactionStatus;
 	private String redirectUrl;
+	private Integer action;
+	private String returnUrl;
 	
 	public Double getAmount() {
 		return amount;
@@ -53,7 +58,18 @@ public class BusinessPayment extends BusinessAzimutClient{
 	
 		this.referenceTransactionId = referenceTransactionId;
 	}
-	
+	public Integer getAction() {
+		return action;
+	}
+	public void setAction(Integer action) {
+		this.action = action;
+	}
+	public String getReturnUrl() {
+		return returnUrl;
+	}
+	public void setReturnUrl(String returnUrl) {
+		this.returnUrl = returnUrl;
+	}
 	public BusinessPayment() {
 		
 	}

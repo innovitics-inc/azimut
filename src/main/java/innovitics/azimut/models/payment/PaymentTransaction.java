@@ -44,6 +44,14 @@ public class PaymentTransaction extends BaseEntity{
 	private Date deletedAt;
 	
 	private String message;
+	
+	private String parameterNames;
+	
+	private String parameterValues;
+	
+	private Integer action;
+	
+	private Long currencyId;
 
 	public Long getId() {
 		return id;
@@ -132,8 +140,38 @@ public class PaymentTransaction extends BaseEntity{
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
- 
+
+	public String getParameterNames() {
+		return parameterNames;
+	}
+
+	public void setParameterNames(String parameterNames) {
+		this.parameterNames = parameterNames;
+	}
+
+	public String getParameterValues() {
+		return parameterValues;
+	}
+
+	public void setParameterValues(String parameterValues) {
+		this.parameterValues = parameterValues;
+	}
+
+	public Integer getAction() {
+		return action;
+	}
+
+	public void setAction(Integer action) {
+		this.action = action;
+	}
+
+	public Long getCurrencyId() {
+		return currencyId;
+	}
+
+	public void setCurrencyId(Long currencyId) {
+		this.currencyId = currencyId;
+	}
+
 	
 }

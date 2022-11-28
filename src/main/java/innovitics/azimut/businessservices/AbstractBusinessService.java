@@ -24,6 +24,7 @@ import innovitics.azimut.rest.entities.BaseOutput;
 import innovitics.azimut.rest.mappers.RestMapper;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
+import innovitics.azimut.services.payment.PaymentService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
 import innovitics.azimut.utilities.businessutilities.PhoneNumberBlockageUtility;
 import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
@@ -54,6 +55,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected UserMapper userMapper;
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected UserUtility userUtility;
+	@Autowired protected PaymentService paymentService;
 	@Autowired protected UserTypeService userTypeService;
 	@Autowired protected UserBlockageUtility userBlockageUtility;
 	@Autowired protected PhoneNumberBlockageUtility phoneNumberBlockageUtility;
@@ -71,18 +73,6 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	}
 	
 
-	
-	protected  BusinessException handleIntegrationException(IntegrationException integrationException,ErrorCode errorCode)
-	{
-		this.logger.info("Handling Exception as an Integration Exception::::"+integrationException.getMessage());
-		return this.exceptionHandler.handleIntegrationExceptionAsBusinessException(integrationException, errorCode);
-	}
-	
-	protected  BusinessException handleBusinessExceptionAsIs(Exception exception,ErrorCode errorCode)
-	{
-			this.logger.info("Handling Exception as Is"+exception.getMessage());
-			return this.exceptionHandler.handleAsBusinessException(exception, errorCode);
-	}
 	
 	public DatabaseConditions generateDatabaseConditions(BusinessSearchCriteria businessSearchCriteria)
 	{
@@ -172,6 +162,13 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 			searchBusinessFundPrice.setSearchFromDate(DateUtility.getCurrentDayMonthYear());
 			searchBusinessFundPrice.setSearchToDate(DateUtility.getCurrentDayMonthYear());
 			return searchBusinessFundPrice;
+		}
+		
+		protected void execute(BusinessUser tokenizedBusinessUser,UserMapper userMapper,Object object, String methodName,Object[] parameters,Class<?>[] paramterTypes) throws BusinessException
+		{
+			{		
+				this.userUtility.getValueUsingReflection(object,methodName,parameters,paramterTypes);						
+			}			
 		}
 		
 }

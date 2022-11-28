@@ -1,5 +1,6 @@
 package innovitics.azimut.businessmodels.user;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -404,18 +405,23 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	@Override
 	public String toString() {
-		return "BusinessUser [id=" + id + ", password=" + password + ", secondPassword=" + secondPassword
-				+ ", oldPassword=" + oldPassword + ", newPassword=" + newPassword + ", deviceId=" + deviceId
-				+ ", userId=" + userId + ", userIdType=" + userIdType + ", idType=" + idType + ", nickName=" + nickName
-				+ ", emailAddress=" + emailAddress + ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber="
-				+ phoneNumber + ", profilePicture=" + profilePicture + ", signedPdf=" + signedPdf + ", picturePath="
-				+ picturePath + ", pdfPath=" + pdfPath + ", isChangeNoApproved=" + isChangeNoApproved + ", isVerified="
-				+ isVerified + ", migrated=" + migrated + ", businessFlow=" + businessFlow + ", flowId=" + flowId
-				+ ", countryCode=" + countryCode + ", file=" + file + ", lastSolvedPageId=" + lastSolvedPageId
+		return "BusinessUser [id=" + id + ", deviceId=" + deviceId + ", userId=" + userId + ", userIdType=" + userIdType
+				+ ", userIdTypeAr=" + userIdTypeAr + ", idType=" + idType + ", nickName=" + nickName + ", emailAddress="
+				+ emailAddress + ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber
+				+ ", profilePicture=" + profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath
+				+ ", pdfPath=" + pdfPath + ", isChangeNoApproved=" + isChangeNoApproved + ", isVerified=" + isVerified
+				+ ", migrated=" + migrated + ", businessFlow=" + businessFlow + ", flowId=" + flowId + ", countryCode="
+				+ countryCode + ", file=" + file + ", fullName=" + fullName + ", lastSolvedPageId=" + lastSolvedPageId
 				+ ", nextPageId=" + nextPageId + ", nextUserStep=" + nextUserStep + ", contractMap=" + contractMap
 				+ ", userImages=" + userImages + ", otherUserIdType=" + otherUserIdType + ", otherIdType=" + otherIdType
-				+ ", otherUserId=" + otherUserId + ", otherNationality=" + otherNationality + "]";
+				+ ", otherUserId=" + otherUserId + ", otherNationality=" + otherNationality + ", genderId=" + genderId
+				+ ", azimutAccount=" + azimutAccount + ", failureNumber=" + failureNumber + ", isInstitutional="
+				+ isInstitutional + ", azimutIdTypeId=" + azimutIdTypeId + ", userLocation=" + userLocation
+				+ ", tempDirectory=" + tempDirectory + ", livenessChecked=" + livenessChecked + ", clientBankAccounts="
+				+ Arrays.toString(clientBankAccounts) + ", solvedPages=" + solvedPages + ", azimutAccounts="
+				+ azimutAccounts + ", userDevices=" + userDevices + ", dates=" + Arrays.toString(dates) + ", isOld="
+				+ isOld + "]";
 	}
-
+	
 
 }

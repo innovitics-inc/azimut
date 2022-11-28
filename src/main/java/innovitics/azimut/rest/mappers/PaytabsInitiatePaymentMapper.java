@@ -56,6 +56,7 @@ public class PaytabsInitiatePaymentMapper extends RestMapper<InitiatePaymentInpu
 		initiatePaymentInput.setShippingEmail(businessPayment.getEmailAddress());
 		initiatePaymentInput.setShippingPhone(businessPayment.getUserPhone());
 		initiatePaymentInput.setCartDescription("Cart with transaction id"+" "+initiatePaymentInput.getCartId()+" from Innovitics");
+		initiatePaymentInput.setReturnUrl(businessPayment.getReturnUrl());
 		
 		return initiatePaymentInput;
 	}

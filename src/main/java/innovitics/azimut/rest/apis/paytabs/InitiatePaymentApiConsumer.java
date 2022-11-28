@@ -54,6 +54,7 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 		shippingDetails.setZip(input.getZip());
 		request.setShippingDetails(shippingDetails);
 		request.setCallbackUrl(this.configProperties.getPaytabsCallBackUrl()+"?"+StringUtility.TRANSACTION_SERIAL_PARAM_NAME+"="+this.generateSerial(input));
+		request.setReturnUrl(input.getReturnUrl());
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getPayPageLang(), this.getContentLength(request)));
 		return httpEntity;
 	}

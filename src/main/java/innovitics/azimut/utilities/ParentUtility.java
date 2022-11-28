@@ -38,7 +38,7 @@ protected Timestamp getMinutesBefore(String value)
 	}
 
 
-protected Object getValueUsingReflection(Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes) throws BusinessException
+public Object getValueUsingReflection(Object object,String methodName,Object[] parameters,Class<?>[] paramterTypes) throws BusinessException
 {				
 	try 
 	{

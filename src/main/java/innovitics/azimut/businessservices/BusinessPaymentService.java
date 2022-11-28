@@ -1,16 +1,18 @@
 package innovitics.azimut.businessservices;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import innovitics.azimut.businessmodels.BusinessPayment;
 import innovitics.azimut.businessmodels.payment.PaytabsCallbackRequest;
+import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.payment.PaymentTransaction;
-import innovitics.azimut.rest.mappers.PaytabsInitiatePaymentMapper;
-import innovitics.azimut.services.payment.PaymentService;
+import innovitics.azimut.utilities.crosslayerenums.Action;
 import innovitics.azimut.utilities.crosslayerenums.PaymentGateway;
 import innovitics.azimut.utilities.crosslayerenums.PaymentTransactionStatus;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
@@ -21,13 +23,19 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 @Service
 public class BusinessPaymentService extends AbstractBusinessService<BusinessPayment>{
 
-	@Autowired PaymentService paymentService;
+	@Autowired BusinessAzimutTradingService businessAzimutTradingService;
 	
 	public BusinessPayment initiatePayment(BusinessPayment businessPayment,BusinessUser tokenizedBusinessUser,String language) throws IntegrationException, BusinessException
 	{
 		try
 		{
-			PaymentTransaction paymentTransaction=this.paymentService.addPayment(this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false), businessPayment.getAmount(), PaymentGateway.PAYTABS);
+			PaymentTransaction paymentTransaction=new PaymentTransaction();
+			this.populateDynamicParameters(paymentTransaction, businessPayment);
+			paymentTransaction = this.paymentService.addPaymentTransaction(
+					this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false),
+					businessPayment.getAmount(), PaymentGateway.PAYTABS, businessPayment.getCurrencyId(),
+					businessPayment.getAction(), paymentTransaction.getParameterNames(),
+					paymentTransaction.getParameterValues());
 		
 			businessPayment=(BusinessPayment)this.restContract.getData(this.restContract.paytabsInitiatePaymentMapper, this.preparePaymentInputs(paymentTransaction,tokenizedBusinessUser,businessPayment,language), null);
 		
@@ -59,7 +67,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 	{
 		paymentTransaction.setStatus(PaymentTransactionStatus.PG.getStatusId());
 		paymentTransaction.setReferenceTransactionId(businessPayment.getReferenceTransactionId());
-		this.paymentService.updateTransaction(paymentTransaction);
+		this.paymentService.updatePaymentTransaction(paymentTransaction);
 		
 	}
 	
@@ -102,8 +110,8 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 					paymentTransaction.setPaymentMethod(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod());
 					}
 				}
-				this.paymentService.updateTransaction(paymentTransaction);
-
+				this.paymentService.updatePaymentTransaction(paymentTransaction);
+				this.execute(paymentTransaction);
 			}
 			catch (Exception exception)
 			{
@@ -141,6 +149,59 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			throw this.exceptionHandler.handleException(exception);
 		}
 		
+	}
+
+	private void execute(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException
+	{
+		 if(NumberUtility.areIntegerValuesMatching(Action.INJECT.getActionId(), paymentTransaction.getAction()))
+		 {
+			 this.inject(paymentTransaction);
+		 }
+	}
+	
+	
+	private void inject(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException
+	{
+		
+			BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
+			baseAzimutTrading.setOrderValue(paymentTransaction.getTransactionAmount());
+			baseAzimutTrading.setCurrencyId(paymentTransaction.getCurrencyId());
+		
+			if(paymentTransaction!=null&&paymentTransaction.getKeyValueMap()!=null)
+			{
+				if(StringUtility.isStringPopulated(paymentTransaction.getKeyValueMap().get(StringUtility.BANK_ID)))
+				{
+					baseAzimutTrading.setBankId(Long.valueOf(paymentTransaction.getKeyValueMap().get(StringUtility.BANK_ID)));
+				}
+				if(StringUtility.isStringPopulated(paymentTransaction.getKeyValueMap().get(StringUtility.ACCOUNT_ID)))
+				{
+					baseAzimutTrading.setAccountId(Long.valueOf(paymentTransaction.getKeyValueMap().get(StringUtility.ACCOUNT_ID)));
+				}
+			}
+			this.businessAzimutTradingService.inject(this.userMapper.convertBasicUnitToBusinessUnit(paymentTransaction.getUser()), baseAzimutTrading);
+
+	}
+	
+	public void populateDynamicParameters(PaymentTransaction paymentTransaction,BusinessPayment businessPayment)
+	{
+		
+		StringBuffer parameterNames=new StringBuffer();
+		StringBuffer parameterValues=new StringBuffer();
+		if(businessPayment!=null&&businessPayment.getAction()!=null)
+		{
+			if(NumberUtility.areIntegerValuesMatching(Action.INJECT.getActionId(), businessPayment.getAction()))
+			{
+				parameterNames.append(StringUtility.BANK_ID);
+				parameterNames.append(StringUtility.COMMA);
+				parameterNames.append(StringUtility.ACCOUNT_ID);
+				parameterValues.append(String.valueOf(businessPayment.getBankId()));
+				parameterValues.append(StringUtility.COMMA);
+				parameterValues.append(String.valueOf(businessPayment.getAccountId()));
+			}
+			
+			paymentTransaction.setParameterNames(parameterNames.toString());
+			paymentTransaction.setParameterValues(parameterValues.toString());
+		}
 	}
 	
 }

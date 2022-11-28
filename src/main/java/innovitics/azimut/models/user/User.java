@@ -420,27 +420,28 @@ public class User extends BaseEntity {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userPhone=" + userPhone + ", password=" + password + ", deviceId=" + deviceId
-				+ ", userId=" + userId + ", userType=" + userType + ", nickName=" + nickName + ", emailAddress="
-				+ emailAddress + ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber
-				+ ", profilePicture=" + profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath
-				+ ", pdfPath=" + pdfPath + ", isChangeNoApproved=" + isChangeNoApproved + ", verificationPercentage="
-				+ verificationPercentage + ", isVerified=" + isVerified + ", migrated=" + migrated + ", createdAt="
-				+ createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + ", countryCode=" + countryCode
-				+ ", lastSolvedPageId=" + lastSolvedPageId + ", nextPageId=" + nextPageId + ", userStep=" + userStep
-				+ ", contractMap=" + contractMap + ", country=" + country + ", city=" + city + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", dateOfIdExpiry="
-				+ dateOfIdExpiry + ", otherUserIdType=" + otherUserIdType + ", otherIdType=" + otherIdType
-				+ ", otherUserId=" + otherUserId + ", otherNationality=" + otherNationality + ", genderId=" + genderId
+		return "User [id=" + id + ", userPhone=" + userPhone + ", deviceId=" + deviceId + ", userId=" + userId
+				+ ", userType=" + userType + ", nickName=" + nickName + ", emailAddress=" + emailAddress
+				+ ", countryPhoneCode=" + countryPhoneCode + ", phoneNumber=" + phoneNumber + ", profilePicture="
+				+ profilePicture + ", signedPdf=" + signedPdf + ", picturePath=" + picturePath + ", pdfPath=" + pdfPath
+				+ ", isChangeNoApproved=" + isChangeNoApproved + ", verificationPercentage=" + verificationPercentage
+				+ ", isVerified=" + isVerified + ", migrated=" + migrated + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", deletedAt=" + deletedAt + ", countryCode=" + countryCode + ", lastSolvedPageId="
+				+ lastSolvedPageId + ", nextPageId=" + nextPageId + ", userStep=" + userStep + ", contractMap="
+				+ contractMap + ", country=" + country + ", city=" + city + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", dateOfBirth=" + dateOfBirth + ", dateOfIdExpiry=" + dateOfIdExpiry
+				+ ", otherUserIdType=" + otherUserIdType + ", otherIdType=" + otherIdType + ", otherUserId="
+				+ otherUserId + ", otherNationality=" + otherNationality + ", genderId=" + genderId
 				+ ", teacomputersAddressAr=" + teacomputersAddressAr + ", teacomputersAddressEn="
 				+ teacomputersAddressEn + ", teacomputersCityId=" + teacomputersCityId + ", teacomputersCountryId="
 				+ teacomputersCountryId + ", teacomputersIssueCityId=" + teacomputersIssueCityId
 				+ ", teacomputersIssueCountryId=" + teacomputersIssueCountryId + ", teacomputersNationalityId="
 				+ teacomputersNationalityId + ", teacomputersClientaml=" + teacomputersClientaml
 				+ ", teacomputersOccupation=" + teacomputersOccupation + ", failureNumber=" + failureNumber
-				+ ", isInstitutional=" + isInstitutional + "]";
+				+ ", isInstitutional=" + isInstitutional + ", livenessChecked=" + livenessChecked + ", solvedPages="
+				+ solvedPages + ", isOld=" + isOld + "]";
 	}
-
+	
 
 
 	

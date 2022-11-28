@@ -1,6 +1,7 @@
 package innovitics.azimut.models;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,8 @@ public class BaseEntity {
 	protected Double minimumInitialAmount;
 	protected Double minimumOwnedAmount;
 	protected Boolean block;
+	protected Map<String,String> keyValueMap; 
+	
 
 	public Date getCreatedAt() {
 		return createdAt;
@@ -109,6 +112,12 @@ public class BaseEntity {
 	}
 	public void setBlock(Boolean block) {
 		this.block = block;
+	}
+	public Map<String, String> getKeyValueMap() {
+		return keyValueMap;
+	}
+	public void setKeyValueMap(Map<String, String> keyValueMap) {
+		this.keyValueMap = keyValueMap;
 	}
 	
 	

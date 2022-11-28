@@ -20,6 +20,7 @@ public class InitiatePaymentInput extends PaytabsInput {
 	private String shippingCity;
 	private String shippingCountry;
 	private String shippingZip;
+	private String returnUrl;
 	
 	
 	public String getCartId() {
@@ -129,6 +130,12 @@ public class InitiatePaymentInput extends PaytabsInput {
 	}
 	public void setShippingZip(String shippingZip) {
 		this.shippingZip = shippingZip;
+	}
+	public String getReturnUrl() {
+		return returnUrl;
+	}
+	public void setReturnUrl(String returnUrl) {
+		this.returnUrl = returnUrl;
 	}
 	
 	
