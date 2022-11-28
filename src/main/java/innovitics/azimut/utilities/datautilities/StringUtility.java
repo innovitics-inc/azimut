@@ -200,7 +200,8 @@ public final class StringUtility extends ParentUtility{
 	}
 	public static String getStringValue(byte[] contentAsByteArray, String characterEncoding) {
 		try {
-			return new String(contentAsByteArray, 0, contentAsByteArray.length, characterEncoding);
+			String value=new String(contentAsByteArray, 0, contentAsByteArray.length, characterEncoding);	
+			return value;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

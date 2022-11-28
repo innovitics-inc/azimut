@@ -34,9 +34,9 @@ public class QueryPaymentApiConsumer extends RestPaytabsApiConsumer<PaytabsQuery
 			{
 				queryPaymentOutput.setCartAmount(Double.valueOf(responseEntity.getBody().getCartAmount()));
 			}
-			if(StringUtility.isStringPopulated(responseEntity.getBody().getPaymentResult().getResponseCode()))
+			if(StringUtility.isStringPopulated(responseEntity.getBody().getPaymentResult().getResponseStatus()))
 			{
-				queryPaymentOutput.setResponseStatus(responseEntity.getBody().getPaymentResult().getResponseCode());
+				queryPaymentOutput.setResponseStatus(responseEntity.getBody().getPaymentResult().getResponseStatus());
 			}
 		}
 		
