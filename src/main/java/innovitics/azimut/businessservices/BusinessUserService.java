@@ -28,6 +28,7 @@ import innovitics.azimut.services.kyc.UserImageService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.businessutilities.PhoneNumberBlockageUtility;
+import innovitics.azimut.utilities.businessutilities.UserUtility;
 import innovitics.azimut.utilities.crosslayerenums.AnswerType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
@@ -37,7 +38,6 @@ import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.datautilities.UserUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.mapping.UserMapper;
@@ -549,7 +549,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		}
 		return new BusinessUser();
 	}
-	public BusinessUser getUserLocation(BusinessUser tokenizedBusinessUser)
+	public BusinessUser getUserLocation(BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
 		BusinessUser businessUser=new BusinessUser();
 

@@ -63,7 +63,7 @@ public class UserBlockageUtility extends ParentUtility
 		return this.userBlockageService.updateUserBlockage(userBlockage);
 		
 	}
-	public UserBlockage getUserBlockage(Long userId,boolean shouldBeFull)
+	public UserBlockage getUserBlockage(Long userId,boolean shouldBeFull) throws BusinessException
 	{	
 		
 		try 

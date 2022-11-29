@@ -176,16 +176,15 @@ public class ExceptionHandler{
 				return this.handleBusinessException((Exception)exception,ErrorCode.OPERATION_NOT_PERFORMED);
 		}
 	
-	public Object getNullIfNonExistent(Exception exception)
+	public Object getNullIfNonExistent(Exception exception) throws BusinessException
 	 {
 		 exception.printStackTrace();
-			if(this.isABusinessException(exception))
-			{
+			if (this.isABusinessException(exception)) {
 				return null;
+			} else {
+				throw new BusinessException(ErrorCode.OPERATION_NOT_PERFORMED);
 			}
-			else
-			return null;
-	 }
+		}
 	
 	public boolean isInvocationException(Exception exception)
 	{

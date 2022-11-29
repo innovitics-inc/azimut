@@ -1,4 +1,4 @@
-package innovitics.azimut.utilities.datautilities;
+package innovitics.azimut.utilities.businessutilities;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -32,6 +32,10 @@ import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.crosslayerenums.UserImageType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
+import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobData;
@@ -282,7 +286,7 @@ public class UserUtility extends ParentUtility{
 			throw this.exceptionHandler.handleBusinessException(exception,ErrorCode.USER_LOCATION_NOT_SAVED);
 		}
 	}
-	public UserLocation getUserLocation(BusinessUser tokenizedBusinessUser) throws BusinessException
+	public UserLocation getUserLocation(BusinessUser tokenizedBusinessUser) throws Exception
 	{
 		try 
 		{
@@ -296,7 +300,7 @@ public class UserUtility extends ParentUtility{
 		
 	}
 	
-	public User saveOldUser(String countryPhoneCode,String phoneNumber,List<AzimutAccount> azimutAccounts)
+	public User saveOldUser(String countryPhoneCode,String phoneNumber,List<AzimutAccount> azimutAccounts) throws Exception
 	{
 		User user=new User();
 		user.setCountryPhoneCode(countryPhoneCode);
@@ -329,7 +333,7 @@ public class UserUtility extends ParentUtility{
 		return user;
 	}
 	
-	public UserType getUserTypeByTeacomputerId(Long teacomputerId)
+	public UserType getUserTypeByTeacomputerId(Long teacomputerId) throws Exception
 	{
 		try 
 		{

@@ -3,6 +3,7 @@ package innovitics.azimut.utilities.exceptionhandling;
 public enum ErrorCode {
 	NO_MATCHED_CLIENT_NUMBER_EXIST(79,"",""),
 	INVALID_CLIENT(185,"",""),
+	INVALID_CLIENT_STATUS(79,"",""),
 	CONNECTION_TIMEOUT(994,"Could not perform the operation, please try again later.",""),
 	OPERATION_FAILURE(995,"Operation failed.",""),
 	PAYMENT_FAILURE(996,"Operation Could not be performed, please check with the vendor.",""),
@@ -49,8 +50,8 @@ public enum ErrorCode {
 	KYC_INCOMPLETE(31118,"Please Complete the KYC Form.",""),
 	KYC_SUBMITTED(31119,"KYC Form submitted.",""),
 	PAYMENT_TRANSACTION_NOT_FOUND(4000,"Transaction not found",""),
-	PAYMENT_TRANSACTION_CORRUPTED(4001,"Transaction corrupted","")
-	
+	PAYMENT_TRANSACTION_CORRUPTED(4001,"Transaction corrupted",""),
+	PAYMENT_TRANSACTION_NOT_SAVED(4002,"Transaction not saved","")
 	;
 	
 	private final int code;

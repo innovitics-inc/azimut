@@ -169,5 +169,9 @@ public final class DateUtility extends ParentUtility{
 		logger.info("Are dates different?::"+result);
 		return result;
 	}
-	
+	public static String changeDatetoStringDate(Date date,String destinationFormat) 
+	{
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(destinationFormat);
+		return simpleDateFormat.format(date);
+	}
 }

@@ -26,12 +26,13 @@ import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.services.payment.PaymentService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
+import innovitics.azimut.utilities.businessutilities.PaymentTransactionUtility;
 import innovitics.azimut.utilities.businessutilities.PhoneNumberBlockageUtility;
 import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
+import innovitics.azimut.utilities.businessutilities.UserUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.datautilities.UserUtility;
 import innovitics.azimut.utilities.dbutilities.DatabaseConditions;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
@@ -59,6 +60,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected UserTypeService userTypeService;
 	@Autowired protected UserBlockageUtility userBlockageUtility;
 	@Autowired protected PhoneNumberBlockageUtility phoneNumberBlockageUtility;
+	@Autowired protected PaymentTransactionUtility paymentTransactionUtility;
 
 	@Autowired AES aes;
 	
@@ -143,7 +145,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 		this.validation.validate(businessEntity, validator,objectName);	
 	}
 	
-	 protected Long getAzimutUserTypeId(BusinessUser businessUser)
+	 protected Long getAzimutUserTypeId(BusinessUser businessUser) throws BusinessException
 	  {
 		  try 
 		  {
@@ -152,8 +154,9 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 		  catch(Exception exception)
 		  {
 			  this.exceptionHandler.getNullIfNonExistent(exception);
-			  return null;
+			  
 		  }
+		return null;
 	  }
 	 
 		protected BusinessFundPrice prepareBusinessFundPriceInput(Long teacomputerId)

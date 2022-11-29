@@ -151,16 +151,19 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		
 	}
 
-	private void execute(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException
+	private void execute(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException,Exception
 	{
-		 if(NumberUtility.areIntegerValuesMatching(Action.INJECT.getActionId(), paymentTransaction.getAction()))
-		 {
-			 this.inject(paymentTransaction);
-		 }
+		if(StringUtility.stringsMatch(paymentTransaction!=null?paymentTransaction.getStatus():null, StringUtility.EXCLUDED_STATUSES[0]))
+		{
+			if(NumberUtility.areIntegerValuesMatching(Action.INJECT.getActionId(), paymentTransaction.getAction()))
+			{
+				this.inject(paymentTransaction);
+			}
+		}
 	}
 	
 	
-	private void inject(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException
+	private void inject(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException,Exception
 	{
 		
 			BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();

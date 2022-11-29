@@ -532,7 +532,8 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 		}
 		catch(Exception exception)
 		{
-			this.exceptionHandler.getNullIfNonExistent(exception);
+			this.logger.info("Could not retireve the Institutional First Page Id::: ");
+			exception.printStackTrace();
 			return null;
 		}
 	}

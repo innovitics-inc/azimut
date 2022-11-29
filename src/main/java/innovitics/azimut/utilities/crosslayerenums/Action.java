@@ -6,8 +6,8 @@ import java.util.List;
 
 public enum Action {
 
-	INJECT(1,"inject","معلق"),
-	ORDER(2,"order","تنفيذ"),
+	BUY(1,"buy","شراء"),
+	INJECT(2,"inject","إيداع"),
 	OTHER(3,"OTHER","أخرى")
 	;
 

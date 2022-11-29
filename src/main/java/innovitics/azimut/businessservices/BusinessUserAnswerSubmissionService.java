@@ -288,7 +288,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		return businessUser.getVerificationPercentage();
 	}
 	
-	KYCPage findPageDetails(Long id)
+	KYCPage findPageDetails(Long id) throws BusinessException
 	{
 		try 
 		{

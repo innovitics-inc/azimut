@@ -107,13 +107,13 @@ public class ListUtility<T> extends ParentUtility{
 
 	 }
 	 
-	 public List<T> handleExceptionAndReturnEmptyList(Exception exception,ErrorCode errorCode) throws BusinessException 
+	 public List<T> handleExceptionAndReturnEmptyList(Exception exception) throws BusinessException 
 		{
 			if(exception instanceof IntegrationException)
 				
 			    {	
 					IntegrationException integrationException=(IntegrationException) exception;
-					if(NumberUtility.areIntegerValuesMatching(integrationException.getErrorCode().intValue(), errorCode.getCode()))
+					if(StringUtility.TEACOMPUTER_VALIDITY_ERROR_CODES.contains(integrationException.getErrorCode()))
 					{
 						return new ArrayList<T>();
 					}

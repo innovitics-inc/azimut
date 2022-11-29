@@ -50,5 +50,17 @@ public enum TransactionOrderType {
 	    }
 	    return TransactionOrderType.OTHER;
 	}
+	
+	public static TransactionOrderType getByOwnId(int id) 
+	{
+	    for(TransactionOrderType transactionOrderType : values()) 
+	    {
+	        if(transactionOrderType.getTypeId()==id)
+	        {
+	        	return transactionOrderType;
+	        }
+	    }
+	    return TransactionOrderType.OTHER;
+	}
 
 }

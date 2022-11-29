@@ -81,13 +81,13 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		return responseBaseAzimutTrading;
 	}
 	
-	public BaseAzimutTrading placeOrderRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException
+	public BaseAzimutTrading placeOrderRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException,Exception
 	{
 		BaseAzimutTrading responseBaseAzimutTrading=(BaseAzimutTrading)this.restContract.getData(this.restContract.placeOrderMapper, this.prepareOrderPlacingInputs(tokenizedBusinessUser, baseAzimutTrading), null);
 		return responseBaseAzimutTrading;
 	}
 	
-	public BaseAzimutTrading injectRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException, IOException
+	public BaseAzimutTrading injectRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws Exception
 	{		
 		BaseAzimutTrading responseBaseAzimutTrading=		
 		 (BaseAzimutTrading)this.restContract.getData(this.restContract.injectWithdrawMapper, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_DEPOSIT);
@@ -96,7 +96,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	
 	}
 	
-	public BaseAzimutTrading withdrawRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
+	public BaseAzimutTrading withdrawRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException,Exception
 	{
 		BaseAzimutTrading responseBaseAzimutTrading=				
 				 (BaseAzimutTrading)this.restContract.getData(this.restContract.injectWithdrawMapper, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_WITHDRAW);
@@ -106,7 +106,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	
 	
 
-	public BaseAzimutTrading getUserBlockage(BusinessUser tokenizedBusinessUser,String userPhone)
+	public BaseAzimutTrading getUserBlockage(BusinessUser tokenizedBusinessUser,String userPhone) throws BusinessException
 	{
 		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
 		
@@ -263,7 +263,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	
 	
 	
-	private BaseAzimutTrading prepareOrderPlacingInputs(BusinessUser tokenizedBusinessUser, BaseAzimutTrading baseAzimutTrading) {
+	private BaseAzimutTrading prepareOrderPlacingInputs(BusinessUser tokenizedBusinessUser, BaseAzimutTrading baseAzimutTrading) throws Exception {
 		
 		BaseAzimutTrading addBaseAzimutTrading=new BaseAzimutTrading();
 		addBaseAzimutTrading.setAzId(tokenizedBusinessUser.getUserId());
@@ -275,7 +275,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		return addBaseAzimutTrading;
 	}
 	
-private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusinessUser, BaseAzimutTrading baseAzimutTrading) {
+private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusinessUser, BaseAzimutTrading baseAzimutTrading) throws Exception {
 		
 		BaseAzimutTrading addBaseAzimutTrading=new BaseAzimutTrading();
 		

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import innovitics.azimut.models.payment.PaymentTransaction;
@@ -115,15 +116,17 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		return paymentTransaction;
 
 	}
-	public	List<PaymentTransaction> getTransactionByUser(Long userId,String[] paymentTransactionStatuses,PaymentGateway paymentGateway)
-	{
+	public	List<PaymentTransaction> getTransactionsByUser(Long userId,String excludedStatus,PaymentGateway paymentGateway,Integer[] actions)
+	{	
+
 		List<PaymentTransaction> paymentTransactions=new ArrayList<PaymentTransaction>();
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
-		searchCriteriaList.add(new SearchCriteria("id", userId,SearchOperation.EQUAL, "user"));
+		searchCriteriaList.add(new SearchCriteria("id", userId,SearchOperation.PARENT_EQUAL, "user"));
 		searchCriteriaList.add(new SearchCriteria("paymentGateway", paymentGateway.getId(),SearchOperation.EQUAL, null));
-		searchCriteriaList.add(new SearchCriteria("status", this.arrayUtility.generateObjectListFromObjectArray(paymentTransactionStatuses),SearchOperation.NOT_IN, null));
-
-		paymentTransactions= this.paymentTransactionRepository.findAll(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList));
+		searchCriteriaList.add(new SearchCriteria("action", this.arrayUtility.generateObjectListFromObjectArray(actions),SearchOperation.IN, null));
+		searchCriteriaList.add(new SearchCriteria("status", excludedStatus,SearchOperation.NOT_EQUAL, null));
+				
+		paymentTransactions = this.paymentTransactionRepository.findAll(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList));
 		
 		if(this.paymentTransactionListUtility.isListPopulated(paymentTransactions))
 		{

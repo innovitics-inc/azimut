@@ -35,6 +35,7 @@ import innovitics.azimut.utilities.businessutilities.Sorting;
 import innovitics.azimut.utilities.crosslayerenums.BankAccountStatus;
 import innovitics.azimut.utilities.crosslayerenums.CurrencyType;
 import innovitics.azimut.utilities.crosslayerenums.OrderStatus;
+import innovitics.azimut.utilities.crosslayerenums.PaymentGateway;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
@@ -158,7 +159,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			}
 			catch(Exception exception)
 			{
-				businessClientCashBalances=clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT);
+				businessClientCashBalances=clientCashBalanceListUtility.handleExceptionAndReturnEmptyList(exception);
 				businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
 				businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
 			}
@@ -211,13 +212,34 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		if(tokenizedBusinessUser!=null&&StringUtility.isStringPopulated(tokenizedBusinessUser.getUserId()))
 		{
 			try 
-			{			
-				responseBusinessAzimutClient.setBusinessTransactions((List<BusinessTransaction>) this.restContract.getDataList(this.restContract.getTransactionsMapper, this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null));
+			{	
+				List<BusinessTransaction> businessTransactions= (List<BusinessTransaction>) this.restContract.getDataList(this.restContract.getTransactionsMapper, this.prepareTransactionSearchInputs(businessAzimutClient,tokenizedBusinessUser), null);
+				
+				List<BusinessTransaction> businessPaymentTransactions=this.getPaymentTransactions(tokenizedBusinessUser);
+				
+				if(businessTransactionListUtility.isListPopulated(businessTransactions)&&businessTransactionListUtility.isListPopulated(businessPaymentTransactions))
+				{
+					businessTransactions.addAll(businessPaymentTransactions);
+					responseBusinessAzimutClient.setBusinessTransactions(businessTransactions);
+				}
+				else if(businessTransactionListUtility.isListPopulated(businessTransactions)&&businessTransactionListUtility.isListEmptyOrNull(businessPaymentTransactions))
+				{
+					responseBusinessAzimutClient.setBusinessTransactions(businessTransactions);
+				}
+				else if(businessTransactionListUtility.isListEmptyOrNull(businessTransactions)&&businessTransactionListUtility.isListPopulated(businessPaymentTransactions))
+				{
+					responseBusinessAzimutClient.setBusinessTransactions(businessPaymentTransactions);
+				}
+				else if(businessTransactionListUtility.isListEmptyOrNull(businessTransactions)&&businessTransactionListUtility.isListEmptyOrNull(businessPaymentTransactions))
+				{
+					responseBusinessAzimutClient.setLastTransactionDate("No transactions yet.");
+					responseBusinessAzimutClient.setBusinessTransactions(new ArrayList<BusinessTransaction>());
+				}						
 			}
 			catch(Exception exception)
 			{
 				responseBusinessAzimutClient.setLastTransactionDate("No transactions yet.");
-				responseBusinessAzimutClient.setBusinessTransactions(businessTransactionListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));
+				responseBusinessAzimutClient.setBusinessTransactions(businessTransactionListUtility.handleExceptionAndReturnEmptyList(exception));
 			}
 		}
 		else
@@ -227,6 +249,17 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			
 		}
 		return responseBusinessAzimutClient;
+	}
+	
+	public List<BusinessTransaction> getPaymentTransactions(BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
+	{
+		List<BusinessTransaction> businessTransactions=new ArrayList<BusinessTransaction>();
+		if(tokenizedBusinessUser!=null&&StringUtility.isStringPopulated(tokenizedBusinessUser.getUserId()))
+		{
+			businessTransactions=this.paymentTransactionUtility.getUserPaymentTransactionsAndConvertThemToBusinessTransactions(tokenizedBusinessUser, PaymentGateway.PAYTABS);	
+		}
+		
+		return businessTransactions;
 	}
 	
 	public BusinessAzimutClient getBankAccountsWithDetails(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,boolean isList,Long accountId) throws BusinessException,IntegrationException
@@ -341,7 +374,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 		return responseBusinessAzimutClient;
 	}
-	private BusinessAzimutClient prepareAccountHoldingInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) 
+	private BusinessAzimutClient prepareAccountHoldingInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException 
 	{
 		BusinessAzimutClient searchAzimutClient=new BusinessAzimutClient();
 		searchAzimutClient.setAccountId(businessAzimutClient.getAccountId());
@@ -603,7 +636,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			{
 				responseBusinessAzimutClient.setTotalPosition(new BigDecimal(0));
 				responseBusinessAzimutClient.setBalance(0D);
-				responseBusinessAzimutClient.setBusinessClientFunds(clientFundListUtility.handleExceptionAndReturnEmptyList(exception, ErrorCode.INVALID_CLIENT));
+				responseBusinessAzimutClient.setBusinessClientFunds(clientFundListUtility.handleExceptionAndReturnEmptyList(exception));
 			}
 		}
 		else
@@ -616,7 +649,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return responseBusinessAzimutClient;
 	}
 			
-	Map<String,Object> getClientFunds(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient,boolean getDetails) throws IntegrationException
+	Map<String,Object> getClientFunds(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient,boolean getDetails) throws IntegrationException, BusinessException
 	{
 		
 		Map <String,Object> clientFundPriceMap= new HashMap<String,Object>();
@@ -654,7 +687,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return clientFundPriceMap;
 	}
 	
-	public void getClientFundDetails(BusinessClientFund businessClientFund,BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException
+	public void getClientFundDetails(BusinessClientFund businessClientFund,BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
 	{	
 		//List<BusinessFundTransaction> businessFundTransactions=this.restManager.getFundTransactionsMapper.wrapBaseBusinessEntity(true, this.prepareBusinessBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient), null).getDataList();
 		List<BusinessFundTransaction> allTransactions=new ArrayList<BusinessFundTransaction>();
@@ -680,7 +713,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			}
 			catch(Exception exception)
 			{
-				responseBusinessAzimutClient.setEportfolioDetails(eportfolioDetailListUtility.handleExceptionAndReturnEmptyList(exception,ErrorCode.INVALID_CLIENT));		
+				responseBusinessAzimutClient.setEportfolioDetails(eportfolioDetailListUtility.handleExceptionAndReturnEmptyList(exception));		
 			}
 		}
 		else
@@ -756,14 +789,14 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 	}
 	
-	private EportfolioDetail prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) {
+	private EportfolioDetail prepareGetEportfolioInputs(BusinessUser tokenizedBusinessUser,String language) throws BusinessException {
 		EportfolioDetail eportBusinessEntity=new EportfolioDetail();		
 		eportBusinessEntity.setAzId(tokenizedBusinessUser.getUserId());
 		eportBusinessEntity.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
 		eportBusinessEntity.setLanguage(language);
 		return eportBusinessEntity;
 	}
-	private BusinessAzimutClient prepareGetReportInputs(BusinessUser tokenizedBusinessUser,String language,String reportType,BusinessAzimutClient businessAzimutClient) {
+	private BusinessAzimutClient prepareGetReportInputs(BusinessUser tokenizedBusinessUser,String language,String reportType,BusinessAzimutClient businessAzimutClient) throws BusinessException {
 		BusinessAzimutClient searchBusinessAzimutClient=new BusinessAzimutClient();
 		searchBusinessAzimutClient.setAzId(tokenizedBusinessUser.getUserId());
 		searchBusinessAzimutClient.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));
@@ -781,7 +814,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return searchBusinessAzimutClient;
 	}
 		
-	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException 
+	private AzimutAccount prepareAccountAdditionInputs(AzimutAccount azimutAccount,BusinessUser businessUser) throws BusinessException,Exception 
 	{
 		azimutAccount.setCustomerNameEn(businessUser.getFirstName()+StringUtility.SPACE+businessUser.getLastName());
 		azimutAccount.setCustomerNameAr(businessUser.getFirstName()+StringUtility.SPACE+businessUser.getLastName());
@@ -823,7 +856,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return azimutAccount;
 	}
 
-	BusinessTransaction prepareTransactionSearchInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser)
+	BusinessTransaction prepareTransactionSearchInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
 		BusinessTransaction searchBusinessTransaction=new BusinessTransaction();
 		/*
@@ -839,7 +872,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return searchBusinessTransaction;
 	}
 	
-	BusinessClientCashBalance preparClientCashBalanceInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser)
+	BusinessClientCashBalance preparClientCashBalanceInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException
 	{
 		BusinessClientCashBalance searchBusinessClientCashBalance=new BusinessClientCashBalance();
 		searchBusinessClientCashBalance.setAzId(tokenizedBusinessUser.getUserId());
@@ -848,7 +881,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return searchBusinessClientCashBalance;
 		
 	}
-	BusinessClientBankAccountDetails prepareClientBankAccountDetailsInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,boolean isList)
+	BusinessClientBankAccountDetails prepareClientBankAccountDetailsInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser,boolean isList) throws BusinessException
 	{
 		BusinessClientBankAccountDetails searchBusinessClientBankAccountDetails=new BusinessClientBankAccountDetails();
 		searchBusinessClientBankAccountDetails.setAzId(tokenizedBusinessUser.getUserId());
@@ -858,7 +891,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return searchBusinessClientBankAccountDetails;
 	}
 	
-	BusinessClientFund prepareClientFundInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient)
+	BusinessClientFund prepareClientFundInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws BusinessException
 	{
 		BusinessClientFund searchBusinessClientFund=new BusinessClientFund();
 		searchBusinessClientFund.setAzId(tokenizedBusinessUser.getUserId());
@@ -925,7 +958,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		return businessAzimutClient;
 	}
 	
-  AzimutAccount	prepareAccountRetrievalInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser)
+  AzimutAccount	prepareAccountRetrievalInputs(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException
   {
 	  AzimutAccount azimutAccount=new AzimutAccount();
 	  azimutAccount.setPhoneNumber(businessAzimutClient.getUserPhone());
@@ -937,7 +970,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
   
   
-  BusinessFundTransaction prepareBusinessFundTransactionRetrievalInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient,OrderStatus orderStatus)
+  BusinessFundTransaction prepareBusinessFundTransactionRetrievalInputs(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient,OrderStatus orderStatus) throws BusinessException
   {
 	  BusinessFundTransaction searchBusinessFundTransaction=new BusinessFundTransaction();
 	  searchBusinessFundTransaction.setAzIdType(this.getAzimutUserTypeId(tokenizedBusinessUser));

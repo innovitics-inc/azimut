@@ -58,6 +58,10 @@ public final class StringUtility extends ParentUtility{
 	public final static String TRANSACTION_SERIAL_PARAM_NAME="serial";
 	public final static String BANK_ID="bankId";
 	public final static String ACCOUNT_ID="accountId";
+	public final static String [] EXCLUDED_STATUSES=new String []{"A"};
+	public final static String EXCLUDED_STATUS="A";
+	public final static Integer [] RELEVANT_ACTIONS=new Integer []{1,2};
+	public final static List<Integer> TEACOMPUTER_VALIDITY_ERROR_CODES=Arrays.asList(ErrorCode.INVALID_CLIENT.getCode(),ErrorCode.INVALID_CLIENT_STATUS.getCode());
 	
 	public static String getClassName(Object object)
 	{

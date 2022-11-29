@@ -48,7 +48,7 @@ public class PhoneNumberBlockageUtility extends UserBlockageUtility{
 		
 	}
 
-	public UserBlockage getUserBlockage(String userPhone,boolean shouldBeFull)
+	public UserBlockage getUserBlockage(String userPhone,boolean shouldBeFull) throws BusinessException
 	{	
 		
 		try 

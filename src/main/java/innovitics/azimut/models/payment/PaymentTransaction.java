@@ -173,5 +173,14 @@ public class PaymentTransaction extends BaseEntity{
 		this.currencyId = currencyId;
 	}
 
+	@Override
+	public String toString() {
+		return "PaymentTransaction [id=" + id + ", user=" + user + ", transactionAmount=" + transactionAmount
+				+ ", status=" + status + ", referenceTransactionId=" + referenceTransactionId + ", paymentGateway="
+				+ paymentGateway + ", paymentMethod=" + paymentMethod + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", deletedAt=" + deletedAt + ", message=" + message + ", parameterNames=" + parameterNames
+				+ ", parameterValues=" + parameterValues + ", action=" + action + ", currencyId=" + currencyId + "]";
+	}
+
 	
 }
