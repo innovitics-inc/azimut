@@ -96,7 +96,7 @@ public class PaymentTransactionUtility extends ParentUtility{
 	{
 		List<BusinessTransaction> businessPaymentTransactions=new ArrayList<BusinessTransaction>();
 		
-		List<PaymentTransaction> paymentTransactions=this.getTransactionByUser(tokenizedBusinessUser.getId(), StringUtility.EXCLUDED_STATUS, paymentGateway, StringUtility.RELEVANT_ACTIONS);
+		List<PaymentTransaction> paymentTransactions=this.getTransactionByUser(tokenizedBusinessUser.getId(), StringUtility.INCLUDED_STATUSES, paymentGateway, StringUtility.RELEVANT_ACTIONS);
 		
 		if(this.paymentTransactionListUtility.isListPopulated(paymentTransactions))
 		{
@@ -110,12 +110,12 @@ public class PaymentTransactionUtility extends ParentUtility{
 		return businessPaymentTransactions;
 	}
 	
-	private	List<PaymentTransaction> getTransactionByUser(Long userId,String excludedStatus,PaymentGateway paymentGateway,Integer[] actions) throws BusinessException
+	private	List<PaymentTransaction> getTransactionByUser(Long userId,String[] includedStatuses,PaymentGateway paymentGateway,Integer[] actions) throws BusinessException
 	{
 		try 
 		{
 	
-		return this.paymentService.getTransactionsByUser(userId, excludedStatus, paymentGateway, actions);
+		return this.paymentService.getTransactionsByUser(userId, includedStatuses, paymentGateway, actions);
 		}
 		catch(Exception exception)
 		{

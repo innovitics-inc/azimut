@@ -340,6 +340,37 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 		}
 		
 	}
+	@PostMapping(value="/addUserInteraction",
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessUser>> addUserInteraction(
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestParam ("countryCode") String countryCode,
+			@RequestParam ("countryPhoneCode") String countryPhoneCode,
+			@RequestParam ("phoneNumber") String phoneNumber,
+			@RequestParam ("email") String email,
+			@RequestParam ("body") String body,
+			@RequestParam ("type") Integer type,
+			@RequestParam (name="file",required=false) MultipartFile file) 
+			throws BusinessException, IOException,MaxUploadSizeExceededException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.addUserInteraction(countryCode,countryPhoneCode,phoneNumber,email,body,type,file), null, null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException,language);
+		}
+		catch(MaxUploadSizeExceededException maxUploadSizeExceededException)
+		{
+			return this.handleBaseGenericResponseException(maxUploadSizeExceededException,language);
+		}
+		catch(IllegalStateException illegalStateException)
+		{
+			return this.handleBaseGenericResponseException(illegalStateException,language);
+		}
+		
+	}
 
 	@GetMapping(value="/execute",
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 

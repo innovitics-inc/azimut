@@ -42,7 +42,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter
 		.authorizeRequests().antMatchers("/api/authenticate","/api/forgotPassword","/api/user/getByUserPhone","/api/saveUserTemporarily","/api/azimut/user/getAzimutLookUpData",
 				"/api/azimut/trading/incrementUserBlockage",
 				"/api/azimut/trading/getUserBlockage",
-				"/api/paytabs/callback"
+				"/api/paytabs/callback",
+				"/api/user/addUserInteraction"
 				
 				).permitAll()
 		.anyRequest().authenticated()

@@ -116,7 +116,7 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		return paymentTransaction;
 
 	}
-	public	List<PaymentTransaction> getTransactionsByUser(Long userId,String excludedStatus,PaymentGateway paymentGateway,Integer[] actions)
+	public	List<PaymentTransaction> getTransactionsByUser(Long userId,String[] includedStatuses,PaymentGateway paymentGateway,Integer[] actions)
 	{	
 
 		List<PaymentTransaction> paymentTransactions=new ArrayList<PaymentTransaction>();
@@ -124,7 +124,7 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		searchCriteriaList.add(new SearchCriteria("id", userId,SearchOperation.PARENT_EQUAL, "user"));
 		searchCriteriaList.add(new SearchCriteria("paymentGateway", paymentGateway.getId(),SearchOperation.EQUAL, null));
 		searchCriteriaList.add(new SearchCriteria("action", this.arrayUtility.generateObjectListFromObjectArray(actions),SearchOperation.IN, null));
-		searchCriteriaList.add(new SearchCriteria("status", excludedStatus,SearchOperation.NOT_EQUAL, null));
+		searchCriteriaList.add(new SearchCriteria("status",this.arrayUtility.generateObjectListFromObjectArray(includedStatuses),SearchOperation.IN, null));
 				
 		paymentTransactions = this.paymentTransactionRepository.findAll(this.paymentTransactionParentSpecification.findByCriteria(searchCriteriaList));
 		

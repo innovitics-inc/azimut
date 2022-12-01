@@ -385,40 +385,15 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		catch(Exception exception)
 		{
 			this.logger.info("Enter Excepton Handling");
-			this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);			
-			searchedForBusinessUser=new BusinessUser();			
-			try 
+			BusinessException businessException=this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);			
+			if(NumberUtility.areIntegerValuesMatching(businessException.getErrorCode(), ErrorCode.USER_NOT_FOUND.getCode()))
 			{
-				//List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
-				List<AzimutAccount> azimutAccounts=this.restContract.getDataList(this.restContract.checkAccountMapper, this.prepareAccountRetrievalInputs(null, businessUser), null);
-				if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
-				{
-					searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);					
-					this.userUtility.saveOldUser(businessUser.getCountryPhoneCode(),businessUser.getPhoneNumber(),azimutAccounts);
-				}
-				
-				else
-				{
-					searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
-				}
+				searchedForBusinessUser=this.lookForuUserAtTC(searchedForBusinessUser, businessUser);
 			}
-			catch(Exception teacomputerException)
+			else
 			{
-				teacomputerException.printStackTrace();
-				
-				this.logger.info("Enter TC exception Handling");
-				if(exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(teacomputerException, ErrorCode.NO_MATCHED_CLIENT_NUMBER_EXIST))
-				{
-					this.logger.info("Go to reg");
-					searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
-				}
-				else
-				{
-					this.logger.info("Throw exception");
-					throw this.exceptionHandler.handleException(teacomputerException);
-				}
+				throw businessException;
 			}
-			
 		}
 		
 		return searchedForBusinessUser;
@@ -673,10 +648,12 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	}
 	  AzimutAccount	prepareAccountRetrievalInputs(BusinessAzimutClient businessAzimutClient,BusinessUser searchBusinessUser)
 	  {
-		  AzimutAccount azimutAccount=new AzimutAccount();
-		  azimutAccount.setPhoneNumber(searchBusinessUser.getPhoneNumber());
-		 /* azimutAccount.setUserId(businessAzimutClient.getUserId());
-		  azimutAccount.setIdType(this.getAzimutUserTypeId(searchBusinessUser));*/
+		  AzimutAccount azimutAccount=new AzimutAccount();		  
+		  if(searchBusinessUser!=null)
+		  {
+			  String withoutPlus=StringUtility.isStringPopulated((searchBusinessUser.getCountryPhoneCode()))?(searchBusinessUser.getCountryPhoneCode()).substring(1):null;
+			  azimutAccount.setPhoneNumber(withoutPlus+searchBusinessUser.getPhoneNumber());
+		  }
 		  return azimutAccount;
 	  }	
 	 
@@ -835,4 +812,46 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	}
 	
+	private BusinessUser lookForuUserAtTC(BusinessUser searchedForBusinessUser,BusinessUser businessUser) throws BusinessException
+	{
+		searchedForBusinessUser=new BusinessUser();			
+		try 
+		{
+			//List<AzimutAccount> azimutAccounts=this.restManager.checkAccountMapper.wrapBaseBusinessEntity(true, this.prepareAccountRetrievalInputs(null, businessUser), null).getDataList();
+			List<AzimutAccount> azimutAccounts=this.restContract.getDataList(this.restContract.checkAccountMapper, this.prepareAccountRetrievalInputs(null, businessUser), null);
+			if(this.azimutAccountListUtility.isListPopulated(azimutAccounts))
+			{
+				searchedForBusinessUser.setBusinessFlow(BusinessFlow.SET_PASSWORD);					
+				this.userUtility.saveOldUser(businessUser.getCountryPhoneCode(),businessUser.getPhoneNumber(),azimutAccounts);
+			}
+		
+			else
+			{
+				searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
+			}
+		}
+		catch(Exception teacomputerException)
+		{
+			teacomputerException.printStackTrace();
+		
+			this.logger.info("Enter TC exception Handling");
+			if(exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(teacomputerException, ErrorCode.NO_MATCHED_CLIENT_NUMBER_EXIST))
+			{
+				this.logger.info("Go to reg");
+				searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
+			}
+			else
+			{
+				this.logger.info("Throw exception");
+				throw this.exceptionHandler.handleException(teacomputerException);
+			}
+		}
+		return searchedForBusinessUser;
+	}
+	
+	public BusinessUser addUserInteraction(String countryCode,String countryPhoneCode,String phoneNumber,String email,String body,Integer type,MultipartFile file) throws BusinessException
+	{
+		this.userUtility.addUserInteraction(countryCode, countryPhoneCode, phoneNumber, email, body, type, file);
+		return new BusinessUser();
+	}
 }

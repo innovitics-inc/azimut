@@ -6,6 +6,7 @@ public class SearchCriteria {
     private String key;
     private Object value;
     private List<Object> valueList;
+    private List<String> stringValueList;
     private SearchOperation operation;
     private String joiningColumn;
     private String rangeFrom;
@@ -41,6 +42,12 @@ public class SearchCriteria {
 	public void setValueList(List<Object> valueList) {
 		this.valueList = valueList;
 	}
+	public List<String> getStringValueList() {
+		return stringValueList;
+	}
+	public void setStringValueList(List<String> stringValueList) {
+		this.stringValueList = stringValueList;
+	}
 	public String getRangeFrom() {
 		return rangeFrom;
 	}
@@ -57,6 +64,13 @@ public class SearchCriteria {
 		super();
 		this.key = key;
 		this.valueList = valueList;
+		this.operation = operation;
+		this.joiningColumn = joiningColumn;
+	}
+	public SearchCriteria(String key, List<String> valueList, SearchOperation operation, String joiningColumn,boolean StringList) {
+		super();
+		this.key = key;
+		this.stringValueList = valueList;
 		this.operation = operation;
 		this.joiningColumn = joiningColumn;
 	}

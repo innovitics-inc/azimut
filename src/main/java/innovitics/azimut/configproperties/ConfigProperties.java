@@ -22,6 +22,9 @@ public class ConfigProperties {
     @Value("${blob.container.name.profile-pictures}")
     private String blobProfilePicturePath;
     
+    @Value("${blob.container.name.user-interactions}")
+    private String blobUserInteractionPath;
+    
     @Value("${blob.container.name.signed-pdfs}")
     private String blobSignedPdfPath;
 
@@ -180,6 +183,9 @@ public class ConfigProperties {
 	}
 	public String getBlobProfilePicturePath() {
 		return blobProfilePicturePath;
+	}
+	public String getBlobUserInteractionPath() {
+		return blobUserInteractionPath;
 	}
 	public String getBlobSignedPdfPath() {
 		return blobSignedPdfPath;

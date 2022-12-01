@@ -19,6 +19,7 @@ import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.models.user.UserDevice;
 import innovitics.azimut.models.user.UserImage;
+import innovitics.azimut.models.user.UserInteraction;
 import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.security.AES;
@@ -27,6 +28,7 @@ import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.services.user.GenderService;
 import innovitics.azimut.services.user.UserBlockageService;
 import innovitics.azimut.services.user.UserDeviceService;
+import innovitics.azimut.services.user.UserInteractionService;
 import innovitics.azimut.services.user.UserLocationService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.ParentUtility;
@@ -55,6 +57,7 @@ public class UserUtility extends ParentUtility{
 	@Autowired AES aes;
 	@Autowired UserLocationService userLocationService;
 	@Autowired UserTypeService userTypeService;
+	@Autowired UserInteractionService userInteractionService;
 	public void upsertDeviceIdAudit(User user,String deviceId,UserDevice updatedUserDevice)
 	{
 			if(updatedUserDevice!=null)
@@ -347,5 +350,41 @@ public class UserUtility extends ParentUtility{
 				
 	}
 	
-	
+	public UserInteraction addUserInteraction(String countryCode,String countryPhoneCode,String phoneNumber,String email,String body,Integer type,MultipartFile file) throws BusinessException
+	{
+		UserInteraction  userInteraction=new UserInteraction();
+		if(file!=null)
+		{
+			try 
+			{	
+				String url="";
+				String subDirectory=DateUtility.getCurrentDayMonthYear();
+				url=this.blobFileUtility.uploadFileToBlob(file,false,this.configProperties.getBlobUserInteractionPath(),subDirectory,true).getUrl();
+				userInteraction.setPrivateUrl(url);
+				userInteraction.setImageName(file.getOriginalFilename());
+				userInteraction.setImagePath(subDirectory);
+			} 	
+			catch (BusinessException | IOException e) 
+			{
+				this.logger.info("Failed to upload the file::::");
+				e.printStackTrace();
+			}
+		}
+		userInteraction.setCountryCode(countryCode);
+		userInteraction.setCountryPhoneCode(countryPhoneCode);
+		userInteraction.setPhoneNumber(phoneNumber);
+		userInteraction.setEmail(email);
+		userInteraction.setBody(body);
+		userInteraction.setType(type);
+		userInteraction.setCreatedAt(new Date());
+		userInteraction.setUpdatedAt(new Date());
+		try 
+		{
+			return this.userInteractionService.addUserInteraction(userInteraction);
+		}
+		catch(Exception exception)
+		{
+			throw this.exceptionHandler.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
+		}
+	}
 }

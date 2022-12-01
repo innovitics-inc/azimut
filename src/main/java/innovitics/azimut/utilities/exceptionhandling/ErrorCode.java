@@ -41,6 +41,7 @@ public enum ErrorCode {
 	USER_LOCATION_NOT_SAVED(2124,"Could not save the user location.",""),
 	INVALID_USER_STEP(2125,"Invalid userStep",""),
 	USER_ID_NOT_MATCHING(2126, "The User Id does not match the extracted client data.",""),
+	USER_INTERACTION_NOT_ADDED(2127, "We could not submit your request, please try again later",""),
 	PAGES_NOT_FOUND(31111,"No pages are found for this user type.",""),
 	PAGE_NOT_FOUND(31112,"Page not found.",""),
 	INVALID_ANSWER_TYPE(31113,"Invalid answer type.",""),

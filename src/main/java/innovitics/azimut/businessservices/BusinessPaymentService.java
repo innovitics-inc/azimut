@@ -153,7 +153,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 
 	private void execute(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException,Exception
 	{
-		if(StringUtility.stringsMatch(paymentTransaction!=null?paymentTransaction.getStatus():null, StringUtility.EXCLUDED_STATUSES[0]))
+		if(true/*StringUtility.stringsMatch(paymentTransaction!=null?paymentTransaction.getStatus():null, StringUtility.EXCLUDED_STATUSES[0])*/)
 		{
 			if(NumberUtility.areIntegerValuesMatching(Action.INJECT.getActionId(), paymentTransaction.getAction()))
 			{
