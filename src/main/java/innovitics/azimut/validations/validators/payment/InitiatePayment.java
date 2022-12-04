@@ -35,7 +35,7 @@ public class InitiatePayment extends BaseValidator{
 	
 		if(BooleanUtility.isFalse(businessPayment.getIsMobile()))
 		{
-			if(StringUtility.isStringPopulated(businessPayment.getReturnUrl()))
+			if(!StringUtility.isStringPopulated(businessPayment.getReturnUrl()))
 				errors.rejectValue("returnUrl", "invalidValue");
 		}
 		
