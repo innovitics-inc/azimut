@@ -12,6 +12,8 @@ import innovitics.azimut.models.user.UserDevice;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.utilities.CustomJsonRootName;
+
+
 @CustomJsonRootName(plural = "users", singular = "user")
 public class BusinessUser  extends BaseBusinessEntity{
 	

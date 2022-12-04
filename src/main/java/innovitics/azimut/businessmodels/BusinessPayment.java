@@ -17,7 +17,7 @@ public class BusinessPayment extends BusinessAzimutClient{
 	private String redirectUrl;
 	private Integer action;
 	private String returnUrl;
-	
+	private String cartId;
 	public Double getAmount() {
 		return amount;
 	}
@@ -69,6 +69,13 @@ public class BusinessPayment extends BusinessAzimutClient{
 	}
 	public void setReturnUrl(String returnUrl) {
 		this.returnUrl = returnUrl;
+	}
+	
+	public String getCartId() {
+		return cartId;
+	}
+	public void setCartId(String cartId) {
+		this.cartId = cartId;
 	}
 	public BusinessPayment() {
 		

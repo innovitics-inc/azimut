@@ -52,6 +52,8 @@ public class PaymentTransaction extends BaseEntity{
 	private Integer action;
 	
 	private Long currencyId;
+	
+	private String initiator;
 
 	public Long getId() {
 		return id;
@@ -171,6 +173,14 @@ public class PaymentTransaction extends BaseEntity{
 
 	public void setCurrencyId(Long currencyId) {
 		this.currencyId = currencyId;
+	}
+
+	public String getInitiator() {
+		return initiator;
+	}
+
+	public void setInitiator(String initiator) {
+		this.initiator = initiator;
 	}
 
 	@Override

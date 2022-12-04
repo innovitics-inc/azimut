@@ -59,7 +59,7 @@ public final class StringUtility extends ParentUtility{
 	public final static String BANK_ID="bankId";
 	public final static String ACCOUNT_ID="accountId";
 	public final static String [] INCLUDED_STATUSES=new String []{"PG","H","P","V","E","D","OTHER"};
-	public final static String EXCLUDED_STATUS="A";
+	public final static String PAYTABS_SUCCESS_STATUS="A";
 	public final static Integer [] RELEVANT_ACTIONS=new Integer []{1,2};
 	public final static List<Integer> TEACOMPUTER_VALIDITY_ERROR_CODES=Arrays.asList(ErrorCode.INVALID_CLIENT.getCode(),ErrorCode.INVALID_CLIENT_STATUS.getCode());
 	

@@ -17,6 +17,7 @@ import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
@@ -33,8 +34,7 @@ public class PaymentController extends BaseGenericRestController<BusinessPayment
 			@RequestBody BusinessPayment businessPayment) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			this.logger.info("SearchBusinessAzmiutClient::"+businessPayment);
-			return this.generateBaseGenericResponse(BusinessPayment.class,this.businessPaymentService.initiatePayment(businessPayment,this.getCurrentRequestHolder(token),language),null, null);
+			return this.generateBaseGenericResponse(BusinessPayment.class,this.businessPaymentService.initiatePayment(businessPayment,this.getCurrentRequestHolder(token),language,BooleanUtility.getValue(businessPayment.getIsMobile())),null, null);
 		}		
 		catch(BusinessException businessException)
 		{

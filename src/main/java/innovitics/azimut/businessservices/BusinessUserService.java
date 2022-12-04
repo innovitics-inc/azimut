@@ -854,4 +854,9 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		this.userUtility.addUserInteraction(countryCode, countryPhoneCode, phoneNumber, email, body, type, file);
 		return new BusinessUser();
 	}
+	public BusinessUser getUserInteractions(Integer typeId) throws BusinessException
+	{
+		this.userUtility.getUserInteractions(typeId);
+		return new BusinessUser();
+	}
 }

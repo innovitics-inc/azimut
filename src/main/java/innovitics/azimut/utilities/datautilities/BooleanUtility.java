@@ -12,4 +12,13 @@ public final class BooleanUtility {
 		return ((flag==null)||(flag!=null&&!flag));
 	}
 	
+	public static boolean getValue(Boolean flag)
+	{
+		if(flag!=null&&flag)
+			return true;
+		else if((flag==null)||(flag!=null&&!flag))
+			return false;
+		else
+			return false;
+	}
 }

@@ -31,7 +31,7 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 	protected ResponseEntity<BaseGenericResponse<PaytabsCallbackRequest>> callback(
 			@RequestParam(StringUtility.TRANSACTION_SERIAL_PARAM_NAME) String serial,
 			@RequestBody PaytabsCallbackRequest paytabsCallbackRequest
-			) throws BusinessException, IOException, IntegrationException {
+			) throws BusinessException {
 		try
 		{
 			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest,serial),null, null);
@@ -43,5 +43,22 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 		
 	}
 
-	
+	@PostMapping(value="/instantCallback",
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, 
+						MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<PaytabsCallbackRequest>> instantCallback(
+			@RequestBody PaytabsCallbackRequest paytabsCallbackRequest
+			) throws BusinessException {
+		try
+		{
+			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest,null),null, null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException);
+		}
+		
+	}
+
 }

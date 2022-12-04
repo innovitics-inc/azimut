@@ -9,7 +9,6 @@ import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.validations.validators.BaseValidator;
 @Component
 public class SaveClientBankAccountsTemporarily extends BaseValidator{
-@Autowired ArrayUtility arrayUtility;
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return BusinessAzimutClient.class.equals(clazz);

@@ -3,11 +3,13 @@ package innovitics.azimut.businessservices;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import innovitics.azimut.businessmodels.BusinessPayment;
 import innovitics.azimut.businessmodels.payment.PaytabsCallbackRequest;
 import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
+import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
@@ -18,15 +20,17 @@ import innovitics.azimut.utilities.crosslayerenums.PaymentTransactionStatus;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.validations.validators.payment.InitiatePayment;
 
 @SuppressWarnings("unchecked")
 @Service
 public class BusinessPaymentService extends AbstractBusinessService<BusinessPayment>{
 
 	@Autowired BusinessAzimutTradingService businessAzimutTradingService;
-	
-	public BusinessPayment initiatePayment(BusinessPayment businessPayment,BusinessUser tokenizedBusinessUser,String language) throws IntegrationException, BusinessException
+	@Autowired InitiatePayment initiatePayment;
+	public BusinessPayment initiatePayment(BusinessPayment businessPayment,BusinessUser tokenizedBusinessUser,String language,boolean isMobile) throws IntegrationException, BusinessException
 	{
+		this.validation.validate(businessPayment, initiatePayment, BusinessPayment.class.getName());
 		try
 		{
 			PaymentTransaction paymentTransaction=new PaymentTransaction();
@@ -37,9 +41,15 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 					businessPayment.getAction(), paymentTransaction.getParameterNames(),
 					paymentTransaction.getParameterValues());
 		
-			businessPayment=(BusinessPayment)this.restContract.getData(this.restContract.paytabsInitiatePaymentMapper, this.preparePaymentInputs(paymentTransaction,tokenizedBusinessUser,businessPayment,language), null);
-		
-			this.updateTransactionAfterGatewayCall(businessPayment, paymentTransaction);
+			if(!isMobile)
+			{
+				businessPayment=(BusinessPayment)this.restContract.getData(this.restContract.paytabsInitiatePaymentMapper, this.preparePaymentInputs(paymentTransaction,tokenizedBusinessUser,businessPayment,language), null);
+				this.updateTransactionAfterGatewayCall(businessPayment, paymentTransaction);
+			}
+			else
+			{
+				businessPayment.setCartId(this.aes.encrypt(String.valueOf(paymentTransaction.getId())+String.valueOf(businessPayment.getAmount())));
+			}
 		}
 		catch(Exception exception)
 		{
@@ -73,58 +83,99 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 	
 	public PaytabsCallbackRequest updateTransactionAfterGatewayCallback(PaytabsCallbackRequest paytabsCallbackRequest,String serial) throws BusinessException
 	{
-		PaymentTransaction paymentTransaction=new PaymentTransaction();
-		String valueToEncrypt="";
-		boolean areParamsPopulated=paytabsCallbackRequest!=null&&(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId())&&StringUtility.isStringPopulated(paytabsCallbackRequest.getCartAmount()));
-		if(areParamsPopulated)
-		{
-			String amountWithoutDecimalPoint=(StringUtility.splitStringUsingCharacter(String.valueOf(paytabsCallbackRequest.getCartAmount()), "\\.")).get(0);
-			valueToEncrypt=areParamsPopulated?amountWithoutDecimalPoint:null;
-		}
-		if(StringUtility.stringsMatch(serial,StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
-		{
-			this.checkPaymentStatus(paytabsCallbackRequest.getTransactionReference(),Double.valueOf(paytabsCallbackRequest.getCartAmount()),paytabsCallbackRequest.getPaymentResult().getResponseStatus());
+			PaymentTransaction paymentTransaction=new PaymentTransaction();
+			String valueToEncrypt="";
+			String amountWithoutDecimalPoint="";
+		
 			try 
 			{
-				if(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId()))
-				{
-					paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,Long.valueOf(paytabsCallbackRequest.getCartId()));
+			boolean areParamsPopulated=paytabsCallbackRequest!=null&&(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId())&&StringUtility.isStringPopulated(paytabsCallbackRequest.getCartAmount()));
+			if(areParamsPopulated)
+			{
+				amountWithoutDecimalPoint=(StringUtility.splitStringUsingCharacter(String.valueOf(paytabsCallbackRequest.getCartAmount()), "\\.")).get(0);
+			}
+			this.checkPaymentStatus(paytabsCallbackRequest.getTransactionReference(),Double.valueOf(paytabsCallbackRequest.getCartAmount()),paytabsCallbackRequest.getPaymentResult().getResponseStatus());
+			if(StringUtility.isStringPopulated(serial))
+			{	
+				valueToEncrypt=areParamsPopulated?amountWithoutDecimalPoint:null;
+				if(StringUtility.stringsMatch(serial,StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
+				{		
+					try 
+					{
+						paymentTransaction=	this.findPaymentTransaction(paytabsCallbackRequest,true);
+						this.populateThePaymentTransaction(paymentTransaction, paytabsCallbackRequest);
+						this.paymentService.updatePaymentTransaction(paymentTransaction);
+						this.execute(paymentTransaction);
+					}
+					catch (Exception exception)
+					{
+						throw this.handleBusinessException(exception,ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
+					}
 				}
 				else
 				{
-					paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
+					throw new BusinessException(ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
 				}
-			
-				if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentResult()!=null)
-				{
-					if(paytabsCallbackRequest.getPaymentResult().getResponseStatus()!=null)
-					{
-						paymentTransaction.setStatus(paytabsCallbackRequest.getPaymentResult().getResponseStatus());					
-					}
-					if(paytabsCallbackRequest.getPaymentResult().getResponseMessage()!=null) 
-					{
-						paymentTransaction.setMessage(paytabsCallbackRequest.getPaymentResult().getResponseMessage());
-					}
-					if(paytabsCallbackRequest.getPaymentInfo()!=null&&StringUtility.isStringPopulated(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod()))
-					{
-					paymentTransaction.setPaymentMethod(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod());
-					}
-				}
-				this.paymentService.updatePaymentTransaction(paymentTransaction);
-				this.execute(paymentTransaction);
 			}
-			catch (Exception exception)
+			else
 			{
-				throw this.handleBusinessException(exception,ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
+				try 
+				{
+					paymentTransaction=this.findPaymentTransaction(paytabsCallbackRequest,false);
+					valueToEncrypt=areParamsPopulated?(paymentTransaction!=null?String.valueOf(paymentTransaction.getId())+amountWithoutDecimalPoint:null):null;
+					if(StringUtility.stringsMatch(paytabsCallbackRequest.getCartId(),StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
+					{
+						this.populateThePaymentTransaction(paymentTransaction, paytabsCallbackRequest);
+						this.paymentService.updatePaymentTransaction(paymentTransaction);
+						this.execute(paymentTransaction);
+					}	
+				}
+				catch (Exception exception)
+				{
+					throw this.handleBusinessException(exception,ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
+				}
 			}
 		}
-		else
+		catch(Exception exception)
 		{
-			throw new BusinessException(ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
+			throw this.handleBusinessException(exception, ErrorCode.PAYMENT_FAILURE);
 		}
 		
 		return new PaytabsCallbackRequest();
 		
+	}
+	
+	private PaymentTransaction findPaymentTransaction(PaytabsCallbackRequest paytabsCallbackRequest,boolean useCartId)
+	{
+		PaymentTransaction paymentTransaction=new PaymentTransaction();
+		if(useCartId)
+		{
+			paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,Long.valueOf(paytabsCallbackRequest.getCartId()));
+		}
+		else
+		{
+			paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
+		}
+		return paymentTransaction;
+
+	}
+	private void populateThePaymentTransaction(PaymentTransaction paymentTransaction, PaytabsCallbackRequest paytabsCallbackRequest)
+	{
+		if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentResult()!=null)
+		{
+			if(paytabsCallbackRequest.getPaymentResult().getResponseStatus()!=null)
+			{
+				paymentTransaction.setStatus(paytabsCallbackRequest.getPaymentResult().getResponseStatus());					
+			}
+			if(paytabsCallbackRequest.getPaymentResult().getResponseMessage()!=null) 
+			{
+				paymentTransaction.setMessage(paytabsCallbackRequest.getPaymentResult().getResponseMessage());
+			}
+			if(paytabsCallbackRequest.getPaymentInfo()!=null&&StringUtility.isStringPopulated(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod()))
+			{
+			paymentTransaction.setPaymentMethod(paytabsCallbackRequest.getPaymentInfo().getPaymentMethod());
+			}
+		}
 	}
 	
 	private void checkPaymentStatus(String transactionReference,Double amount,String responseStatus) throws BusinessException 
@@ -151,9 +202,10 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		
 	}
 
+	
 	private void execute(PaymentTransaction paymentTransaction) throws IntegrationException, BusinessException, IOException,Exception
 	{
-		if(true/*StringUtility.stringsMatch(paymentTransaction!=null?paymentTransaction.getStatus():null, StringUtility.EXCLUDED_STATUSES[0])*/)
+		if(StringUtility.stringsMatch(paymentTransaction!=null?paymentTransaction.getStatus():null, StringUtility.PAYTABS_SUCCESS_STATUS))
 		{
 			if(NumberUtility.areIntegerValuesMatching(Action.INJECT.getActionId(), paymentTransaction.getAction()))
 			{

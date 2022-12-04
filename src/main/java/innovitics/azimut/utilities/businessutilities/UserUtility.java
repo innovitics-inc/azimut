@@ -387,4 +387,17 @@ public class UserUtility extends ParentUtility{
 			throw this.exceptionHandler.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
 		}
 	}
+	
+	public List<UserInteraction> getUserInteractions(Integer type) throws BusinessException
+	{
+		try 
+		{
+		return this.userInteractionService.getUserInteractionsByType(type);
+		}
+		catch(Exception exception)
+		{
+			this.exceptionHandler.getNullIfNonExistent(exception);
+			return new ArrayList<UserInteraction>();
+		}
+	}
 }
