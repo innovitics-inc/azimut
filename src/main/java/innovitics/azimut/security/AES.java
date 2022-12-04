@@ -27,7 +27,10 @@ public class AES {
 		return hashedValue;
 	}
 
-
+	public String ecryptWithoutSpecialCharacters(String value)
+	{
+		return this.encrypt(value).replaceAll("[-+^]*","");
+	}
 
 
 

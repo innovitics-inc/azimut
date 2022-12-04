@@ -213,4 +213,19 @@ public final class StringUtility extends ParentUtility{
 		}
 		return "";
 	}
+	
+	public static String generateAmountStringWithoutDecimalPoints(Double amount)
+	{
+		return (splitStringUsingCharacter(String.valueOf(amount), "\\.")).get(0);
+	}
+	
+	public static String generateAmountStringWithoutDecimalPoints(String amount)
+	{
+		if(isStringPopulated(amount))
+		{
+			return (splitStringUsingCharacter(amount, "\\.")).get(0);
+		}
+		else
+			return "";
+	}
 }

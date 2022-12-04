@@ -88,8 +88,8 @@ public class InitiatePaymentApiConsumer extends RestPaytabsApiConsumer<InitiateP
 	{
 		if(initiatePaymentInput!=null&&StringUtility.isStringPopulated(initiatePaymentInput.getCartId())&&initiatePaymentInput.getCartAmount()!=null)
 		{
-			String amountWithoutDecimalPoint=(StringUtility.splitStringUsingCharacter(String.valueOf(initiatePaymentInput.getCartAmount()), "\\.")).get(0);
-			return aes.encrypt(amountWithoutDecimalPoint);
+			String amountWithoutDecimalPoint=StringUtility.generateAmountStringWithoutDecimalPoints(initiatePaymentInput.getCartAmount());
+			return aes.ecryptWithoutSpecialCharacters(amountWithoutDecimalPoint);
 		}
 		else
 		{

@@ -12,7 +12,7 @@ public class BusinessPayment extends BusinessAzimutClient{
 	private Double amount;
 	private String notes;
 	private String referenceTransactionId;
-	private Long transactionId;
+	
 	private String transactionStatus;
 	private String redirectUrl;
 	private Integer action;
@@ -35,12 +35,6 @@ public class BusinessPayment extends BusinessAzimutClient{
 	}
 	public void setReferenceTransactionId(String referenceTransactionId) {
 		this.referenceTransactionId = referenceTransactionId;
-	}
-	public Long getTransactionId() {
-		return transactionId;
-	}
-	public void setTransactionId(Long transactionId) {
-		this.transactionId = transactionId;
 	}
 	public String getTransactionStatus() {
 		return transactionStatus;

@@ -1,15 +1,16 @@
 package innovitics.azimut.businessservices;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import innovitics.azimut.businessmodels.BusinessPayment;
 import innovitics.azimut.businessmodels.payment.PaytabsCallbackRequest;
 import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
-import innovitics.azimut.businessmodels.user.BusinessAzimutClient;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
@@ -28,6 +29,10 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 
 	@Autowired BusinessAzimutTradingService businessAzimutTradingService;
 	@Autowired InitiatePayment initiatePayment;
+	
+	public static final String TRANSACTION_ID_PARAM="transactionId";
+	public static final String AMOUNT_PARAM="amount";
+	
 	public BusinessPayment initiatePayment(BusinessPayment businessPayment,BusinessUser tokenizedBusinessUser,String language,boolean isMobile) throws IntegrationException, BusinessException
 	{
 		this.validation.validate(businessPayment, initiatePayment, BusinessPayment.class.getName());
@@ -44,12 +49,29 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			if(!isMobile)
 			{
 				businessPayment=(BusinessPayment)this.restContract.getData(this.restContract.paytabsInitiatePaymentMapper, this.preparePaymentInputs(paymentTransaction,tokenizedBusinessUser,businessPayment,language), null);
-				this.updateTransactionAfterGatewayCall(businessPayment, paymentTransaction);
+				this.updateTransactionAfterGatewayCall(businessPayment, paymentTransaction,PaymentTransactionStatus.PG);
 			}
 			else
-			{
-				businessPayment.setCartId(this.aes.encrypt(String.valueOf(paymentTransaction.getId())+String.valueOf(businessPayment.getAmount())));
+			{	
+				businessPayment.setCartId(this.aes.encrypt(String.valueOf(paymentTransaction.getId())+"-"+String.valueOf(StringUtility.generateAmountStringWithoutDecimalPoints(businessPayment.getAmount()))));
+				businessPayment.setTransactionId(paymentTransaction.getId());
 			}
+		}
+		catch(Exception exception)
+		{
+			throw this.exceptionHandler.handleException(exception);
+		}
+		
+		return businessPayment;
+	}
+	public BusinessPayment reconcilePayment(BusinessPayment businessPayment,BusinessUser tokenizedBusinessUser,String language,boolean isMobile) throws IntegrationException, BusinessException
+	{
+		this.validation.validate(businessPayment, initiatePayment, BusinessPayment.class.getName());
+		try
+		{
+			PaymentTransaction paymentTransaction=new PaymentTransaction();
+			paymentTransaction=this.paymentTransactionUtility.getTransactionByReferenceId(businessPayment.getReferenceTransactionId(), PaymentGateway.PAYTABS);
+			this.updateTransactionAfterGatewayCall(businessPayment, paymentTransaction,PaymentTransactionStatus.PG);
 		}
 		catch(Exception exception)
 		{
@@ -73,9 +95,9 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		return businessPayment;
 	}
 	
-	private void updateTransactionAfterGatewayCall(BusinessPayment businessPayment,PaymentTransaction paymentTransaction)
+	private void updateTransactionAfterGatewayCall(BusinessPayment businessPayment,PaymentTransaction paymentTransaction,PaymentTransactionStatus paymentTransactionStatus)
 	{
-		paymentTransaction.setStatus(PaymentTransactionStatus.PG.getStatusId());
+		paymentTransaction.setStatus(paymentTransactionStatus.getStatusId());
 		paymentTransaction.setReferenceTransactionId(businessPayment.getReferenceTransactionId());
 		this.paymentService.updatePaymentTransaction(paymentTransaction);
 		
@@ -92,20 +114,23 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			boolean areParamsPopulated=paytabsCallbackRequest!=null&&(StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId())&&StringUtility.isStringPopulated(paytabsCallbackRequest.getCartAmount()));
 			if(areParamsPopulated)
 			{
-				amountWithoutDecimalPoint=(StringUtility.splitStringUsingCharacter(String.valueOf(paytabsCallbackRequest.getCartAmount()), "\\.")).get(0);
+			   amountWithoutDecimalPoint=StringUtility.generateAmountStringWithoutDecimalPoints(paytabsCallbackRequest.getCartAmount());
 			}
 			this.checkPaymentStatus(paytabsCallbackRequest.getTransactionReference(),Double.valueOf(paytabsCallbackRequest.getCartAmount()),paytabsCallbackRequest.getPaymentResult().getResponseStatus());
 			if(StringUtility.isStringPopulated(serial))
 			{	
 				valueToEncrypt=areParamsPopulated?amountWithoutDecimalPoint:null;
-				if(StringUtility.stringsMatch(serial,StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
+				if(StringUtility.stringsMatch(serial,StringUtility.isStringPopulated(valueToEncrypt)?this.aes.ecryptWithoutSpecialCharacters(valueToEncrypt):null))
 				{		
 					try 
 					{
-						paymentTransaction=	this.findPaymentTransaction(paytabsCallbackRequest,true);
-						this.populateThePaymentTransaction(paymentTransaction, paytabsCallbackRequest);
-						this.paymentService.updatePaymentTransaction(paymentTransaction);
-						this.execute(paymentTransaction);
+						paymentTransaction=	this.findPaymentTransaction(paytabsCallbackRequest,Long.valueOf(paytabsCallbackRequest.getCartId()));
+						if(paymentTransaction!=null)
+						{
+							this.populateThePaymentTransaction(paymentTransaction, paytabsCallbackRequest);
+							this.paymentService.updatePaymentTransaction(paymentTransaction);
+							this.execute(paymentTransaction);
+						}
 					}
 					catch (Exception exception)
 					{
@@ -119,16 +144,26 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			}
 			else
 			{
+				Map<String,String> values=this.generateIdAndAmount(valueToEncrypt);
+				if(values!=null)
+				{
+					paytabsCallbackRequest.setTransactionId(Long.valueOf(values.get(TRANSACTION_ID_PARAM)));
+				}
+				
 				try 
 				{
-					paymentTransaction=this.findPaymentTransaction(paytabsCallbackRequest,false);
-					valueToEncrypt=areParamsPopulated?(paymentTransaction!=null?String.valueOf(paymentTransaction.getId())+amountWithoutDecimalPoint:null):null;
-					if(StringUtility.stringsMatch(paytabsCallbackRequest.getCartId(),StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
+					paymentTransaction=this.findPaymentTransaction(paytabsCallbackRequest,paytabsCallbackRequest.getTransactionId());
+					
+					if(paymentTransaction!=null)
 					{
-						this.populateThePaymentTransaction(paymentTransaction, paytabsCallbackRequest);
-						this.paymentService.updatePaymentTransaction(paymentTransaction);
-						this.execute(paymentTransaction);
-					}	
+						valueToEncrypt=areParamsPopulated?(paymentTransaction!=null?String.valueOf(paymentTransaction.getId())+amountWithoutDecimalPoint:null):null;
+						if(StringUtility.stringsMatch(paytabsCallbackRequest.getCartId(),StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
+						{
+							this.populateThePaymentTransaction(paymentTransaction, paytabsCallbackRequest);
+							this.paymentService.updatePaymentTransaction(paymentTransaction);
+							this.execute(paymentTransaction);
+						}
+					}
 				}
 				catch (Exception exception)
 				{
@@ -145,16 +180,24 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		
 	}
 	
-	private PaymentTransaction findPaymentTransaction(PaytabsCallbackRequest paytabsCallbackRequest,boolean useCartId)
+	private PaymentTransaction findPaymentTransaction(PaytabsCallbackRequest paytabsCallbackRequest,Long transactionId) throws BusinessException
 	{
 		PaymentTransaction paymentTransaction=new PaymentTransaction();
-		if(useCartId)
+		try 
 		{
-			paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,Long.valueOf(paytabsCallbackRequest.getCartId()));
+			if(transactionId!=null)
+			{
+				paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,transactionId);
+			}
+			else
+			{
+				paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
+			}
 		}
-		else
+		catch(Exception exception)
 		{
-			paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
+			this.exceptionHandler.getNullIfNonExistent(exception);
+			return null;
 		}
 		return paymentTransaction;
 
@@ -257,6 +300,22 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			paymentTransaction.setParameterNames(parameterNames.toString());
 			paymentTransaction.setParameterValues(parameterValues.toString());
 		}
+	}
+	
+
+	public  Map<String,String> generateIdAndAmount(String value)
+	{
+		Map<String,String> stringMap=new HashMap<String,String>();
+		if(StringUtility.isStringPopulated(value))
+		{
+			List<String>values= StringUtility.splitStringUsingCharacter(aes.decrypt(value),"-");
+			stringMap.put(TRANSACTION_ID_PARAM,values.get(0));
+			stringMap.put(AMOUNT_PARAM,values.get(1));
+			
+			return stringMap;
+		}
+		else
+			return null;
 	}
 	
 }

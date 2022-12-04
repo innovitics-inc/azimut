@@ -54,6 +54,7 @@ public class BaseBusinessEntity implements Serializable{
 	private Integer pageNumber;
 	private Integer pageSize;
 	private Boolean persist;
+	protected Long transactionId;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -289,6 +290,12 @@ public class BaseBusinessEntity implements Serializable{
 	}
 	public void setPersist(Boolean persist) {
 		this.persist = persist;
+	}
+	public Long getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(Long transactionId) {
+		this.transactionId = transactionId;
 	}
 	
 	
