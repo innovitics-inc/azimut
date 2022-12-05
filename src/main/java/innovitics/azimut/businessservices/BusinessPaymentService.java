@@ -105,6 +105,8 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 	
 	public PaytabsCallbackRequest updateTransactionAfterGatewayCallback(PaytabsCallbackRequest paytabsCallbackRequest,String serial) throws BusinessException
 	{
+		
+			this.logger.info("Serial:::"+serial);
 			PaymentTransaction paymentTransaction=new PaymentTransaction();
 			String valueToEncrypt="";
 			String amountWithoutDecimalPoint="";
@@ -118,7 +120,8 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			}
 			this.checkPaymentStatus(paytabsCallbackRequest.getTransactionReference(),Double.valueOf(paytabsCallbackRequest.getCartAmount()),paytabsCallbackRequest.getPaymentResult().getResponseStatus());
 			if(StringUtility.isStringPopulated(serial))
-			{	
+			{
+				this.logger.info("Serial populated:::");
 				valueToEncrypt=areParamsPopulated?amountWithoutDecimalPoint:null;
 				if(StringUtility.stringsMatch(serial,StringUtility.isStringPopulated(valueToEncrypt)?this.aes.ecryptWithoutSpecialCharacters(valueToEncrypt):null))
 				{		
@@ -144,7 +147,8 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			}
 			else
 			{
-				Map<String,String> values=this.generateIdAndAmount(valueToEncrypt);
+				this.logger.info("Serial Not populated:::");
+				Map<String,String> values=this.generateIdAndAmount(paytabsCallbackRequest.getCartId());
 				if(values!=null)
 				{
 					paytabsCallbackRequest.setTransactionId(Long.valueOf(values.get(TRANSACTION_ID_PARAM)));
@@ -156,7 +160,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 					
 					if(paymentTransaction!=null)
 					{
-						valueToEncrypt=areParamsPopulated?(paymentTransaction!=null?String.valueOf(paymentTransaction.getId())+amountWithoutDecimalPoint:null):null;
+						valueToEncrypt=areParamsPopulated?(paymentTransaction!=null?String.valueOf(paymentTransaction.getId())+"-"+amountWithoutDecimalPoint:null):null;
 						if(StringUtility.stringsMatch(paytabsCallbackRequest.getCartId(),StringUtility.isStringPopulated(valueToEncrypt)?this.aes.encrypt(valueToEncrypt):null))
 						{
 							this.populateThePaymentTransaction(paymentTransaction, paytabsCallbackRequest);
@@ -187,10 +191,12 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		{
 			if(transactionId!=null)
 			{
+				this.logger.info("Get By Id");
 				paymentTransaction=this.paymentService.getTransactionById(transactionId);
 			}
 			else
 			{
+				this.logger.info("Get By Reference Id");
 				paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS);
 			}
 		}
@@ -250,6 +256,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 	{
 		if(StringUtility.stringsMatch(paymentTransaction!=null?paymentTransaction.getStatus():null, StringUtility.PAYTABS_SUCCESS_STATUS))
 		{
+			this.logger.info("Payment Succeeded:::");
 			if(NumberUtility.areIntegerValuesMatching(Action.INJECT.getActionId(), paymentTransaction.getAction()))
 			{
 				this.inject(paymentTransaction);
@@ -305,10 +312,12 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 
 	public  Map<String,String> generateIdAndAmount(String value)
 	{
+		this.logger.info("Value:::"+value);
 		Map<String,String> stringMap=new HashMap<String,String>();
 		if(StringUtility.isStringPopulated(value))
 		{
 			List<String>values= StringUtility.splitStringUsingCharacter(aes.decrypt(value),"-");
+			this.logger.info("Values:::"+StringUtility.splitStringUsingCharacter(aes.decrypt(value),"-"));	
 			stringMap.put(TRANSACTION_ID_PARAM,values.get(0));
 			stringMap.put(AMOUNT_PARAM,values.get(1));
 			

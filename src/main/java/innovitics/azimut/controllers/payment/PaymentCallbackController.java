@@ -48,6 +48,7 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 						MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<PaytabsCallbackRequest>> instantCallback(
+			
 			@RequestBody PaytabsCallbackRequest paytabsCallbackRequest
 			) throws BusinessException {
 		try
