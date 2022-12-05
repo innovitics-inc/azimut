@@ -14,6 +14,7 @@ public class BusinessPayment extends BusinessAzimutClient{
 	private String referenceTransactionId;
 	
 	private String transactionStatus;
+	private String statusMessage;
 	private String redirectUrl;
 	private Integer action;
 	private String returnUrl;
@@ -41,6 +42,13 @@ public class BusinessPayment extends BusinessAzimutClient{
 	}
 	public void setTransactionStatus(String transactionStatus) {
 		this.transactionStatus = transactionStatus;
+	}
+	
+	public String getStatusMessage() {
+		return statusMessage;
+	}
+	public void setStatusMessage(String statusMessage) {
+		this.statusMessage = statusMessage;
 	}
 	public String getRedirectUrl() {
 		return redirectUrl;

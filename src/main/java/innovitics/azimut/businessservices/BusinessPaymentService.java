@@ -22,6 +22,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.validations.validators.payment.InitiatePayment;
+import innovitics.azimut.validations.validators.payment.QueryPayment;
 
 @SuppressWarnings("unchecked")
 @Service
@@ -29,6 +30,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 
 	@Autowired BusinessAzimutTradingService businessAzimutTradingService;
 	@Autowired InitiatePayment initiatePayment;
+	@Autowired QueryPayment queryPayment;
 	
 	public static final String TRANSACTION_ID_PARAM="transactionId";
 	public static final String AMOUNT_PARAM="amount";
@@ -64,20 +66,19 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		
 		return businessPayment;
 	}
-	public BusinessPayment reconcilePayment(BusinessPayment businessPayment,BusinessUser tokenizedBusinessUser,String language,boolean isMobile) throws IntegrationException, BusinessException
+	public BusinessPayment queryPayment(BusinessPayment businessPayment,BusinessUser tokenizedBusinessUser,String language,boolean isMobile) throws IntegrationException, BusinessException
 	{
-		this.validation.validate(businessPayment, initiatePayment, BusinessPayment.class.getName());
-		try
-		{
-			PaymentTransaction paymentTransaction=new PaymentTransaction();
-			paymentTransaction=this.paymentTransactionUtility.getTransactionByReferenceId(businessPayment.getReferenceTransactionId(), PaymentGateway.PAYTABS);
-			this.updateTransactionAfterGatewayCall(businessPayment, paymentTransaction,PaymentTransactionStatus.PG);
-		}
-		catch(Exception exception)
-		{
-			throw this.exceptionHandler.handleException(exception);
-		}
 		
+			this.validation.validate(businessPayment, queryPayment, BusinessPayment.class.getName());
+			PaymentTransaction paymentTransaction=new PaymentTransaction();
+			paymentTransaction=this.paymentTransactionUtility.getTransactionByUser(tokenizedBusinessUser.getId(),businessPayment.getReferenceTransactionId(), PaymentGateway.PAYTABS);
+			
+			if(paymentTransaction!=null)
+			{
+				businessPayment.setTransactionStatus(PaymentTransactionStatus.getById(paymentTransaction.getStatus()).getStatusId());
+				businessPayment.setStatusMessage(PaymentTransactionStatus.getById(paymentTransaction.getStatus()).getStatus());
+			}
+
 		return businessPayment;
 	}
 	

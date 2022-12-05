@@ -5,8 +5,8 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 public enum PaymentTransactionStatus {
 
 	
-	I("I","Transaction Pending at Azimut","العملية معلقة"),
-	PG("PG","Transaction Pending Paytabs","العملية معلقة"),
+	I("I","Transaction initiated but pending at the merchant.","العملية معلقة"),
+	PG("PG","Transaction pending at the payment gateway","العملية معلقة"),
 	A("A","Payment Authorized","تمت العملية بنجاح"),
 	H("H","Transaction on Hold (Authorised but on hold for further anti-fraud review)",""),
 	P("P","Transaction Pending (for refunds)",""),

@@ -109,6 +109,19 @@ public class PaymentTransactionUtility extends ParentUtility{
 		
 		return businessPaymentTransactions;
 	}
+	public PaymentTransaction getTransactionByUser(Long userId,String referenceTransactionId,PaymentGateway paymentGateway) throws BusinessException
+	{
+		try 
+		{
+	
+		return this.paymentService.getTransactionByUser(userId,referenceTransactionId,paymentGateway);
+		}
+		catch(Exception exception)
+		{
+			 this.exceptionHandler.getNullIfNonExistent(exception);
+			 return null;
+		}
+	}
 	
 	private	List<PaymentTransaction> getTransactionByUser(Long userId,String[] includedStatuses,PaymentGateway paymentGateway,Integer[] actions) throws BusinessException
 	{
