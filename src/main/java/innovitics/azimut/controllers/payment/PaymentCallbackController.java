@@ -48,11 +48,12 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 						MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<PaytabsCallbackRequest>> instantCallback(
-			
+			@RequestHeader(name="Signature",required=false) String  signature,
 			@RequestBody PaytabsCallbackRequest paytabsCallbackRequest
 			) throws BusinessException {
 		try
 		{
+			this.logger.info("Signature:::"+signature);
 			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest,null),null, null);
 		}		
 		catch(BusinessException businessException)

@@ -15,8 +15,8 @@ import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.fileutilities.PropertyTagFinder;
 
 @Component
-public class TeaComputersFundPriceJob/* extends ParentJob*/{
-	/*@Autowired BusinessFundsService businessFundsService;
+public class TeaComputersFundPriceJob extends ParentJob{
+	@Autowired BusinessFundsService businessFundsService;
 	
 	@Override
 	@Scheduled(fixedDelayString = "${tea.computers.job.delay.seconds}", timeUnit = TimeUnit.SECONDS)
@@ -39,5 +39,5 @@ public class TeaComputersFundPriceJob/* extends ParentJob*/{
 	public String getName() {
 		return this.getClass().getName();
 	}
-	*/
+	
 }

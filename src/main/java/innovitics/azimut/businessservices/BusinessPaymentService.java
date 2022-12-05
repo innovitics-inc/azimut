@@ -210,6 +210,9 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 	}
 	private void populateThePaymentTransaction(PaymentTransaction paymentTransaction, PaytabsCallbackRequest paytabsCallbackRequest)
 	{
+		
+		paymentTransaction.setReferenceTransactionId(paytabsCallbackRequest.getTransactionReference());
+		
 		if(paymentTransaction!=null&&paytabsCallbackRequest!=null&&paytabsCallbackRequest.getPaymentResult()!=null)
 		{
 			if(paytabsCallbackRequest.getPaymentResult().getResponseStatus()!=null)
