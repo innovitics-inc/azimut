@@ -1,7 +1,7 @@
 package innovitics.azimut.utilities.exceptionhandling;
 
 public enum ErrorCode {
-	NO_MATCHED_CLIENT_NUMBER_EXIST(79,"",""),
+	NO_MATCHED_CLIENT_NUMBER_EXIST(79,"Invalid Username or password.",""),
 	INVALID_CLIENT(185,"",""),
 	INVALID_CLIENT_STATUS(79,"",""),
 	CONNECTION_TIMEOUT(994,"Could not perform the operation, please try again later.",""),

@@ -40,7 +40,7 @@ public class CheckAccountMapper extends RestMapper<GetClientAccountsInput, GetCl
 	GetClientAccountsInput createInput(AzimutAccount azimutAccount) 
 	{
 		GetClientAccountsInput input =new GetClientAccountsInput();
-		input.setMobile(StringUtility.ZERO+azimutAccount.getPhoneNumber());
+		input.setMobile(azimutAccount.getPhoneNumber());
 		input.setIdNumber(azimutAccount.getUserId());
 		input.setIdTypeId(azimutAccount.getIdType());
 		return input;

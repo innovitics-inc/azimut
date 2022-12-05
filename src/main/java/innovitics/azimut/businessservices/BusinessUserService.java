@@ -804,9 +804,16 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			}
 			catch(Exception exception)
 			{
-				this.logger.info("Could not retrieve the azimut bank accounts");
 				exception.printStackTrace();
-				throw this.exceptionHandler.handleException(exception);
+				this.logger.info("Could not retrieve the azimut bank accounts");
+				if(this.exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(exception, ErrorCode.NO_MATCHED_CLIENT_NUMBER_EXIST))
+				{
+					throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, null);
+				}
+				else
+				{
+					throw this.exceptionHandler.handleException(exception);
+				}
 			}
 		}
 	

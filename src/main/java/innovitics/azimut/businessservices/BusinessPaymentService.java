@@ -76,7 +76,17 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			if(paymentTransaction!=null)
 			{
 				businessPayment.setTransactionStatus(PaymentTransactionStatus.getById(paymentTransaction.getStatus()).getStatusId());
-				businessPayment.setStatusMessage(PaymentTransactionStatus.getById(paymentTransaction.getStatus()).getStatus());
+				if(StringUtility.isStringPopulated(language))
+				{
+					if(StringUtility.stringsMatch(language, StringUtility.ENGLISH))
+					{
+						businessPayment.setStatusMessage(PaymentTransactionStatus.getById(paymentTransaction.getStatus()).getStatus());
+					}
+					else if(StringUtility.stringsMatch(language, StringUtility.ARABIC))
+					{
+						businessPayment.setStatusMessage(PaymentTransactionStatus.getById(paymentTransaction.getStatus()).getStatusAr());
+					}
+				}
 			}
 
 		return businessPayment;
