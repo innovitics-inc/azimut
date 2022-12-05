@@ -187,7 +187,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 		{
 			if(transactionId!=null)
 			{
-				paymentTransaction=this.paymentService.getTransactionByReferenceId(paytabsCallbackRequest.getTransactionReference(), PaymentGateway.PAYTABS,transactionId);
+				paymentTransaction=this.paymentService.getTransactionById(transactionId);
 			}
 			else
 			{
