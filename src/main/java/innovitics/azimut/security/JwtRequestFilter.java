@@ -32,6 +32,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private JwtUtil jwtUtil;
 	
 	private static final String AUTHORIZATION_HEADER = "Authorization";
+	private static final String SIGNATURE_HEADER = "Signature";
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -45,12 +46,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			long startTime = System.currentTimeMillis();
 
 			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
+			final String signatureHeader = request.getHeader(SIGNATURE_HEADER);
 			String username = null;
 			String jwt = null;
 
 			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 				jwt = authorizationHeader.substring(7);
 				username = jwtUtil.extractUsername(jwt);
+			}
+			
+			if (StringUtility.isStringPopulated(signatureHeader)) 
+			{
+				this.logger.info("Signature header:::"+signatureHeader);
+				String payload=StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),
+						request.getCharacterEncoding());
+				String hashedPayload=this.jwtUtil.aes.hashString(payload);
+				this.logger.info("hashedPayload:::"+hashedPayload);
+				request.setAttribute("hashedPayload",hashedPayload);
 			}
 
 			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -74,7 +86,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			    
 			//filterChain.doFilter(request, response);
-			
+			    request.setAttribute("payload",  StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),
+						request.getCharacterEncoding()));
 			filterChain.doFilter(requestWrapper, responseWrapper);
 
 			this.logger.info("Method:::"+requestWrapper.getMethod());
