@@ -41,16 +41,14 @@ public class GenericFilter implements Filter {
 		        
 		        byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());
 		 
-		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());
-		    
-		        if(signatureHeader!=null&&StringUtility.stringsDontMatch(signatureHeader, hmacUtil.generateHmac256(signatureHeader,this.configProperties.getPaytabsServerKey())))
+		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());		        
+		        logger.info("REQUEST:::"+jsonRequest);
+			    
+		        if(signatureHeader!=null&&StringUtility.stringsDontMatch(signatureHeader, hmacUtil.generateHmac256(jsonRequest,this.configProperties.getPaytabsServerKey())))
 		        {
 		        	throw new BusinessException(ErrorCode.INVALID_SIGNATURE);
 		        }
 		        
-		        
-		        logger.info("REQUEST:::"+jsonRequest);
-		 
 		        chain.doFilter(wrapper, response);
 		        return;
 			} 
