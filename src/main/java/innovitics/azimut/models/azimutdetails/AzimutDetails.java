@@ -1,38 +1,17 @@
 package innovitics.azimut.models.azimutdetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import innovitics.azimut.models.BaseEntity;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Entity
-@Table(name="azimut_details")
-
-public class AzimutDetails extends BaseEntity{
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-
-	private Long id;
+public class AzimutDetails {
+	
 	private String getDirections;
 	private String contactUs;
 	private String workingDays;
-	private String workingHours;
 	private String longt;
 	private String lat;
-	
-	
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private String workingHours;
+	private String email;
+	private String phoneNumber;
+	private String whatsappNumber;
+	private String whatsappLink;
 	public String getGetDirections() {
 		return getDirections;
 	}
@@ -44,13 +23,6 @@ public class AzimutDetails extends BaseEntity{
 	}
 	public void setContactUs(String contactUs) {
 		this.contactUs = contactUs;
-	}
-	
-	public String getWorkingHours() {
-		return workingHours;
-	}
-	public void setWorkingHours(String workingHours) {
-		this.workingHours = workingHours;
 	}
 	public String getWorkingDays() {
 		return workingDays;
@@ -70,6 +42,39 @@ public class AzimutDetails extends BaseEntity{
 	public void setLat(String lat) {
 		this.lat = lat;
 	}
+	public String getWorkingHours() {
+		return workingHours;
+	}
+	public void setWorkingHours(String workingHours) {
+		this.workingHours = workingHours;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public String getWhatsappNumber() {
+		return whatsappNumber;
+	}
+	public void setWhatsappNumber(String whatsappNumber) {
+		this.whatsappNumber = whatsappNumber;
+	}
+	public String getWhatsappLink() {
+		return whatsappLink;
+	}
+	public void setWhatsappLink(String whatsappLink) {
+		this.whatsappLink = whatsappLink;
+	}
+	
+	
+	
 	
 	
 }

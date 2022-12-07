@@ -7,6 +7,7 @@ import java.util.Map;
 import innovitics.azimut.businessmodels.BusinessTransaction;
 import innovitics.azimut.businessmodels.funds.BusinessClientFund;
 import innovitics.azimut.models.azimutdetails.AzimutDetails;
+import innovitics.azimut.models.azimutdetails.AzimutDetailsLookup;
 import innovitics.azimut.models.teacomputers.Currency;
 import innovitics.azimut.utilities.CustomJsonRootName;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
