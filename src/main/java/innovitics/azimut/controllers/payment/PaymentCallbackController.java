@@ -44,14 +44,6 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 			this.logger.info("Signature:::"+signature);
 			String jsonString= StringUtility.convertToJson(paytabsCallbackRequest);
 			this.logger.info("Json String:::"+jsonString);
-
-			try {
-				String hashedString=this.hmacUtility.generateHmac256(jsonString,this.configProperties.getPaytabsServerKey());
-				this.logger.info("hashed String:::"+hashedString);
-			} catch (InvalidKeyException | NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
-			
 			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest,serial),null, null);
 		}		
 		catch(BusinessException businessException)

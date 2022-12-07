@@ -94,9 +94,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			
 			this.logger.info("URL:::"+requestWrapper.getRequestURI());
 			
-		    String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),"UTF-8");
-			this.logger.info("REQUEST:::"+requestBody);	
+		    String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),requestWrapper.getCharacterEncoding());
+			this.logger.info("REQUEST:::"+requestBody);
 			this.logger.info("Character Encoding:::"+requestWrapper.getCharacterEncoding());
+			
+			HmacUtil hmacUtility=new HmacUtil();
+			this.logger.info("hashed String:::::"+hmacUtility.generateHmac256(requestBody,this.configProperties.getPaytabsServerKey()));
 			
 			
 			String responseBody = StringUtility.getStringValue(responseWrapper.getContentAsByteArray(),response.getCharacterEncoding());
@@ -132,31 +135,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
-	
-	/*
-	String generateHmacSignature(String signatureHeader,String payload,HttpServletRequest request)
-	{
-		String hashedPayload="";
-		if (StringUtility.isStringPopulated(signatureHeader)) 
-		{
-			this.logger.info("Signature header:::"+signatureHeader);
-			this.logger.info("Payload:::"+payload);
-			try 
-			{
-				hashedPayload = this.hmacUtility.generateHmac256(payload,this.configProperties.getPaytabsServerKey());
-				this.logger.info("Payload:::"+payload);
-				this.logger.info("hashedPayload:::"+hashedPayload);
-				request.setAttribute("hashedPayload",hashedPayload);
-			} 
-			catch (InvalidKeyException | NoSuchAlgorithmException e) 
-			{
-				this.logger.info("Could not generate the hmac signature");
-				e.printStackTrace();
-				return hashedPayload;
-			}
-			
-		}
-		return signatureHeader;
-	}
-	*/
+
 }
