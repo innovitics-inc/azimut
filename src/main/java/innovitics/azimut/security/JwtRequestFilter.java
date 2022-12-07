@@ -32,8 +32,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private MyUserDetailsService myUserDetailsService;
 	@Autowired 
 	private JwtUtil jwtUtil;
-	@Autowired
-	private HmacUtility hmacUtility;
 	@Autowired ConfigProperties configProperties;
 	
 	private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -96,12 +94,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			
 			this.logger.info("URL:::"+requestWrapper.getRequestURI());
 			
-		    String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),
-					request.getCharacterEncoding());
+		    String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),"UTF-8");
 			this.logger.info("REQUEST:::"+requestBody);	
+			this.logger.info("Character Encoding:::"+requestWrapper.getCharacterEncoding());
 			
-			String responseBody = StringUtility.getStringValue(responseWrapper.getContentAsByteArray(),
-					response.getCharacterEncoding());
+			
+			String responseBody = StringUtility.getStringValue(responseWrapper.getContentAsByteArray(),response.getCharacterEncoding());
 			long timeTaken = System.currentTimeMillis() - startTime;
 			this.logger.info("RESPONSE:::"+responseBody);
 			responseWrapper.copyBodyToResponse();
@@ -135,7 +133,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
     }
 	
-	
+	/*
 	String generateHmacSignature(String signatureHeader,String payload,HttpServletRequest request)
 	{
 		String hashedPayload="";
@@ -160,4 +158,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		}
 		return signatureHeader;
 	}
+	*/
 }

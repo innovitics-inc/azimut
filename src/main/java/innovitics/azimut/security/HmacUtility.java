@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HmacUtility {
 	
-	String generateHmac256(String message, String key) throws InvalidKeyException, NoSuchAlgorithmException {
+	public String generateHmac256(String message, String key) throws InvalidKeyException, NoSuchAlgorithmException {
         try 
         {
         	byte[] bytes = hmac("HmacSHA256", key.getBytes(), message.getBytes());

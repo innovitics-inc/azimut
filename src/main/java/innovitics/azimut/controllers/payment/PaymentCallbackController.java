@@ -1,6 +1,8 @@
 package innovitics.azimut.controllers.payment;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,22 +20,38 @@ import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.security.HmacUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @Controller
 @RequestMapping("/api/paytabs")
 public class PaymentCallbackController extends BaseGenericRestController<PaytabsCallbackRequest, String> {
 	@Autowired BusinessPaymentService businessPaymentService;
+	@Autowired HmacUtility hmacUtility;
+
 	@PostMapping(value="/callback",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, 
 						MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<PaytabsCallbackRequest>> callback(
+			@RequestHeader(name="Signature",required=false) String  signature,
 			@RequestParam(StringUtility.TRANSACTION_SERIAL_PARAM_NAME) String serial,
 			@RequestBody PaytabsCallbackRequest paytabsCallbackRequest
 			) throws BusinessException {
 		try
 		{
+			
+			this.logger.info("Signature:::"+signature);
+			String jsonString= StringUtility.convertToJson(paytabsCallbackRequest);
+			this.logger.info("Json String:::"+jsonString);
+
+			try {
+				String hashedString=this.hmacUtility.generateHmac256(jsonString,this.configProperties.getPaytabsServerKey());
+				this.logger.info("hashed String:::"+hashedString);
+			} catch (InvalidKeyException | NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			
 			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest,serial),null, null);
 		}		
 		catch(BusinessException businessException)

@@ -10,6 +10,10 @@ public class PaymentResult {
     	 private String responseCode;
 	   	 @JsonProperty("response_message")
     	 private String responseMessage;
+	   	 @JsonProperty("cvv_result")
+	   	 private String cvvResult;
+	   	 @JsonProperty("avs_result")
+	   	 private String avsResult;
 	   	 @JsonProperty("transaction_time")
     	 private String responseTime;
     	 
@@ -36,6 +40,18 @@ public class PaymentResult {
 		}
 		public void setResponseTime(String responseTime) {
 			this.responseTime = responseTime;
+		}
+		public String getCvvResult() {
+			return cvvResult;
+		}
+		public void setCvvResult(String cvvResult) {
+			this.cvvResult = cvvResult;
+		}
+		public String getAvsResult() {
+			return avsResult;
+		}
+		public void setAvsResult(String avsResult) {
+			this.avsResult = avsResult;
 		}
 	   	 
 	   	 

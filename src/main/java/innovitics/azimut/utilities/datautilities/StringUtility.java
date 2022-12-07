@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -106,7 +107,24 @@ public final class StringUtility extends ParentUtility{
 
         return mapper.writeValueAsString(baseGenericResponse);
     }
-	
+	public static String convertToJson(Object object) {
+		String json="";   
+		try 
+		{
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.setSerializationInclusion(Include.NON_NULL);
+			objectMapper.setSerializationInclusion(Include.NON_ABSENT);
+			objectMapper.setSerializationInclusion(Include.NON_EMPTY);
+			
+			json = objectMapper.writeValueAsString(object);
+		}
+		catch(Exception exception)
+		{
+			logger.info("Could not stringfy");
+			exception.printStackTrace();
+		}
+        return json;
+    }	
 	public static String addLeadingAndTrailingSpaces(String string)
 	{
 		return " "+string+" ";
