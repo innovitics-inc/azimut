@@ -3,12 +3,11 @@ package innovitics.azimut.security;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
+import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,10 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
@@ -35,7 +35,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired ConfigProperties configProperties;
 	
 	private static final String AUTHORIZATION_HEADER = "Authorization";
-	private static final String SIGNATURE_HEADER = "Signature";
 	private static final String CONTENT_TYPE = "Content-Type";
 	
 	@Override
@@ -50,7 +49,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			long startTime = System.currentTimeMillis();
 
 			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
-			final String signatureHeader = request.getHeader(SIGNATURE_HEADER);
 			final String contentTypeHeader = request.getHeader(CONTENT_TYPE);
 			
 			
@@ -85,8 +83,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			
 			this.logger.info("authorization header:::"+authorizationHeader);    
-			this.logger.info("signature header:::"+signatureHeader);    
 			this.logger.info("content type:::"+contentTypeHeader);
+			
 			//filterChain.doFilter(request, response);			  
 			filterChain.doFilter(requestWrapper, responseWrapper);
 
@@ -94,12 +92,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			
 			this.logger.info("URL:::"+requestWrapper.getRequestURI());
 			
-		    String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),requestWrapper.getCharacterEncoding());
+		    /*String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),requestWrapper.getCharacterEncoding());
 			this.logger.info("REQUEST:::"+requestBody);
 			this.logger.info("Character Encoding:::"+requestWrapper.getCharacterEncoding());
-			
-			HmacUtil hmacUtility=new HmacUtil();
-			this.logger.info("hashed String:::::"+hmacUtility.generateHmac256(requestBody,this.configProperties.getPaytabsServerKey()));
+			*/
+			//HmacUtil hmacUtility=new HmacUtil();
+			//this.logger.info("hashed String:::::"+hmacUtility.generateHmac256(requestBody,this.configProperties.getPaytabsServerKey()));
 			
 			
 			String responseBody = StringUtility.getStringValue(responseWrapper.getContentAsByteArray(),response.getCharacterEncoding());
@@ -135,5 +133,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
-
 }
