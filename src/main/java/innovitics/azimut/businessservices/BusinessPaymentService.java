@@ -55,7 +55,8 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			}
 			else
 			{	
-				businessPayment.setCartId(this.aes.encrypt(String.valueOf(paymentTransaction.getId())+"-"+String.valueOf(StringUtility.generateAmountStringWithoutDecimalPoints(businessPayment.getAmount()))));
+				businessPayment.setCartId(String.valueOf(paymentTransaction.getId()));
+				//businessPayment.setCartId(this.aes.encrypt(String.valueOf(paymentTransaction.getId())+"-"+String.valueOf(StringUtility.generateAmountStringWithoutDecimalPoints(businessPayment.getAmount()))));
 				businessPayment.setTransactionId(paymentTransaction.getId());
 			}
 		}
@@ -159,10 +160,15 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			else
 			{
 				this.logger.info("Serial Not populated:::");
-				Map<String,String> values=this.generateIdAndAmount(paytabsCallbackRequest.getCartId());
+				/*Map<String,String> values=this.generateIdAndAmount(paytabsCallbackRequest.getCartId());
 				if(values!=null)
 				{
 					paytabsCallbackRequest.setTransactionId(Long.valueOf(values.get(TRANSACTION_ID_PARAM)));
+				}
+				*/
+				if(paytabsCallbackRequest!=null&&StringUtility.isStringPopulated(paytabsCallbackRequest.getCartId())) 
+				{
+					paytabsCallbackRequest.setTransactionId(Long.valueOf(paytabsCallbackRequest.getCartId()));
 				}
 				
 				try 

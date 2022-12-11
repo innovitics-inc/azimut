@@ -20,14 +20,12 @@ import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
-import innovitics.azimut.security.HmacUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @Controller
 @RequestMapping("/api/paytabs")
 public class PaymentCallbackController extends BaseGenericRestController<PaytabsCallbackRequest, String> {
 	@Autowired BusinessPaymentService businessPaymentService;
-	@Autowired HmacUtility hmacUtility;
 
 	@PostMapping(value="/callback",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, 
@@ -40,10 +38,6 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 			) throws BusinessException {
 		try
 		{
-			
-			this.logger.info("Signature:::"+signature);
-			String jsonString= StringUtility.convertToJson(paytabsCallbackRequest);
-			this.logger.info("Json String:::"+jsonString);
 			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest,serial),null, null);
 		}		
 		catch(BusinessException businessException)

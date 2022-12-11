@@ -103,25 +103,25 @@ public class AzimutDataLookUpService extends AbstractService<AzimutDataLookup, S
 				String azimutDetailsLookupKey=azimutDetailsLookup.getKeyString();
 				String azimutDetailsLookupValue=azimutDetailsLookup.getValueString();
 
-				if(StringUtility.stringsMatch(GET_DIRECTIONS, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(GET_DIRECTIONS, azimutDetailsLookupKey))
 				azimutDetails.setGetDirections(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(CONTACT_US, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(CONTACT_US, azimutDetailsLookupKey))
 				azimutDetails.setContactUs(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(WORKING_DAYS, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(WORKING_DAYS, azimutDetailsLookupKey))
 				azimutDetails.setWorkingDays(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(WORKING_HOURS, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(WORKING_HOURS, azimutDetailsLookupKey))
 				azimutDetails.setWorkingHours(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(LONGITUTE, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(LONGITUTE, azimutDetailsLookupKey))
 				azimutDetails.setLongt(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(LATITUDE, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(LATITUDE, azimutDetailsLookupKey))
 				azimutDetails.setLat(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(EMAIL, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(EMAIL, azimutDetailsLookupKey))
 				azimutDetails.setEmail(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(PHONE_NUMBER, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(PHONE_NUMBER, azimutDetailsLookupKey))
 				azimutDetails.setPhoneNumber(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(WHATSAPP_NUMBER, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(WHATSAPP_NUMBER, azimutDetailsLookupKey))
 				azimutDetails.setWhatsappNumber(azimutDetailsLookupValue);
-				if(StringUtility.stringsMatch(WHATSAPP_LINK, azimutDetailsLookupKey));
+				if(StringUtility.stringsMatch(WHATSAPP_LINK, azimutDetailsLookupKey))
 				azimutDetails.setWhatsappLink(azimutDetailsLookupValue);
 			}
 		}	

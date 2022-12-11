@@ -34,16 +34,13 @@ public class GenericFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)  {       
         RequestWrapper wrapper;
 		try {
-			wrapper = new RequestWrapper((HttpServletRequest) request);
-			 String signatureHeader = wrapper.getHeader(SIGNATURE_HEADER);
-				this.logger.info("signature header:::"+signatureHeader);    
-
-		        
+			
+				wrapper = new RequestWrapper((HttpServletRequest) request);
+				String signatureHeader = wrapper.getHeader(SIGNATURE_HEADER);
+				this.logger.info("signature header:::"+signatureHeader);
 		        byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());
-		 
 		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());		        
 		        logger.info("REQUEST:::"+jsonRequest);
-			    
 		        if(signatureHeader!=null&&StringUtility.stringsDontMatch(signatureHeader, hmacUtil.generateHmac256(jsonRequest,this.configProperties.getPaytabsServerKey())))
 		        {
 		        	throw new BusinessException(ErrorCode.INVALID_SIGNATURE);
@@ -51,22 +48,20 @@ public class GenericFilter implements Filter {
 		        
 		        chain.doFilter(wrapper, response);
 		        return;
-			} 
-			
+			} 			
 			catch (IOException e) 
 			{
 				e.printStackTrace();
-			} catch (BusinessException e) 
+			} 
+			catch (BusinessException e) 
 			{
 				e.printStackTrace();
 				setErrorResponse(HttpStatus.BAD_REQUEST,(HttpServletResponse)response,ErrorCode.INVALID_SIGNATURE);
-			} catch (ServletException e) 
+			} 
+			catch (ServletException e) 
 			{
 				e.printStackTrace();
 			}
- 
-       
- 
     }
  
     public void setErrorResponse(HttpStatus status, HttpServletResponse response,ErrorCode errorCode)
