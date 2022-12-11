@@ -939,7 +939,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				
 				businessAzimutClient.setLastTransactionDate(sorting? unsortedTransactions.get(lastIndex-1).getTrxDate():unsortedTransactions.get(0).getTrxDate());
 				String oldLastTransactionDate=businessAzimutClient.getLastTransactionDate();
-				businessAzimutClient.setLastTransactionDate(DateUtility.changeStringDateFormat(oldLastTransactionDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
+				businessAzimutClient.setLastTransactionDate(DateUtility.changeStringDateFormat(oldLastTransactionDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM, yyyy")));
 				
 				for(BusinessTransaction  businessTransaction:unsortedTransactions)
 				{
@@ -948,7 +948,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 						this.logger.info("business Transaction:::"+ businessTransaction);
 							
 						 String oldDate=businessTransaction.getTrxDate();
-						 businessTransaction.setTrxDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
+						 businessTransaction.setTrxDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM, yyyy")));
 											
 					}
 				}
@@ -997,7 +997,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				  {
 					  
 					  if(StringUtility.isStringPopulated(businessFundPrice.getPriceDate()))
-					  businessClientFund.setLastPriceUpdateDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(), new SimpleDateFormat("yyyy-MM-dd"), new SimpleDateFormat("dd MMM,yyyy")));
+					  businessClientFund.setLastPriceUpdateDate(DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(), new SimpleDateFormat("yyyy-MM-dd"), new SimpleDateFormat("dd MMM, yyyy")));
 					 
 					  
 					  businessClientFund.setLogo(businessFundPrice.getLogo());
@@ -1063,7 +1063,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		 {
 			 String oldDate=businessFundTransaction.getOrderDate();
 			 this.logger.info("Old date:::::"+oldDate);
-			 businessFundTransaction.setOrderDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM,yyyy")));
+			 businessFundTransaction.setOrderDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM, yyyy")));
 		 }
 		 
 		 businessClientFund.setFundTransactions(businessFundTransactions);
