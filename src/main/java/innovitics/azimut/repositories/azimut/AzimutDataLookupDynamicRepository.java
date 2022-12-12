@@ -1,4 +1,4 @@
-package innovitics.azimut.repositories.user;
+package innovitics.azimut.repositories.azimut;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

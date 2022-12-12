@@ -1,4 +1,4 @@
-package innovitics.azimut.services.user;
+package innovitics.azimut.services.azimut;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ import innovitics.azimut.models.azimutdetails.AzimutDetails;
 import innovitics.azimut.models.azimutdetails.AzimutDetailsLookup;
 import innovitics.azimut.models.user.AzimutDataLookup;
 import innovitics.azimut.models.user.AzimutEntity;
-import innovitics.azimut.repositories.user.AzimutDataLookupDynamicRepository;
-import innovitics.azimut.repositories.user.AzimutDetailsDynamicRepository;
-import innovitics.azimut.repositories.user.AzimutEntityDynamicRepository;
+import innovitics.azimut.repositories.azimut.AzimutDataLookupDynamicRepository;
+import innovitics.azimut.repositories.azimut.AzimutDetailsDynamicRepository;
+import innovitics.azimut.repositories.azimut.AzimutEntityDynamicRepository;
 import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
@@ -45,51 +45,8 @@ public class AzimutDataLookUpService extends AbstractService<AzimutDataLookup, S
 	private final static String PHONE_NUMBER="phoneNumber";
 	private final static String WHATSAPP_NUMBER="whatsappNumber";
 	private final static String WHATSAPP_LINK="whatsappLink";
+
 	
-	
-	
-	
-	
-	
-	public List<AzimutDataLookup> getFieldValues(Long [] entityTypes)
-	{
-		List<AzimutDataLookup> azimutDataLookups=new ArrayList<AzimutDataLookup>();		
-		if(this.arrayUtility.isArrayPopulated(entityTypes))
-		{
-			List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
-			searchCriteriaList.add(new SearchCriteria("entityType", this.arrayUtility.generateObjectListFromObjectArray(entityTypes),SearchOperation.PARENT_IN, "parent"));
-			azimutDataLookups= this.azimutDataLookupDynamicRepository.findAll(this.azimutDataLookupParentSpecification.findByCriteria(searchCriteriaList));
-		}
-		else
-		{
-			azimutDataLookups= this.azimutDataLookupDynamicRepository.findAll();
-		}
-		return azimutDataLookups;
-	}
-	public List<AzimutEntity> getEntityValues(Long [] entityTypes)
-	{
-		List<AzimutEntity> azimutEntities=new ArrayList<AzimutEntity>();		
-		if(this.arrayUtility.isArrayPopulated(entityTypes))
-		{
-			List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
-			searchCriteriaList.add(new SearchCriteria("entityType", this.arrayUtility.generateObjectListFromObjectArray(entityTypes),SearchOperation.IN, null));
-			azimutEntities= this.azimutEntityDynamicRepository.findAll(this.azimutEntitySepcification.findByCriteria(searchCriteriaList),new NamedEntityGraph(EntityGraphType.FETCH, "AzimutEntity.details"));
-		}
-		else
-		{
-			azimutEntities= this.azimutEntityDynamicRepository.findAll();
-		}
-		return azimutEntities;
-	}
-	
-	public void save(AzimutEntity azimutEntity)
-	{
-		this.azimutEntityDynamicRepository.save(azimutEntity);
-	}
-	public void saveAll(List<AzimutDataLookup> azimutdataLookUps)
-	{
-		this.azimutDataLookupDynamicRepository.saveAll(azimutdataLookUps);
-	}
 	
 	public AzimutDetails getAzimutDetails()
 	{

@@ -44,7 +44,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter
 				"/api/azimut/trading/getUserBlockage",
 				"/api/paytabs/callback",
 				"/api/paytabs/instantCallback",
-				"/api/user/addUserInteraction"
+				"/api/user/addUserInteraction",
+				"/api/azimut/information/**"
 				
 				).permitAll()
 		.anyRequest().authenticated()

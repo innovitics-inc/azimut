@@ -1,4 +1,4 @@
-package innovitics.azimut.utilities.datautilities;
+package innovitics.azimut.utilities.businessutilities;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +11,8 @@ import innovitics.azimut.models.ChangePhoneNumberRequest;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.services.user.ChangePhoneNumberRequestService;
 import innovitics.azimut.services.user.UserService;
+import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 

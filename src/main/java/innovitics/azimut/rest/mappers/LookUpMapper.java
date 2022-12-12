@@ -23,8 +23,8 @@ import innovitics.azimut.rest.entities.teacomputers.LookUpOutput;
 import innovitics.azimut.rest.entities.teacomputers.LookUpOutputs;
 import innovitics.azimut.rest.models.teacomputers.LookupRequest;
 import innovitics.azimut.rest.models.teacomputers.LookupResponse;
+import innovitics.azimut.services.azimut.AzimutDataLookUpService;
 import innovitics.azimut.services.teacomputer.TeaComputerService;
-import innovitics.azimut.services.user.AzimutDataLookUpService;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 

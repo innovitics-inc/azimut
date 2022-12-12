@@ -37,7 +37,11 @@
   </head>
 
   <body>
+  
     <div class="row">
+    <div>
+     <img th:src="@{Logo.png}"/>
+    </div>
       <div th:each="question, iterStat: ${questions}">
         <div class="col-md-6" th:if="${question.answerType} == 'CHECK' ">
           <p

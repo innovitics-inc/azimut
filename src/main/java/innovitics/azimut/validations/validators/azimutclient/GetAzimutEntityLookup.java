@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import innovitics.azimut.businessmodels.user.BusinessAzimutDataLookup;
+import innovitics.azimut.utilities.businessutilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
-import innovitics.azimut.utilities.datautilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.validations.validators.BaseValidator;
 
