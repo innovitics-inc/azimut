@@ -69,6 +69,7 @@ public class BusinessAzimutInformationService extends AbstractBusinessService<Bu
 				businessAzimutInformationType.setBusinessAzimutInformationList(entry.getValue());
 				businessAzimutInformationTypes.add(businessAzimutInformationType);
 				}
+				return businessAzimutInformationTypes;
 			}
 			
 			return Collections.<BusinessAzimutInformationType> emptyList();

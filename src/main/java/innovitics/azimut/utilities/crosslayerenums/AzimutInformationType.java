@@ -66,38 +66,28 @@ public enum AzimutInformationType {
 	
 	public static String  getInformationTypeById(Integer id,String language) 
 	{
+		String result="";
 	    for(AzimutInformationType azimutInformationType : values()) 
 	    {
 	        	if(NumberUtility.areIntegerValuesMatching(azimutInformationType.id, id))
 	        	{
 	        		if(StringUtility.stringsMatch(language, StringUtility.ENGLISH))
 	        	    {  
-	        			return azimutInformationType.informationType;
+	        			result = azimutInformationType.informationType;
 	        	    }
 	        		else if(StringUtility.stringsMatch(language, StringUtility.ARABIC))
 	        		{
-	        			return azimutInformationType.informationTypeAr;
+	        			result =  azimutInformationType.informationTypeAr;
 	        		}
 	        	    else 
 	        	    {
-	        	    	return azimutInformationType.informationType;
+	        	    	result = azimutInformationType.informationType;
 	        	    }
 	        		
 	        	}	
-	        	return azimutInformationType.informationType;
+	    
 	    }
-	    if(StringUtility.stringsMatch(language, StringUtility.ENGLISH))
-	    {  
-	    	return AzimutInformationType.OTHER.informationType;
-	    }
-	    else if(StringUtility.stringsMatch(language, StringUtility.ARABIC))
-	    {
-	    	return AzimutInformationType.OTHER.informationTypeAr;
-	    }
-	    else
-	    {
-	    	return AzimutInformationType.OTHER.informationType;
-	    }
+    	return result;
 	}
 	
 }
