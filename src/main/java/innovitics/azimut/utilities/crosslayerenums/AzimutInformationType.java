@@ -16,10 +16,7 @@ import innovitics.azimut.utilities.mapping.AzimutInformationMapper;
 
 public enum AzimutInformationType {
 
-	FAQ(1,"FAQ","FAQ عربي"),
-	FAQ2(2,"FAQ2","FAQ2 عربي"),
-	FAQ3(3,"FAQ3","FAQ3 عربي"),
-	OTHER(4,"OTHER","أخرى")
+	FAQ(1,"FAQ","FAQ عربي")	
 	;
 		
 	AzimutInformationType(int id,String informationType, String informationTypeAr) {
