@@ -16,9 +16,11 @@ import innovitics.azimut.utilities.mapping.AzimutInformationMapper;
 
 public enum AzimutInformationType {
 
-	FAQ(1,"",""),
-	FAQ2(2,"",""),
-	FAQ3(3,"","");
+	FAQ(1,"FAQ","FAQ عربي"),
+	FAQ2(2,"FAQ2","FAQ2 عربي"),
+	FAQ3(3,"FAQ3","FAQ3 عربي"),
+	OTHER(4,"OTHER","أخرى")
+	;
 		
 	AzimutInformationType(int id,String informationType, String informationTypeAr) {
 		this.id=id;
@@ -62,5 +64,40 @@ public enum AzimutInformationType {
 	    return map;
 	}
 	
+	public static String  getInformationTypeById(Integer id,String language) 
+	{
+	    for(AzimutInformationType azimutInformationType : values()) 
+	    {
+	        	if(NumberUtility.areIntegerValuesMatching(azimutInformationType.id, id))
+	        	{
+	        		if(StringUtility.stringsMatch(language, StringUtility.ENGLISH))
+	        	    {  
+	        			return azimutInformationType.informationType;
+	        	    }
+	        		else if(StringUtility.stringsMatch(language, StringUtility.ARABIC))
+	        		{
+	        			return azimutInformationType.informationTypeAr;
+	        		}
+	        	    else 
+	        	    {
+	        	    	return azimutInformationType.informationType;
+	        	    }
+	        		
+	        	}	
+	        	return azimutInformationType.informationType;
+	    }
+	    if(StringUtility.stringsMatch(language, StringUtility.ENGLISH))
+	    {  
+	    	return AzimutInformationType.OTHER.informationType;
+	    }
+	    else if(StringUtility.stringsMatch(language, StringUtility.ARABIC))
+	    {
+	    	return AzimutInformationType.OTHER.informationTypeAr;
+	    }
+	    else
+	    {
+	    	return AzimutInformationType.OTHER.informationType;
+	    }
+	}
 	
 }

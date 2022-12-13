@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import innovitics.azimut.businessmodels.BusinessAzimutInformation;
 import innovitics.azimut.businessmodels.BusinessAzimutInformationType;
 import innovitics.azimut.models.azimutdetails.AzimutInformation;
+import innovitics.azimut.utilities.crosslayerenums.AzimutInformationType;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @Component
@@ -23,6 +24,7 @@ public class AzimutInformationMapper extends Mapper<AzimutInformation,BusinessAz
 		businessAzimutInformation.setQuestion(azimutInformation.getQuestion());
 		businessAzimutInformation.setAnswer(azimutInformation.getAnswer());
 		businessAzimutInformation.setType(azimutInformation.getInformationType());
+		
 		return businessAzimutInformation;
 	}
 
@@ -75,7 +77,11 @@ public class AzimutInformationMapper extends Mapper<AzimutInformation,BusinessAz
 			businessAzimutInformationType.setQuestion(azimutInformation.getQuestion());
 			businessAzimutInformationType.setAnswer(azimutInformation.getAnswer());
 		}
-		businessAzimutInformationType.setType(azimutInformation.getInformationType());
+		if(azimutInformation.getInformationType()!=null)
+		{
+			businessAzimutInformationType.setType(azimutInformation.getInformationType());
+			businessAzimutInformationType.setTypeName(AzimutInformationType.getInformationTypeById(azimutInformation.getInformationType(), language));
+		}
 		return businessAzimutInformationType;
 	}
 }

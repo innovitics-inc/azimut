@@ -31,7 +31,7 @@ public class AzimutInformationController extends BaseGenericRestController<Busin
 			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessAzimutInformationType.class,null,this.businessAzimutInformationService.getAll(language),null);
+			return this.generateBaseGenericResponse(BusinessAzimutInformationType.class,null,this.businessAzimutInformationService.getAzimutInformations(language),null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -40,22 +40,6 @@ public class AzimutInformationController extends BaseGenericRestController<Busin
 		
 	}
 	
-	@PostMapping(value="/getByType",
-			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
-			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessAzimutInformationType>> getByType(
-			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
-			@RequestBody BusinessAzimutInformationType businessAzimutInformationType) throws BusinessException, IOException, IntegrationException {
-		try
-		{
-			return this.generateBaseGenericResponse(BusinessAzimutInformationType.class,this.businessAzimutInformationService.getByType(businessAzimutInformationType.getType(),language),null,null);
-		}		
-		catch(BusinessException businessException)
-		{
-			return this.handleBaseGenericResponseException(businessException,language);
-		}
-		
-	}
 	@PostMapping(value="/getById",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 

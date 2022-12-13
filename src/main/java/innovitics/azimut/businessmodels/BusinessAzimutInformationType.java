@@ -8,7 +8,12 @@ import innovitics.azimut.utilities.CustomJsonRootName;
 @CustomJsonRootName(plural = "data", singular = "data")
 public class BusinessAzimutInformationType  extends  BaseBusinessEntity{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6327924498322143931L;
 	Integer type;
+	String typeName;
 	private Long id;
 	private String question;
 	private String answer;
@@ -19,6 +24,13 @@ public class BusinessAzimutInformationType  extends  BaseBusinessEntity{
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	
+	public String getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 	public Long getId() {
 		return id;
