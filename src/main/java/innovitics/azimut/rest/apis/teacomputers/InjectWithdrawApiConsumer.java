@@ -31,6 +31,7 @@ public class InjectWithdrawApiConsumer extends RestTeaComputerApiConsumer<Inject
 		request.setBankId(input.getBankId());
 		request.setCurrencyId(input.getCurrencyId());
 		request.setTicketDoc(input.getTicketDoc());
+		request.setReferenceno(input.getReferenceNo());
 		request.setSignature(this.generateSignature(request));
 		HttpEntity<String> httpEntity=this.stringfy(request, this.generateHeaders(input.getLocale(), this.getContentLength(request)));
 		return httpEntity;

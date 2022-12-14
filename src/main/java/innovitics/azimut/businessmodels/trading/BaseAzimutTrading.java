@@ -22,6 +22,7 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
     private String fileBytes;
     private Integer threshold;
     private Long transactionId;
+    private String referenceNo;
     
 	
 	public Long getOrderTypeId() {
@@ -108,6 +109,12 @@ public class BaseAzimutTrading extends BaseBusinessEntity {
 	}
 	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
+	}
+	public String getReferenceNo() {
+		return referenceNo;
+	}
+	public void setReferenceNo(String referenceNo) {
+		this.referenceNo = referenceNo;
 	}
 	
 	

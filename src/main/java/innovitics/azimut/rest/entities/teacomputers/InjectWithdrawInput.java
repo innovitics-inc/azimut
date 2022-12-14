@@ -8,6 +8,7 @@ public class InjectWithdrawInput extends TeaComputerInput{
     private Long moduleType;
     private String ticketDoc;
     private String externalCode;
+    private String referenceNo;
 	
     public Long getCurrencyId() {
 		return currencyId;
@@ -44,6 +45,12 @@ public class InjectWithdrawInput extends TeaComputerInput{
 	}
 	public void setExternalCode(String externalCode) {
 		this.externalCode = externalCode;
+	}
+	public String getReferenceNo() {
+		return referenceNo;
+	}
+	public void setReferenceNo(String referenceNo) {
+		this.referenceNo = referenceNo;
 	}
 	
     

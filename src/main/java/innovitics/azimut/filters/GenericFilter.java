@@ -52,6 +52,7 @@ public class GenericFilter implements Filter {
 			catch (IOException e) 
 			{
 				e.printStackTrace();
+				setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,(HttpServletResponse)response,ErrorCode.OPERATION_NOT_PERFORMED);
 			} 
 			catch (BusinessException e) 
 			{
@@ -61,6 +62,7 @@ public class GenericFilter implements Filter {
 			catch (ServletException e) 
 			{
 				e.printStackTrace();
+				setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,(HttpServletResponse)response,ErrorCode.OPERATION_NOT_PERFORMED);
 			}
     }
  

@@ -54,10 +54,6 @@ public class BusinessAzimutInformationService extends AbstractBusinessService<Bu
 			List<BusinessAzimutInformationType> businessAzimutInformationTypes=new ArrayList<BusinessAzimutInformationType>();
 			
 			List<AzimutInformation> azimutInformations=this.azimutInformationService.getAllByType(null);
-			this.logger.info("Size:::"+azimutInformations.size());
-			this.logger.info("Empty?:::"+azimutInformations.isEmpty());
-			this.logger.info("Null?:::"+azimutInformations.toString());
-			
 			
 			if(azimutInformationListUtility.isListPopulated(azimutInformations))
 			{	Map<Integer,List<BusinessAzimutInformation>> map= AzimutInformationType.assign(azimutInformations, azimutInformationMapper,langauge);

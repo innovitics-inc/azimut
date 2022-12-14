@@ -21,4 +21,10 @@ public class NavService extends  AbstractService<Nav, String>{
 		return this.navRepository.getByJoinedTeacomputerIds();
 	}
 	
+	
+	public Nav updateNav(Nav nav)
+	{
+		return this.navRepository.save(nav);
+	}
+	
 }

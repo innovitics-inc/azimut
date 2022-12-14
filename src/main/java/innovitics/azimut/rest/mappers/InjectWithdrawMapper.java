@@ -47,6 +47,7 @@ public class InjectWithdrawMapper extends RestMapper<InjectWithdrawInput, Inject
 		input.setOrderValue(baseAzimutTrading.getOrderValue());
 		input.setModuleType(baseAzimutTrading.getModuleTypeId());
 		input.setTicketDoc(baseAzimutTrading.getFileBytes());
+		input.setReferenceNo(baseAzimutTrading.getReferenceNo());
 		return input;
 	}
 

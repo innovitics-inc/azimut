@@ -9,6 +9,7 @@ public class ClientCashBalanceResponse extends TeaComputerResponse {
     private Double inPendingTrans;
     private Double outPendingTrans;
     private String currencyRate;
+    private Double totalBuyValue;
     
 	public String getCurrencyID() {
 		return currencyID;
@@ -51,6 +52,12 @@ public class ClientCashBalanceResponse extends TeaComputerResponse {
 	}
 	public void setCurrencyRate(String currencyRate) {
 		this.currencyRate = currencyRate;
+	}
+	public Double getTotalBuyValue() {
+		return totalBuyValue;
+	}
+	public void setTotalBuyValue(Double totalBuyValue) {
+		this.totalBuyValue = totalBuyValue;
 	}
 	
 	

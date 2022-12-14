@@ -9,6 +9,7 @@ public class ClientBalanceOutput extends TeaComputerOutput{
     private Double inPendingTrans;
     private Double outPendingTrans;
     private Double currencyRate;
+    private Double totalBuyValue;
     
 	public Long getCurrencyID() {
 		return currencyID;
@@ -51,6 +52,12 @@ public class ClientBalanceOutput extends TeaComputerOutput{
 	}
 	public void setCurrencyRate(Double currencyRate) {
 		this.currencyRate = currencyRate;
+	}
+	public Double getTotalBuyValue() {
+		return totalBuyValue;
+	}
+	public void setTotalBuyValue(Double totalBuyValue) {
+		this.totalBuyValue = totalBuyValue;
 	}
 	
 }

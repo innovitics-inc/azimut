@@ -105,6 +105,9 @@ public class GetClientBalanceMapper extends RestMapper<GetClientBalanceInput, Ge
 					businessClientCashBalance.setPendingTransferFormatted("0");
 				}
 				
+				businessClientCashBalance.setTotalBuyValue(clientBalanceOutput.getTotalBuyValue());
+				
+				
 				businessClientCashBalances.add(businessClientCashBalance);
 				}
 			}

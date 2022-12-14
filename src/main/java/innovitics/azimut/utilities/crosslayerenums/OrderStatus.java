@@ -3,6 +3,7 @@ package innovitics.azimut.utilities.crosslayerenums;
 public enum OrderStatus {
 	EXECUTED(1,"Executed"),
 	PENDING(2,"Pending"),
+	CANCELED(3,"Canceled")
 	
 	
 	;

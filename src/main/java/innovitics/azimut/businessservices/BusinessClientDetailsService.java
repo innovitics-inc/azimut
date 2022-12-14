@@ -694,6 +694,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		allTransactions.addAll(this.restContract.getDataList(this.restContract.getFundTransactionsMapper,this.prepareBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient,OrderStatus.EXECUTED),StringUtility.EXECUTED_ORDERS));
 		allTransactions.addAll(this.restContract.getDataList(this.restContract.getFundTransactionsMapper,this.prepareBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient,OrderStatus.PENDING),StringUtility.PENDING_ORDERS));
+		allTransactions.addAll(this.restContract.getDataList(this.restContract.getFundTransactionsMapper,this.prepareBusinessFundTransactionRetrievalInputs(tokenizedBusinessUser,businessAzimutClient,OrderStatus.CANCELED),StringUtility.CANCELED_ORDERS));
 		
 		this.beautifyBusinessClientFundTransactions(businessClientFund,allTransactions,businessAzimutClient);
 	

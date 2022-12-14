@@ -51,6 +51,7 @@ public final class StringUtility extends ParentUtility{
 	public final static List<String> ORDER_STATUSES=Arrays.asList("GetExecutedOrders","GetPendingOrders");
 	public static final String EXECUTED_ORDERS="GetExecutedOrders";
 	public static final String PENDING_ORDERS="GetPendingOrders";
+	public static final String CANCELED_ORDERS="GetCanceledOrders";
 	public final static String PDF_EXTENSION="pdf";
 	public final static String SEARCH_FROM_TRANSACTION_DATE="01-12-1950";
 	public final static String SEARCH_TO_TRANSACTION_DATE="12-12-2050";

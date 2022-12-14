@@ -289,6 +289,7 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 			addBaseAzimutTrading.setCurrencyId(baseAzimutTrading.getCurrencyId());
 			addBaseAzimutTrading.setUserId(tokenizedBusinessUser.getUserId());		
 			addBaseAzimutTrading.setModuleTypeId(ModuleType.CASH.getTypeId());
+			addBaseAzimutTrading.setReferenceNo(baseAzimutTrading.getReferenceNo());
 			if(baseAzimutTrading.getInjectionDocument()!=null)
 			try 
 			{

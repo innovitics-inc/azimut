@@ -16,6 +16,7 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
     private Double inPendingTrans;
     private Double outPendingTrans;
     private Double currencyRate;
+    private Double totalBuyValue;
 	
 	
 	public BusinessClientCashBalance() {
@@ -124,6 +125,14 @@ public class BusinessClientCashBalance extends BaseBusinessEntity{
 	}
 
 	
+	public Double getTotalBuyValue() {
+		return totalBuyValue;
+	}
+
+	public void setTotalBuyValue(Double totalBuyValue) {
+		this.totalBuyValue = totalBuyValue;
+	}
+
 	@Override
 	public String toString() {
 		return "BusinessClientCashBalance [idType=" + idType + ", idNumber=" + idNumber + ", currencyID=" + currencyID

@@ -173,6 +173,9 @@ public class ConfigProperties {
     @Value("${paytabs.return.url}")
     private String paytabsReturnUrl;    
     
+    @Value("${temp.file.delete.delay.hours}")
+    private String tempFileDeleteDelayInMinutes;    
+    
     
     
 	public String getBlobConnectionString() {
@@ -335,6 +338,9 @@ public class ConfigProperties {
 	}
 	public String getPaytabsReturnUrl() {
 		return paytabsReturnUrl;
+	}
+	public String getTempFileDeleteDelayInMinutes() {
+		return tempFileDeleteDelayInMinutes;
 	}
     
     

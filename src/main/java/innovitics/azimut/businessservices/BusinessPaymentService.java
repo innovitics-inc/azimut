@@ -291,7 +291,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 			BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
 			baseAzimutTrading.setOrderValue(paymentTransaction.getTransactionAmount());
 			baseAzimutTrading.setCurrencyId(paymentTransaction.getCurrencyId());
-		
+			baseAzimutTrading.setReferenceNo(paymentTransaction.getReferenceTransactionId());
 			if(paymentTransaction!=null&&paymentTransaction.getKeyValueMap()!=null)
 			{
 				if(StringUtility.isStringPopulated(paymentTransaction.getKeyValueMap().get(StringUtility.BANK_ID)))
