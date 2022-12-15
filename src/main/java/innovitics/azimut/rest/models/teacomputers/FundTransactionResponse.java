@@ -52,6 +52,12 @@ public class FundTransactionResponse extends TeaComputerResponse{
 	public void setOrderValue(Double orderValue) {
 		this.orderValue = orderValue;
 	}
+	@Override
+	public String toString() {
+		return "FundTransactionResponse [transactionID=" + transactionID + ", fundId=" + fundId + ", orderDate="
+				+ orderDate + ", valueDate=" + valueDate + ", quantity=" + quantity + ", orderTypeId=" + orderTypeId
+				+ ", orderValue=" + orderValue + ", Signature=" + Signature + "]";
+	}
 	
 	
 
