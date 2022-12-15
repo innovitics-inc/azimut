@@ -10,7 +10,7 @@ public class InjectWithdrawRequest extends TeaComputerRequest{
 	   	private Long AccountId;
 	   	private Long BankId;
 	   	private String TicketDoc;
-	   	private String referenceno;
+	   	private String ReferenceNumber;
 	   	
 	   	
 		public String getOrderDate() {
@@ -61,12 +61,13 @@ public class InjectWithdrawRequest extends TeaComputerRequest{
 		public void setBankId(Long bankId) {
 			BankId = bankId;
 		}
-		public String getReferenceno() {
-			return referenceno;
+		public String getReferenceNumber() {
+			return ReferenceNumber;
 		}
-		public void setReferenceno(String referenceno) {
-			this.referenceno = referenceno;
+		public void setReferenceNumber(String referenceNumber) {
+			ReferenceNumber = referenceNumber;
 		}
+	
 		
 	   	
 	   	
