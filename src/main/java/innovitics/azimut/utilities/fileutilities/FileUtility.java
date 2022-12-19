@@ -49,7 +49,7 @@ public class FileUtility extends ParentUtility{
 	{
 		try 
 		{
-			BufferedWriter bufferedWriter= new BufferedWriter(new FileWriter(this.configProperties.getLogFilePath()+"//business"+DateUtility.getCurrentDayMonthYear()+".log"));		
+			BufferedWriter bufferedWriter= new BufferedWriter(new FileWriter(this.configProperties.getLogFilePath()+"//business"+DateUtility.getCurrentDayMonthYear()+".log",true));		
 			bufferedWriter.write(content);
 			bufferedWriter.close();
 		}		
