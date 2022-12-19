@@ -166,6 +166,12 @@ public class ConfigProperties {
     @Value("${paytabs.client.key}")
     private String paytabsClientKey;    
     
+    @Value("${paytabs.mobile.server.key}")
+    private String paytabsMobileServerKey;
+    
+    @Value("${paytabs.mobile.client.key}")
+    private String paytabsMobileClientKey;    
+    
     @Value("${paytabs.callback.url}")
     private String paytabsCallBackUrl;    
     
@@ -339,6 +345,12 @@ public class ConfigProperties {
 	}
 	public String getPaytabsClientKey() {
 		return paytabsClientKey;
+	}
+	public String getPaytabsMobileServerKey() {
+		return paytabsMobileServerKey;
+	}
+	public String getPaytabsMobileClientKey() {
+		return paytabsMobileClientKey;
 	}
 	public String getPaytabsCallBackUrl() {
 		return paytabsCallBackUrl;
