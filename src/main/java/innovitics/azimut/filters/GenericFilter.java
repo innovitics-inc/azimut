@@ -35,18 +35,14 @@ public class GenericFilter implements Filter {
         RequestWrapper wrapper;
 		try {
 			
+				long startTime = System.currentTimeMillis();
 				wrapper = new RequestWrapper((HttpServletRequest) request);
 				String signatureHeader = wrapper.getHeader(SIGNATURE_HEADER);
 				this.logger.info("signature header:::"+signatureHeader);
 		        byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());
-		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());		        
-		        logger.info("REQUEST:::"+jsonRequest);
-		        if(signatureHeader!=null&&StringUtility.stringsDontMatch(signatureHeader, hmacUtil.generateHmac256(jsonRequest,this.configProperties.getPaytabsServerKey())))
-		        {
-		        	throw new BusinessException(ErrorCode.INVALID_SIGNATURE);
-		        }
-		        
-		        chain.doFilter(wrapper, response);
+		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());	
+		        this.checkRequestHeaderSignature(signatureHeader, jsonRequest);
+		        chain.doFilter(wrapper, response);				
 		        return;
 			} 			
 			catch (IOException e) 
@@ -81,8 +77,14 @@ public class GenericFilter implements Filter {
         }
     }
     
-    
-    
-    
+    void checkRequestHeaderSignature(String signatureHeader,String jsonRequest) throws BusinessException
+    {
+    	
+    	if(signatureHeader!=null&&StringUtility.stringsDontMatch(signatureHeader, hmacUtil.generateHmac256(jsonRequest,this.configProperties.getPaytabsServerKey())))
+        {
+        	throw new BusinessException(ErrorCode.INVALID_SIGNATURE);
+        }
+		
+    }
     
 }

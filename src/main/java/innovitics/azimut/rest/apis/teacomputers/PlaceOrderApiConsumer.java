@@ -23,7 +23,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrderRequest, PlaceOrderResponse, PlaceOrderInput, PlaceOrderOutput>{
 
 	
-	public static final String PATH="/PlaceOrder";
+	private static final String PATH="/PlaceOrder";
 	
 	@Override
 	public HttpEntity<String> generateRequestFromInput(PlaceOrderInput input) {

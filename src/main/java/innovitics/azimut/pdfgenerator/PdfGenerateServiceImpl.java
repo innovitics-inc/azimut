@@ -162,38 +162,6 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 		PDFMergerUtility pdfMergerUtility=new PDFMergerUtility();
 		ByteArrayOutputStream mergingByteArrayOutputStream=new ByteArrayOutputStream();
 		pdfMergerUtility.setDestinationStream(mergingByteArrayOutputStream);
-
-		/*
-		ByteArrayOutputStream userDetailsByteArrayOutputStream=this.populateUserDetailsPDFInByteArrayOutputStream(businessUser);
-		
-		pdfMergerUtility.addSource(new ByteArrayInputStream(userDetailsByteArrayOutputStream.toByteArray()));
-		
-			 
-		 for(BlobItem blobItem:blobItems)
-		 {
-			 ByteArrayOutputStream byteArrayOutputStream=this.blobFileUtility.
-					 downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),blobItem.getName());
-			pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
-		 }
-		 
-		 
-		 for(UserAnswer userAnswer:userAnswers)
-		 {
-				ByteArrayOutputStream byteArrayOutputStream=this.blobFileUtility.
-						downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(), userAnswer.getDocumentSubDirectory(),userAnswer.getDocumentName());
-				pdfMergerUtility.addSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
-		}
-			
-		ByteArrayOutputStream signatureByteArrayOutputStream=this.populateSignaturePDFInByteArrayOutputStream(businessUser);
-			
-		pdfMergerUtility.addSource(new ByteArrayInputStream(signatureByteArrayOutputStream.toByteArray()));
-		*/	
-		
-		/*
-		 List<BlobItem> blobItems = this.blobFileUtility.
-				 listBlobItemsInFolder(this.blobFileUtility.generateBlobClient(this.configProperties.getBlobKYCDocuments()),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId());
-		 */
-		 
 		 
 		 for(String pageOrder:solvedPages)
 		 {
@@ -214,7 +182,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
 		
 		
 		BlobData blobData= this.blobFileUtility.
-		uploadFileToBlob(mergingByteArrayOutputStream.toByteArray(), true, this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),StringUtility.CONTRACT_DOCUMENT_NAME, "pdf");
+		uploadFileToBlob(mergingByteArrayOutputStream.toByteArray(), true, this.configProperties.getBlobKYCDocuments(),StringUtility.CONTRACTS_SUBDIRECTORY+"/"+businessUser.getUserId(),StringUtility.CONTRACT_DOCUMENT_NAME, StringUtility.PDF_EXTENSION);
 		
 		mergingByteArrayOutputStream.close();
 		return blobData.getConcatinated(true);

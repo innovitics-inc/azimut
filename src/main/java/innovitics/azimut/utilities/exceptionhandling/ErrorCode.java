@@ -18,7 +18,7 @@ public enum ErrorCode {
 	INVALID_EXTENSION(2101,"Could not upload the file.",""),
 	COPY_FAILURE(2102,"Could not upload the file.",""),
 	UPLOAD_FAILURE(2103,"Could not upload the file.",""),
-	FILE_TOO_BIG(2104,"File size too big.",""),
+	FILE_TOO_BIG(2104,"File size too big.","حجم الملف كبير"),
 	REQUESTS_FOUND(2105,"Another request was found for this user.",""),
 	MISSING_FILE(2106,"File missing.",""),
 	UNAUTHORIZED_USER(2107,"Unauthorized user.","غير مصرح لهذا المستخدم"),

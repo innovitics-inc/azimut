@@ -272,6 +272,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		addBaseAzimutTrading.setOrderValue(baseAzimutTrading.getOrderValue());
 		addBaseAzimutTrading.setQuantity(baseAzimutTrading.getQuantity());
 		addBaseAzimutTrading.setFundId(baseAzimutTrading.getTeacomputerId());
+		addBaseAzimutTrading.setTransactionId(baseAzimutTrading.getTransactionId());
 		return addBaseAzimutTrading;
 	}
 	
@@ -320,4 +321,22 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		}
 		return userPhone;
 	}
+	
+	public BaseAzimutTrading cancelOrderRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws Exception
+	{
+		BaseAzimutTrading responseBaseAzimutTrading=new BaseAzimutTrading();
+		try {
+			responseBaseAzimutTrading = (BaseAzimutTrading)this.restContract.getData(this.restContract.cancelOrderMapper, this.prepareOrderPlacingInputs(tokenizedBusinessUser, baseAzimutTrading), null);
+		} 
+		catch (Exception exception) 
+		{
+			exception.printStackTrace();
+			if(exception instanceof IntegrationException)
+			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.OPERATION_FAILURE);
+			else
+			throw new BusinessException(ErrorCode.OPERATION_FAILURE);
+		}
+		return responseBaseAzimutTrading;
+	}
+
 }

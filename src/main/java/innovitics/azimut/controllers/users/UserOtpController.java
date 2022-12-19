@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessmodels.user.BusinessUserOTP;
-import innovitics.azimut.businessutilities.OTPUtility;
+import innovitics.azimut.businessservices.BusinessOTPService;
+
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
@@ -23,14 +24,15 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 @RequestMapping("/api/otp")
 public class UserOtpController extends BaseGenericRestController<BusinessUserOTP,String>
 {
-@Autowired OTPUtility otpUtility;
-	@PostMapping(value="/logOTP",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+@Autowired BusinessOTPService businessOTPService;
+	@PostMapping(value="/sendOTP",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
-	protected ResponseEntity<BaseGenericResponse<BusinessUserOTP>> logOTP (@RequestBody BusinessUserOTP businessUserOTP,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException {
+	protected ResponseEntity<BaseGenericResponse<BusinessUserOTP>> sendOTP (
+			@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestBody BusinessUserOTP businessUserOTP,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws BusinessException, IOException {
 		try
 		{
-			
-			return this.generateBaseGenericResponse(BusinessUserOTP.class,otpUtility.addUserOtp(businessUserOTP),null, null);
+			return this.generateBaseGenericResponse(BusinessUserOTP.class,businessOTPService.addUserOtp(this.getCurrentRequestHolder(token)),null, null);
 		}		
 		catch(BusinessException businessException)
 		{

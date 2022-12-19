@@ -31,11 +31,11 @@ public class PaymentTransactionUtility extends ParentUtility{
 	@Autowired PaymentService paymentService;
 	@Autowired ListUtility<PaymentTransaction> paymentTransactionListUtility;
 	
-	public PaymentTransaction addPaymentTransaction(User user,Double amount,PaymentGateway paymentGateway,Long currencyId,Integer action,String parameterNames,String parameterValues) throws BusinessException
+	public PaymentTransaction addPaymentTransaction(User user,Double amount,PaymentGateway paymentGateway,Long currencyId,Integer action,String parameterNames,String parameterValues,String initiator) throws BusinessException
 	{
 		try 
 		{
-			return this.paymentService.addPaymentTransaction(user, amount, paymentGateway, currencyId, action, parameterNames, parameterValues);
+			return this.paymentService.addPaymentTransaction(user, amount, paymentGateway, currencyId, action, parameterNames, parameterValues,initiator);
 		}
 		catch(Exception exception)
 		{

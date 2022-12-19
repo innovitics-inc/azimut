@@ -29,6 +29,7 @@ public class UserOTP extends BaseEntity{
 	private Date createdAt;
 	private Date updatedAt;
 	private Date deletedAt;
+	private String sessionInfo;
 	
 	public Long getId() {
 		return id;
@@ -89,6 +90,12 @@ public class UserOTP extends BaseEntity{
 	}
 	public void setDeletedAt(Date deletedAt) {
 		this.deletedAt = deletedAt;
+	}
+	public String getSessionInfo() {
+		return sessionInfo;
+	}
+	public void setSessionInfo(String sessionInfo) {
+		this.sessionInfo = sessionInfo;
 	}
 	
 	

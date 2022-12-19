@@ -47,7 +47,21 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 			return this.handleBaseGenericResponseException(businessException,language);
 		}
 	}
-	
+	@PostMapping(value="/cancelOrder",
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> cancelOrder(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BaseAzimutTrading baseAzimutTrading) throws BusinessException, Exception{
+		try
+		{
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.cancelOrderRest(this.getCurrentRequestHolder(token),baseAzimutTrading),null,null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException,language);
+		}
+	}
 
 	@PostMapping(value="/inject",
 			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},

@@ -14,14 +14,10 @@ public class UserOTPService extends AbstractService<UserOTP, String>{
 	@Autowired UserOtpRepository userOtpRepository;
 	
 	
-	public List<UserOTP> getFilteredUserOTP(String userPhone,String functionality)
-	{
-		return this.userOtpRepository.getFilteredUserOTP(userPhone, functionality);
-	}
-	
 	public UserOTP save(UserOTP userOTP)
 	{
 		return this.userOtpRepository.save(userOTP);
 	}
+	
 	
 }

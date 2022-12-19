@@ -29,6 +29,7 @@ import innovitics.azimut.services.teacomputer.TeaComputerService;
 import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.businessutilities.AzimutDataLookupUtility;
 import innovitics.azimut.utilities.businessutilities.ChangePhoneNumberRequestUtility;
+import innovitics.azimut.utilities.businessutilities.EmailUtility;
 import innovitics.azimut.utilities.businessutilities.PhoneNumberBlockageUtility;
 import innovitics.azimut.utilities.businessutilities.UserUtility;
 import innovitics.azimut.utilities.crosslayerenums.AnswerType;
@@ -66,6 +67,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	@Autowired ListUtility<AzimutAccount> azimutAccountListUtility;
 	@Autowired SaveUserLocation saveUserLocation;
 	@Autowired PhoneNumberBlockageUtility phoneNumberBlockageUtility;
+	@Autowired EmailUtility emailUtility;
 	
 	
 	public static final String PROFILE_PICTURE_PARAMETER="profilePicture";
@@ -613,6 +615,12 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		try 
 		{
 		businessUser.setDocumentURL(this.pdfGenerateService.downloadContract(this.userAnswerSubmissionService.getUserAnswersByUserIdAndAnswerType(tokenizedBusinessUser.getId(), AnswerType.DOCUMENT.getType()), tokenizedBusinessUser,solvedPages));
+		
+		this.emailUtility.sendMailWithAttachment("alaa.sadek@innovitics.com","Contract Download","Hello!!",this.blobFileUtility.downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(),  StringUtility.CONTRACTS_SUBDIRECTORY+"/"+tokenizedBusinessUser.getUserId(), StringUtility.CONTRACT_DOCUMENT_NAME +".pdf"));
+		
+		//this.emailUtility.sendSimpleMessage("omar.amer@innovitics.com", "Contract Download", "Test!!");
+		
+		
 		}
 		catch (BusinessException | IOException e) 
 		{

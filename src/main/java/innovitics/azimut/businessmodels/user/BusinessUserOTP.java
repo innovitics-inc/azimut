@@ -17,6 +17,7 @@ public class BusinessUserOTP extends BaseBusinessEntity{
 	private Date nextTrial;
 	private String functionality;
 	private OTPMethod otpMethod;
+	private String sessionInfo;
 	
 	public Long getId() {
 		return id;
@@ -90,6 +91,22 @@ public class BusinessUserOTP extends BaseBusinessEntity{
 	}
 	public void setDeletedAt(Date deletedAt) {
 		this.deletedAt = deletedAt;
+	}
+	public String getSessionInfo() {
+		return sessionInfo;
+	}
+	public void setSessionInfo(String sessionInfo) {
+		this.sessionInfo = sessionInfo;
+	}
+	public BusinessUserOTP(String userPhone) {
+		super();
+		this.userPhone = userPhone;
+	}
+	
+	
+	
+	public BusinessUserOTP() {
+		// TODO Auto-generated constructor stub
 	}
 	
 		

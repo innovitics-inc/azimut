@@ -55,6 +55,8 @@ public class BaseBusinessEntity implements Serializable{
 	private Integer pageSize;
 	private Boolean persist;
 	protected Long transactionId;
+	protected String deviceId;
+
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -296,6 +298,12 @@ public class BaseBusinessEntity implements Serializable{
 	}
 	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
+	}
+	public String getDeviceId() {
+		return deviceId;
+	}
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 	
 	

@@ -1,16 +1,19 @@
 package innovitics.azimut.utilities.fileutilities;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import innovitics.azimut.utilities.ParentUtility;
+import innovitics.azimut.utilities.datautilities.DateUtility;
 
 @Component
-public class FileUtility{
+public class FileUtility extends ParentUtility{
 
 	public String uploadFile(MultipartFile file) throws IOException
 	{
@@ -40,4 +43,22 @@ public class FileUtility{
 	{
 		return size/1000000;
 	}
+	
+	
+	public void write(String content)
+	{
+		try 
+		{
+			BufferedWriter bufferedWriter= new BufferedWriter(new FileWriter(this.configProperties.getLogFilePath()+"//business"+DateUtility.getCurrentDayMonthYear()+".log"));		
+			bufferedWriter.write(content);
+			bufferedWriter.close();
+		}		
+		catch (IOException exception) 
+		{
+			exception.printStackTrace();
+		}
+		
+	}
+	
+	
 }

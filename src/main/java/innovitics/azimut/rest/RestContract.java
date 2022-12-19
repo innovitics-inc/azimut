@@ -13,6 +13,7 @@ import innovitics.azimut.rest.entities.BaseInput;
 import innovitics.azimut.rest.entities.BaseOutput;
 import innovitics.azimut.rest.mappers.AddAccountMapper;
 import innovitics.azimut.rest.mappers.AddClientBankAccountMapper;
+import innovitics.azimut.rest.mappers.CancelOrderMapper;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.rest.mappers.GetClientBalanceMapper;
 import innovitics.azimut.rest.mappers.GetClientBankAccountsMapper;
@@ -29,10 +30,12 @@ import innovitics.azimut.rest.mappers.PaytabsInitiatePaymentMapper;
 import innovitics.azimut.rest.mappers.PaytabsQueryPaymentMapper;
 import innovitics.azimut.rest.mappers.PlaceOrderMapper;
 import innovitics.azimut.rest.mappers.RestMapper;
+import innovitics.azimut.rest.mappers.SendVerificationCodeMapper;
 import innovitics.azimut.rest.mappers.ValifyAccessTokenMapper;
 import innovitics.azimut.rest.mappers.ValifyFacialImageMapper;
 import innovitics.azimut.rest.mappers.ValifyIdMapper;
 import innovitics.azimut.rest.mappers.ValifyPassportIdMapper;
+import innovitics.azimut.rest.mappers.VerifyMapper;
 import innovitics.azimut.utilities.mapping.FundPriceMapper;
 
 @Component
@@ -53,6 +56,7 @@ public class RestContract<I, O, REQ, RES, B extends BaseBusinessEntity>
 	@Autowired public GetReportMapper getReportMapper;
 	@Autowired public GetCompanyBankAccountMapper getCompanyBankAccountMapper;
 	@Autowired public PlaceOrderMapper placeOrderMapper;
+	@Autowired public CancelOrderMapper cancelOrderMapper;
 	@Autowired public InjectWithdrawMapper injectWithdrawMapper;
 	@Autowired public ValifyAccessTokenMapper valifyAccessTokenMapper;
 	@Autowired public ValifyFacialImageMapper valifyFacialImageMapper;
@@ -60,6 +64,8 @@ public class RestContract<I, O, REQ, RES, B extends BaseBusinessEntity>
 	@Autowired public ValifyPassportIdMapper valifyPassportIdMapper;
 	@Autowired public PaytabsInitiatePaymentMapper paytabsInitiatePaymentMapper;
 	@Autowired public PaytabsQueryPaymentMapper paytabsQueryPaymentMapper;
+	@Autowired public SendVerificationCodeMapper sendVerificationCodeMapper;
+	@Autowired public VerifyMapper verifyMapper;
 
 	public B getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String param) throws IntegrationException
 	{

@@ -14,7 +14,7 @@ public class PlaceOrderRequest extends TeaComputerRequest{
 	
 	private Long FundID;
 
-
+	private String TransactionID;
 
 
 	public Integer getQuantity() {
@@ -63,6 +63,14 @@ public class PlaceOrderRequest extends TeaComputerRequest{
 
 	public void setFundID(Long fundID) {
 		FundID = fundID;
+	}
+
+	public String getTransactionID() {
+		return TransactionID;
+	}
+
+	public void setTransactionID(String transactionID) {
+		TransactionID = transactionID;
 	}
 	
 	

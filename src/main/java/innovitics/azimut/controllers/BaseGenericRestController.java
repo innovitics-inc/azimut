@@ -39,19 +39,6 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 	protected @Autowired JwtUtil jwtUtil;
 	public final static Logger logger = LogManager.getLogger(BaseGenericRestController.class.getName());
 	protected @Autowired ConfigProperties configProperties;
-/*
-	protected abstract ResponseEntity<BaseGenericResponse<T>> list(@RequestHeader("Authorization") String  token)throws BusinessException;
-
-	protected abstract ResponseEntity<BaseGenericResponse<T>> read(@RequestHeader("Authorization") String  token,Integer id)throws BusinessException;
-
-	protected abstract ResponseEntity<BaseGenericResponse<T>> save(T entity)throws BusinessException, IntegrationException;
-
-	protected abstract ResponseEntity<BaseGenericResponse<T>> update(@RequestHeader("Authorization") String  token,T entity)throws BusinessException;
-
-	protected abstract ResponseEntity<BaseGenericResponse<T>> listByParameter(@RequestHeader("Authorization") String  token,S s)throws BusinessException;
-	
-	protected abstract ResponseEntity<BaseGenericResponse<T>> listPaginatedByParameter(@RequestHeader("Authorization") String  token,BusinessSearchCriteria businessSearchCriteria)throws BusinessException;
-*/
 
 	private HttpStatus validateGenericResponseSuccess(BaseGenericResponse<T> baseGenericResponse) {
 		if (baseGenericResponse != null

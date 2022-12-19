@@ -46,7 +46,7 @@ public class BusinessPaymentService extends AbstractBusinessService<BusinessPaym
 					this.userMapper.convertBusinessUnitToBasicUnit(tokenizedBusinessUser, false),
 					businessPayment.getAmount(), PaymentGateway.PAYTABS, businessPayment.getCurrencyId(),
 					businessPayment.getAction(), paymentTransaction.getParameterNames(),
-					paymentTransaction.getParameterValues());
+					paymentTransaction.getParameterValues(),isMobile?"mobile":"web");
 		
 			if(!isMobile)
 			{

@@ -1,47 +1,42 @@
 package innovitics.azimut.rest.mappers;
 
-import java.util.List;
-
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
-import innovitics.azimut.exceptions.IntegrationException;
-import innovitics.azimut.rest.entities.teacomputers.CancelOrderInput;
-import innovitics.azimut.rest.entities.teacomputers.CancelOrderOutput;
-import innovitics.azimut.rest.models.teacomputers.CancelOrderRequest;
-import innovitics.azimut.rest.models.teacomputers.CancelOrderResponse;
+import innovitics.azimut.rest.apis.teacomputers.CancelOrderApiConsumer;
+import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
+import innovitics.azimut.rest.entities.teacomputers.PlaceOrderOutput;
 
-public class CancelOrderMapper extends RestMapper<CancelOrderInput, CancelOrderOutput, CancelOrderRequest, CancelOrderResponse, BaseAzimutTrading> {
+@Component
+public class CancelOrderMapper extends PlaceOrderMapper {
 
+	@Autowired CancelOrderApiConsumer cancelOrderApiConsumer;
 	@Override
-	BaseAzimutTrading consumeRestService(BaseAzimutTrading baseBusinessEntity, String params) throws IntegrationException, HttpClientErrorException, Exception 
+	PlaceOrderInput createInput(BaseAzimutTrading baseAzimutTrading) {
+		PlaceOrderInput input=new PlaceOrderInput();
+		
+		input.setTransactionId(String.valueOf(baseAzimutTrading.getTransactionId()));
+		input.setIdTypeId(baseAzimutTrading.getAzIdType());
+		input.setIdNumber(baseAzimutTrading.getAzId());
+		
+		return input;
+	}
+	
+	@Override
+	BaseAzimutTrading createBusinessEntityFromOutput(PlaceOrderOutput placeOrderOutput) 
 	{
-		return null;
+		BaseAzimutTrading baseAzimutTrading=new BaseAzimutTrading();
+		
+		return baseAzimutTrading;
 	}
 
+	
 	@Override
-	List<BaseAzimutTrading> consumeListRestService(BaseAzimutTrading baseBusinessEntity, String params)throws IntegrationException, HttpClientErrorException, Exception 
-	{
-		return null;
+	protected void setConsumer(BaseAzimutTrading baseAzimutTrading) {
+		this.consumer=cancelOrderApiConsumer;
+		
 	}
 
-	@Override
-	CancelOrderInput createInput(BaseAzimutTrading baseBusinessEntity) {
-		return null;
-	}
-
-	@Override
-	BaseAzimutTrading createBusinessEntityFromOutput(CancelOrderOutput BaseOutput) {
-		return null;
-	}
-
-	@Override
-	protected List<BaseAzimutTrading> createListBusinessEntityFromOutput(CancelOrderOutput BaseOutput) {
-		return null;
-	}
-
-	@Override
-	protected void setConsumer(BaseAzimutTrading baseBusinessEntity) {
-	}
 
 }

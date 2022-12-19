@@ -42,12 +42,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		try {
-			
-			
-			ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
-			ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
-			long startTime = System.currentTimeMillis();
-
+						
 			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
 			final String contentTypeHeader = request.getHeader(CONTENT_TYPE);
 			
@@ -83,29 +78,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			
 			this.logger.info("authorization header:::"+authorizationHeader);    
-			this.logger.info("content type:::"+contentTypeHeader);
-			
-			//filterChain.doFilter(request, response);			  
-			filterChain.doFilter(requestWrapper, responseWrapper);
-
-			this.logger.info("Method:::"+requestWrapper.getMethod());
-			
-			this.logger.info("URL:::"+requestWrapper.getRequestURI());
-			
-		    /*String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),requestWrapper.getCharacterEncoding());
-			this.logger.info("REQUEST:::"+requestBody);
-			this.logger.info("Character Encoding:::"+requestWrapper.getCharacterEncoding());
-			*/
-			//HmacUtil hmacUtility=new HmacUtil();
-			//this.logger.info("hashed String:::::"+hmacUtility.generateHmac256(requestBody,this.configProperties.getPaytabsServerKey()));
 			
 			
-			String responseBody = StringUtility.getStringValue(responseWrapper.getContentAsByteArray(),response.getCharacterEncoding());
-			long timeTaken = System.currentTimeMillis() - startTime;
-			this.logger.info("RESPONSE:::"+responseBody);
-			responseWrapper.copyBodyToResponse();
-
-			
+			filterChain.doFilter(request, response);			  
 		} 
 		
 		catch (JwtException e) {
@@ -118,12 +93,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	}
 
 	public void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable ex){
-		/*
-		 * response.setStatus(status.value());
-		 * response.setContentType("application/json"); try {
-		 * response.sendError(ErrorCode.FAILED_TO_VALIDATE_TOKEN.getCode()); } catch
-		 * (IOException e) { // TODO Auto-generated catch block e.printStackTrace(); }
-		 */
 		response.setStatus(status.value());
 		response.setContentType("application/json");
         try {

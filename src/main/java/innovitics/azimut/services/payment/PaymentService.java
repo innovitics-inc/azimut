@@ -51,7 +51,7 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		
 	}
 	
-	public PaymentTransaction addPaymentTransaction(User user,Double amount,PaymentGateway paymentGateway,Long currencyId,Integer action,String parameterNames,String parameterValues)
+	public PaymentTransaction addPaymentTransaction(User user,Double amount,PaymentGateway paymentGateway,Long currencyId,Integer action,String parameterNames,String parameterValues,String initiator)
 	{
 		PaymentTransaction paymentTransaction=new PaymentTransaction();
 		paymentTransaction.setUser(user);
@@ -60,6 +60,7 @@ public class PaymentService extends AbstractService<PaymentTransaction,String> {
 		paymentTransaction.setStatus(PaymentTransactionStatus.I.getStatusId());
 		paymentTransaction.setCurrencyId(currencyId);
 		paymentTransaction.setAction(action);
+		paymentTransaction.setInitiator(initiator);
 		paymentTransaction.setCreatedAt(new Date());
 		paymentTransaction.setUpdatedAt(new Date());
 		paymentTransaction.setParameterNames(parameterNames);

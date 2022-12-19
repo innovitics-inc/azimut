@@ -6,6 +6,7 @@ public class PlaceOrderInput extends TeaComputerInput{
 	private Double orderValue;
 	private Integer quantity;
 	private String externalOrderID;
+	private String transactionId;
 
 	public Long getOrderTypeId() {
 		return orderTypeId;
@@ -38,5 +39,14 @@ public class PlaceOrderInput extends TeaComputerInput{
 	public void setExternalOrderID(String externalOrderID) {
 		this.externalOrderID = externalOrderID;
 	}
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+	
 	
 }

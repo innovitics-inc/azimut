@@ -9,7 +9,6 @@ public class AuthenticationRequest extends BaseBusinessEntity {
 	private	String countryPhoneCode;
 	private String phoneNumber;
 	private String password;
-	private String deviceId;
 	private String refreshToken;
 	private String newPassword;
 
@@ -39,13 +38,6 @@ public class AuthenticationRequest extends BaseBusinessEntity {
 		this.phoneNumber = phoneNumber;
 	}
 	
-	public String getDeviceId() {
-		return deviceId;
-	}
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
-	}
-		
 	public String getRefreshToken() {
 		return refreshToken;
 	}
@@ -70,7 +62,7 @@ public class AuthenticationRequest extends BaseBusinessEntity {
 	@Override
 	public String toString() {
 		return "AuthenticationRequest [userPhone=" + userPhone + ", countryPhoneCode=" + countryPhoneCode
-				+ ", phoneNumber=" + phoneNumber + ", password=" + password + ", deviceId=" + deviceId + ", refreshToken="
+				+ ", phoneNumber=" + phoneNumber + ", password=" + password +", refreshToken="
 				+ refreshToken + ", newPassword=" + newPassword + "]";
 	}
 

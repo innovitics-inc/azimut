@@ -176,7 +176,14 @@ public class ConfigProperties {
     @Value("${temp.file.delete.delay.hours}")
     private String tempFileDeleteDelayInMinutes;    
     
+    @Value("${firebase.url}")
+    private String firebaseUrl;
     
+    @Value("${firebase.web.key}")
+    private String firebaseWebKey;
+    
+    @Value("${spring.mail.username}")
+    private String mailUserName;
     
 	public String getBlobConnectionString() {
 		return blobConnectionString;
@@ -341,6 +348,15 @@ public class ConfigProperties {
 	}
 	public String getTempFileDeleteDelayInMinutes() {
 		return tempFileDeleteDelayInMinutes;
+	}
+	public String getFirebaseUrl() {
+		return firebaseUrl;
+	}
+	public String getFirebaseWebKey() {
+		return firebaseWebKey;
+	}
+	public String getMailUserName() {
+		return mailUserName;
 	}
     
     

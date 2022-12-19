@@ -19,7 +19,7 @@ public class UserOtpMapper extends Mapper<UserOTP, BusinessUserOTP>{
 		userOTP.setCreatedAt(new Date());
 		userOTP.setUpdatedAt(save?businessUserOTP.getUpdatedAt():new Date());
 		userOTP.setNextTrial(null);
-				
+		userOTP.setSessionInfo(businessUserOTP.getSessionInfo());		
 		return userOTP;
 	}
 
@@ -33,7 +33,7 @@ public class UserOtpMapper extends Mapper<UserOTP, BusinessUserOTP>{
 		businessUserOTP.setCreatedAt(userOTP.getCreatedAt());
 		businessUserOTP.setUpdatedAt(userOTP.getUpdatedAt());
 		businessUserOTP.setNextTrial(null);
-				
+		businessUserOTP.setSessionInfo(userOTP.getSessionInfo());		
 		return businessUserOTP;
 	}
 
