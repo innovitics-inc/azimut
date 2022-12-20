@@ -31,6 +31,7 @@ import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.kyc.ValifyMapper;
 import innovitics.azimut.validations.validators.valify.ValifyFacialImages;
 import innovitics.azimut.validations.validators.valify.ValifyIdImages;
@@ -90,7 +91,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		try {
 		if(straightFace!=null&&smilingFace!=null)
 		{
-			this.logger.info("Valify straight and smiling face images");
+			MyLogger.info("Valify straight and smiling face images");
 			businessValify.setStraightFace(valifyUtility.encodeImageToBase64(straightFace));
 			UserImage straightImage=this.userUtility.createUserImageRecord(businessUser, straightFace, UserImageType.STRAIGHT);
 			userImages.add(straightImage);
@@ -109,7 +110,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		
 		if(leftSide!=null&&rightSide!=null)
 		{
-			this.logger.info("Valify left and right face images");
+			MyLogger.info("Valify left and right face images");
 			businessValify.setLeftSide(valifyUtility.encodeImageToBase64(leftSide));
 			UserImage leftImage=this.userUtility.createUserImageRecord(businessUser, leftSide, UserImageType.LEFT);
 			userImages.add(leftImage);
@@ -130,7 +131,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		businessValify.setLanguage(language);
 		
 		
-		this.logger.info("Request"+businessValify.toString());
+		MyLogger.info("Request"+businessValify.toString());
 		
 		
 		try 
@@ -143,7 +144,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		{
 			this.handleValifyExceptions(exception,businessUser,false);
 		}
-		this.logger.info("First Page ID::::"+businessUser.getFirstPageId());
+		MyLogger.info("First Page ID::::"+businessUser.getFirstPageId());
 		businessValifyResponse.setFirstPageId(businessUser.getFirstPageId());
 		return businessValifyResponse;
 	}
@@ -165,7 +166,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 			if(frontImage!=null&&backImage!=null)
 			{
 			
-			this.logger.info("Valify national ID documents");	
+			MyLogger.info("Valify national ID documents");	
 			businessValify.setFrontImage(valifyUtility.encodeImageToBase64(frontImage));
 			UserImage frontUserImage=this.userUtility.createUserImageRecord(businessUser, frontImage, UserImageType.FRONT_IMAGE);
 			userImages.add(frontUserImage);
@@ -180,7 +181,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 			
 		if(passportImage!=null)
 			{
-			this.logger.info("Valify passport document");
+			MyLogger.info("Valify passport document");
 			businessValify.setPassportImage(valifyUtility.encodeImageToBase64(passportImage));
 			UserImage passportUserImage=this.userUtility.createUserImageRecord(businessUser, passportImage, UserImageType.PASSPORT_IMAGE);
 			userImages.add(passportUserImage);
@@ -216,7 +217,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		{
 			this.handleValifyExceptions(exception,businessUser,BooleanUtility.isTrue(incrementFailure));
 		}
-		this.logger.info("First Page ID::::"+businessUser.getFirstPageId());
+		MyLogger.info("First Page ID::::"+businessUser.getFirstPageId());
 		businessValifyResponse.setFirstPageId(businessUser.getFirstPageId());
 		return businessValifyResponse;
 	}
@@ -227,14 +228,14 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 	{
 		if(businessValify!=null&&NumberUtility.areIntegerValuesMatching(businessValify.getUserStep(), UserStep.STRAIGHT_AND_SMILE.getStepId()))
 		{
-			this.logger.info("Valify national straight and smiling face images user step");
+			MyLogger.info("Valify national straight and smiling face images user step");
 			businessValify.setFirstImage(businessValify.getStraightFace());
 			businessValify.setSecondImage(businessValify.getSmilingFace());
 		}
 		
 		else if(businessValify!=null&&NumberUtility.areIntegerValuesMatching(businessValify.getUserStep(), UserStep.LEFT_AND_RIGHT.getStepId()))
 		{
-			this.logger.info("Valify national left and right face images user step");
+			MyLogger.info("Valify national left and right face images user step");
 			businessValify.setFirstImage(businessValify.getLeftSide());
 			businessValify.setSecondImage(businessValify.getRightSide());
 		}		
@@ -298,7 +299,7 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not update the user details");
+			MyLogger.info("Could not update the user details");
 			exception.printStackTrace();
 			this.handleBusinessException(exception, ErrorCode.USER_NOT_UPDATED);
 		}

@@ -12,6 +12,7 @@ import innovitics.azimut.businessservices.BusinessFundsService;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.DateUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.fileutilities.PropertyTagFinder;
 
 @Component
@@ -29,7 +30,7 @@ public class TeaComputersFundPriceJob extends ParentJob{
 		} 
 		catch (Exception exception) 
 		{
-			this.logger.info("Could not update the fund prices");
+			MyLogger.info("Could not update the fund prices");
 			exception.printStackTrace();
 		} 
 	}

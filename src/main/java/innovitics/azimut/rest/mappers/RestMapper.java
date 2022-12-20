@@ -18,6 +18,7 @@ import innovitics.azimut.rest.models.teacomputers.AddAccountResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +53,14 @@ public abstract class RestMapper <I extends BaseInput,O extends BaseOutput,REQ,R
 		WrapperBusinessEntity<B> wrapperBusinessEntity=new WrapperBusinessEntity<B>();
 		try {
 			if (!isList) {
-				logger.info("Wrapper:::::");
+				MyLogger.info("Wrapper:::::");
 				wrapperBusinessEntity.setData(this.consumeRestService(baseBusinessEntity, params));
 			} else {
-				logger.info("List Wrapper:::::");
+				MyLogger.info("List Wrapper:::::");
 				wrapperBusinessEntity.setDataList(this.consumeListRestService(baseBusinessEntity, params));
 			}
 		} catch (Exception exception) {
-			this.logger.info("Exception Stack Trace:::");
+			MyLogger.info("Exception Stack Trace:::");
 			exception.printStackTrace();
 			IntegrationException  integrationException=(IntegrationException)exception;
 			throw  integrationException;
@@ -76,24 +77,24 @@ public abstract class RestMapper <I extends BaseInput,O extends BaseOutput,REQ,R
 				this.setConsumer(baseBusinessEntity);
 				if (this.getConsumer() != null) 
 				{
-					logger.info("Consumer Type:::" + this.getConsumer().getClass().getName());
-					logger.info("Response Type:::" + this.getConsumer().getResponseClassType().getName());
+					MyLogger.info("Consumer Type:::" + this.getConsumer().getClass().getName());
+					MyLogger.info("Response Type:::" + this.getConsumer().getResponseClassType().getName());
 				}
 				if (!isList) 
 				{
-					logger.info("Advanced Wrapper:::::");
+					MyLogger.info("Advanced Wrapper:::::");
 					wrapperBusinessEntity.setData(this.consumeRestAdvancedService(baseBusinessEntity,this.getConsumer().getResponseClassType(), param));
 					
 				} 
 				else
 				{
-					logger.info("Advanced List Wrapper:::::");
+					MyLogger.info("Advanced List Wrapper:::::");
 					wrapperBusinessEntity.setDataList(this.consumeListRestAdvancedService(baseBusinessEntity,this.getConsumer().getResponseClassType(), param));					
 				}
 			}
 			catch (Exception exception) 
 			{
-				this.logger.info("Exception Stack Trace:::");
+				MyLogger.info("Exception Stack Trace:::");
 				exception.printStackTrace();
 				IntegrationException integrationException = (IntegrationException) exception;
 				throw integrationException;

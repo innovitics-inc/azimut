@@ -39,6 +39,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.FileUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.kycutilities.AnswerTypeUtility;
 
 @Component
@@ -76,7 +77,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 			  }
 			  
 			  
-			  this.logger.info("Invalid value " +value + " for field "+ field);
+			  MyLogger.info("Invalid value " +value + " for field "+ field);
 			  
 			  throw  this.populateInavlidFieldValueBusinessException(value, field);
 			 
@@ -104,7 +105,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 			  }
 			  
 			  
-			  this.logger.info("Invalid value " +value + " for field "+ field);
+			  MyLogger.info("Invalid value " +value + " for field "+ field);
 			  
 			  BusinessException businessException=new BusinessException(ErrorCode.INVALID_FIELD_VALUE);
 			  
@@ -226,7 +227,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 		   {
 			  if(file.getSize()>maximumSize)
 			  {  
-				  this.logger.info("File Size::::"+file.getSize());
+				  MyLogger.info("File Size::::"+file.getSize());
 				  BusinessException  businessException=new BusinessException(ErrorCode.FILE_TOO_BIG);
 				 businessException.setErrorMessage("File size should not exceed "+this.fileUtility.getFileSizeInMegabytes(maximumSize)+ " Megabytes");
 				  throw  businessException;
@@ -241,7 +242,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 		   {
 			  if(StringUtility.isStringPopulated(file.getOriginalFilename())&&!file.getOriginalFilename().contains("."+extension))
 			  {  
-				  this.logger.info("File Name::::"+file.getName());
+				  MyLogger.info("File Name::::"+file.getName());
 				  BusinessException  businessException=new BusinessException(ErrorCode.INVALID_EXTENSION);
 				  businessException.setErrorMessage(extension+" file extension should be uploaded.");
 				  throw  businessException;
@@ -259,7 +260,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 			try {
 				user=this.userService.findByUserPhone(businessUser.getUserPhone());
 			} catch (Exception exception) {
-				this.logger.info("No user was found having this number");
+				MyLogger.info("No user was found having this number");
 			}
 		}
 		
@@ -279,7 +280,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 	
 	public void checkUserAnswersValidity(BusinessUserAnswerSubmission businessUserAnswerSubmission) throws BusinessException
 	{
-		this.logger.info("Validating the User Answers:::");
+		MyLogger.info("Validating the User Answers:::");
 		String errorMessage="";
 		if (businessUserAnswerSubmission != null) 
 		{
@@ -298,7 +299,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 				try
 				{
 					mandatoryQuestionIds=this.questionService.getMandatoryQuestionsByPage(businessUserAnswerSubmission.getPageId());
-					this.logger.info("Mandatory Question Ids::"+mandatoryQuestionIds.toString());
+					MyLogger.info("Mandatory Question Ids::"+mandatoryQuestionIds.toString());
 					
 					mandatoryQuestionCount=mandatoryQuestionIds.size();
 				}
@@ -317,8 +318,8 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 				
 				
 				
-				this.logger.info("mandatory Question Count: "+mandatoryQuestionCount);
-				this.logger.info("submiited mandatory Question Count: "+suppliedMandatoryQuestionCount);
+				MyLogger.info("mandatory Question Count: "+mandatoryQuestionCount);
+				MyLogger.info("submiited mandatory Question Count: "+suppliedMandatoryQuestionCount);
 				if (suppliedMandatoryQuestionCount==mandatoryQuestionCount) 
 				{
 					for (BusinessUserSubmittedAnswer businessUserSubmittedAnswer : businessUserAnswerSubmission.getUserAnswers()) 
@@ -361,7 +362,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 		}
 		else
 		{
-			this.logger.info("Request Object is Null");
+			MyLogger.info("Request Object is Null");
 			errorMessage="Request is empty";
 		}
 	
@@ -461,7 +462,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 
 	public List<String> validateKYCFormCompletion(BusinessUser businessUser,Long pageCount) throws BusinessException 
 	{
-		this.logger.info("Page Count:::"+pageCount);
+		MyLogger.info("Page Count:::"+pageCount);
 		List<String> solvedPageOrders=new ArrayList<String>();
 		if(businessUser!=null)
 		{
@@ -470,7 +471,7 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 				solvedPageOrders = Arrays.asList(businessUser.getSolvedPages().split(","));
 				for(String solvedPage:solvedPageOrders)
 				{
-					this.logger.info("Page Order:::"+solvedPage);
+					MyLogger.info("Page Order:::"+solvedPage);
 				}
 			}
 			else
@@ -481,13 +482,13 @@ protected static final Logger logger = LoggerFactory.getLogger(Validation.class)
 	
 		else
 		{
-			this.logger.info("KYC Incomplete");
+			MyLogger.info("KYC Incomplete");
 			throw new BusinessException(ErrorCode.OPERATION_NOT_PERFORMED);
 		}
 		if(pageCount!=null&&solvedPageOrders!=null&&!solvedPageOrders.isEmpty())
 		{
 			Long solvedPageCount=Long.valueOf(solvedPageOrders.size());
-			this.logger.info("Solved Page Count:::"+solvedPageCount);
+			MyLogger.info("Solved Page Count:::"+solvedPageCount);
 			
 			if(solvedPageCount.longValue()<pageCount.longValue())
 			{

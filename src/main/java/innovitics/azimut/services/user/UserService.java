@@ -16,6 +16,7 @@ import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.child.UserSpecification;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class UserService extends AbstractService<User,String>{
 
@@ -36,7 +37,7 @@ public class UserService extends AbstractService<User,String>{
 	
 	
 	public User save(User user) {
-		this.logger.info("Persisting:: User:::"+user.toString());
+		MyLogger.info("Persisting:: User:::"+user.toString());
 		return this.userRepository.save(user);
 	
 	}

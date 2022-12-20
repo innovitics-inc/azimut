@@ -12,6 +12,7 @@ import innovitics.azimut.rest.models.teacomputers.GetReportRequest;
 import innovitics.azimut.rest.models.teacomputers.GetReportResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class GetReportApiConsumer extends RestTeaComputerEportApiConsumer<GetReportRequest, GetReportResponse, GetReportInput, GetReportOutput>{
 
@@ -66,7 +67,7 @@ public class GetReportApiConsumer extends RestTeaComputerEportApiConsumer<GetRep
 
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Get Valuation Report API:::");
+		MyLogger.info("Handling the Exception in the Get Valuation Report API:::");
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;			

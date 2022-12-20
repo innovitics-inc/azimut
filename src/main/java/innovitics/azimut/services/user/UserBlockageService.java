@@ -14,6 +14,7 @@ import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.childparent.UserBlockageSpecification;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class UserBlockageService extends AbstractService<UserBlockage, String> {
 
@@ -52,7 +53,7 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	
 	public UserBlockage updateUserBlockage(UserBlockage userBlockage)
 	{
-		this.logger.info("user phone:::::"+userBlockage.getUserPhone());
+		MyLogger.info("user phone:::::"+userBlockage.getUserPhone());
 		userBlockage.setUpdatedAt(new Date());
 		UserBlockage updatedUserBlockage= this.userBlockageRepository.save(userBlockage);
 		
@@ -76,7 +77,7 @@ public class UserBlockageService extends AbstractService<UserBlockage, String> {
 	
 	public UserBlockage addUserBlockage(String userPhone)
 	{
-		this.logger.info("user phone:::::"+userPhone);
+		MyLogger.info("user phone:::::"+userPhone);
 		UserBlockage userBlockage=new UserBlockage();	
 		userBlockage.setErrorCount(1);
 		userBlockage.setUserPhone(userPhone);

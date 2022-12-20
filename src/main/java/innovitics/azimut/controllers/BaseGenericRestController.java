@@ -25,10 +25,12 @@ import innovitics.azimut.exceptions.GeneralException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.security.JwtUtil;
 import innovitics.azimut.utilities.CustomJsonRootName;
+import innovitics.azimut.utilities.Multi;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.validations.Validation;
 
 
@@ -52,7 +54,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 	private BaseGenericResponse<T> constructGenericBaseResponseCodeAndMessage(BaseGenericResponse<T> baseResponse) {
 		baseResponse.setMessage(StringUtility.SUCCESS);
 		baseResponse.setStatus(StringUtility.SUCCESS_CODE);
-		logger.info(baseResponse.toString());
+		MyLogger.info(baseResponse.toString());
 		return baseResponse;
 	}
 
@@ -61,16 +63,16 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 	}
 
 	protected ResponseEntity<BaseGenericResponse<T>> handleBaseGenericResponseException(BusinessException businessException) {
-		this.logger.info("Exception Caught::::");
+		MyLogger.info("Exception Caught::::");
 		return this.generateFailureBaseGenericResponseEntity(businessException, this.determineErrorType(businessException.getErrorCode()));
 	}
 	protected ResponseEntity<BaseGenericResponse<T>> handleBaseGenericResponseException(BusinessException businessException,String locale) {
-		this.logger.info("Exception Caught::::");
+		MyLogger.info("Exception Caught::::");
 		return this.generateFailureBaseGenericResponseEntity(businessException, this.determineErrorType(businessException.getErrorCode()),locale);
 	}
 
 	private HttpStatus determineErrorType(int errorCode) {
-		this.logger.info("Determine the Error Code:::"+errorCode);
+		MyLogger.info("Determine the Error Code:::"+errorCode);
 		HttpStatus httpStatus=HttpStatus.BAD_REQUEST;
 		if(errorCode==ErrorCode.NO_DATA_FOUND.getCode())
 		{
@@ -117,7 +119,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 	}
 
 	public BaseGenericResponse<T> generateBaseGenericResponseFailure(int errorCode, String errorMessage) {
-		this.logger.info("Generating the Base Response Failure using :::"+errorCode+" and " +errorMessage);
+		MyLogger.info("Generating the Base Response Failure using :::"+errorCode+" and " +errorMessage);
 		BaseGenericResponse<T> baseGenericResponse = new BaseGenericResponse<T>();
 		baseGenericResponse.setMessage(errorMessage);
 		baseGenericResponse.setStatus(errorCode);
@@ -137,14 +139,14 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 			object.put(singleAnnotation, data);
 			//baseGenericResponse.setObject(object);
 			baseGenericResponse.setResponse(object);
-			this.logger.info("Response"+object.toString());
+			MyLogger.info("Response"+object.toString());
 			
 		} else if (listUtility.isListPopulated(dataList)) {
 			Map<String, List<T>> result = new HashMap<String, List<T>>();
 			result.put(pluralAnnotation, dataList);
 			//baseGenericResponse.setResult(result);
 			baseGenericResponse.setResponse(result);
-			this.logger.info("Response"+result.toString());
+			MyLogger.info("Response"+result.toString());
 		}
 		else if (this.listUtility.isPaginatedListPopulated(paginatedList)) 
 		{
@@ -152,7 +154,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 			Map<String, PaginatedEntity<T>> page=new HashMap<String, PaginatedEntity<T>>();
 			page.put(pluralAnnotation, paginatedList);
 			baseGenericResponse.setResponse(page);
-			this.logger.info("Response"+page.toString());
+			MyLogger.info("Response"+page.toString());
 			/*
 			Map<String, List<T>> result = new HashMap<String, List<T>>();
 			result.put(pluralAnnotation, paginatedList.getDataList());
@@ -168,14 +170,14 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 		
 		else if(data==null&&(listUtility.isListEmptyOrNull(dataList))&&(listUtility.isPaginatedListEmpty(paginatedList)))
 		{
-			this.logger.info("No data found:::" + baseGenericResponse.toString());
-			this.logger.info("Base Response:::" + baseGenericResponse.toString());
+			MyLogger.info("No data found:::" + baseGenericResponse.toString());
+			MyLogger.info("Base Response:::" + baseGenericResponse.toString());
 			throw new BusinessException(ErrorCode.NO_DATA_FOUND);
 		}
 		
-		this.logger.info("Base Response:::" + baseGenericResponse.toString());
+		MyLogger.info("Base Response:::" + baseGenericResponse.toString());
 
-		this.logger.info("Data found:::" );
+		MyLogger.info("Data found:::" );
 		return new ResponseEntity<BaseGenericResponse<T>>(
 				this.constructGenericBaseResponseCodeAndMessage(baseGenericResponse),
 				this.validateGenericResponseSuccess(baseGenericResponse));
@@ -184,10 +186,13 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 	
 	protected BusinessUser getCurrentRequestHolder(String token) throws BusinessException
 	{
+		
+		
 		BusinessUser businessUser =this.jwtUtil.getBusinessUserFromToken(StringUtility.generateSubStringStartingFromCertainIndex(token,' '));
 		if(businessUser!=null)
 		{
-			this.logger.info("Current Request Holder::"+businessUser.getUserPhone());
+			MyLogger.info("Current Request Holder::"+businessUser.getUserPhone());
+			businessUser.setSystemTrx(Multi.currentThread().getId());
 		}
 		
 		return businessUser;
@@ -195,7 +200,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 	
 	
 	protected ResponseEntity<BaseGenericResponse<T>> handleBaseGenericResponseException(Exception exception) {
-		this.logger.info("Exception Caught::::");
+		MyLogger.info("Exception Caught::::");
 		if(exception instanceof MultipartException ||exception instanceof MaxUploadSizeExceededException|| exception instanceof SizeLimitExceededException || exception instanceof IllegalStateException)
 		return this.generateFailureBaseGenericResponseEntity(new BusinessException(ErrorCode.FILE_TOO_BIG),HttpStatus.BAD_REQUEST);
 		else 
@@ -203,7 +208,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 	} 
 
 	protected ResponseEntity<BaseGenericResponse<T>> handleBaseGenericResponseException(Exception exception,String locale) {
-		this.logger.info("Exception Caught::::");
+		MyLogger.info("Exception Caught::::");
 		if(exception instanceof MultipartException ||exception instanceof MaxUploadSizeExceededException|| exception instanceof SizeLimitExceededException || exception instanceof IllegalStateException)
 		return this.generateFailureBaseGenericResponseEntity(new BusinessException(ErrorCode.FILE_TOO_BIG),HttpStatus.BAD_REQUEST,locale);
 		else 

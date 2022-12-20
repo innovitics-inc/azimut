@@ -18,6 +18,7 @@ import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Service
 public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrderRequest, PlaceOrderResponse, PlaceOrderInput, PlaceOrderOutput>{
@@ -67,7 +68,7 @@ public class PlaceOrderApiConsumer extends RestTeaComputerApiConsumer<PlaceOrder
 
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Place Orders API:::");
+		MyLogger.info("Handling the Exception in the Place Orders API:::");
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;			

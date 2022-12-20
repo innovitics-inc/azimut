@@ -14,6 +14,7 @@ import innovitics.azimut.services.user.UserBlockageService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class UserBlockageUtility extends ParentUtility
@@ -25,7 +26,7 @@ public class UserBlockageUtility extends ParentUtility
 	public Object checkUserBlockage(Integer numberOfTrials,String blockageDurationMinutes,BusinessUser tokenizedBusinessUser,UserMapper userMapper,Object object, String methodName,Object[] parameters,Class<?>[] paramterTypes,ErrorCode errorCode) throws BusinessException
 	{
 		
-		this.logger.info("Checking User Blockage::::");
+		MyLogger.info("Checking User Blockage::::");
 		int actualNumberOfTrials= numberOfTrials!=null?numberOfTrials.intValue():0;
 		UserBlockage userBlockage=this.getUserBlockage(tokenizedBusinessUser.getId(),false);
 		if(userBlockage!=null)

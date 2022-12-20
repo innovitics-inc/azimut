@@ -18,6 +18,7 @@ import innovitics.azimut.services.kyc.KYCPageService;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.kyc.KYCPageMapper;
 
 @Service
@@ -99,7 +100,7 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 		if(businessSubmittedAnswer!=null
 				&&StringUtility.isStringPopulated(businessSubmittedAnswer.getDocumentName())&&StringUtility.isStringPopulated(businessSubmittedAnswer.getDocumentSubDirectory()))
 		{
-			this.logger.info("Generating the Document URL");
+			MyLogger.info("Generating the Document URL");
 			businessSubmittedAnswer.setDocumentURL
 			(this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobKYCDocuments(), businessSubmittedAnswer.getDocumentName(), businessSubmittedAnswer.getDocumentSubDirectory(), true,15L));	
 		}

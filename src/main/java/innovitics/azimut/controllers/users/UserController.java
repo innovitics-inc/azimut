@@ -31,6 +31,8 @@ import innovitics.azimut.services.user.UserDeviceService;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
+
 import org.springframework.web.multipart.MultipartException;
 
 @RestController
@@ -97,8 +99,8 @@ public class UserController extends BaseGenericRestController<BusinessUser,Strin
 			@RequestParam ("newCountryPhoneCode") String newCountryPhoneCode,@RequestParam ("newPhoneNumber") String newPhoneNumber) throws BusinessException, IOException,MaxUploadSizeExceededException {
 		try
 		{
-			this.logger.info("newCountryPhoneCode"+newCountryPhoneCode);
-			this.logger.info("newPhoneNumber"+newPhoneNumber);
+			MyLogger.info("newCountryPhoneCode"+newCountryPhoneCode);
+			MyLogger.info("newPhoneNumber"+newPhoneNumber);
 			return this.generateBaseGenericResponse(BusinessUser.class, 
 					this.businessUserService.beautifyUser(this.businessUserService.uploadSignedPdf(id,newCountryPhoneCode,newPhoneNumber,file,this.getCurrentRequestHolder(token))), null, null);
 		}		

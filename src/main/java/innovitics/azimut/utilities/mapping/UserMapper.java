@@ -14,6 +14,7 @@ import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Component
 public class UserMapper extends Mapper<User, BusinessUser>{
 public static final long TEACOMPUTERS_CLIENT_AML=1L;
@@ -27,7 +28,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 		
 		if(businessUser!=null)
 		{
-			this.logger.info("Business User to be editted::"+businessUser.toString());
+			MyLogger.info("Business User to be editted::"+businessUser.toString());
 			//this.convertBusinessDatesToBasicDates(user, businessUser, save);
 			
 			user.setId(businessUser.getId());
@@ -170,7 +171,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			
 			user.concatinate();
 			
-			this.logger.info("User::"+user.toString());
+			MyLogger.info("User::"+user.toString());
 			
 			return user;
 			
@@ -190,7 +191,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 		BusinessUser businessUser=new BusinessUser();
 		if(user!=null)
 		{
-			this.logger.info("User before conversion::"+user.toString());
+			MyLogger.info("User before conversion::"+user.toString());
 			//this.convertBasicDatesToBusinessDates(user, businessUser);
 			
 			if(user.getId()!=null)
@@ -383,7 +384,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			businessUser.concatinate();
 
 		}
-		this.logger.info("Business User::"+businessUser.toString());
+		MyLogger.info("Business User::"+businessUser.toString());
 		return businessUser;
 
 	}
@@ -532,7 +533,7 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not retireve the Institutional First Page Id::: ");
+			MyLogger.info("Could not retireve the Institutional First Page Id::: ");
 			exception.printStackTrace();
 			return null;
 		}

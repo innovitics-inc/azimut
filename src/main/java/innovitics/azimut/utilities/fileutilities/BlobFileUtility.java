@@ -56,11 +56,11 @@ public class BlobFileUtility extends ParentUtility{
 		blobData.setSubDirectory(subDirectory);
 		if (generateSasToken) 
 			blobData.setToken(this.generateSasTokenString(blobClient));		
-		this.logger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
+		MyLogger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not upload the file.");
+			MyLogger.info("Could not upload the file.");
 			exception.printStackTrace();
 			throw new BusinessException(ErrorCode.UPLOAD_FAILURE);
 		}
@@ -148,21 +148,21 @@ public class BlobFileUtility extends ParentUtility{
 	}
 	
 	public void deleteFileFromBlob(String containerName,String subDirectory,String fileName,boolean generateSasToken) throws IOException {
-		this.logger.info("accessing delete");
+		MyLogger.info("accessing delete");
 		try 
 		{
 			this.blobClientGeneration(containerName, subDirectory, fileName).getBlobClient().delete();
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not delete the file");
+			MyLogger.info("Could not delete the file");
 			exception.printStackTrace();
 		}
 		
 	}
 	
 	public void deleteAllFilesFromBlob(String containerName,String subDirectory) throws IOException {
-		this.logger.info("accessing delete all");
+		MyLogger.info("accessing delete all");
 		try 
 		{
 		
@@ -171,7 +171,7 @@ public class BlobFileUtility extends ParentUtility{
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not delete the directory");
+			MyLogger.info("Could not delete the directory");
 			exception.printStackTrace();
 		}
 		
@@ -187,15 +187,15 @@ public class BlobFileUtility extends ParentUtility{
 		        for (BlobItem blobItem : collect) 
 		        {
 		            String name = blobItem.getName();
-		            this.logger.info("Blob Item Name:::"+name);
+		            MyLogger.info("Blob Item Name:::"+name);
 		            if (name.endsWith("/")) 
 		            {
-		              this.logger.info("Accessing Folder");		              
+		              MyLogger.info("Accessing Folder");		              
 		              deleteAtLocation(container, name);
 		            } 
 		            else 
 		            {
-		            	this.logger.info("Accessing File");
+		            	MyLogger.info("Accessing File");
 		            	blobContainerClient.getBlobClient(name).delete();
 		            }
 		        }
@@ -212,29 +212,29 @@ public class BlobFileUtility extends ParentUtility{
 	}
 	public  boolean checkIfPathExists(BlobContainerClient blobContainerClient, String filePath) 
 	{
-	    this.logger.info("path exists? :::::"+blobContainerClient.exists());
+	    MyLogger.info("path exists? :::::"+blobContainerClient.exists());
 		return blobContainerClient.exists();
 	}
 	
 	
 	public void copyBlobFile(String sourceContainerName,String destinationContainerName,String subDirectory,String fileName,boolean generateSasToken) throws IOException {
-		this.logger.info("accessing read");
+		MyLogger.info("accessing read");
 		try 
 		{
 		
-		this.logger.info("source blob:::");	
+		MyLogger.info("source blob:::");	
 		BlobData sourceBlobData=this.blobClientGeneration(sourceContainerName, subDirectory, fileName);
-		this.logger.info("destination blob:::");
+		MyLogger.info("destination blob:::");
 		BlobData destinationBlobData=this.blobClientGeneration(destinationContainerName, subDirectory, fileName);
-		this.logger.info("copying from source to destination:::");
+		MyLogger.info("copying from source to destination:::");
 		destinationBlobData.getBlobClient().beginCopy(sourceBlobData.getBlobClient().getBlobUrl(), null);
-		this.logger.info("deleting from source:::");
+		MyLogger.info("deleting from source:::");
 		sourceBlobData.getBlobClient().delete();
 		
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not copy the file");
+			MyLogger.info("Could not copy the file");
 			exception.printStackTrace();
 		}
 		
@@ -247,7 +247,7 @@ public class BlobFileUtility extends ParentUtility{
 		blobData.setFileName(fileName);
 		blobData= this.generateBlobClientAndFileName(containerName+"/"+subDirectory, fileName, blobData);
 		
-		this.logger.info("Blob URL::::::: "+blobData.getBlobClient().getBlobUrl());
+		MyLogger.info("Blob URL::::::: "+blobData.getBlobClient().getBlobUrl());
 		return blobData;
 	}
 	public BlobData uploadFileToBlob(InputStream inputStream,boolean generateSasToken,String containerName,String subDirectory,String extension) throws IOException, BusinessException 
@@ -263,11 +263,11 @@ public class BlobFileUtility extends ParentUtility{
 		blobData.setSubDirectory(subDirectory);
 		if (generateSasToken) 
 			blobData.setToken(this.generateSasTokenString(blobClient));		
-		this.logger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
+		MyLogger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not upload the file.");
+			MyLogger.info("Could not upload the file.");
 			exception.printStackTrace();
 			throw new BusinessException(ErrorCode.UPLOAD_FAILURE);
 		}
@@ -287,11 +287,11 @@ public class BlobFileUtility extends ParentUtility{
 		blobData.setSubDirectory(subDirectory);
 		if (generateSasToken) 
 			blobData.setToken(this.generateSasTokenString(blobClient));		
-		this.logger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
+		MyLogger.info("Generated URL:::"+blobData.getConcatinated(generateSasToken));
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Could not upload the file.");
+			MyLogger.info("Could not upload the file.");
 			exception.printStackTrace();
 			throw new BusinessException(ErrorCode.UPLOAD_FAILURE);
 		}

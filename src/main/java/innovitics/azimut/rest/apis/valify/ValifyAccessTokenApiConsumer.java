@@ -16,6 +16,7 @@ import innovitics.azimut.rest.entities.valify.ValifyInput;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenRequest;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenResponse;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class ValifyAccessTokenApiConsumer extends RestValifyApiConsumer<ValifyAccessTokenRequest, ValifyAccessTokenResponse,ValifyAccessTokenInput ,ValifyAccessTokenOutput> {
 
@@ -35,7 +36,7 @@ public class ValifyAccessTokenApiConsumer extends RestValifyApiConsumer<ValifyAc
 		output.setTokenType(response.getToken_type());
 		output.setScope(response.getScope());
 		output.setRefreshToken(response.getRefresh_token());
-		this.logger.info("ValifyAccessTokenOutput:::"+output.toString());
+		MyLogger.info("ValifyAccessTokenOutput:::"+output.toString());
 		return output;
 		
 	}
@@ -66,7 +67,7 @@ public class ValifyAccessTokenApiConsumer extends RestValifyApiConsumer<ValifyAc
 	public HttpHeaders generateHeaders(String locale,long contentLength) {
 		HttpHeaders headers=this.httpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		logger.info("Generated Headers:::"+headers.toString());
+		MyLogger.info("Generated Headers:::"+headers.toString());
 		return headers;
 	}
 

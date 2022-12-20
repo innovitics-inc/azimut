@@ -5,20 +5,16 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import innovitics.azimut.businessmodels.WrapperBusinessEntity;
 import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.models.user.UserBlockage;
-import innovitics.azimut.rest.mappers.InjectWithdrawMapper;
-import innovitics.azimut.rest.mappers.PlaceOrderMapper;
-import innovitics.azimut.utilities.businessutilities.UserBlockageUtility;
 import innovitics.azimut.utilities.crosslayerenums.ModuleType;
-import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 
 @Service
@@ -155,7 +151,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 			if(userBlockage==null)
 			{
 				
-				this.logger.info("User Blockage none existent::");
+				MyLogger.info("User Blockage none existent::");
 				UserBlockage addedUserBlockage=new UserBlockage();
 				
 				if(hasToken)
@@ -172,7 +168,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 			}
 			else
 			{
-				this.logger.info("User Blockage::" +userBlockage.toString());
+				MyLogger.info("User Blockage::" +userBlockage.toString());
 				if(this.getMinutesBefore(this.configProperties.getBlockageDurationInMinutes()).before(userBlockage.getUpdatedAt()))
 				{	
 					
@@ -223,14 +219,14 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 			UserBlockage userBlockage=this.phoneNumberBlockageUtility.getUserBlockage(userPhone,false);	
 			if(userBlockage==null)
 			{
-				this.logger.info("User Blockage none existent::");
+				MyLogger.info("User Blockage none existent::");
 				UserBlockage addedUserBlockage=this.phoneNumberBlockageUtility.addUserBlockage(userPhone);
 				addedUserBlockage.setUser(null);
 				baseAzimutTrading.setUserBlockage(addedUserBlockage);
 			}
 			else
 			{
-				this.logger.info("User Blockage::" +userBlockage.toString());
+				MyLogger.info("User Blockage::" +userBlockage.toString());
 				if(this.getMinutesBefore(this.configProperties.getBlockageDurationInMinutes()).before(userBlockage.getUpdatedAt()))
 				{	
 					
@@ -298,7 +294,7 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 			} 
 			catch (IOException ioException) 
 			{
-				this.logger.info("Could not extract the file bytes");
+				MyLogger.info("Could not extract the file bytes");
 				ioException.printStackTrace();
 			}
 		 }

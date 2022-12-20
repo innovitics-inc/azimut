@@ -22,6 +22,7 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.security.HmacUtil;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Component
 public class GenericFilter implements Filter {
@@ -38,7 +39,7 @@ public class GenericFilter implements Filter {
 				long startTime = System.currentTimeMillis();
 				wrapper = new RequestWrapper((HttpServletRequest) request);
 				String signatureHeader = wrapper.getHeader(SIGNATURE_HEADER);
-				this.logger.info("signature header:::"+signatureHeader);
+				MyLogger.info("signature header:::"+signatureHeader);
 		        byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());
 		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());	
 		        this.checkRequestHeaderSignature(signatureHeader, jsonRequest,wrapper.getRequestURI());

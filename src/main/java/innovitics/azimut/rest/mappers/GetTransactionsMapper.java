@@ -24,6 +24,7 @@ import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.TransactionType;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTransactionsOutput,GetTransactionsRequest,TransactionResponse[],BusinessTransaction>{
 
@@ -77,7 +78,7 @@ public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTr
 		BusinessTransaction businessTransaction=new BusinessTransaction();
 		if(transactionOutput!=null)
 		{
-			this.logger.info("TransactionOutput:::::"+ transactionOutput);
+			MyLogger.info("TransactionOutput:::::"+ transactionOutput);
 			businessTransaction.setAmount(transactionOutput.getTransValue()==null? null:Double.valueOf(transactionOutput.getTransValue()));
 			businessTransaction.setTrxDate(transactionOutput.getTransDate());
 			

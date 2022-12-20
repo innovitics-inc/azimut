@@ -19,8 +19,10 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
+import innovitics.azimut.utilities.LocalThread;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.FileUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Component
 public class AccessLogFilter implements Filter {
 
@@ -34,13 +36,16 @@ public class AccessLogFilter implements Filter {
   		//ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest)request);
 		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse)response);
 
-		String transaction=UUID.randomUUID().toString();
-		
+		String transaction=String.valueOf(Thread.currentThread().getId());
+
 		RequestWrapper wrapper = new RequestWrapper((HttpServletRequest) request);
 		byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());
 		String requestBody =new String(body, 0, body.length, wrapper.getCharacterEncoding());	
 		
-		this.logger.info("REQUEST::"+transaction+"::"+requestBody);		
+		MyLogger.info("REQUEST::"+transaction+"::"+requestBody);
+		
+		
+		
 		this.fileUtility.write("REQUEST::"+transaction+"::"+requestBody);
 		
 		
@@ -49,11 +54,11 @@ public class AccessLogFilter implements Filter {
         // Get Cache
 
 	    /*String requestBody = StringUtility.getStringValue(requestWrapper.getContentAsByteArray(),requestWrapper.getCharacterEncoding());
-		this.logger.info("REQUEST:::"+requestBody);*/
+		MyLogger.info("REQUEST:::"+requestBody);*/
 
 		String responseBody = StringUtility.getStringValue(responseWrapper.getContentAsByteArray(),response.getCharacterEncoding()); 
 		  
-		this.logger.info("RESPONSE::"+transaction+"::"+responseBody);
+		MyLogger.info("RESPONSE::"+transaction+"::"+responseBody);
 		responseWrapper.copyBodyToResponse();
 		
 		

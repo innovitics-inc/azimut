@@ -29,6 +29,7 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @RestController
 @RequestMapping("/api/kyc/pages")
@@ -144,7 +145,7 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage, St
 			Long answerId,MultipartFile file) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			this.logger.info("answerId:::"+answerId);
+			MyLogger.info("answerId:::"+answerId);
 			return this.generateBaseGenericResponse(BusinessKYCPage.class,this.businessUserAnswerSubmissionService.uploadDocument(this.getCurrentRequestHolder(token),answerId,file),null, null);			
 		}		
 		catch(BusinessException businessException)

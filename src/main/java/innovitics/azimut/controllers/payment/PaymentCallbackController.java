@@ -21,6 +21,7 @@ import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Controller
 @RequestMapping("/api/paytabs")
@@ -57,7 +58,7 @@ public class PaymentCallbackController extends BaseGenericRestController<Paytabs
 			) throws BusinessException {
 		try
 		{
-			this.logger.info("Signature:::"+signature);
+			MyLogger.info("Signature:::"+signature);
 			return this.generateBaseGenericResponse(PaytabsCallbackRequest.class,this.businessPaymentService.updateTransactionAfterGatewayCallback(paytabsCallbackRequest,null),null, null);
 		}		
 		catch(BusinessException businessException)

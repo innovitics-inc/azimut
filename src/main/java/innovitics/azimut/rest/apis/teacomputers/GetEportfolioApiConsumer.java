@@ -15,6 +15,7 @@ import innovitics.azimut.rest.models.teacomputers.GetEportfolioRequest;
 import innovitics.azimut.rest.models.teacomputers.GetEportfolioResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class GetEportfolioApiConsumer extends RestTeaComputerEportApiConsumer<GetEportfolioRequest, GetEportfolioResponse, GetEportfolioInput, GetEportfolioOutput>{
 
@@ -70,7 +71,7 @@ public class GetEportfolioApiConsumer extends RestTeaComputerEportApiConsumer<Ge
 
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Get Eportfolio API:::");
+		MyLogger.info("Handling the Exception in the Get Eportfolio API:::");
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;			

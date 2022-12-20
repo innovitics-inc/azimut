@@ -41,6 +41,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 import innovitics.azimut.validations.validators.azimutclient.SaveUserLocation;
 import innovitics.azimut.validations.validators.user.AddBusinessUserValidator;
@@ -386,7 +387,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		}
 		catch(Exception exception)
 		{
-			this.logger.info("Enter Excepton Handling");
+			MyLogger.info("Enter Excepton Handling");
 			BusinessException businessException=this.handleBusinessException(exception,ErrorCode.USER_NOT_FOUND);			
 			if(NumberUtility.areIntegerValuesMatching(businessException.getErrorCode(), ErrorCode.USER_NOT_FOUND.getCode()))
 			{
@@ -605,7 +606,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public void updateUserAtTeaComputers(BusinessUser businessUser) 
 	{
-		logger.info("Update User at Tea Computers");
+		MyLogger.info("Update User at Tea Computers");
 	}
 	
 	public BusinessUser downloadUserContract(BusinessUser tokenizedBusinessUser) throws BusinessException
@@ -643,7 +644,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 			if(exception instanceof IntegrationException)
 			{
-				this.logger.info("Detecting the exception type in the checkAccountAtTeaComputers method:::");
+				MyLogger.info("Detecting the exception type in the checkAccountAtTeaComputers method:::");
 				throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.FAILED_TO_INTEGRATE);
 			}
 			else
@@ -673,16 +674,16 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		String fileName=blobData.getFileName();
 		String filePath=blobData.getSubDirectory();
 		user=this.userMapper.convertBusinessUnitToBasicUnit(businessUser, false);
-		logger.info("Parameter::"+parameter);
+		MyLogger.info("Parameter::"+parameter);
 		if(StringUtility.stringsMatch(PROFILE_PICTURE_PARAMETER, parameter))
 		{	
-			logger.info("updating Profile Picture");
+			MyLogger.info("updating Profile Picture");
 			user.setProfilePicture(fileName);
 			user.setPicturePath(filePath);									
 		}
 		else if(StringUtility.stringsMatch(SIGNED_PDF_PARAMETER, parameter))
 		{	
-			logger.info("updating signed PDF");
+			MyLogger.info("updating signed PDF");
 			user.setSignedPdf(fileName);
 			user.setPdfPath(filePath);
 			user.setChangeNoApproved(false);
@@ -690,13 +691,13 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		user= userService.update(user);
 		if(user.getProfilePicture()!=null&&user.getPicturePath()!=null&&StringUtility.stringsMatch(PROFILE_PICTURE_PARAMETER, parameter))
 		{
-			logger.info("Generating Profile Picture URL");
+			MyLogger.info("Generating Profile Picture URL");
 			user.setProfilePicture(blobData.getConcatinated(generateSasToken));
 		}
 		
 		if(user.getSignedPdf()!=null&&user.getPdfPath()!=null&&StringUtility.stringsMatch(SIGNED_PDF_PARAMETER, parameter))
 		{
-			logger.info("Generating Signed PDF URL");
+			MyLogger.info("Generating Signed PDF URL");
 			user.setSignedPdf(blobData.getConcatinated(generateSasToken));
 		}
 		
@@ -759,7 +760,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	
 	public BusinessUser setUserIdAndUserIdType(BusinessUser tokenizedBusinessUser,BusinessUser inputBusinessUser)
 	{
-		this.logger.debug("Editing the user:::");
+		MyLogger.info("Editing the user:::");
 		if(inputBusinessUser!=null)
 		{
 			tokenizedBusinessUser.setIdType(inputBusinessUser.getIdType());
@@ -769,7 +770,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			try 
 			{
 				this.editUser(tokenizedBusinessUser);
-				this.logger.debug("User Editted:::");
+				MyLogger.info("User Editted:::");
 			}
 			catch(Exception exception)
 			{
@@ -793,7 +794,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 				
 				if(isListPopulated&&azimutAccounts.size()==1)
 				{
-					this.logger.info("Single old account::::");
+					MyLogger.info("Single old account::::");
 					BusinessUser inputBusinessUser=new BusinessUser();
 					
 					inputBusinessUser.setIdType(azimutAccounts.get(0).getAzIdType());
@@ -813,7 +814,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			catch(Exception exception)
 			{
 				exception.printStackTrace();
-				this.logger.info("Could not retrieve the azimut bank accounts");
+				MyLogger.info("Could not retrieve the azimut bank accounts");
 				if(this.exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(exception, ErrorCode.NO_MATCHED_CLIENT_NUMBER_EXIST))
 				{
 					throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, null);
@@ -849,15 +850,15 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		{
 			teacomputerException.printStackTrace();
 		
-			this.logger.info("Enter TC exception Handling");
+			MyLogger.info("Enter TC exception Handling");
 			if(exceptionHandler.checkIfIntegrationExceptinWithSpecificErrorCode(teacomputerException, ErrorCode.NO_MATCHED_CLIENT_NUMBER_EXIST))
 			{
-				this.logger.info("Go to reg");
+				MyLogger.info("Go to reg");
 				searchedForBusinessUser.setBusinessFlow(BusinessFlow.GO_TO_REGISTRATION);
 			}
 			else
 			{
-				this.logger.info("Throw exception");
+				MyLogger.info("Throw exception");
 				throw this.exceptionHandler.handleException(teacomputerException);
 			}
 		}

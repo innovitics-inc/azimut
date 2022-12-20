@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.utilities.ParentUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.DiskStorePathManager;
@@ -34,7 +35,7 @@ public class CachingLayer  extends ParentUtility {
 		Cache cache = singletonManager.getCache("cacheLayer");
 		if(cache.get(cacheKey)==null)
 		 {
-			this.logger.info("Cache Empty:::");
+			MyLogger.info("Cache Empty:::");
 			Object result=this.getValueUsingReflection(object,methodName,parameters,paramterTypes);
 			Element element =new Element(cacheKey,result);
 			element.setTimeToLive(timeToLive);
@@ -44,7 +45,7 @@ public class CachingLayer  extends ParentUtility {
 		 }		
 		else
 		{
-			this.logger.info("Cache Populated:::");
+			MyLogger.info("Cache Populated:::");
 			return cache.get(cacheKey).getObjectValue();
 		}
 	}

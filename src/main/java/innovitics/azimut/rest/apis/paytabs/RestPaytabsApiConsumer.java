@@ -25,6 +25,7 @@ import innovitics.azimut.rest.models.paytabs.PaytabsRequest;
 import innovitics.azimut.rest.models.paytabs.PaytabsResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 public abstract class RestPaytabsApiConsumer <PaytabsRequest, PaytabsResponse, PaytabsInput, PaytabsOutput> 
 extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, PaytabsOutput> {
@@ -40,7 +41,7 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.add(StringUtility.PAYTABS_AUTHORIZATION_HEADER,this.configProperties.getPaytabsServerKey());
 		headers.add("lang",locale);
-		logger.info("Generated Headers:::"+headers.toString());
+		MyLogger.info("Generated Headers:::"+headers.toString());
 		return headers;
 	}
 	
@@ -83,7 +84,7 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 	}
 	protected IntegrationException validateExceptionType(Exception exception)
 	{
-		this.logger.info("Stack trace:::");
+		MyLogger.info("Stack trace:::");
 		
 		exception.printStackTrace();
 		
@@ -104,23 +105,23 @@ extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, 
 	
 	}	
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
-		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
+		MyLogger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
 		String errorMessage="";
 		innovitics.azimut.rest.models.paytabs.PaytabsResponse  paytabsResponse=new innovitics.azimut.rest.models.paytabs.PaytabsResponse() ;
 		ObjectMapper mapper = new ObjectMapper();
 		try 
 		{
-			this.logger.info("Parsing the exception to the teaComputerResponse:::");
-			this.logger.info("httpClientErrorException.getResponseBodyAsString():::"+httpClientErrorException.getResponseBodyAsString());
+			MyLogger.info("Parsing the exception to the teaComputerResponse:::");
+			MyLogger.info("httpClientErrorException.getResponseBodyAsString():::"+httpClientErrorException.getResponseBodyAsString());
 			paytabsResponse = mapper.readValue(httpClientErrorException.getResponseBodyAsString(), innovitics.azimut.rest.models.paytabs.PaytabsResponse.class);
 			errorMessage=paytabsResponse.getMessage();
 			errorCode=paytabsResponse.getCode();
 			
 			
-			this.logger.info("paytabsResponse:::"+paytabsResponse.toString());
+			MyLogger.info("paytabsResponse:::"+paytabsResponse.toString());
 		} catch (JsonProcessingException e) {
-			this.logger.info("Failed to Parse:::");
+			MyLogger.info("Failed to Parse:::");
 			e.printStackTrace();
 			return new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
 		}

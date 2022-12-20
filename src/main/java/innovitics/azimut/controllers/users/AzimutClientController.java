@@ -24,6 +24,7 @@ import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @RestController
 @RequestMapping("/api/azimut/user")
 public class AzimutClientController extends BaseGenericRestController<BusinessAzimutClient ,String>{
@@ -37,7 +38,7 @@ public class AzimutClientController extends BaseGenericRestController<BusinessAz
 			@RequestBody BusinessAzimutClient searchBusinessAzimutClient) throws BusinessException, IOException, IntegrationException {
 		try
 		{
-			this.logger.info("SearchBusinessAzmiutClient::"+searchBusinessAzimutClient);
+			MyLogger.info("SearchBusinessAzmiutClient::"+searchBusinessAzimutClient);
 			return this.generateBaseGenericResponse(BusinessAzimutClient.class,this.businessClientDetailsService.getBalanceAndTransactions(searchBusinessAzimutClient,this.getCurrentRequestHolder(token)),null, null);
 		}		
 		catch(BusinessException businessException)

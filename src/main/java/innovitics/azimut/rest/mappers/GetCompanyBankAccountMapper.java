@@ -16,6 +16,7 @@ import innovitics.azimut.rest.models.teacomputers.CompanyBankAccountResponse;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Component
 public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput,GetCompanyBankAccountRequest ,CompanyBankAccountResponse[], BusinessCompanyBankAccount> {
@@ -67,7 +68,7 @@ public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccoun
 		BusinessCompanyBankAccount businessCompanyBankAccount=new BusinessCompanyBankAccount();
 		if(companyBankAccountOutput!=null)
 		{
-			this.logger.info("companyBankAccountOutput:::"+companyBankAccountOutput.toString());
+			MyLogger.info("companyBankAccountOutput:::"+companyBankAccountOutput.toString());
 			businessCompanyBankAccount.setBankName(companyBankAccountOutput.getBankName());
 			businessCompanyBankAccount.setAccountNo(companyBankAccountOutput.getAccountNo());
 			businessCompanyBankAccount.setBranchName(companyBankAccountOutput.getBranchName());

@@ -18,6 +18,7 @@ import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.Mapper;
 @Component
 public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
@@ -56,11 +57,11 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 			}
 			businessAnswer.setRelatedAnswers(businessRelatedAnswers);
 		}
-		this.logger.info("The answers were retrieved successfully::::::");
+		MyLogger.info("The answers were retrieved successfully::::::");
 		//this.populateUserAnswers(parentAnswers, childAnswers,answer.getPageId(),answer.getAppUserId());
 		
 		//businessAnswer.setBusinessSubmittedAnswers(parentAnswers);
-		this.logger.info("Business Answer, business submitted answer list::::"+businessAnswer.getBusinessSubmittedAnswers());		
+		MyLogger.info("Business Answer, business submitted answer list::::"+businessAnswer.getBusinessSubmittedAnswers());		
 		return businessAnswer;
 	}
 
@@ -85,11 +86,11 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 			}
 			businessAnswer.setRelatedAnswers(businessRelatedAnswers);
 		}
-		this.logger.info("The answers were retrieved successfully::::::");
+		MyLogger.info("The answers were retrieved successfully::::::");
 		//this.populateUserAnswers(parentAnswers, childAnswers,answer.getPageId(),answer.getAppUserId());
 		
 		//businessAnswer.setBusinessSubmittedAnswers(parentAnswers);
-		this.logger.info("Business Answer, business submitted answer list::::"+businessAnswer.getBusinessSubmittedAnswers());		
+		MyLogger.info("Business Answer, business submitted answer list::::"+businessAnswer.getBusinessSubmittedAnswers());		
 		return businessAnswer;
 	}
 	
@@ -120,7 +121,7 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 		//this.populateUserAnswers(answer, parentAnswers, childAnswers);
 		/*if(this.userAnswerListUtility.isSetPopulated(answer.getUserAnswers()))
 		{		
-			   this.logger.info("User answers Found:::::"+answer.getUserAnswers());
+			   MyLogger.info("User answers Found:::::"+answer.getUserAnswers());
 				
 				List<Long> parentIds=new LinkedList<Long>();
 				List<Long> childIds = new LinkedList<Long>();
@@ -164,7 +165,7 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 			List<BusinessSubmittedAnswer> relatedAnswers=new LinkedList<BusinessSubmittedAnswer>();
 			for(BusinessSubmittedAnswer child:childAnswers)
 			{
-				this.logger.info("Comparing"+" "+child+" and "+parent);
+				MyLogger.info("Comparing"+" "+child+" and "+parent);
 				if (NumberUtility.areLongValuesMatching(parent.getAnswerId(), child.getParentAnswerId()))
 				{
 					relatedAnswers.add(child);
@@ -179,7 +180,7 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 	{
 		if(this.userAnswerListUtility.isSetPopulated(answer.getUserAnswers()))
 		{		
-			   this.logger.info("User answers Found:::::"+answer.getUserAnswers());
+			   MyLogger.info("User answers Found:::::"+answer.getUserAnswers());
 				
 				List<Long> parentIds=new LinkedList<Long>();
 				List<Long> childIds = new LinkedList<Long>();
@@ -232,7 +233,7 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 		}
 		if(this.userAnswerListUtility.isListPopulated(userAnswers))
 		{		
-			   this.logger.info("User answers Found:::::"+userAnswers.toString());
+			   MyLogger.info("User answers Found:::::"+userAnswers.toString());
 				
 				List<Long> parentIds=new LinkedList<Long>();
 				List<Long> childIds = new LinkedList<Long>();

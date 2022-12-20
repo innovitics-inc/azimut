@@ -16,6 +16,7 @@ import innovitics.azimut.models.kyc.UserAnswer;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.ParentMapper;
 @Component
 public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
@@ -108,7 +109,7 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 				BusinessAnswer businessAnswer=this.answerMapper.convertBasicUnitToBusinessUnit(answer,language);
 					if(this.businessSubmittedAnswerListUtility.isListPopulated(businessAnswer.getBusinessSubmittedAnswers()))
 					{
-						this.logger.info("The business answer in the Question Mapper::::");
+						MyLogger.info("The business answer in the Question Mapper::::");
 
 						businessAnswer.setBusinessSubmittedAnswers(null);
 					}

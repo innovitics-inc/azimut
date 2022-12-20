@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import io.jsonwebtoken.JwtException;
 
 @Component
@@ -77,7 +78,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 
 			
-			this.logger.info("authorization header:::"+authorizationHeader);    
+			MyLogger.info("authorization header:::"+authorizationHeader);    
 			
 			
 			filterChain.doFilter(request, response);			  

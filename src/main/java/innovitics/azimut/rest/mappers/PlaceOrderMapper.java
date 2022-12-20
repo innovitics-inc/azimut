@@ -14,6 +14,7 @@ import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderOutput;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderRequest;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderResponse;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Component
 public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutput,PlaceOrderRequest,PlaceOrderResponse, BaseAzimutTrading>{
 
@@ -21,7 +22,7 @@ public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutp
 	
 	@Override
 	public BaseAzimutTrading consumeRestService(BaseAzimutTrading baseAzimutTrading, String params) throws IntegrationException, HttpClientErrorException, Exception {
-		this.logger.info("Access the place order mapper:::::");
+		MyLogger.info("Access the place order mapper:::::");
 		
 		return this.createBusinessEntityFromOutput(this.placeOrderApiConsumer.invoke(this.createInput(baseAzimutTrading), PlaceOrderResponse.class, params));
 		

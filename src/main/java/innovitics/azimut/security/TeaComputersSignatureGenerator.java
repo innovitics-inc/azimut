@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
+
 import java.util.Base64;
 @Component
 public class TeaComputersSignatureGenerator {
@@ -23,10 +25,10 @@ public class TeaComputersSignatureGenerator {
 		StringBuffer stringBuffer=new StringBuffer();
 		if(arrayUtility.isArrayPopulated(params))
 		{
-			logger.info("Param Array is populated:::");
+			MyLogger.info("Param Array is populated:::");
 			for (int i=0;i<params.length;i++)
 			{
-				logger.info(params[i]);
+				MyLogger.info(params[i]);
 				stringBuffer.append(params.clone()[i]);				
 			}
 			stringBuffer.append(this.configProperties.getTeaComputersKey());
@@ -44,10 +46,10 @@ public class TeaComputersSignatureGenerator {
 		StringBuffer stringBuffer=new StringBuffer();
 		if(arrayUtility.isArrayPopulated(params))
 		{
-			logger.info("Param Array is populated:::");
+			MyLogger.info("Param Array is populated:::");
 			for (int i=0;i<params.length;i++)
 			{
-				logger.info(params[i]);
+				MyLogger.info(params[i]);
 				stringBuffer.append(params.clone()[i]);				
 			}
 			stringBuffer.append(customSecurityKey);

@@ -20,6 +20,7 @@ import innovitics.azimut.rest.models.teacomputers.GetClientCashBalanceResponse;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<GetClientCashBalanceRequest, ClientCashBalanceResponse[], GetClientBalanceInput, GetClientBalanceOutput> {
 
@@ -84,7 +85,7 @@ public class GetClientCashBalanceApiConsumer extends RestTeaComputerApiConsumer<
 	@Override
 	public IntegrationException handleException(Exception exception) 
 	{
-		this.logger.info("Handling the Exception in the Get Client Balance API:::");		
+		MyLogger.info("Handling the Exception in the Get Client Balance API:::");		
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;

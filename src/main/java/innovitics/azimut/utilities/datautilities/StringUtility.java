@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +21,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 
 public final class StringUtility extends ParentUtility{
 	
+	protected static final Logger logger = LoggerFactory.getLogger(StringUtility.class);
 	public static final String SUCCESS="success";
 	public static final int SUCCESS_CODE=0;
 	public static final String AUTHORIZATION_HEADER="Authorization";

@@ -42,6 +42,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class UserUtility extends ParentUtility{
@@ -85,9 +86,9 @@ public class UserUtility extends ParentUtility{
 	{	
 		if(!StringUtility.isStringPopulated(deviceId))
 		{	
-			this.logger.info("deviceId empty");
+			MyLogger.info("deviceId empty");
 			deviceId=aes.encrypt(user.getId().toString()+StringUtility.WEB_DEVICE);
-			this.logger.info("deviceId:::::"+deviceId);
+			MyLogger.info("deviceId:::::"+deviceId);
 		}
 		
 		List<UserDevice> userDevices=this.userDeviceService.getUserDevicesWithUserId(user.getId());
@@ -114,7 +115,7 @@ public class UserUtility extends ParentUtility{
 		    	}
 		    	if(userDevice!=null&&StringUtility.isStringPopulated(userDevice.getDeviceId())&&StringUtility.stringsMatch(userDevice.getDeviceId(), deviceId))
 		    	{
-		    		this.logger.info("UserDevice:::"+userDevice.toString());
+		    		MyLogger.info("UserDevice:::"+userDevice.toString());
 		    		this.upsertDeviceIdAudit(user, deviceId,userDevice);
 		    	}
 		    	deviceIds.add(userDevice.getDeviceId());
@@ -164,11 +165,11 @@ public class UserUtility extends ParentUtility{
 	{	
 		if(newUserStep!=null)
 		{
-			this.logger.info("New user step::::"+newUserStep.toString());
+			MyLogger.info("New user step::::"+newUserStep.toString());
 		}
 		if(tokenizedBusinessUser.getUserStep()!=null)
 		{
-			this.logger.info("Old user step::::"+tokenizedBusinessUser.getUserStep().toString());
+			MyLogger.info("Old user step::::"+tokenizedBusinessUser.getUserStep().toString());
 		}
 		if(tokenizedBusinessUser.getUserStep()!=null)
 		{
@@ -331,7 +332,7 @@ public class UserUtility extends ParentUtility{
 			user.setUserId(userId);
 	    }
 		
-		this.logger.info("Old user being saved::::::::::::::::::::::"+user.toString());
+		MyLogger.info("Old user being saved::::::::::::::::::::::"+user.toString());
 		this.userService.save(user);
 		return user;
 	}
@@ -366,7 +367,7 @@ public class UserUtility extends ParentUtility{
 			} 	
 			catch (BusinessException | IOException e) 
 			{
-				this.logger.info("Failed to upload the file::::");
+				MyLogger.info("Failed to upload the file::::");
 				e.printStackTrace();
 			}
 		}

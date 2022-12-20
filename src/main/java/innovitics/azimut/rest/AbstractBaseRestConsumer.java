@@ -37,6 +37,7 @@ import innovitics.azimut.rest.errorhandling.RestErrorHandler;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Component
 public abstract class AbstractBaseRestConsumer<REQ,RES,I,O>
@@ -53,7 +54,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 
 	@Override
 	public O invoke(I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception {
-		logger.info("Input::" + input);
+		MyLogger.info("Input::" + input);
 		ResponseEntity<RES> responseEntity=null;
 		try {
 
@@ -66,7 +67,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				//logger.info("Request::" + httpEntity.toString());
 				String url=this.generateURL(params);
 				
-				logger.info("URL:::"+url);
+				MyLogger.info("URL:::"+url);
 				
 				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), );
 				
@@ -76,7 +77,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				
 				this.populateResponse(url, responseEntity);
 				
-				logger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
+				MyLogger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
 				
 				this.validateResponse(responseEntity);
 				
@@ -84,7 +85,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				
 				this.transferFromInputToOutput(input, output);
 				
-				logger.info("Output:::" +output!=null?output.toString():null);
+				MyLogger.info("Output:::" +output!=null?output.toString():null);
 				return output;
 			}
 			if(mappedHttpEntity!=null)
@@ -92,16 +93,16 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				//logger.info("Request::" + mappedHttpEntity.toString());
 				String url=this.generateURL(params);
 				
-				logger.info("URL:::"+url);
+				MyLogger.info("URL:::"+url);
 				
 				//ResponseEntity<RES> responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params);
 				responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params,input);
-				logger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
+				MyLogger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
 				
 				this.validateResponse(responseEntity);
 				
 				O output=this.generateOutPutFromResponse(responseEntity);
-				logger.info("Output:::" +output!=null?output.toString():null);
+				MyLogger.info("Output:::" +output!=null?output.toString():null);
 				return output;
 	
 			}
@@ -129,8 +130,8 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	
 	protected boolean validateResponseStatus(ResponseEntity<RES> responseEntity) 
 	{	boolean result=false;
-		this.logger.info("Response Entity::::"+ responseEntity!=null?responseEntity.toString():null);
-		this.logger.info("Response Body::::"+responseEntity.getBody()!=null?responseEntity.getBody().toString():null);
+		MyLogger.info("Response Entity::::"+ responseEntity!=null?responseEntity.toString():null);
+		MyLogger.info("Response Body::::"+responseEntity.getBody()!=null?responseEntity.getBody().toString():null);
 		boolean responseResult=responseEntity!=null&&responseEntity.getStatusCode()!=null&&responseEntity.getStatusCode().is2xxSuccessful()&&responseEntity.getBody()!=null;
 		
 		return responseResult;
@@ -140,9 +141,9 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	public
 	ResponseEntity<RES> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException
 	{						
-		this.logger.info("Request right before invocation::::"+httpEntity.toString());
-		this.logger.info("Method:::"+httpMethod);
-		this.logger.info("Class:::"+clazz.getName());
+		MyLogger.info("Request right before invocation::::"+httpEntity.toString());
+		MyLogger.info("Method:::"+httpMethod);
+		MyLogger.info("Class:::"+clazz.getName());
 
 		ResponseEntity<RES> responseEntity=this.restTemplate().exchange(this.generateURL(params), httpMethod, httpEntity, clazz);
 		return responseEntity;
@@ -153,9 +154,9 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	public
 	ResponseEntity<RES> consumeURLEncodedRequestRestAPI(HttpEntity<MultiValueMap<String, String>> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException
 	{						
-		this.logger.info("URL Encoded Request right before invocation::::"+httpEntity);
-		this.logger.info("Method:::"+httpMethod);
-		this.logger.info("Class:::"+clazz.getName());
+		MyLogger.info("URL Encoded Request right before invocation::::"+httpEntity);
+		MyLogger.info("Method:::"+httpMethod);
+		MyLogger.info("Class:::"+clazz.getName());
 
 		ResponseEntity<RES> responseEntity=this.restTemplate().exchange(this.generateURL(params), httpMethod, httpEntity, clazz);
 		return responseEntity;
@@ -190,10 +191,10 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	    try 
 	    {
 			json = objectMapper.writeValueAsString(request);
-			this.logger.info("Json:::::"+json);
+			MyLogger.info("Json:::::"+json);
 		} catch (JsonProcessingException e) 
 	    {
-			this.logger.info("Could not stringfy to json object");
+			MyLogger.info("Could not stringfy to json object");
 			e.printStackTrace();
 		}
 		return json.length();
@@ -211,10 +212,10 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 			objectMapper.setSerializationInclusion(Include.NON_EMPTY);
 
 			json = objectMapper.writeValueAsString(request);
-			//this.logger.info("Json:::::"+json);
+			//MyLogger.info("Json:::::"+json);
 		} catch (JsonProcessingException e) 
 	    {
-			this.logger.info("Could not stringfy to json object");
+			MyLogger.info("Could not stringfy to json object");
 			e.printStackTrace();
 		}
 

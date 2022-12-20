@@ -20,6 +20,7 @@ import innovitics.azimut.rest.models.teacomputers.GetClientFundsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountRequest;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsumer<GetCompanyBankAccountRequest, CompanyBankAccountResponse[], GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput>{
 
@@ -46,7 +47,7 @@ public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsum
 				for(int i=0;i<responseEntity.getBody().length;i++)
 				{
 					
-					this.logger.info("CompanyBankAccountResponse:::"+responseEntity.getBody()[i].toString());
+					MyLogger.info("CompanyBankAccountResponse:::"+responseEntity.getBody()[i].toString());
 					CompanyBankAccountOutput companyBankAccountOutput = new CompanyBankAccountOutput();
 					
 					companyBankAccountOutput.setAccountNo(responseEntity.getBody()[i].getAccountNo());
@@ -80,7 +81,7 @@ public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsum
 	@Override
 	public IntegrationException handleException(Exception exception) 
 	{
-		this.logger.info("Handling the Exception in the Get Company Bank Accounts API:::");
+		MyLogger.info("Handling the Exception in the Get Company Bank Accounts API:::");
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;			

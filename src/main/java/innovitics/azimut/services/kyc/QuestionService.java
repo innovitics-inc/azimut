@@ -16,6 +16,7 @@ import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.childparent.QuestionSpecification;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class QuestionService extends AbstractService<Question, String>{
 
@@ -48,7 +49,7 @@ public class QuestionService extends AbstractService<Question, String>{
 		searchCriteriaList.add(new SearchCriteria("id", id.toString(),SearchOperation.EQUAL,null));
 		Question question=this.questionDynamicRepository.findOne(this.questionSpecification.findByCriteria(searchCriteriaList)).get();
 		
-		this.logger.info("Question:::"+question.toString());
+		MyLogger.info("Question:::"+question.toString());
 		
 		return question;
 	}

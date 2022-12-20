@@ -14,13 +14,14 @@ import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessservices.AbstractBusinessService;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @ControllerAdvice
 public class FileUploadExceptionAdvice {
 	protected static final Logger logger = LoggerFactory.getLogger(FileUploadExceptionAdvice.class);
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<BaseGenericResponse<BusinessUser>> handleMaxSizeException(MaxUploadSizeExceededException exc, HttpServletRequest request, HttpServletResponse response){
-    	this.logger.info("File was found to be too big:::");
+    	MyLogger.info("File was found to be too big:::");
     	BaseGenericResponse<BusinessUser> baseGenericResponse=new BaseGenericResponse<BusinessUser>();
     	baseGenericResponse.setStatus(ErrorCode.FILE_TOO_BIG.getCode());
     	baseGenericResponse.setMessage(ErrorCode.FILE_TOO_BIG.getMessage());

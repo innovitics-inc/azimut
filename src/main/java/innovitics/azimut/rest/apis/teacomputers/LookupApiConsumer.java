@@ -17,6 +17,7 @@ import innovitics.azimut.rest.models.teacomputers.LookupResponse;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class LookupApiConsumer  extends RestTeaComputerApiConsumer<LookupRequest, LookupResponse[],LookUpInput , LookUpOutput>{
 
@@ -92,14 +93,14 @@ public class LookupApiConsumer  extends RestTeaComputerApiConsumer<LookupRequest
 	
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Check Account API:::");
+		MyLogger.info("Handling the Exception in the Check Account API:::");
 		if(exception instanceof IntegrationException)
 		{
-			this.logger.info("The exception was found to be an integration exception:::");
+			MyLogger.info("The exception was found to be an integration exception:::");
 			IntegrationException integrationException=(IntegrationException)exception;
 			
-			this.logger.info("Check Account API Integration Exception error Code:::"+integrationException.getErrorCode());
-			this.logger.info("Check Account API Integration Exception error message:::"+integrationException.getErrorMessage());
+			MyLogger.info("Check Account API Integration Exception error Code:::"+integrationException.getErrorCode());
+			MyLogger.info("Check Account API Integration Exception error message:::"+integrationException.getErrorMessage());
 			
 			return integrationException;
 		}

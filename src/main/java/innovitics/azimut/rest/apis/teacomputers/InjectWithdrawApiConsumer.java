@@ -13,6 +13,7 @@ import innovitics.azimut.rest.models.teacomputers.InjectWithdrawResponse;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Service
 public class InjectWithdrawApiConsumer extends RestTeaComputerApiConsumer<InjectWithdrawRequest, InjectWithdrawResponse, InjectWithdrawInput, InjectWithdrawOutput> {
@@ -55,7 +56,7 @@ public class InjectWithdrawApiConsumer extends RestTeaComputerApiConsumer<Inject
 
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Inject/Withdraw API:::");
+		MyLogger.info("Handling the Exception in the Inject/Withdraw API:::");
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;			

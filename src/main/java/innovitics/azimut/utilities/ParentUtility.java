@@ -18,13 +18,13 @@ import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Component
 public class ParentUtility {
 	@Autowired protected ExceptionHandler exceptionHandler;
 @Autowired protected ConfigProperties configProperties;
 
-protected static final Logger logger = LoggerFactory.getLogger(ParentUtility.class);
 	
 protected Timestamp getMinutesBefore(String value)
 	{
@@ -43,17 +43,17 @@ public Object getValueUsingReflection(Object object,String methodName,Object[] p
 	try 
 	{
 		Method method = object.getClass().getDeclaredMethod(methodName,paramterTypes);
-		this.logger.info("Method Name::"+methodName);
+		MyLogger.info("Method Name::"+methodName);
 		Object result = method.invoke(object, parameters); 
 		return result;
 	}
 	catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception) 
 	{
-		this.logger.info("Could not return the method invocation");
+		MyLogger.info("Could not return the method invocation");
 		exception.printStackTrace();
 		if(this.exceptionHandler.isInvocationException(exception))
 		{
-		   this.logger.info("Detecting if the exception was caused by an integration exception:::");
+		   MyLogger.info("Detecting if the exception was caused by an integration exception:::");
 		  Exception cause=(Exception) ((InvocationTargetException)exception).getCause();
 		  throw this.exceptionHandler.handleException(cause);
 		}

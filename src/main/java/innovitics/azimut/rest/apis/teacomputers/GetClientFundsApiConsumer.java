@@ -17,6 +17,7 @@ import innovitics.azimut.rest.models.teacomputers.ClientFundResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientFundsRequest;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetClientFundsRequest, ClientFundResponse[], GetClientFundsInput, GetClientFundsOutput> {
 
@@ -38,7 +39,7 @@ public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetCli
 
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Get Client Funds API:::");
+		MyLogger.info("Handling the Exception in the Get Client Funds API:::");
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;			

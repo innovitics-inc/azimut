@@ -12,6 +12,7 @@ import innovitics.azimut.rest.models.teacomputers.HoldClientBankAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.HoldClientBankAccountResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Service
 public class HoldClientBankAccountApiConsumer extends RestTeaComputerApiConsumer<HoldClientBankAccountRequest, HoldClientBankAccountResponse, HoldClientBankAccountInput, HoldClientBankAccountOutput>{
@@ -46,7 +47,7 @@ public class HoldClientBankAccountApiConsumer extends RestTeaComputerApiConsumer
 
 	@Override
 	public IntegrationException handleException(Exception exception) {
-		this.logger.info("Handling the Exception in the Hold Client Bank Account API:::");
+		MyLogger.info("Handling the Exception in the Hold Client Bank Account API:::");
 		if(exception instanceof IntegrationException)
 		{
 			IntegrationException integrationException=(IntegrationException)exception;			

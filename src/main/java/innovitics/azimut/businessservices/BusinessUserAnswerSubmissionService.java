@@ -35,6 +35,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.kycutilities.AnswerTypeUtility;
 import innovitics.azimut.utilities.mapping.kyc.KYCPageMapper;
 import innovitics.azimut.utilities.mapping.kyc.UserAnswerMapper;
@@ -88,7 +89,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		} 
 		catch (Exception exception) 
 		{			
-			this.logger.info("Could not submit the user answers.");	
+			MyLogger.info("Could not submit the user answers.");	
 			throw handleBusinessException(exception, ErrorCode.ANSWER_SUBMISSION_FAILED);
 		}
 		
@@ -136,7 +137,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		
 		for(UserAnswersIntermediary userAnswersIntermediary: userAnswersIntermediaries)
 		{
-			this.logger.info("User Answer Int:::"+ userAnswersIntermediary.toString());
+			MyLogger.info("User Answer Int:::"+ userAnswersIntermediary.toString());
 			this.copyAnswerIfDocument(userAnswersIntermediary.getParentAnswer());
 			userAnswers.add(userAnswersIntermediary.getParentAnswer());
 			
@@ -220,7 +221,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 			businessKYCPage.setDocumentSubDirectory(blobData.getSubDirectory());
 			
 		} catch (IOException exception) {
-			this.logger.info("Failed to upload the document.");
+			MyLogger.info("Failed to upload the document.");
 			exception.printStackTrace();
 			this.handleBusinessException(exception, ErrorCode.UPLOAD_FAILURE);
 		}
@@ -306,7 +307,7 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		
 		if(arrayUtility.isArrayPopulated(userAnswers)&&this.questionListUtility.isListPopulated(businessKYCPage.getQuestions()))
 		{
-			this.logger.info("User Answers and Questions are populated::::::::");
+			MyLogger.info("User Answers and Questions are populated::::::::");
 			for(BusinessQuestion businessQuestion:businessKYCPage.getQuestions())
 			{
 				List<BusinessSubmittedAnswer> businessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();

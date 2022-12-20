@@ -21,6 +21,7 @@ import innovitics.azimut.rest.BaseRestConsumer;
 import innovitics.azimut.rest.models.BaseRestResponse;
 import innovitics.azimut.rest.models.valify.ValifyResponse;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Component
 public class RestErrorHandler  implements ResponseErrorHandler {
 	public final static Logger logger = LogManager.getLogger(ResponseErrorHandler.class.getName());
@@ -43,7 +44,7 @@ public class RestErrorHandler  implements ResponseErrorHandler {
 			
 			Field field= bresponse.getField("message");
 			message=(String) field.get(message);
-			this.logger.info("Message Value:::"+message);
+			MyLogger.info("Message Value:::"+message);
 		
 			
 		} catch (NoSuchFieldException e) {
@@ -59,7 +60,7 @@ public class RestErrorHandler  implements ResponseErrorHandler {
 	}
 	
 	public void handleError(HttpClientErrorException httpClientErrorException) throws IntegrationException {
-			this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
+			MyLogger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 			ValifyResponse baseRestResponse=new ValifyResponse();
 			ObjectMapper mapper = new ObjectMapper();
 			try {
@@ -68,6 +69,6 @@ public class RestErrorHandler  implements ResponseErrorHandler {
 				e.printStackTrace();
 				throw new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
 			}
-			this.logger.info("baseRestResponse:::"+baseRestResponse.toString());
+			MyLogger.info("baseRestResponse:::"+baseRestResponse.toString());
 	}
 }

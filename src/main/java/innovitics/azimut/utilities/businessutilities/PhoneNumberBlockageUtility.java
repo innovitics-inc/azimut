@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class PhoneNumberBlockageUtility extends UserBlockageUtility{
@@ -14,7 +15,7 @@ public class PhoneNumberBlockageUtility extends UserBlockageUtility{
 	public Object checkUserBlockage(Integer numberOfTrials,String blockageDurationMinutes,String userPhone,Object object, String methodName,Object[] parameters,Class<?>[] paramterTypes,ErrorCode errorCode) throws BusinessException
 	{
 		
-		this.logger.info("Checking User Blockage in PhoneNumberBlockageUtility::::");
+		MyLogger.info("Checking User Blockage in PhoneNumberBlockageUtility::::");
 		int actualNumberOfTrials= numberOfTrials!=null?numberOfTrials.intValue():0;
 		UserBlockage userBlockage=this.getUserBlockage(userPhone,false);
 		if(userBlockage!=null)

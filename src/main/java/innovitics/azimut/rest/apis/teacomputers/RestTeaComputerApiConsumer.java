@@ -30,6 +30,7 @@ import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.security.TeaComputersSignatureGenerator;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.rest.models.teacomputers.TeaComputerRequest; 
 
 
@@ -44,7 +45,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.add("lang",locale);
-		logger.info("Generated Headers:::"+headers.toString());
+		MyLogger.info("Generated Headers:::"+headers.toString());
 		return headers;
 	}
 	
@@ -62,10 +63,10 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 	ResponseEntity<TeaComputerResponse> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<TeaComputerResponse> clazz,String params,TeaComputerInput input) throws Exception,HttpClientErrorException, IntegrationException
 	{					
 		try {
-		this.logger.info("Tea Computer Rest::::");
-		this.logger.info("Request right before invocation::::"+httpEntity.toString());
-		this.logger.info("Method:::"+httpMethod);
-		this.logger.info("Class:::"+clazz.getName());
+		MyLogger.info("Tea Computer Rest::::");
+		MyLogger.info("Request right before invocation::::"+httpEntity.toString());
+		MyLogger.info("Method:::"+httpMethod);
+		MyLogger.info("Class:::"+clazz.getName());
 		final RestTemplate authRestTemplate = new RestTemplate();	
 		authRestTemplate.setRequestFactory(new HttpComponentsClientHttpRequestWithBodyFactory());
 		ResponseEntity<TeaComputerResponse> responseEntity=authRestTemplate.exchange(this.generateURL(params), httpMethod, httpEntity, clazz);
@@ -73,7 +74,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		}
 		catch(HttpClientErrorException clientErrorException)
 		{
-			this.logger.info("An integration exception was caught:::");
+			MyLogger.info("An integration exception was caught:::");
 			throw this.handleTeaComputerError(clientErrorException);
 		}
 			
@@ -126,15 +127,15 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 	}
 	
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
-		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
+		MyLogger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
 		String errorMessage="";
 		innovitics.azimut.rest.models.teacomputers.TeaComputerResponse  teaComputerResponse=new innovitics.azimut.rest.models.teacomputers.TeaComputerResponse() ;
 		ObjectMapper mapper = new ObjectMapper();
 		try 
 		{
-			this.logger.info("Parsing the exception to the teaComputerResponse:::");
-			this.logger.info("httpClientErrorException.getResponseBodyAsString():::"+httpClientErrorException.getResponseBodyAsString());
+			MyLogger.info("Parsing the exception to the teaComputerResponse:::");
+			MyLogger.info("httpClientErrorException.getResponseBodyAsString():::"+httpClientErrorException.getResponseBodyAsString());
 			teaComputerResponse = mapper.readValue(httpClientErrorException.getResponseBodyAsString(), innovitics.azimut.rest.models.teacomputers.TeaComputerResponse.class);
 			errorMessage=teaComputerResponse.getMessage();
 			if(StringUtility.isStringPopulated(teaComputerResponse.getErrorCode()))
@@ -142,9 +143,9 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 				errorCode=Integer.valueOf(teaComputerResponse.getErrorCode());
 			}
 			
-			this.logger.info("teaComputerResponse:::"+teaComputerResponse.toString());
+			MyLogger.info("teaComputerResponse:::"+teaComputerResponse.toString());
 		} catch (JsonProcessingException e) {
-			this.logger.info("Failed to Parse:::");
+			MyLogger.info("Failed to Parse:::");
 			e.printStackTrace();
 			return new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
 		}

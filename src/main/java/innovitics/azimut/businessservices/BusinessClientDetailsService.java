@@ -45,6 +45,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.mapping.FundMapper;
 import innovitics.azimut.utilities.mapping.FundPriceMapper;
 import innovitics.azimut.validations.validators.azimutclient.GetAzimutEntityLookup;
@@ -115,7 +116,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 	public BusinessAzimutClient getBalanceAndTransactions(BusinessAzimutClient businessAzimutClient,BusinessUser tokenizedBusinessUser) throws BusinessException,IntegrationException
 	{
-		this.logger.info("");
+		
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		this.validation.validateUser(businessAzimutClient.getId(), tokenizedBusinessUser);
 		this.validation.validate(businessAzimutClient, getBalanceAndTransactions, BusinessAzimutClient.class.getName());
@@ -138,13 +139,13 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				businessClientCashBalances=restContract.getDataList(restContract.getClientBalanceMapper,this.preparClientCashBalanceInputs(businessAzimutClient,tokenizedBusinessUser), null);
 				if(clientCashBalanceListUtility.isListEmptyOrNull(businessClientCashBalances))
 				{
-					this.logger.info("Empty List");
+					MyLogger.info("Empty List");
 					businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.EGYPTIAN_POUND));
 					businessClientCashBalances.add(new BusinessClientCashBalance(CurrencyType.US_DOLLAR));
 				}
 				else if(clientCashBalanceListUtility.sizeIsOne(businessClientCashBalances))
 				{
-					this.logger.info("One Element List");
+					MyLogger.info("One Element List");
 					BusinessClientCashBalance existingBusinessClientCashBalance=businessClientCashBalances.get(0);
 					if(existingBusinessClientCashBalance!=null&&NumberUtility.areLongValuesMatching(existingBusinessClientCashBalance.getCurrencyID().longValue(), CurrencyType.EGYPTIAN_POUND.getTypeId()))
 					{
@@ -603,6 +604,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	
 	public BusinessAzimutClient getPaginatedClientFunds(BusinessUser tokenizedBusinessUser,BusinessAzimutClient businessAzimutClient) throws IntegrationException, BusinessException
 	{
+		MyLogger.info("Current thread"+Thread.currentThread().getId());
 		BusinessAzimutClient responseBusinessAzimutClient=new BusinessAzimutClient();
 		responseBusinessAzimutClient=this.getClientFundsOrFund(tokenizedBusinessUser, businessAzimutClient,true);
 		if(responseBusinessAzimutClient!=null&&businessAzimutClient!=null&&businessAzimutClient.getPageNumber()!=null)
@@ -677,7 +679,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		Long [] teacomputerFundIds=this.populateTheArrayOfFundIds(businessClientFunds);		
 		if(this.arrayUtility.isArrayPopulated(teacomputerFundIds))
 		{
-			this.logger.info("Funds Populated::::");
+			MyLogger.info("Funds Populated::::");
 			businessFundPrices= this.fundPriceMapper.convertBasicListToBusinessList(this.fundService.getAllRelevantFundPrices(teacomputerFundIds));
 		}
 		
@@ -852,7 +854,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		}
 		
 
-		this.logger.info("Azimut Account:::"+azimutAccount.toString());
+		MyLogger.info("Azimut Account:::"+azimutAccount.toString());
 		
 		return azimutAccount;
 	}
@@ -869,7 +871,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		
 		searchBusinessTransaction.setAzId(tokenizedBusinessUser.getUserId());
 		searchBusinessTransaction.setAzIdType(/*businessAzimutClient.getAzIdType()*/this.getAzimutUserTypeId(tokenizedBusinessUser));
-		this.logger.info("SearchBusinessTransaction:"+ searchBusinessTransaction.toString());
+		MyLogger.info("SearchBusinessTransaction:"+ searchBusinessTransaction.toString());
 		return searchBusinessTransaction;
 	}
 	
@@ -878,7 +880,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessClientCashBalance searchBusinessClientCashBalance=new BusinessClientCashBalance();
 		searchBusinessClientCashBalance.setAzId(tokenizedBusinessUser.getUserId());
 		searchBusinessClientCashBalance.setAzIdType(/*businessAzimutClient.getAzIdType()*/this.getAzimutUserTypeId(tokenizedBusinessUser));
-		this.logger.info("SearchBusinessClientCashBalance:"+ searchBusinessClientCashBalance.toString());
+		MyLogger.info("SearchBusinessClientCashBalance:"+ searchBusinessClientCashBalance.toString());
 		return searchBusinessClientCashBalance;
 		
 	}
@@ -905,7 +907,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 		BusinessFundPrice searchBusinessFundPrice=new BusinessFundPrice();
 		searchBusinessFundPrice.setSearchFromDate(businessAzimutClient.getSearchFromDate());
 		searchBusinessFundPrice.setSearchToDate(businessAzimutClient.getSearchToDate());
-		this.logger.info("SearchBusinessFundPrice:"+ searchBusinessFundPrice.toString());
+		MyLogger.info("SearchBusinessFundPrice:"+ searchBusinessFundPrice.toString());
 		return searchBusinessFundPrice;
 	}
 	
@@ -925,17 +927,17 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				else if(!StringUtility.isStringPopulated(businessAzimutClient.getSorting())||StringUtility.isStringPopulated(businessAzimutClient.getSorting())&&businessAzimutClient.getSorting().equals(Sorting.DESC.getOrder()))
 				sorting=false;	
 					
-				this.logger.info("Sorting:::"+sorting);
+				MyLogger.info("Sorting:::"+sorting);
 				
 				Collections.sort(unsortedTransactions,sorting ? this.cashTransactionSortCompare: cashTransactionSortCompare.reversed());
 				
-				this.logger.info("Sorted Transactions:::"+unsortedTransactions.toString());
+				MyLogger.info("Sorted Transactions:::"+unsortedTransactions.toString());
 				
 				
 				int lastIndex=unsortedTransactions.size();
 				int index = sorting ?  lastIndex: 0;
 				
-				this.logger.info("Index:::"+index);
+				MyLogger.info("Index:::"+index);
 				businessAzimutClient.setBusinessTransactions(unsortedTransactions);
 				
 				businessAzimutClient.setLastTransactionDate(sorting? unsortedTransactions.get(lastIndex-1).getTrxDate():unsortedTransactions.get(0).getTrxDate());
@@ -946,7 +948,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				{
 					if(businessTransaction!=null)
 					{
-						this.logger.info("business Transaction:::"+ businessTransaction);
+						MyLogger.info("business Transaction:::"+ businessTransaction);
 							
 						 String oldDate=businessTransaction.getTrxDate();
 						 businessTransaction.setTrxDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM, yyyy")));
@@ -988,7 +990,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 
 	  if(this.clientFundListUtility.isListPopulated(businessClientFunds)&&this.fundPricesListUtility.isListPopulated(businessFundPrices))
 	  {
-		this.logger.info("The two lists are populated::");  
+		MyLogger.info("The two lists are populated::");  
 		  double totalFundPosition=0d;
 		  for(BusinessClientFund businessClientFund:businessClientFunds)
 		  {
@@ -1017,7 +1019,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 	  
 	  if(this.clientCashBalanceListUtility.isListPopulated(businessClientCashBalances))
 		{
-		 this.logger.info("Cash Balances:::::::"+businessClientCashBalances.toString()); 
+		 MyLogger.info("Cash Balances:::::::"+businessClientCashBalances.toString()); 
 		 double clientCashBalanceInAllCurrencies=0.0D;
 		  
 		  	for(BusinessClientCashBalance businessClientCashBalance:businessClientCashBalances)
@@ -1043,7 +1045,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
   
   private void beautifyBusinessClientFundTransactions(BusinessClientFund businessClientFund,List<BusinessFundTransaction> businessFundTransactions,BusinessAzimutClient searchBusinessAzimutClient)
   {
-	 this.logger.info("Business Fund Transactions:::"+businessFundTransactions.toString());
+	 MyLogger.info("Business Fund Transactions:::"+businessFundTransactions.toString());
 	 if(businessClientFund!=null)
 	 {
 		boolean sorting = true;
@@ -1053,17 +1055,17 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 				else if(!StringUtility.isStringPopulated(searchBusinessAzimutClient.getSorting())||StringUtility.stringsMatch(searchBusinessAzimutClient.getSorting(), Sorting.DESC.getOrder()))
 				sorting=false;	
 				{	
-				this.logger.info("Sorting:::"+sorting);
+				MyLogger.info("Sorting:::"+sorting);
 				Collections.sort(businessFundTransactions,sorting ? this.fundTransactionSortCompare: fundTransactionSortCompare.reversed());
 				int index = sorting ? businessFundTransactions.size() : 0;
-				this.logger.info("Index:::"+index);
+				MyLogger.info("Index:::"+index);
 				}
 				
 		 
 		 for(BusinessFundTransaction businessFundTransaction:businessFundTransactions)
 		 {
 			 String oldDate=businessFundTransaction.getOrderDate();
-			 this.logger.info("Old date:::::"+oldDate);
+			 MyLogger.info("Old date:::::"+oldDate);
 			 businessFundTransaction.setOrderDate(DateUtility.changeStringDateFormat(oldDate, new SimpleDateFormat("dd-MM-yyyy"), new SimpleDateFormat("dd MMM, yyyy")));
 		 }
 		 

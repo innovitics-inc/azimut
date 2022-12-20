@@ -67,7 +67,7 @@ public class PdfGenerateServiceImpl implements PdfGenerateService {
             renderer.createPDF(fileOutputStream, false);
             renderer.finishPDF();            
             FileInputStream fileInputStream=new FileInputStream(outputFile);                       
-            this.logger.info("File Path:::::::::::::::::::"+outputFile.getAbsolutePath());
+            MyLogger.info("File Path:::::::::::::::::::"+outputFile.getAbsolutePath());
             ByteArrayOutputStream baos=new ByteArrayOutputStream (); 
             outputFile.delete();
 */           

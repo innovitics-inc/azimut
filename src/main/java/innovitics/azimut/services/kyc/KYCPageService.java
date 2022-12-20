@@ -17,6 +17,7 @@ import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.childparent.KYCPageSpecification;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class KYCPageService extends  AbstractService<KYCPage, String>{
 @Autowired KYCPageDynamicRepository kycPageDynamicRepository;
@@ -25,7 +26,7 @@ public class KYCPageService extends  AbstractService<KYCPage, String>{
 
 	public List<KYCPage> getByUserType(Long userIdType)
 	{
-		this.logger.info("Old implementation");
+		MyLogger.info("Old implementation");
 		/*List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
 		searchCriteriaList.add(new SearchCriteria("id", userTypId.toString(),SearchOperation.PARENT_EQUAL,"userType"));		
 		return kycPageDynamicRepository.findAll(this.kycPageSpecification.findByCriteria(searchCriteriaList));*/

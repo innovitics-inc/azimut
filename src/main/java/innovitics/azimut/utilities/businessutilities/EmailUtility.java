@@ -27,6 +27,7 @@ import com.azure.core.amqp.implementation.StringUtil;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Component
 public class EmailUtility extends ParentUtility{
@@ -49,7 +50,7 @@ public class EmailUtility extends ParentUtility{
         }
         catch (MailException ex) 
         {
-        	this.logger.error("Email could not be sent::::::::::");
+        	MyLogger.error("Email could not be sent::::::::::");
         	ex.printStackTrace();
         }
         
@@ -81,7 +82,7 @@ public class EmailUtility extends ParentUtility{
     	} 
     	catch (MailException ex) 
     	{
-    		this.logger.error("Email could not be sent::::::::::");
+    		MyLogger.error("Email could not be sent::::::::::");
         	ex.printStackTrace();
     	}
        

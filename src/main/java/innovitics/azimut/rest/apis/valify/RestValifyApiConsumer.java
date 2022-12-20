@@ -19,6 +19,7 @@ import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.rest.models.valify.ValifyResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 public abstract class RestValifyApiConsumer  <ValifyRequest, ValifyResponse, ValifyInput, ValifyOutput> 
 extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, ValifyOutput> {
@@ -33,7 +34,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(locale);
-		logger.info("Generated Headers:::"+headers.toString());
+		MyLogger.info("Generated Headers:::"+headers.toString());
 		return headers;
 	}
 	
@@ -42,7 +43,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(token);
-		logger.info("Generated Headers:::"+headers.toString());
+		MyLogger.info("Generated Headers:::"+headers.toString());
 		return headers;
 	}
 	
@@ -59,8 +60,8 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 	
 	protected IntegrationException handleValifyError(String errorMessage,String errorCode) throws IntegrationException
 	{
-			this.logger.info("Error Message:::"+ errorMessage);
-			this.logger.info("Error Code:::"+ errorCode);
+			MyLogger.info("Error Message:::"+ errorMessage);
+			MyLogger.info("Error Code:::"+ errorCode);
 			IntegrationException integrationException =new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
 			integrationException.setErrorMessage(errorMessage);
 			return integrationException;		
@@ -108,7 +109,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 	
 	protected IntegrationException validateExceptionType(Exception exception)
 	{
-		this.logger.info("Stack trace:::");
+		MyLogger.info("Stack trace:::");
 		
 		exception.printStackTrace();
 		
@@ -130,7 +131,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 	}
 	
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
-		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
+		MyLogger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
 		String errorMessage="";
 		innovitics.azimut.rest.models.valify.ValifyResponse  valifyResponse=new innovitics.azimut.rest.models.valify.ValifyResponse();
@@ -155,7 +156,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 				errorMessage=valifyResponse.getMessage();
 			}
 
-			this.logger.info("valifyResponse:::"+valifyResponse.toString());
+			MyLogger.info("valifyResponse:::"+valifyResponse.toString());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			return new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);

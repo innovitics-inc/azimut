@@ -13,6 +13,7 @@ import innovitics.azimut.rest.entities.valify.ValifyAccessTokenInput;
 import innovitics.azimut.rest.entities.valify.ValifyAccessTokenOutput;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenRequest;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenResponse;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Component
 public class ValifyAccessTokenMapper extends RestMapper<ValifyAccessTokenInput,ValifyAccessTokenOutput,ValifyAccessTokenRequest ,ValifyAccessTokenResponse, BusinessValify> {
 
@@ -40,12 +41,12 @@ public class ValifyAccessTokenMapper extends RestMapper<ValifyAccessTokenInput,V
 	@Override
 	BusinessValify createBusinessEntityFromOutput(ValifyAccessTokenOutput valifyAccessTokenOutput) {
 		BusinessValify businessValify=new BusinessValify();
-		this.logger.info("ValifyAccessTokenOutput in the Mapper:::"+valifyAccessTokenOutput.toString());
+		MyLogger.info("ValifyAccessTokenOutput in the Mapper:::"+valifyAccessTokenOutput.toString());
 		if(valifyAccessTokenOutput!=null)
 		{
 			businessValify.setToken(valifyAccessTokenOutput.getAccessToken());
 		}
-		this.logger.info("Business Valify token retrieval:::"+businessValify.toString());
+		MyLogger.info("Business Valify token retrieval:::"+businessValify.toString());
 		return businessValify;
 	}
 

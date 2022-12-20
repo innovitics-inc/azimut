@@ -7,6 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import innovitics.azimut.utilities.fileutilities.MyLogger;
+
 
 public class BaseSpecification {
 	public final static Logger logger = LogManager.getLogger(BaseSpecification.class.getName());
@@ -23,10 +25,10 @@ public class BaseSpecification {
 	            
 	        }
 	    } catch (ParseException e) {
-	        this.logger.info("Stack Trace");
+	        MyLogger.info("Stack Trace");
 	        e.printStackTrace();
 	    }
-	    this.logger.info("SQL Date Result:::::"+result.toString());
+	    MyLogger.info("SQL Date Result:::::"+result.toString());
 	    return result;
 	}
 }

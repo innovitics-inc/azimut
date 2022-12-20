@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 public abstract class RestFirebaseApiConsumer <FirebaseRequest, FirebaseResponse, FirebaseInput, FirebaseOutput>
 extends AbstractBaseRestConsumer<FirebaseRequest, FirebaseResponse, FirebaseInput, FirebaseOutput>
@@ -68,7 +69,7 @@ extends AbstractBaseRestConsumer<FirebaseRequest, FirebaseResponse, FirebaseInpu
 
 	protected IntegrationException validateExceptionType(Exception exception)
 	{
-		this.logger.info("Stack trace:::");
+		MyLogger.info("Stack trace:::");
 		
 		exception.printStackTrace();
 		
@@ -89,23 +90,23 @@ extends AbstractBaseRestConsumer<FirebaseRequest, FirebaseResponse, FirebaseInpu
 	
 	}	
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
-		this.logger.info("httpClientErrorException:::"+httpClientErrorException.toString());
+		MyLogger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
 		String errorMessage="";
 		innovitics.azimut.rest.models.firebase.FirebaseResponse  firebaseResponse=new innovitics.azimut.rest.models.firebase.FirebaseResponse() ;
 		ObjectMapper mapper = new ObjectMapper();
 		try 
 		{
-			this.logger.info("Parsing the exception to the teaComputerResponse:::");
-			this.logger.info("httpClientErrorException.getResponseBodyAsString():::"+httpClientErrorException.getResponseBodyAsString());
+			MyLogger.info("Parsing the exception to the teaComputerResponse:::");
+			MyLogger.info("httpClientErrorException.getResponseBodyAsString():::"+httpClientErrorException.getResponseBodyAsString());
 			firebaseResponse = mapper.readValue(httpClientErrorException.getResponseBodyAsString(), innovitics.azimut.rest.models.firebase.FirebaseResponse.class);
 			errorMessage=firebaseResponse.getMessage();
 			errorCode=firebaseResponse.getCode();
 			
 			
-			this.logger.info("firebaseResponse:::"+firebaseResponse.toString());
+			MyLogger.info("firebaseResponse:::"+firebaseResponse.toString());
 		} catch (JsonProcessingException e) {
-			this.logger.info("Failed to Parse:::");
+			MyLogger.info("Failed to Parse:::");
 			e.printStackTrace();
 			return new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
 		}

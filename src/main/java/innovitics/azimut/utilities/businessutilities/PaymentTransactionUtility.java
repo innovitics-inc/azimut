@@ -23,6 +23,7 @@ import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 @Component
 public class PaymentTransactionUtility extends ParentUtility{
@@ -118,8 +119,7 @@ public class PaymentTransactionUtility extends ParentUtility{
 		}
 		catch(Exception exception)
 		{
-			 this.exceptionHandler.getNullIfNonExistent(exception);
-			 return null;
+			throw this.exceptionHandler.handleBusinessException(exception, ErrorCode.PAYMENT_TRANSACTION_NOT_FOUND);
 		}
 	}
 	
@@ -143,15 +143,15 @@ public class PaymentTransactionUtility extends ParentUtility{
 	{
 		BusinessTransaction businessTransaction=new BusinessTransaction();
 	
-		this.logger.info("PaymentTransaction:::"+paymentTransaction.toString());
+		MyLogger.info("PaymentTransaction:::"+paymentTransaction.toString());
 		
 		businessTransaction.setAmount(paymentTransaction.getTransactionAmount());		
 		businessTransaction.setTrxDate(DateUtility.changeDatetoStringDate(paymentTransaction.getUpdatedAt(), "dd-MM-yyyy"));
 		businessTransaction.setCurrency(CurrencyType.getById(paymentTransaction.getCurrencyId()).getType());
 		
-		this.logger.info("TransactionStatus::::"+TransactionStatus.getByPaymentStatusId(paymentTransaction.getStatus()));
+		MyLogger.info("TransactionStatus::::"+TransactionStatus.getByPaymentStatusId(paymentTransaction.getStatus()));
 		
-		this.logger.info("Action::::"+Action.getById(paymentTransaction.getAction()));
+		MyLogger.info("Action::::"+Action.getById(paymentTransaction.getAction()));
 		
 		businessTransaction.setStatus(TransactionStatus.getByPaymentStatusId(paymentTransaction.getStatus()).getStatusId());				
 		businessTransaction.setType(TransactionOrderType.getByOwnId(Action.getById(paymentTransaction.getAction()).getActionId()).getTypeId());

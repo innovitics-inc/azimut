@@ -16,6 +16,7 @@ import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.childparent.UserDeviceSpecification;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class UserDeviceService extends AbstractService<UserDevice,String>{
 	
@@ -24,7 +25,7 @@ public class UserDeviceService extends AbstractService<UserDevice,String>{
 	
 	public UserDevice addUserDevice(UserDevice userDevice)
 	{
-		this.logger.info("Adding the device Id:::::");
+		MyLogger.info("Adding the device Id:::::");
 		new Date();
 		return	this.userDeviceRepository.save(userDevice);
 	}

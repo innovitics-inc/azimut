@@ -112,7 +112,7 @@ public class JwtUtil {
 	       {	
 	    	   if(this.isTokenExpired(authenticationRequest.getOldToken()))
 	    	   {
-	    		   this.logger.info("Token was found to be expired::::::");
+	    		   MyLogger.info("Token was found to be expired::::::");
 	    		   throw new BusinessException(ErrorCode.FAILED_TO_VALIDATE_TOKEN);
 	    	   }
 	    	   
@@ -129,7 +129,7 @@ public class JwtUtil {
 	       }
 	       else
 	       {
-	    	   this.logger.info("User was not found::::::");
+	    	   MyLogger.info("User was not found::::::");
 	    	   throw new BusinessException(ErrorCode.USER_NOT_FOUND);
 	       }
 	       
@@ -137,8 +137,8 @@ public class JwtUtil {
 	/*	   catch(ExpiredJwtException expiredJwtException)
   	   {
 			   
-		  this.logger.info("ExpiredJwtException caught:::::");
-		  this.logger.info("ExpiredJwtException caught:::::"+expiredJwtException.getMessage());
+		  MyLogger.info("ExpiredJwtException caught:::::");
+		  MyLogger.info("ExpiredJwtException caught:::::"+expiredJwtException.getMessage());
   		  throw this.exceptionHandler.handleAsBusinessException(expiredJwtException, ErrorCode.FAILED_TO_VALIDATE_TOKEN); 
   	   }*/
 

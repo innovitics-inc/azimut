@@ -21,6 +21,7 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.utilities.businessutilities.EmailUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 
 
 @RestController
@@ -38,7 +39,7 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	{
 		BusinessUser businessUser = new BusinessUser();
 		try {
-			this.logger.info("Authentication Request:::"+authenticationRequest.toString());
+			MyLogger.info("Authentication Request:::"+authenticationRequest.toString());
 			this.validation.validateAuthenticationCredentials(authenticationRequest);
 			businessUser=this.businessUserService.beautifyUser(this.businessUserService.getByUserPhoneAndPassword(authenticationRequest.getCountryPhoneCode()+authenticationRequest.getPhoneNumber(),authenticationRequest.getPassword(),authenticationRequest.getDeviceId()));			
 			return this.generateBaseGenericResponse(AuthenticationResponse.class, new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);

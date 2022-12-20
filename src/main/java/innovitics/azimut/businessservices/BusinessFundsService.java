@@ -20,6 +20,7 @@ import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.fileutilities.MyLogger;
 @Service
 public class BusinessFundsService extends AbstractBusinessService<BusinessFundPrice> {
 	@Autowired FundService fundService;
@@ -41,7 +42,7 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 		
 			for(Fund fund:fundsWithoutNavs) 
 			{
-				this.logger.info("Fund without Nav :::"+fund.toString());
+				MyLogger.info("Fund without Nav :::"+fund.toString());
 			}			
 			insertedNavs=this.checkTeaComputerNavAvailabilityForFundAndUpdatePrices(this.navService.getByJoinedTeacomputerIds(), /*businessFundPrices3*/businessFundPrices,fundsWithoutNavs);
 			this.navService.batchInsert(insertedNavs);
@@ -65,9 +66,9 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 		 for (Nav nav : availableNavs)
 		  {
 			 for (BusinessFundPrice businessFundPrice : businessFundPrices) {
-				this.logger.info("Comparison:::");
-				this.logger.info("Business Fund Price:::"+businessFundPrice);
-				this.logger.info("Available Nav:::"+nav);
+				MyLogger.info("Comparison:::");
+				MyLogger.info("Business Fund Price:::"+businessFundPrice);
+				MyLogger.info("Available Nav:::"+nav);
 				
 				if (nav != null && businessFundPrice != null && nav.getTeacomputerId() != null
 						&& businessFundPrice.getFundId() != null
@@ -82,7 +83,7 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 						}
 						else
 						{
-							this.logger.info("Inserting due to different price.");
+							MyLogger.info("Inserting due to different price.");
 							insertedNavs.add(this.generateNavFromNavAndBusinessFund(nav.getFundId(), businessFundPrice));
 						}
 					}
@@ -93,7 +94,7 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 								&& 
 							StringUtility.stringsDontMatch(nav.getDate().toString().substring(0,10), DateUtility.changeStringDateFormat(businessFundPrice.getPriceDate(),new SimpleDateFormat("dd-MM-yyyy"),new SimpleDateFormat("yyyy-MM-dd"))))	
 							{
-							this.logger.info("Inserting due to same price on a different date.");
+							MyLogger.info("Inserting due to same price on a different date.");
 							insertedNavs.add(this.generateNavFromNavAndBusinessFund(nav.getFundId(), businessFundPrice));
 							}
 
@@ -125,8 +126,8 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 	private Nav generateNavFromNavAndBusinessFund(Long fundId,BusinessFundPrice businessFundPrice)
 	{
 		
-		this.logger.info("Fund ID:::"+fundId);
-		this.logger.info("businessFundPrice:::"+businessFundPrice.toString());
+		MyLogger.info("Fund ID:::"+fundId);
+		MyLogger.info("businessFundPrice:::"+businessFundPrice.toString());
 		
 		Nav insertedNav = new Nav();
 		insertedNav.setFundId(fundId.longValue());
@@ -135,7 +136,7 @@ public class BusinessFundsService extends AbstractBusinessService<BusinessFundPr
 		insertedNav.setCreatedAt(new Date());
 		insertedNav.setUpdatedAt(new Date());
 		insertedNav.setNav(businessFundPrice.getNav());
-		this.logger.info("Inserted Nav:::"+insertedNav.toString());
+		MyLogger.info("Inserted Nav:::"+insertedNav.toString());
 		
 		return insertedNav;
 	
