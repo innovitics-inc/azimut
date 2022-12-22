@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import innovitics.azimut.businessservices.BusinessFundsService;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 public class TemporaryBlobDeletionJob extends ParentJob{
 	

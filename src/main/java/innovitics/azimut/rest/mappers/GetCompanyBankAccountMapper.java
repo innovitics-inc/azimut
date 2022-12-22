@@ -16,7 +16,7 @@ import innovitics.azimut.rest.models.teacomputers.CompanyBankAccountResponse;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountRequest;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Component
 public class GetCompanyBankAccountMapper extends RestMapper<GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput,GetCompanyBankAccountRequest ,CompanyBankAccountResponse[], BusinessCompanyBankAccount> {

@@ -21,7 +21,7 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
 @RequestMapping("/api/azimut/information")
-public class AzimutInformationController extends BaseGenericRestController<BusinessAzimutInformationType, String>{
+public class AzimutInformationController extends BaseGenericRestController<BusinessAzimutInformationType>{
 
 	@Autowired BusinessAzimutInformationService businessAzimutInformationService;
 	

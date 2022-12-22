@@ -41,7 +41,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 import innovitics.azimut.validations.validators.azimutclient.SaveUserLocation;
 import innovitics.azimut.validations.validators.user.AddBusinessUserValidator;

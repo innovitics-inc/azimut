@@ -13,7 +13,7 @@ import innovitics.azimut.rest.models.teacomputers.InjectWithdrawResponse;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Service
 public class InjectWithdrawApiConsumer extends RestTeaComputerApiConsumer<InjectWithdrawRequest, InjectWithdrawResponse, InjectWithdrawInput, InjectWithdrawOutput> {

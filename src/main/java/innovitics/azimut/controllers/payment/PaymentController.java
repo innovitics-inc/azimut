@@ -22,7 +22,7 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentController extends BaseGenericRestController<BusinessPayment ,String> {
+public class PaymentController extends BaseGenericRestController<BusinessPayment> {
 
 	@Autowired BusinessPaymentService businessPaymentService;
 	

@@ -17,7 +17,7 @@ import innovitics.azimut.rest.models.teacomputers.ClientFundResponse;
 import innovitics.azimut.rest.models.teacomputers.GetClientFundsRequest;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class GetClientFundsApiConsumer extends RestTeaComputerApiConsumer<GetClientFundsRequest, ClientFundResponse[], GetClientFundsInput, GetClientFundsOutput> {
 

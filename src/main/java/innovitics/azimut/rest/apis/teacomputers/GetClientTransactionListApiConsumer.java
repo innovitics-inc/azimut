@@ -20,7 +20,7 @@ import innovitics.azimut.rest.models.teacomputers.GetTransactionsRequest;
 import innovitics.azimut.rest.models.teacomputers.TransactionResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class GetClientTransactionListApiConsumer extends RestTeaComputerApiConsumer<GetTransactionsRequest, TransactionResponse[], GetTransactionsInput, GetTransactionsOutput> {
 

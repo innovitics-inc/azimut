@@ -18,7 +18,7 @@ import innovitics.azimut.rest.models.teacomputers.AddAccountResponse;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;

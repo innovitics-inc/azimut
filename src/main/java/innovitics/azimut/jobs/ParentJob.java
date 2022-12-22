@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.utilities.datautilities.DateUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 public abstract class ParentJob {
 	

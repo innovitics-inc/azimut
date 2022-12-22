@@ -31,7 +31,7 @@ import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.kyc.ValifyMapper;
 import innovitics.azimut.validations.validators.valify.ValifyFacialImages;
 import innovitics.azimut.validations.validators.valify.ValifyIdImages;

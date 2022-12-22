@@ -29,11 +29,11 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @RestController
 @RequestMapping("/api/kyc/pages")
-public class KYCController extends BaseGenericRestController<BusinessKYCPage, String> {
+public class KYCController extends BaseGenericRestController<BusinessKYCPage> {
 
 	@Autowired BusinessKYCPageService businessKYCPageService;
 	@Autowired BusinessUserAnswerSubmissionService businessUserAnswerSubmissionService;

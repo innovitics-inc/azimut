@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 public abstract class RestFirebaseApiConsumer <FirebaseRequest, FirebaseResponse, FirebaseInput, FirebaseOutput>
 extends AbstractBaseRestConsumer<FirebaseRequest, FirebaseResponse, FirebaseInput, FirebaseOutput>

@@ -14,7 +14,7 @@ import innovitics.azimut.services.user.UserBlockageService;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class UserBlockageUtility extends ParentUtility

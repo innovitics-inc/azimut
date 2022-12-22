@@ -18,7 +18,7 @@ import innovitics.azimut.services.kyc.KYCPageService;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.kyc.KYCPageMapper;
 
 @Service

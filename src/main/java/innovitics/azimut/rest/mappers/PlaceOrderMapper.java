@@ -14,7 +14,7 @@ import innovitics.azimut.rest.entities.teacomputers.PlaceOrderInput;
 import innovitics.azimut.rest.entities.teacomputers.PlaceOrderOutput;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderRequest;
 import innovitics.azimut.rest.models.teacomputers.PlaceOrderResponse;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Component
 public class PlaceOrderMapper extends RestMapper<PlaceOrderInput, PlaceOrderOutput,PlaceOrderRequest,PlaceOrderResponse, BaseAzimutTrading>{
 

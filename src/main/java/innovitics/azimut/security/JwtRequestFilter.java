@@ -20,10 +20,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.configproperties.ConfigProperties;
+import innovitics.azimut.controllers.BaseGenericRestController;
+import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import io.jsonwebtoken.JwtException;
 
 @Component
@@ -44,11 +49,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		
 		try {
 						
-			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
-			final String contentTypeHeader = request.getHeader(CONTENT_TYPE);
-			
-			
-			String username = null;
+			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);			
+		    long start = System.nanoTime();
+		    String username = null;
 			String jwt = null;
 
 			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -79,9 +82,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			
 			MyLogger.info("authorization header:::"+authorizationHeader);    
+			filterChain.doFilter(request, response);
 			
 			
-			filterChain.doFilter(request, response);			  
+	        long end = System.nanoTime();
+
+	        long elapsedTime = end - start;
+
+	        double elapsedTimeInSecond = (double) elapsedTime / 1_000_000_000;
+
+			
+			MyLogger.info("Request Done in :::" + (elapsedTimeInSecond)+" seconds");
 		} 
 		
 		catch (JwtException e) {

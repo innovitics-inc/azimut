@@ -29,6 +29,8 @@ import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.logging.FileUtility;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Component
 public class BlobFileUtility extends ParentUtility{
  @Autowired FileUtility fileUtility;

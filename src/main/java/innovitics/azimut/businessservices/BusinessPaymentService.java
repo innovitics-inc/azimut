@@ -21,7 +21,7 @@ import innovitics.azimut.utilities.crosslayerenums.PaymentTransactionStatus;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.validations.validators.payment.InitiatePayment;
 import innovitics.azimut.validations.validators.payment.QueryPayment;
 

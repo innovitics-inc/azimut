@@ -31,13 +31,13 @@ import innovitics.azimut.services.user.UserDeviceService;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 import org.springframework.web.multipart.MultipartException;
 
 @RestController
 @RequestMapping("/api/user")
-public class UserController extends BaseGenericRestController<BusinessUser,String> {
+public class UserController extends BaseGenericRestController<BusinessUser> {
 
 	@Autowired BusinessUserService businessUserService;	
 	@Autowired BlobFileUtility blobFileUtility;

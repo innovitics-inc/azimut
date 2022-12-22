@@ -28,7 +28,7 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 @RestController
 @RequestMapping("/api/valify")
 
-public class ValifyController extends BaseGenericRestController<BusinessValify,String>{
+public class ValifyController extends BaseGenericRestController<BusinessValify>{
 
 	@Autowired 
 	BusinessValifyService businessValifyService;

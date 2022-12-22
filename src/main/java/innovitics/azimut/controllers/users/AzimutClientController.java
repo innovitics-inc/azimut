@@ -24,10 +24,10 @@ import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @RestController
 @RequestMapping("/api/azimut/user")
-public class AzimutClientController extends BaseGenericRestController<BusinessAzimutClient ,String>{
+public class AzimutClientController extends BaseGenericRestController<BusinessAzimutClient>{
 
 	@Autowired BusinessClientDetailsService businessClientDetailsService;
 

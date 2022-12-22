@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import innovitics.azimut.models.Notification;
 import innovitics.azimut.repositories.notification.NotificationRepository;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Service
 public class NotificationCenterService {

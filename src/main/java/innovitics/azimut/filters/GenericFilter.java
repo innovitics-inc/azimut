@@ -22,7 +22,7 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.security.HmacUtil;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Component
 public class GenericFilter implements Filter {

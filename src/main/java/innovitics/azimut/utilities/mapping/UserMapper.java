@@ -14,7 +14,7 @@ import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Component
 public class UserMapper extends Mapper<User, BusinessUser>{
 public static final long TEACOMPUTERS_CLIENT_AML=1L;

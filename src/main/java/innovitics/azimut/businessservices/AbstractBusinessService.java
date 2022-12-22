@@ -39,7 +39,7 @@ import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
-import innovitics.azimut.utilities.fileutilities.FileUtility;
+import innovitics.azimut.utilities.logging.FileUtility;
 import innovitics.azimut.utilities.mapping.UserMapper;
 import innovitics.azimut.validations.Validation;
 

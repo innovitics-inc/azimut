@@ -17,7 +17,7 @@ import innovitics.azimut.rest.models.teacomputers.LookupResponse;
 import innovitics.azimut.utilities.crosslayerenums.AzimutEntityType;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class LookupApiConsumer  extends RestTeaComputerApiConsumer<LookupRequest, LookupResponse[],LookUpInput , LookUpOutput>{
 

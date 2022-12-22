@@ -24,7 +24,7 @@ import innovitics.azimut.utilities.crosslayerenums.TransactionStatus;
 import innovitics.azimut.utilities.crosslayerenums.TransactionType;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class GetTransactionsMapper extends RestMapper<GetTransactionsInput,GetTransactionsOutput,GetTransactionsRequest,TransactionResponse[],BusinessTransaction>{
 

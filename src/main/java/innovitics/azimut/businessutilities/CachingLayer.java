@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.utilities.ParentUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.DiskStorePathManager;

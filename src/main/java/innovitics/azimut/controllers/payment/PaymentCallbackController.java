@@ -21,11 +21,11 @@ import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Controller
 @RequestMapping("/api/paytabs")
-public class PaymentCallbackController extends BaseGenericRestController<PaytabsCallbackRequest, String> {
+public class PaymentCallbackController extends BaseGenericRestController<PaytabsCallbackRequest> {
 	@Autowired BusinessPaymentService businessPaymentService;
 
 	@PostMapping(value="/callback",

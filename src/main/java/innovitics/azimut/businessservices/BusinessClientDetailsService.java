@@ -45,7 +45,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.FundMapper;
 import innovitics.azimut.utilities.mapping.FundPriceMapper;
 import innovitics.azimut.validations.validators.azimutclient.GetAzimutEntityLookup;

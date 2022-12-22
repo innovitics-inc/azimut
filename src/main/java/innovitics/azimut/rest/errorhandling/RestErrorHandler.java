@@ -21,7 +21,7 @@ import innovitics.azimut.rest.BaseRestConsumer;
 import innovitics.azimut.rest.models.BaseRestResponse;
 import innovitics.azimut.rest.models.valify.ValifyResponse;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Component
 public class RestErrorHandler  implements ResponseErrorHandler {
 	public final static Logger logger = LogManager.getLogger(ResponseErrorHandler.class.getName());

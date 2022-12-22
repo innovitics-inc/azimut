@@ -42,7 +42,7 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class UserUtility extends ParentUtility{

@@ -20,7 +20,7 @@ import innovitics.azimut.rest.models.teacomputers.GetClientFundsRequest;
 import innovitics.azimut.rest.models.teacomputers.GetCompanyBankAccountRequest;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class GetCompanyBankAccountsApiConsumer  extends RestTeaComputerApiConsumer<GetCompanyBankAccountRequest, CompanyBankAccountResponse[], GetCompanyBankAccountsInput, GetCompanyBankAccountsOutput>{
 

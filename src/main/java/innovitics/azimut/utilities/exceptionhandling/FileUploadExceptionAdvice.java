@@ -14,7 +14,7 @@ import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessservices.AbstractBusinessService;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.exceptions.BusinessException;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @ControllerAdvice
 public class FileUploadExceptionAdvice {

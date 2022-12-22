@@ -21,13 +21,13 @@ import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.utilities.businessutilities.EmailUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
-public class JwtAuthenticationController extends BaseGenericRestController<AuthenticationResponse, String> {
+public class JwtAuthenticationController extends BaseGenericRestController<AuthenticationResponse> {
 
 	@Autowired BusinessUserService  businessUserService;
 	@Autowired BlobFileUtility blobFileUtility;

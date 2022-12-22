@@ -30,7 +30,7 @@ import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.security.TeaComputersSignatureGenerator;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.rest.models.teacomputers.TeaComputerRequest; 
 
 

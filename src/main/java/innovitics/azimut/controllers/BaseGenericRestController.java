@@ -18,6 +18,7 @@ import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
 import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.businessservices.AbstractBusinessService;
 import innovitics.azimut.businessutilities.BusinessSearchCriteria;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.BusinessException;
@@ -25,21 +26,19 @@ import innovitics.azimut.exceptions.GeneralException;
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.security.JwtUtil;
 import innovitics.azimut.utilities.CustomJsonRootName;
-import innovitics.azimut.utilities.Multi;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.validations.Validation;
 
 
-public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S> {
+public abstract class BaseGenericRestController<T extends BaseBusinessEntity>{
 
 	@Autowired ListUtility<T> listUtility;
 	protected @Autowired Validation<T> validation;
 	protected @Autowired JwtUtil jwtUtil;
-	public final static Logger logger = LogManager.getLogger(BaseGenericRestController.class.getName());
 	protected @Autowired ConfigProperties configProperties;
 
 	private HttpStatus validateGenericResponseSuccess(BaseGenericResponse<T> baseGenericResponse) {
@@ -123,6 +122,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 		BaseGenericResponse<T> baseGenericResponse = new BaseGenericResponse<T>();
 		baseGenericResponse.setMessage(errorMessage);
 		baseGenericResponse.setStatus(errorCode);
+		baseGenericResponse.setTransactionId(Thread.currentThread().getName());
 		return baseGenericResponse;
 
 	}
@@ -155,16 +155,6 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 			page.put(pluralAnnotation, paginatedList);
 			baseGenericResponse.setResponse(page);
 			MyLogger.info("Response"+page.toString());
-			/*
-			Map<String, List<T>> result = new HashMap<String, List<T>>();
-			result.put(pluralAnnotation, paginatedList.getDataList());
-			baseGenericResponse.setHasNext(paginatedList.getHasNext());
-			baseGenericResponse.setHasPrevious(paginatedList.getHasPrevious());
-			baseGenericResponse.setPageSize(paginatedList.getPageSize());
-			baseGenericResponse.setNumberOfPages(paginatedList.getNumberOfPages());
-			baseGenericResponse.setNumberOfItems(paginatedList.getNumberOfItems());
-			*/
-			
 		}
 		
 		
@@ -184,18 +174,16 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity, S>
 
 	}
 	
+	
 	protected BusinessUser getCurrentRequestHolder(String token) throws BusinessException
 	{
-		
-		
 		BusinessUser businessUser =this.jwtUtil.getBusinessUserFromToken(StringUtility.generateSubStringStartingFromCertainIndex(token,' '));
 		if(businessUser!=null)
 		{
 			MyLogger.info("Current Request Holder::"+businessUser.getUserPhone());
-			businessUser.setSystemTrx(Multi.currentThread().getId());
 		}
 		
-		return businessUser;
+		return businessUser;		
 	}
 	
 	

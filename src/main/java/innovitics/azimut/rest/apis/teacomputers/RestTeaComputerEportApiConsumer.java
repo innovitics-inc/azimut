@@ -11,7 +11,7 @@ import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.AbstractBaseRestConsumer;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 public abstract class RestTeaComputerEportApiConsumer <TeaComputerRequest, TeaComputerResponse, TeaComputerInput, TeaComputerOutput> 
 extends RestTeaComputerApiConsumer<TeaComputerRequest, TeaComputerResponse, TeaComputerInput, TeaComputerOutput>{

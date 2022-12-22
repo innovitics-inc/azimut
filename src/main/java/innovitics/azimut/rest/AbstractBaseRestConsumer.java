@@ -37,7 +37,7 @@ import innovitics.azimut.rest.errorhandling.RestErrorHandler;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Component
 public abstract class AbstractBaseRestConsumer<REQ,RES,I,O>

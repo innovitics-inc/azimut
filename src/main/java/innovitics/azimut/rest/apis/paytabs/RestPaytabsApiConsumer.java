@@ -25,7 +25,7 @@ import innovitics.azimut.rest.models.paytabs.PaytabsRequest;
 import innovitics.azimut.rest.models.paytabs.PaytabsResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 public abstract class RestPaytabsApiConsumer <PaytabsRequest, PaytabsResponse, PaytabsInput, PaytabsOutput> 
 extends AbstractBaseRestConsumer<PaytabsRequest, PaytabsResponse, PaytabsInput, PaytabsOutput> {

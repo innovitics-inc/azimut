@@ -22,7 +22,7 @@ import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Component
 public class GetClientBankAccountsMapper extends RestMapper<GetClientBankAccountsInput, GetClientBankAccountsOutput,GetClientBankAccountsRequest ,ClientBankAccountResponse[], BusinessClientBankAccountDetails>{
 

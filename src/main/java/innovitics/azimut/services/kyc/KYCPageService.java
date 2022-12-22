@@ -17,7 +17,7 @@ import innovitics.azimut.services.AbstractService;
 import innovitics.azimut.utilities.dbutilities.SearchCriteria;
 import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.dbutilities.specifications.childparent.KYCPageSpecification;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class KYCPageService extends  AbstractService<KYCPage, String>{
 @Autowired KYCPageDynamicRepository kycPageDynamicRepository;

@@ -27,7 +27,7 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
 @RequestMapping("/api/fund")
-public class FundController extends BaseGenericRestController<BusinessFundPrice, String> {
+public class FundController extends BaseGenericRestController<BusinessFundPrice> {
 
 	@Autowired BusinessFundsService businessFundsService;
 	

@@ -1,4 +1,4 @@
-package innovitics.azimut.utilities.fileutilities;
+package innovitics.azimut.utilities.logging;
 
 import java.io.BufferedWriter;
 import java.io.File;

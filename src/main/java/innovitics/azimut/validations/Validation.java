@@ -38,9 +38,9 @@ import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.FileUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
 import innovitics.azimut.utilities.kycutilities.AnswerTypeUtility;
+import innovitics.azimut.utilities.logging.FileUtility;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Component
 public class Validation<T extends BaseBusinessEntity> {

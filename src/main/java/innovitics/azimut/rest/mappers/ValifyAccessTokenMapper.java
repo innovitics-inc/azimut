@@ -13,7 +13,7 @@ import innovitics.azimut.rest.entities.valify.ValifyAccessTokenInput;
 import innovitics.azimut.rest.entities.valify.ValifyAccessTokenOutput;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenRequest;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenResponse;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Component
 public class ValifyAccessTokenMapper extends RestMapper<ValifyAccessTokenInput,ValifyAccessTokenOutput,ValifyAccessTokenRequest ,ValifyAccessTokenResponse, BusinessValify> {
 

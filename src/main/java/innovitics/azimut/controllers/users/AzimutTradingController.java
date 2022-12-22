@@ -27,7 +27,7 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
 @RequestMapping("/api/azimut/trading")
-public class AzimutTradingController extends BaseGenericRestController<BaseAzimutTrading, String> {
+public class AzimutTradingController extends BaseGenericRestController<BaseAzimutTrading> {
 
 	
 	@Autowired BusinessAzimutTradingService businessAzimutTradingService;

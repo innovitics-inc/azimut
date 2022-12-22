@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BaseGenericResponse<T> {
 	protected Integer status;
 	protected String message;
+	protected String transactionId;
 	
 
 	@JsonInclude(value = Include.NON_EMPTY)
@@ -123,6 +124,14 @@ public class BaseGenericResponse<T> {
 	}
 	public void setHasNext(Boolean hasNext) {
 		this.hasNext = hasNext;
+	}
+	
+	
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
 	}
 	@Override
 	public String toString() {

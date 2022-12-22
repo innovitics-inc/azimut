@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.services.NotificationCenterService;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
-import innovitics.azimut.utilities.fileutilities.FileUtility;
+import innovitics.azimut.utilities.logging.FileUtility;
 
 @RestController
 @RequestMapping("/api")

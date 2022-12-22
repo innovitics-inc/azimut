@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.user.UserBlockage;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class PhoneNumberBlockageUtility extends UserBlockageUtility{

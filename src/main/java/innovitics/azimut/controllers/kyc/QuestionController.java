@@ -22,7 +22,7 @@ import innovitics.azimut.exceptions.IntegrationException;
 @RestController
 @RequestMapping("/api/kyc/question")
 
-public class QuestionController extends BaseGenericRestController<BusinessQuestion, String>{
+public class QuestionController extends BaseGenericRestController<BusinessQuestion>{
 
 @Autowired BusinessQuestionService businessQuestionService;
 	

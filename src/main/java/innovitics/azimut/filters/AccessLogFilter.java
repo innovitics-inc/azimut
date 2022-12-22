@@ -1,6 +1,7 @@
 package innovitics.azimut.filters;
 import javax.servlet.Filter;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.UUID;
 
 import javax.servlet.FilterChain;
@@ -19,10 +20,11 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import innovitics.azimut.utilities.LocalThread;
+import com.azure.core.implementation.UnixTime;
+
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.fileutilities.FileUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.FileUtility;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Component
 public class AccessLogFilter implements Filter {
 
@@ -36,12 +38,17 @@ public class AccessLogFilter implements Filter {
   		//ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest)request);
 		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse)response);
 
-		String transaction=String.valueOf(Thread.currentThread().getId());
+		
+		String transaction=String.valueOf(Instant.now().getEpochSecond());
 
+		Thread.currentThread().setName(transaction);
+		
 		RequestWrapper wrapper = new RequestWrapper((HttpServletRequest) request);
 		byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());
 		String requestBody =new String(body, 0, body.length, wrapper.getCharacterEncoding());	
 		
+		
+		MyLogger.info(wrapper.getRemoteAddr());
 		MyLogger.info("REQUEST::"+transaction+"::"+requestBody);
 		
 		
@@ -65,4 +72,7 @@ public class AccessLogFilter implements Filter {
 		this.fileUtility.write("RESPONSE::"+transaction+"::"+responseBody);
 		 
 	}
+
+  	
+  	
 }

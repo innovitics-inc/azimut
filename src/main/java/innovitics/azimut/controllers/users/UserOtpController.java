@@ -22,7 +22,7 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 
 @RestController
 @RequestMapping("/api/otp")
-public class UserOtpController extends BaseGenericRestController<BusinessUserOTP,String>
+public class UserOtpController extends BaseGenericRestController<BusinessUserOTP>
 {
 @Autowired BusinessOTPService businessOTPService;
 	@PostMapping(value="/sendOTP",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},

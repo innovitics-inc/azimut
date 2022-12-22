@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.utilities.datautilities.ArrayUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 import java.util.Base64;
 @Component

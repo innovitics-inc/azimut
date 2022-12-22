@@ -16,7 +16,7 @@ import innovitics.azimut.rest.entities.valify.ValifyInput;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenRequest;
 import innovitics.azimut.rest.models.valify.ValifyAccessTokenResponse;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class ValifyAccessTokenApiConsumer extends RestValifyApiConsumer<ValifyAccessTokenRequest, ValifyAccessTokenResponse,ValifyAccessTokenInput ,ValifyAccessTokenOutput> {
 

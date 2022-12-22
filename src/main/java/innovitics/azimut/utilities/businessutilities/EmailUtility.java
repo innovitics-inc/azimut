@@ -27,7 +27,7 @@ import com.azure.core.amqp.implementation.StringUtil;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 
 @Component
 public class EmailUtility extends ParentUtility{

@@ -12,7 +12,7 @@ import innovitics.azimut.rest.models.teacomputers.GetReportRequest;
 import innovitics.azimut.rest.models.teacomputers.GetReportResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
-import innovitics.azimut.utilities.fileutilities.MyLogger;
+import innovitics.azimut.utilities.logging.MyLogger;
 @Service
 public class GetReportApiConsumer extends RestTeaComputerEportApiConsumer<GetReportRequest, GetReportResponse, GetReportInput, GetReportOutput>{
 
