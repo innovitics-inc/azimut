@@ -428,11 +428,7 @@ public class BusinessClientDetailsService extends AbstractBusinessService<Busine
 			//this.restManager.addAccountMapper.wrapBaseBusinessEntity(false, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null).getData();
 			
 			this.restContract.getData(this.restContract.addAccountMapper, this.prepareAccountAdditionInputs(azimutAccount,tokenizedBusinessUser), null);
-			
-			tokenizedBusinessUser.setIsVerified(true);
-			
-			this.businessUserService.editUser(tokenizedBusinessUser);
-			
+						
 			BusinessClientBankAccountDetails[] businessClientBankAccountDetailsArray= this.azimutDataLookupUtility.getClientBankAccountData(tokenizedBusinessUser);
 					
 			if(arrayUtility.isArrayPopulated(businessClientBankAccountDetailsArray))

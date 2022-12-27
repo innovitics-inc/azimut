@@ -1,5 +1,6 @@
 package innovitics.azimut.utilities.fileutilities;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -324,5 +325,16 @@ public class BlobFileUtility extends ParentUtility{
 		return byteArrayOutputStream;
 	}
 	
-	
+	public ByteArrayInputStream downloadInputStreamFromBlob(String containerName,String subDirectory,String fileName) throws IOException, BusinessException 
+	{	
+		BlobData blobData=new BlobData();
+		if(!StringUtility.isStringPopulated(subDirectory))
+		subDirectory=DateUtility.getCurrentYearMonth();
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();
+		
+		ByteArrayInputStream byteArrayIntputStream = new ByteArrayInputStream(blobClient.downloadContent().toBytes());            
+		
+		byteArrayIntputStream.close();
+		return byteArrayIntputStream;
+	}
 }

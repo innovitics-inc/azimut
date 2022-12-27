@@ -42,10 +42,6 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 	@Override
 	protected BusinessAnswer convertBasicUnitToBusinessUnit(Answer answer, String language) 
 	{
-		List<BusinessSubmittedAnswer> parentAnswers=new LinkedList<BusinessSubmittedAnswer>();
-		List<BusinessSubmittedAnswer> childAnswers=new LinkedList<BusinessSubmittedAnswer>();
-
-
 		BusinessAnswer businessAnswer =this.convertAnswerToBusinessAnswer(answer,null,null,language);
 		if(this.baseListUtility.isSetPopulated(answer.getRelatedAnswers()))
 		{
@@ -70,10 +66,6 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 	
 	@Override
 	public BusinessAnswer convertBasicUnitToBusinessUnit(Answer answer) {
-		
-		List<BusinessSubmittedAnswer> parentAnswers=new LinkedList<BusinessSubmittedAnswer>();
-		List<BusinessSubmittedAnswer> childAnswers=new LinkedList<BusinessSubmittedAnswer>();
-
 
 		BusinessAnswer businessAnswer =this.convertAnswerToBusinessAnswer(answer,null,null,null);
 		if(this.baseListUtility.isSetPopulated(answer.getRelatedAnswers()))
@@ -118,42 +110,6 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 			businessAnswer.setRelatedQuestionText(answer.getRelatedQuestionTextAr());
 			businessAnswer.setAnswerPlaceHolder(answer.getAnswerPlaceHolderAr());
 		}
-		//this.populateUserAnswers(answer, parentAnswers, childAnswers);
-		/*if(this.userAnswerListUtility.isSetPopulated(answer.getUserAnswers()))
-		{		
-			   MyLogger.info("User answers Found:::::"+answer.getUserAnswers());
-				
-				List<Long> parentIds=new LinkedList<Long>();
-				List<Long> childIds = new LinkedList<Long>();
-					for(UserAnswer userAnswer:answer.getUserAnswers())
-					{
-						if(this.longUtility.areLongValuesMatching(answer.getAppUserId(), userAnswer.getUserId()))
-							
-						{
-								BusinessSubmittedAnswer parentBusinessSubmittedAnswer=new BusinessSubmittedAnswer();
-								BusinessSubmittedAnswer businessSubmittedAnswer=new BusinessSubmittedAnswer();
-		
-								if(answer.getParentAnswer()!=null)
-								 {
-									businessSubmittedAnswer=this.userAnswerMapper.convertAnswerToBusinessAnswer(userAnswer);
-									businessSubmittedAnswer.setParentAnswerId(answer.getParentAnswer().getId());
-									childAnswers.add(businessSubmittedAnswer);
-									childIds.add(businessSubmittedAnswer.getAnswerId());
-								 }
-								else
-								{
-									parentBusinessSubmittedAnswer=this.userAnswerMapper.convertAnswerToBusinessAnswer(userAnswer);
-									parentAnswers.add(parentBusinessSubmittedAnswer);
-									parentIds.add(parentBusinessSubmittedAnswer.getAnswerId());
-								}
-							 
-						}
-						
-					}
-					
-			}*/
-		
-	
 		return businessAnswer;
 	}
 
@@ -175,45 +131,7 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 		}
 
 	}
-/*
-	void populateUserAnswers(Answer answer,List<BusinessSubmittedAnswer> parentAnswers,List<BusinessSubmittedAnswer> childAnswers)
-	{
-		if(this.userAnswerListUtility.isSetPopulated(answer.getUserAnswers()))
-		{		
-			   MyLogger.info("User answers Found:::::"+answer.getUserAnswers());
-				
-				List<Long> parentIds=new LinkedList<Long>();
-				List<Long> childIds = new LinkedList<Long>();
-					for(UserAnswer userAnswer:answer.getUserAnswers())
-					{
-						if(this.longUtility.areLongValuesMatching(answer.getAppUserId(), userAnswer.getUserId()))
-							
-						{
-								BusinessSubmittedAnswer parentBusinessSubmittedAnswer=new BusinessSubmittedAnswer();
-								BusinessSubmittedAnswer businessSubmittedAnswer=new BusinessSubmittedAnswer();
-		
-								if(answer.getParentAnswer()!=null)
-								 {
-									businessSubmittedAnswer=this.userAnswerMapper.convertAnswerToBusinessAnswer(userAnswer);
-									businessSubmittedAnswer.setParentAnswerId(answer.getParentAnswer().getId());
-									childAnswers.add(businessSubmittedAnswer);
-									childIds.add(businessSubmittedAnswer.getAnswerId());
-								 }
-								else
-								{
-									parentBusinessSubmittedAnswer=this.userAnswerMapper.convertAnswerToBusinessAnswer(userAnswer);
-									parentAnswers.add(parentBusinessSubmittedAnswer);
-									parentIds.add(parentBusinessSubmittedAnswer.getAnswerId());
-								}
-							 
-						}
-						
-					}
-					
-			}
-		 
-	}
-	*/
+
 	List<BusinessSubmittedAnswer> populateUserAnswers(Long pageId,Long userId)
 	{
 		List<UserAnswer> userAnswers=new ArrayList<UserAnswer>();
@@ -263,20 +181,5 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 			return parentAnswers;
 	}
 	
-	private Answer convertBusinessAnswerToAnswer(BusinessAnswer businessAnswer,boolean save)
-	{
-		Answer answer=new Answer();
-		answer.setId(businessAnswer.getId());
-		answer.setAnswerOrder(businessAnswer.getAnswerOrder());
-		answer.setIsRelatedAnswerMandatory(businessAnswer.getIsRelatedAnswerMandatory());
-		answer.setAnswerPlaceHolder(businessAnswer.getAnswerPlaceHolder());
-		answer.setAnswerOption(businessAnswer.getAnswerOption());
-		answer.setCreatedAt(save?new Date():businessAnswer.getCreatedAt());
-		answer.setUpdatedAt(businessAnswer.getUpdatedAt());
-		answer.setDeletedAt(businessAnswer.getDeletedAt());
-		return answer;
-
-	}
-
 
 }

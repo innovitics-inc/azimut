@@ -21,6 +21,8 @@ public class BusinessAnswer extends BaseBusinessEntity{
 	private String answerOptionAr;
 	private String relatedQuestionTextAr;
 	private String answerPlaceHolderAr;
+	private String pdFieldName;
+	
 	public Long getId() {
 		return id;
 	}
@@ -106,6 +108,12 @@ public class BusinessAnswer extends BaseBusinessEntity{
 	}
 	public void setAnswerPlaceHolderAr(String answerPlaceHolderAr) {
 		this.answerPlaceHolderAr = answerPlaceHolderAr;
+	}
+	public String getPdFieldName() {
+		return pdFieldName;
+	}
+	public void setPdFieldName(String pdFieldName) {
+		this.pdFieldName = pdFieldName;
 	}
 
 	

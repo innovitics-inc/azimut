@@ -21,6 +21,7 @@ public class BusinessQuestion extends BaseBusinessEntity{
 	private String questionPlaceHolder;
 	private String questionPlaceHolderAr;
 	private String questionTextAr;
+	private String pdfieldName;
 
 	public Long getId() {
 		return id;
@@ -108,6 +109,12 @@ public class BusinessQuestion extends BaseBusinessEntity{
 	}
 	public void setQuestionTextAr(String questionTextAr) {
 		this.questionTextAr = questionTextAr;
+	}
+	public String getPdfieldName() {
+		return pdfieldName;
+	}
+	public void setPdfieldName(String pdfieldName) {
+		this.pdfieldName = pdfieldName;
 	}
 	@Override
 	public String toString() {

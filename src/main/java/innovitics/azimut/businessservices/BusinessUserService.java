@@ -780,6 +780,21 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		
 		return tokenizedBusinessUser;
 	}
+	public BusinessUser verifyUser(BusinessUser tokenizedBusinessUser)
+	{
+		MyLogger.info("Editing the user:::");
+			tokenizedBusinessUser.setIsVerified(true);
+			try 
+			{
+				this.editUser(tokenizedBusinessUser);
+				MyLogger.info("User Editted:::");
+			}
+			catch(Exception exception)
+			{
+				this.handleBusinessException(exception, ErrorCode.USER_NOT_UPDATED);
+			}
+		return tokenizedBusinessUser;
+	}
 	
 	
 	public void getMultipleTcAccounts(BusinessUser businessUser) throws BusinessException

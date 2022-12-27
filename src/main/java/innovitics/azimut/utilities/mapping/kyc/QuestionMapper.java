@@ -27,8 +27,6 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 	@Autowired protected ListUtility<BusinessSubmittedAnswer> businessSubmittedAnswerListUtility;
 	@Autowired protected ListUtility<Question> baseListUtility;
 	@Autowired protected ListUtility<BusinessQuestion> businessListUtility;
-	@Autowired protected ListUtility<UserAnswer> userAnswerListUtility;
-	@Autowired protected UserAnswerMapper userAnswerMapper;
 	
 	@Override
 	public Question convertBusinessUnitToBasicUnit(BusinessQuestion businessQuestion, boolean save) {

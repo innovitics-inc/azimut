@@ -32,6 +32,8 @@ public class UserAnswerSubmissionService extends AbstractService<UserAnswer, Str
 	{
 		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
 		searchCriteriaList.add(new SearchCriteria("userId", userId.toString(),SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("answerId", answerId.toString(),SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("deletedAt", "",SearchOperation.IS_NULL,null));
 		return this.userAnswerDynamicRepository.findOne(this.userAnwerSpecification.findByCriteria(searchCriteriaList),new NamedEntityGraph(EntityGraphType.FETCH, "UserAnswer.details")).get();
 	}
 

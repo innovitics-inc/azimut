@@ -48,11 +48,11 @@ public class AccessLogFilter implements Filter {
 		String requestBody =new String(body, 0, body.length, wrapper.getCharacterEncoding());	
 		
 		
-		MyLogger.info(wrapper.getRemoteAddr());
+		MyLogger.info("IP Address::"+wrapper.getRemoteAddr());
 		MyLogger.info("REQUEST::"+transaction+"::"+requestBody);
 		
 		
-		
+		this.fileUtility.write("IP Address::"+wrapper.getRemoteAddr());
 		this.fileUtility.write("REQUEST::"+transaction+"::"+requestBody);
 		
 		
