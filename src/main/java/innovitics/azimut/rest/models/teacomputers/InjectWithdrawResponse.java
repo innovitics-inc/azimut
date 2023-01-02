@@ -11,5 +11,14 @@ public class InjectWithdrawResponse extends TeaComputerResponse{
 	public void setOrderId(String orderId) {
 		OrderId = orderId;
 	}
+
+	@Override
+	public String toString() {
+		return "InjectWithdrawResponse [OrderId=" + OrderId + ", Signature=" + Signature + ", Message=" + Message
+				+ ", ErrorCode=" + ErrorCode + ", errorMessage=" + errorMessage + "]";
+	}
+	
+	
+	
 	
 }

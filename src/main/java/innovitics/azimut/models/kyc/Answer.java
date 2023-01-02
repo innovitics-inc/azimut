@@ -71,6 +71,7 @@ private Date deletedAt;
 
 private Boolean isAnswerMandatory;
 private String answerPlaceHolderAr;
+private String  pdfField;
 
 public Long getId() {
 	return id;
@@ -182,6 +183,12 @@ public String getAnswerPlaceHolderAr() {
 }
 public void setAnswerPlaceHolderAr(String answerPlaceHolderAr) {
 	this.answerPlaceHolderAr = answerPlaceHolderAr;
+}
+public String getPdfField() {
+	return pdfField;
+}
+public void setPdfField(String pdfField) {
+	this.pdfField = pdfField;
 }
 
 

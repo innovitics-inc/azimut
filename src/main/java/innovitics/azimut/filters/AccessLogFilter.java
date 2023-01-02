@@ -25,6 +25,7 @@ import com.azure.core.implementation.UnixTime;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.logging.FileUtility;
 import innovitics.azimut.utilities.logging.MyLogger;
+import innovitics.azimut.utilities.threading.CurrentRequestHolder;
 @Component
 public class AccessLogFilter implements Filter {
 
@@ -39,9 +40,9 @@ public class AccessLogFilter implements Filter {
 		ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse)response);
 
 		
-		String transaction=String.valueOf(Instant.now().getEpochSecond());
+		String transaction=CurrentRequestHolder.get()!=null&&StringUtility.isStringPopulated(CurrentRequestHolder.get().getSystemTrx())?CurrentRequestHolder.get().getSystemTrx():"";
 
-		Thread.currentThread().setName(transaction);
+		
 		
 		RequestWrapper wrapper = new RequestWrapper((HttpServletRequest) request);
 		byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());

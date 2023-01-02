@@ -4,6 +4,7 @@ public enum ErrorCode {
 	NO_MATCHED_CLIENT_NUMBER_EXIST(79,"Invalid Username or password.",""),
 	INVALID_CLIENT(185,"",""),
 	INVALID_CLIENT_STATUS(79,"",""),
+	INVALID_HEADER_SIGNATURE(993,"Invalid signature, corrupted request.",""),
 	CONNECTION_TIMEOUT(994,"Could not perform the operation, please try again later.",""),
 	OPERATION_FAILURE(995,"Operation failed.",""),
 	PAYMENT_FAILURE(996,"Operation Could not be performed, please check with the vendor.",""),

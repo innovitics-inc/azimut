@@ -42,13 +42,15 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobData;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
+import innovitics.azimut.utilities.fileutilities.SecureStorageService;
 import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 @Component
 public class UserUtility extends ParentUtility{
 	@Autowired UserDeviceService userDeviceService;
 	@Autowired UserService userService;	
-	@Autowired BlobFileUtility blobFileUtility;	
+	@Autowired BlobFileUtility blobFileUtility;
+	@Autowired SecureStorageService storageService;
 	@Autowired UserImageService userImageService;
 	@Autowired protected ListUtility<UserImage> listUtility;
 	@Autowired protected ListUtility<UserDevice> userDeviceListUtility;
@@ -157,7 +159,8 @@ public class UserUtility extends ParentUtility{
 	
 	public BlobData uploadFile(MultipartFile file,BusinessUser businessUser) throws IOException, BusinessException
 	{
-		return blobFileUtility.uploadFileToBlob(file, true, this.configProperties.getBlobKYCDocuments(),this.generateUserImageSubDirectory(businessUser),true);
+		//return blobFileUtility.uploadFileToBlob(file, true, this.configProperties.getBlobKYCDocuments(),this.generateUserImageSubDirectory(businessUser),true);
+		return storageService.uploadFile(file, true, this.configProperties.getBlobKYCDocuments(),this.generateUserImageSubDirectory(businessUser),true);
 	}
 	
 
@@ -211,7 +214,8 @@ public class UserUtility extends ParentUtility{
 		{
 			for(UserImage userImage:userImages)
 			{
-				this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(), userImage.getImageSubDirectory(), userImage.getImageName(), false);
+				//this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(), userImage.getImageSubDirectory(), userImage.getImageName(), false);
+				this.storageService.deleteFile(this.configProperties.getBlobKYCDocuments(), userImage.getImageSubDirectory(), userImage.getImageName(), false);
 			}
 		}
 		
@@ -239,7 +243,8 @@ public class UserUtility extends ParentUtility{
 			
 			for(UserImage userImage:userImages)
 			{
-				userImage.setImageUrl(this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobKYCDocuments(), userImage.getImageName(), userImage.getImageSubDirectory(), true));
+				//userImage.setImageUrl(this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobKYCDocuments(), userImage.getImageName(), userImage.getImageSubDirectory(), true));
+				userImage.setImageUrl(this.storageService.generateFileRetrievalUrl(this.configProperties.getBlobKYCDocuments(), userImage.getImageName(), userImage.getImageSubDirectory(), true));
 				if(!showUser)
 				{
 					userImage.setUser(null);
@@ -360,7 +365,8 @@ public class UserUtility extends ParentUtility{
 			{	
 				String url="";
 				String subDirectory=DateUtility.getCurrentDayMonthYear();
-				url=this.blobFileUtility.uploadFileToBlob(file,false,this.configProperties.getBlobUserInteractionPath(),subDirectory,true).getUrl();
+				//url=this.blobFileUtility.uploadFileToBlob(file,false,this.configProperties.getBlobUserInteractionPath(),subDirectory,true).getUrl();
+				url=this.storageService.uploadFile(file,false,this.configProperties.getBlobUserInteractionPath(),subDirectory,true).getUrl();
 				userInteraction.setPrivateUrl(url);
 				userInteraction.setImageName(file.getOriginalFilename());
 				userInteraction.setImagePath(subDirectory);

@@ -93,7 +93,7 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 		businessAnswer.setAnswerOrder(answer.getAnswerOrder());
 		businessAnswer.setAnswerType(answer.getAnswerType());
 		businessAnswer.setIsRelatedAnswerMandatory(answer.getIsRelatedAnswerMandatory());
-
+		businessAnswer.setPdFieldName(answer.getPdfField());
 		businessAnswer.setAnswerOption(answer.getAnswerOption());
 		businessAnswer.setCreatedAt(answer.getCreatedAt());
 		businessAnswer.setUpdatedAt(answer.getUpdatedAt());
@@ -181,5 +181,54 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 			return parentAnswers;
 	}
 	
-
+	public List<BusinessSubmittedAnswer> populateUserAnswersForAllPages(Long userId)
+	{
+		MyLogger.info("enter3::::");
+		List<UserAnswer> userAnswers=new ArrayList<UserAnswer>();
+		List<BusinessSubmittedAnswer> parentAnswers=new LinkedList<BusinessSubmittedAnswer>();
+		List<BusinessSubmittedAnswer> childAnswers=new LinkedList<BusinessSubmittedAnswer>();
+		try
+		{
+			userAnswers=this.userAnswerSubmissionService.getUserAnswersByUserId(userId);
+		}
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+			if(this.exceptionHandler.isABusinessException(exception))
+			{
+				return null;
+			}
+		}
+		if(this.userAnswerListUtility.isListPopulated(userAnswers))
+		{		
+			   MyLogger.info("User answers Found:::::"+userAnswers.toString());
+				
+				List<Long> parentIds=new LinkedList<Long>();
+				List<Long> childIds = new LinkedList<Long>();
+					for(UserAnswer userAnswer:userAnswers)
+					{
+								BusinessSubmittedAnswer parentBusinessSubmittedAnswer=new BusinessSubmittedAnswer();
+								BusinessSubmittedAnswer businessSubmittedAnswer=new BusinessSubmittedAnswer();
+		
+								if(userAnswer.getQuestionId()==null)
+								 {
+									businessSubmittedAnswer=this.userAnswerMapper.convertAnswerToBusinessAnswer(userAnswer);
+									businessSubmittedAnswer.setParentAnswerId(userAnswer.getRelatedAnswerId());
+									childAnswers.add(businessSubmittedAnswer);
+									childIds.add(businessSubmittedAnswer.getAnswerId());
+								 }
+								else
+								{
+									parentBusinessSubmittedAnswer=this.userAnswerMapper.convertAnswerToBusinessAnswer(userAnswer);
+									parentAnswers.add(parentBusinessSubmittedAnswer);
+									parentIds.add(parentBusinessSubmittedAnswer.getAnswerId());
+								}
+							 
+					}
+					
+			}
+			this.matchAndAssign(parentAnswers, childAnswers);
+			return parentAnswers;
+	}
+	
 }

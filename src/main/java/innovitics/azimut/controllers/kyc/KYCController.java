@@ -71,7 +71,21 @@ public class KYCController extends BaseGenericRestController<BusinessKYCPage> {
 		}
 		
 	}
-	
+	@PostMapping(value="/getPagesByUserId",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
+	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> getPagesByUserId(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
+			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
+			@RequestBody BusinessKYCPage businessKYCPage) throws BusinessException, IOException, IntegrationException {
+		try
+		{
+			return this.generateBaseGenericResponse(BusinessKYCPage.class,null,this.businessKYCPageService.getUserKycPages(this.getCurrentRequestHolder(token),businessKYCPage.getIsWeb(),language), null);
+		}		
+		catch(BusinessException businessException)
+		{
+			return this.handleBaseGenericResponseException(businessException,language);
+		}
+		
+	}
 	@PostMapping(value="/submitAnswers",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BusinessKYCPage>> submitAnswer(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,

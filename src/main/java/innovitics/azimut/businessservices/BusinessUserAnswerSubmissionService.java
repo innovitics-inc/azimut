@@ -214,7 +214,8 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 		try 
 		{
 			
-			BlobData blobData=this.blobFileUtility.uploadFileToBlob(file, true, this.configProperties.getBlobKYCDocumentsTemp(),DateUtility.getCurrentDayMonthYear()+"/"+businessUser.getUserId(),true);
+			//BlobData blobData=this.blobFileUtility.uploadFileToBlob(file, true, this.configProperties.getBlobKYCDocumentsTemp(),DateUtility.getCurrentDayMonthYear()+"/"+businessUser.getUserId(),true);
+			BlobData blobData=this.storageService.uploadFile(file, true, this.configProperties.getBlobKYCDocumentsTemp(),DateUtility.getCurrentDayMonthYear()+"/"+businessUser.getUserId(),true);
 			businessKYCPage.setDocumentURL(blobData.getConcatinated(false));
 			businessKYCPage.setDocumentSize(blobData.getFileSize());
 			businessKYCPage.setDocumentName(blobData.getFileName());
@@ -230,7 +231,8 @@ public class BusinessUserAnswerSubmissionService extends AbstractBusinessService
 	
 	public void deleteDocument(String subDiretory,String fileName) throws IOException
 	{	
-		this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(),subDiretory, fileName, false);
+		//this.blobFileUtility.deleteFileFromBlob(this.configProperties.getBlobKYCDocuments(),subDiretory, fileName, false);
+		this.storageService.deleteFile(this.configProperties.getBlobKYCDocuments(),subDiretory, fileName, false);
 	}
 	
 	public void copyDocument(String subDiretory,String fileName)

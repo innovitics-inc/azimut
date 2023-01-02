@@ -31,6 +31,7 @@ import innovitics.azimut.utilities.datautilities.PaginatedEntity;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.logging.MyLogger;
+import innovitics.azimut.utilities.threading.CurrentRequestHolder;
 import innovitics.azimut.validations.Validation;
 
 
@@ -53,6 +54,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity>{
 	private BaseGenericResponse<T> constructGenericBaseResponseCodeAndMessage(BaseGenericResponse<T> baseResponse) {
 		baseResponse.setMessage(StringUtility.SUCCESS);
 		baseResponse.setStatus(StringUtility.SUCCESS_CODE);
+		baseResponse.setTransactionId(CurrentRequestHolder.get().getSystemTrx());
 		MyLogger.info(baseResponse.toString());
 		return baseResponse;
 	}
@@ -122,7 +124,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity>{
 		BaseGenericResponse<T> baseGenericResponse = new BaseGenericResponse<T>();
 		baseGenericResponse.setMessage(errorMessage);
 		baseGenericResponse.setStatus(errorCode);
-		baseGenericResponse.setTransactionId(Thread.currentThread().getName());
+		baseGenericResponse.setTransactionId(CurrentRequestHolder.get().getSystemTrx());
 		return baseGenericResponse;
 
 	}
@@ -177,7 +179,8 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity>{
 	
 	protected BusinessUser getCurrentRequestHolder(String token) throws BusinessException
 	{
-		BusinessUser businessUser =this.jwtUtil.getBusinessUserFromToken(StringUtility.generateSubStringStartingFromCertainIndex(token,' '));
+		BusinessUser businessUser =CurrentRequestHolder.get();
+				//this.jwtUtil.getBusinessUserFromToken(StringUtility.generateSubStringStartingFromCertainIndex(token,' '));
 		if(businessUser!=null)
 		{
 			MyLogger.info("Current Request Holder::"+businessUser.getUserPhone());

@@ -78,5 +78,14 @@ public class UserAnswerSubmissionService extends AbstractService<UserAnswer, Str
 		return count>0l;
 	}
 	
-
+	public List<UserAnswer> getUserAnswersByUserId(Long userId)
+	{
+		List<UserAnswer> userAnswers=new ArrayList<UserAnswer>();
+		List<SearchCriteria> searchCriteriaList=new ArrayList<SearchCriteria>();
+		searchCriteriaList.add(new SearchCriteria("userId", userId.toString(),SearchOperation.EQUAL,null));
+		searchCriteriaList.add(new SearchCriteria("deletedAt", "",SearchOperation.IS_NULL,null));
+		userAnswers= this.userAnswerDynamicRepository.findAll(this.userAnwerSpecification.findByCriteria(searchCriteriaList),new NamedEntityGraph(EntityGraphType.FETCH, "UserAnswer.details"));
+		return userAnswers;
+	}
+	
 }

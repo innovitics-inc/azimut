@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import innovitics.azimut.businessmodels.kyc.BusinessKYCPage;
 import innovitics.azimut.businessmodels.trading.BaseAzimutTrading;
 import innovitics.azimut.businessmodels.user.AuthenticationRequest;
 import innovitics.azimut.businessmodels.user.AzimutAccount;
@@ -16,10 +17,12 @@ import innovitics.azimut.businessmodels.user.BusinessFlow;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.exceptions.IntegrationException;
+import innovitics.azimut.models.kyc.KYCPage;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserImage;
 import innovitics.azimut.models.user.UserLocation;
 import innovitics.azimut.models.user.UserType;
+import innovitics.azimut.pdfgenerator.PdfFiller;
 import innovitics.azimut.pdfgenerator.PdfGenerateService;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.services.kyc.KYCPageService;
@@ -41,6 +44,7 @@ import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.fileutilities.BlobData;
+import innovitics.azimut.utilities.fileutilities.SecureStorageService;
 import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
 import innovitics.azimut.validations.validators.azimutclient.SaveUserLocation;
@@ -69,7 +73,8 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	@Autowired SaveUserLocation saveUserLocation;
 	@Autowired PhoneNumberBlockageUtility phoneNumberBlockageUtility;
 	@Autowired EmailUtility emailUtility;
-	
+	@Autowired BusinessKYCPageService businKycPageService;
+	@Autowired PdfFiller pdfFiller;
 	
 	public static final String PROFILE_PICTURE_PARAMETER="profilePicture";
 	public static final String SIGNED_PDF_PARAMETER="signedPdf";
@@ -199,7 +204,11 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			if(tokenizedBusinessUser!=null&&tokenizedBusinessUser.getProfilePicture()!=null&&tokenizedBusinessUser.getPicturePath()!=null)
 			{
 				tokenizedBusinessUser.setProfilePicture(
-				this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobProfilePicturePath(), 
+				//this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobProfilePicturePath(), 
+						//tokenizedBusinessUser.getProfilePicture(), 
+						//tokenizedBusinessUser.getPicturePath(), false));
+				
+				this.storageService.generateFileRetrievalUrl(this.configProperties.getBlobProfilePicturePath(), 
 						tokenizedBusinessUser.getProfilePicture(), 
 						tokenizedBusinessUser.getPicturePath(), false));
 			}
@@ -450,9 +459,14 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		this.validation.validateUser(businessUser.getId(), tokenizedBusinessUser);
 		try {
 			tokenizedBusinessUser.setDocumentURL(
-					this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobUnsignedPdfPath(),
+					//this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobUnsignedPdfPath(),
+							//this.configProperties.getPhoneNumberChangeDocumentName(),
+							//this.configProperties.getBlobUnsignedPdfPathSubDirectory(), true)
+					
+					this.storageService.generateFileRetrievalUrl(this.configProperties.getBlobUnsignedPdfPath(),
 							this.configProperties.getPhoneNumberChangeDocumentName(),
-							this.configProperties.getBlobUnsignedPdfPathSubDirectory(), true));
+							this.configProperties.getBlobUnsignedPdfPathSubDirectory(), true)
+					);
 		} catch (Exception exception) {
 			throw this.handleBusinessException(exception, ErrorCode.OPERATION_NOT_PERFORMED);
 		}
@@ -557,6 +571,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 			tokenizedBusinessUser.setOtherIdType(businessUser.getOtherIdType());
 			tokenizedBusinessUser.setOtherUserId(businessUser.getOtherUserId());	
 			tokenizedBusinessUser.setOtherNationality(businessUser.getOtherNationality());
+			tokenizedBusinessUser.setMailingAddress(businessUser.getMailingAddress());
 			this.editUser(tokenizedBusinessUser);
 			if(BooleanUtility.isTrue(businessUser.getIsMobile()))
 			{
@@ -609,7 +624,7 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		MyLogger.info("Update User at Tea Computers");
 	}
 	
-	public BusinessUser downloadUserContract(BusinessUser tokenizedBusinessUser) throws BusinessException
+	public BusinessUser downloadUserContract(BusinessUser tokenizedBusinessUser,String language) throws BusinessException
 	{
 		List<String> solvedPages=this.validation.validateKYCFormCompletion(tokenizedBusinessUser,this.kycPageService.countPagesByUserType(tokenizedBusinessUser.getIdType()));
 		BusinessUser businessUser=new BusinessUser();
@@ -617,11 +632,14 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		{
 		businessUser.setDocumentURL(this.pdfGenerateService.downloadContract(this.userAnswerSubmissionService.getUserAnswersByUserIdAndAnswerType(tokenizedBusinessUser.getId(), AnswerType.DOCUMENT.getType()), tokenizedBusinessUser,solvedPages));
 		
-		this.emailUtility.sendMailWithAttachment("alaa.sadek@innovitics.com","Contract Download","Hello!!",this.blobFileUtility.downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(),  StringUtility.CONTRACTS_SUBDIRECTORY+"/"+tokenizedBusinessUser.getUserId(), StringUtility.CONTRACT_DOCUMENT_NAME +".pdf"));
+		//this.emailUtility.sendMailWithAttachment("alaa.sadek@innovitics.com","Contract Download","Hello!!",this.blobFileUtility.downloadStreamFromBlob(this.configProperties.getBlobKYCDocuments(),  StringUtility.CONTRACTS_SUBDIRECTORY+"/"+tokenizedBusinessUser.getUserId(), StringUtility.CONTRACT_DOCUMENT_NAME +".pdf"));
 		
 		//this.emailUtility.sendSimpleMessage("omar.amer@innovitics.com", "Contract Download", "Test!!");
 		
 		
+		this.pdfFiller.fillPdfForm
+		(businessUser, blobFileUtility, this.businKycPageService.getUserKycPages(tokenizedBusinessUser, false, language),
+				"source container", "source subdirectory", "source file name", "destination container", "destination subdirectory", "destination file name");
 		}
 		catch (BusinessException | IOException e) 
 		{
@@ -670,7 +688,8 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 	private User storeFileBlobNameAndGenerateTokenInBusinessUser(BusinessUser businessUser,User user,MultipartFile file,String containerName,String parameter,boolean generateSasToken) throws IOException, BusinessException
 	{
 		BlobData blobData=new BlobData();
-		blobData=this.blobFileUtility.uploadFileToBlob(file, generateSasToken, containerName,null,false);
+		//blobData=this.blobFileUtility.uploadFileToBlob(file, generateSasToken, containerName,null,false);
+		blobData=this.storageService.uploadFile(file, generateSasToken, containerName,null,false);
 		String fileName=blobData.getFileName();
 		String filePath=blobData.getSubDirectory();
 		user=this.userMapper.convertBusinessUnitToBasicUnit(businessUser, false);
@@ -709,10 +728,16 @@ public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
 		if(getDocuments)
 		{
 			if(user.getProfilePicture()!=null&&user.getPicturePath()!=null)
-			businessUser.setProfilePicture(this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobProfilePicturePath(), user.getProfilePicture(),user.getPicturePath(),false));
+			businessUser.setProfilePicture(
+					//this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobProfilePicturePath(), user.getProfilePicture(),user.getPicturePath(),false)
+					this.storageService.generateFileRetrievalUrl(this.configProperties.getBlobProfilePicturePath(), user.getProfilePicture(),user.getPicturePath(),false)
+					);
 			
 			if(user.getSignedPdf()!=null&&user.getPdfPath()!=null)
-			businessUser.setSignedPdf(this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobSignedPdfPath(), user.getSignedPdf(),user.getPdfPath(),true));
+			businessUser.setSignedPdf(
+					//this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobSignedPdfPath(), user.getSignedPdf(),user.getPdfPath(),true)
+					this.storageService.generateFileRetrievalUrl(this.configProperties.getBlobSignedPdfPath(), user.getSignedPdf(),user.getPdfPath(),true)
+					);
 		}
 		return businessUser;
 	}

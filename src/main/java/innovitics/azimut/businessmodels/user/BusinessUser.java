@@ -67,6 +67,7 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private List<UserDevice> userDevices;
 	private String[] dates;
 	private Boolean isOld;
+	private String mailingAddress;
 	
 	
 	public Date getCreatedAt() {
@@ -400,6 +401,13 @@ public class BusinessUser  extends BaseBusinessEntity{
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public String getMailingAddress() {
+		return mailingAddress;
+	}
+	public void setMailingAddress(String mailingAddress) {
+		this.mailingAddress = mailingAddress;
 	}
 	public void concatinate()
 	{

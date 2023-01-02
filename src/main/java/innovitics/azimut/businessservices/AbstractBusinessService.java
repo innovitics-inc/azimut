@@ -39,6 +39,7 @@ import innovitics.azimut.utilities.dbutilities.SearchOperation;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
 import innovitics.azimut.utilities.fileutilities.BlobFileUtility;
+import innovitics.azimut.utilities.fileutilities.SecureStorageService;
 import innovitics.azimut.utilities.logging.FileUtility;
 import innovitics.azimut.utilities.mapping.UserMapper;
 import innovitics.azimut.validations.Validation;
@@ -53,6 +54,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired ListUtility<T> listUtility;
 	@Autowired Validation<T> validation;
 	@Autowired BlobFileUtility blobFileUtility;
+	@Autowired SecureStorageService storageService;
 	@Autowired protected UserMapper userMapper;
 	@Autowired protected FileUtility fileUtility;
 	@Autowired protected UserUtility userUtility;

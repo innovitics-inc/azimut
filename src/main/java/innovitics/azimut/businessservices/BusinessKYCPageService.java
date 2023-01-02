@@ -2,6 +2,7 @@ package innovitics.azimut.businessservices;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,42 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 			}
 	}
 	
+	public List<BusinessKYCPage> getUserKycPages(BusinessUser tokenizedBusinessUser,Boolean draw,String language) throws BusinessException
+	{
+		MyLogger.info("enter::::");
+		List<BusinessKYCPage> businessKYCPages=new ArrayList<BusinessKYCPage>();
+		List<BusinessQuestion> businessQuestions=new LinkedList<BusinessQuestion>();
+		List<BusinessQuestion> businessSubQuestions=new LinkedList<BusinessQuestion>();
+		List<BusinessSubmittedAnswer> businessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();	
+			  try 
+			  {
+					List<KYCPage> kycPages=this.kycPageService.getByUserType(tokenizedBusinessUser.getIdType());				
+					for(KYCPage kycPage:kycPages)
+					{
+						BusinessKYCPage businessKYCPage=this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language,false);	
+						businessQuestions.addAll(businessKYCPage.getQuestions());
+						if(childListUtility.isListPopulated(businessQuestions))
+						{
+							MyLogger.info("enter2::::");
+							for(BusinessQuestion businessQuestion:businessQuestions)
+							{
+								if(childListUtility.isListPopulated(businessQuestion.getSubQuestions()))
+								{
+									businessSubQuestions.addAll(businessQuestion.getSubQuestions());
+								}
+							}
+						}
+						businessKYCPages.add(businessKYCPage);
+					}
+					businessSubmittedAnswers=this.kycPageMapper.answerMapper.populateUserAnswersForAllPages(tokenizedBusinessUser.getId());
+					kycPageMapper.matchAndAssignForList(businessSubmittedAnswers,businessQuestions,businessSubQuestions);
+					return this.generateUrlsForList(businessKYCPages);			
+				}
+				catch (Exception exception) 
+				{
+					throw this.handleBusinessException(exception,ErrorCode.PAGE_NOT_FOUND);
+				}
+	}
 	
 	public List<BusinessKYCPage> getAllPagesByUserTypeId(BusinessUser businessUser) throws BusinessException
 	{
@@ -65,6 +102,18 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 			}		 
 		catch (Exception exception) {
 			throw this.handleBusinessException(exception, ErrorCode.PAGE_NOT_FOUND);
+		}
+		return businessKYCPages;
+	}
+	
+	
+	public List<BusinessKYCPage> generateUrlsForList(List<BusinessKYCPage> inputBusinessKYCPages) throws IOException
+	{
+		MyLogger.info("enter5::::");
+		List<BusinessKYCPage> businessKYCPages=new ArrayList<BusinessKYCPage>();
+		for(BusinessKYCPage businessKYCPage:inputBusinessKYCPages)
+		{
+			businessKYCPages.add(this.generateUrls(businessKYCPage));
 		}
 		return businessKYCPages;
 	}
@@ -102,7 +151,10 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 		{
 			MyLogger.info("Generating the Document URL");
 			businessSubmittedAnswer.setDocumentURL
-			(this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobKYCDocuments(), businessSubmittedAnswer.getDocumentName(), businessSubmittedAnswer.getDocumentSubDirectory(), true,15L));	
+			(
+			  //this.blobFileUtility.generateFileRetrievalUrl(this.configProperties.getBlobKYCDocuments(), businessSubmittedAnswer.getDocumentName(), businessSubmittedAnswer.getDocumentSubDirectory(), true,15L)
+				this.storageService.generateFileRetrievalUrl(this.configProperties.getBlobKYCDocuments(), businessSubmittedAnswer.getDocumentName(), businessSubmittedAnswer.getDocumentSubDirectory(), true,15L)
+			);	
 		}
 		return businessSubmittedAnswer;
 	}

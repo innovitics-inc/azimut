@@ -319,7 +319,7 @@ public class UserController extends BaseGenericRestController<BusinessUser> {
 	protected ResponseEntity<BaseGenericResponse<BusinessUser>> downloadContract(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language) throws IOException, BusinessException {
 		try
 		{
-			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.downloadUserContract(this.getCurrentRequestHolder(token)),null,null);
+			return this.generateBaseGenericResponse(BusinessUser.class,this.businessUserService.downloadUserContract(this.getCurrentRequestHolder(token),language),null,null);
 		}
 		
 		catch(BusinessException businessException)

@@ -18,7 +18,7 @@ public final class NumberUtility {
 	public static boolean areDoubleValuesMatching(Double value1,Double value2)
 	{
 		boolean	result=false;
-		logger.info("Are the values "+ value1+" and "+ value1+"matching?");
+		logger.info("Are the values "+ value1+" and "+ value1+" matching?");
 		
 		if(value1!=null&&value2!=null&&value1.doubleValue()==value2.doubleValue())
 			result= true;
@@ -31,7 +31,7 @@ public final class NumberUtility {
 	public static boolean areLongValuesMatching(Long value1,Long value2)
 	{
 		boolean	result=false;
-		logger.info("Are the values "+ value1+" and "+ value1+"matching?");
+		logger.info("Are the values "+ value1+" and "+ value1+" matching?");
 		
 		if(value1!=null&&value2!=null&&value1.longValue()==value2.longValue())
 			result= true;
@@ -44,7 +44,7 @@ public final class NumberUtility {
 	public static boolean areIntegerValuesMatching(Integer value1,Integer value2)
 	{
 		boolean	result=false;
-		logger.info("Are the values "+ value1+" and "+ value1+"matching?");
+		logger.info("Are the values "+ value1+" and "+ value1+" matching?");
 		
 		if(value1!=null&&value2!=null&&value1.intValue()==value2.intValue())
 			result= true;

@@ -91,7 +91,7 @@ public class User extends BaseEntity {
 	private String solvedPages;
 	
 	private Boolean isOld;
-	
+	private String mailingAddress;
 	
 	public Date getCreatedAt() {
 		return createdAt;
@@ -414,6 +414,14 @@ public class User extends BaseEntity {
 	public void setIsOld(Boolean isOld) {
 		this.isOld = isOld;
 	}
+	
+	public String getMailingAddress() {
+		return mailingAddress;
+	}
+	public void setMailingAddress(String mailingAddress) {
+		this.mailingAddress = mailingAddress;
+	}
+	
 	public void concatinate()
 	{
 		this.setUserPhone(this.getCountryPhoneCode()+this.getPhoneNumber());

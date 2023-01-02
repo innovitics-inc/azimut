@@ -84,7 +84,7 @@ public class QuestionMapper extends ParentMapper<Question,BusinessQuestion>{
 		businessQuestion.setIsAnswerMandatory(question.getIsAnswerMandatory());
 		businessQuestion.setAnswerType(question.getAnswerType());
 		businessQuestion.setQuestionOrder(question.getQuestionOrder());
-		
+		businessQuestion.setPdfieldName(question.getPdfField());
 		if(StringUtility.stringsMatch(language,StringUtility.ENGLISH)||!StringUtility.isStringPopulated(language))
 		{
 			businessQuestion.setQuestionText(question.getQuestionText());

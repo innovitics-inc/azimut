@@ -36,13 +36,17 @@ public class SignatureFilter extends GenericFilter implements Filter {
         RequestWrapper wrapper;
 		try {
 			
-				long startTime = System.currentTimeMillis();
 				wrapper = new RequestWrapper((HttpServletRequest) request);
+				String path=wrapper.getRequestURI();
 				String signatureHeader = wrapper.getHeader(SIGNATURE_HEADER);
 				MyLogger.info("signature header:::"+signatureHeader);
 		        byte[] body = StreamUtils.copyToByteArray(wrapper.getInputStream());
-		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());	
-		        this.checkRequestHeaderSignature(signatureHeader, jsonRequest,wrapper.getRequestURI());
+		        String jsonRequest =new String(body, 0, body.length, wrapper.getCharacterEncoding());
+		        if(this.applyFilterOnPath(getFilterablePaths(), path))
+		        {
+		        	this.checkRequestHeaderSignature(signatureHeader, jsonRequest,path);
+		        }
+		 
 		        chain.doFilter(wrapper, response);				
 		        return;
 			} 			
@@ -54,7 +58,7 @@ public class SignatureFilter extends GenericFilter implements Filter {
 			catch (BusinessException e) 
 			{
 				e.printStackTrace();
-				setErrorResponse(HttpStatus.BAD_REQUEST,(HttpServletResponse)response,ErrorCode.INVALID_SIGNATURE);
+				setErrorResponse(HttpStatus.BAD_REQUEST,(HttpServletResponse)response,ErrorCode.INVALID_HEADER_SIGNATURE);
 			} 
 			catch (ServletException e) 
 			{
@@ -70,7 +74,7 @@ public class SignatureFilter extends GenericFilter implements Filter {
     	String key=path.contains("instant")?this.configProperties.getPaytabsMobileServerKey():this.configProperties.getPaytabsServerKey();
     	if(signatureHeader!=null&&StringUtility.stringsDontMatch(signatureHeader, hmacUtil.generateHmac256(jsonRequest,key)))
         {
-        	throw new BusinessException(ErrorCode.INVALID_SIGNATURE);
+        	throw new BusinessException(ErrorCode.INVALID_HEADER_SIGNATURE);
         }
 		
     }

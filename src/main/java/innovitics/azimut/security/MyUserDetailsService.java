@@ -20,7 +20,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Autowired
 	BusinessUserService businessUserService;
 	@Override
-	public UserDetails loadUserByUsername(String userPhone) throws UsernameNotFoundException {
+	public BusinessUserHolder loadUserByUsername(String userPhone) throws UsernameNotFoundException {
 		
 		BusinessUser businessUser=new BusinessUser();
 		try {
@@ -30,7 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
 			exception.printStackTrace();
 		}
 				
-		return new User(businessUser.getUserPhone()," ",new ArrayList<>());
+		return new BusinessUserHolder(businessUser.getUserPhone()," ",new ArrayList<>(),businessUser);
 	}
 
 }

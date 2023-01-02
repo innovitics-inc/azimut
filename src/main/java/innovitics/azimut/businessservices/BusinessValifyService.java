@@ -283,12 +283,13 @@ public class BusinessValifyService extends AbstractBusinessService <BusinessVali
 			businessUser.setUserId(businessValifyResponse.getUserId());
 			businessUser.setIdType(businessValifyResponse.getAzIdType());
 			businessUser.setGenderId(this.determineUserGender(businessValifyResponse.getGender()!=null?businessValifyResponse.getGender():businessValifyResponse.getSex()));
-			
+			businessUser.setFirstName(businessValifyResponse.getFirstName());
+			businessUser.setLastName(businessValifyResponse.getFullName());
 			if(StringUtility.isStringPopulated(businessValifyResponse.getCity())&&StringUtility.isStringPopulated(businessValifyResponse.getStreet()))
 				{
 					AzimutAccount azimutAccount=businessUser.getAzimutAccount();
-					azimutAccount.setAddressAr(businessValifyResponse.getStreet()+","+businessValifyResponse.getCity());
-					azimutAccount.setAddressEn(businessValifyResponse.getStreet()+","+businessValifyResponse.getCity());
+					azimutAccount.setAddressAr(businessValifyResponse.getStreet()+","+businessValifyResponse.getArea()+","+businessValifyResponse.getCity());
+					azimutAccount.setAddressEn(businessValifyResponse.getStreet()+","+businessValifyResponse.getArea()+","+businessValifyResponse.getCity());
 				}
 			
 			businessUserService.editUser(businessUser);

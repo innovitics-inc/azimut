@@ -23,8 +23,6 @@ public class SaveClientBankAccountTemporarily extends BaseValidator {
 			errors.rejectValue("accountNumber", "invalidValue");
 	if(!StringUtility.isStringPopulated(businessClientBankAccountDetails.getIban()))
 			errors.rejectValue("iban", "invalidValue");
-	if(businessClientBankAccountDetails.getBranchId()==null)
-			errors.rejectValue("branchId", "invalidValue");
 	if(businessClientBankAccountDetails.getBankId()==null)
 			errors.rejectValue("bankId", "invalidValue");
 	if(businessClientBankAccountDetails.getCurrencyId()==null)

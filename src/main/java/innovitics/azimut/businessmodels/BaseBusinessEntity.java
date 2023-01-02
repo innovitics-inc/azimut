@@ -56,7 +56,7 @@ public class BaseBusinessEntity implements Serializable{
 	private Boolean persist;
 	protected Long transactionId;
 	protected String deviceId;
-	protected Integer systemTrx;
+	protected String systemTrx;
 
 	
 	public Date getCreatedAt() {
@@ -306,10 +306,10 @@ public class BaseBusinessEntity implements Serializable{
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
 	}
-	public Integer getSystemTrx() {
+	public String getSystemTrx() {
 		return systemTrx;
 	}
-	public void setSystemTrx(Integer systemTrx) {
+	public void setSystemTrx(String systemTrx) {
 		this.systemTrx = systemTrx;
 	}
 	

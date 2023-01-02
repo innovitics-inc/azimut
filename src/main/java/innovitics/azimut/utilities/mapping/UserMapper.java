@@ -168,7 +168,10 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			{
 				user.setIsOld(businessUser.getIsOld());
 			}
-			
+			if(businessUser.getMailingAddress()!=null)
+			{
+				user.setMailingAddress(businessUser.getMailingAddress());
+			}
 			user.concatinate();
 			
 			MyLogger.info("User::"+user.toString());
@@ -380,6 +383,10 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			{
 				businessUser.setIsOld(user.getIsOld());
 			}
+			if(user.getMailingAddress()!=null)
+			{
+				businessUser.setMailingAddress(user.getMailingAddress());
+			}
 			
 			businessUser.concatinate();
 
@@ -510,7 +517,11 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 				{
 					oldBusinessUser.setIsOld(businessUser.getIsOld());
 				}
-		
+				
+				if(businessUser.getMailingAddress()!=null)
+				{
+					oldBusinessUser.setMailingAddress(businessUser.getMailingAddress());
+				}
 			businessUser.concatinate();
 			oldBusinessUser.concatinate();
 

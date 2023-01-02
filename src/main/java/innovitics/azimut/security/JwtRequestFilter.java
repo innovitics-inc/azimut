@@ -3,6 +3,7 @@ package innovitics.azimut.security;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -26,9 +27,12 @@ import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.utilities.datautilities.DateUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.logging.MyLogger;
+import innovitics.azimut.utilities.threading.CurrentRequestHolder;
+import innovitics.azimut.utilities.threading.MyThread;
 import io.jsonwebtoken.JwtException;
 
 @Component
@@ -53,6 +57,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		    long start = System.nanoTime();
 		    String username = null;
 			String jwt = null;
+			String transaction=DateUtility.getCurrentNanoSecond();
+			BusinessUser businessUser=new BusinessUser();
+			//Thread.currentThread().setName(transaction);
+			
+			
 
 			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 				jwt = authorizationHeader.substring(7);
@@ -61,14 +70,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			
 
 			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-				UserDetails userDetails = this.myUserDetailsService.loadUserByUsername(username);
-
+				BusinessUserHolder userDetails = this.myUserDetailsService.loadUserByUsername(username);
 				if (jwtUtil.validateToken(jwt, userDetails)) {
 					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 							userDetails, null, userDetails.getAuthorities());
 					usernamePasswordAuthenticationToken
 							.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+					
+					businessUser=userDetails.getBusinessUser();
+					
 				}
 			}
 			
@@ -80,8 +91,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			    response.setHeader("Access-Control-Max-Age", "3600");
 			    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 
-			
-			MyLogger.info("authorization header:::"+authorizationHeader);    
+			businessUser.setSystemTrx(transaction);
+			CurrentRequestHolder.set(businessUser);
+			MyLogger.info("authorization header:::"+authorizationHeader);
 			filterChain.doFilter(request, response);
 			
 			
@@ -93,6 +105,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			
 			MyLogger.info("Request Done in :::" + (elapsedTimeInSecond)+" seconds");
+			CurrentRequestHolder.clear();
 		} 
 		
 		catch (JwtException e) {

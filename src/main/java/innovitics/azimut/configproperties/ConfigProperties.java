@@ -191,6 +191,10 @@ public class ConfigProperties {
     @Value("${spring.mail.username}")
     private String mailUserName;
     
+    @Value("${app.url}")
+    private String appUrl;
+    
+    
 	public String getBlobConnectionString() {
 		return blobConnectionString;
 	}
@@ -369,6 +373,9 @@ public class ConfigProperties {
 	}
 	public String getMailUserName() {
 		return mailUserName;
+	}
+	public String getAppUrl() {
+		return appUrl;
 	}
     
     

@@ -33,9 +33,15 @@ import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.logging.FileUtility;
 import innovitics.azimut.utilities.logging.MyLogger;
 @Component
-public class BlobFileUtility extends ParentUtility{
+public class BlobFileUtility extends ParentStorage{
  @Autowired FileUtility fileUtility;
  private Resource blobFile;
+ 
+ @Override
+ public BlobData uploadFile(MultipartFile file,boolean generateSasToken,String containerName,String subDirectory,boolean useOriginalFileName) throws IOException, BusinessException {
+	 return this.uploadFileToBlob(file, generateSasToken, containerName, subDirectory, useOriginalFileName);
+ }
+ 	
 	public BlobData uploadFileToBlob(MultipartFile file,boolean generateSasToken,String containerName,String subDirectory,boolean useOriginalFileName) throws IOException, BusinessException {
 		String fileName="";
 		BlobData blobData=new BlobData();
@@ -100,17 +106,7 @@ public class BlobFileUtility extends ParentUtility{
 	}
 	
 	
-	String 	generateRandomName(MultipartFile file)
-	{
-		String extension=StringUtility.generateSubStringStartingFromCertainIndex(file.getOriginalFilename(),'.');
-		UUID uuid=UUID.randomUUID();
-		return uuid.toString()+extension;
-	}
-	String 	generateRandomName(String extension)
-	{
-		UUID uuid=UUID.randomUUID();
-		return uuid.toString()+"."+extension;
-	}
+	@Override
 	public String generateFileRetrievalUrl(String path,String fileName,String subDirectory,boolean generateWithToken) throws IOException
 	{
 		BlobData blobData=new BlobData();
@@ -125,7 +121,7 @@ public class BlobFileUtility extends ParentUtility{
 		
 		return blobData.getConcatinated(generateWithToken);
 	}
-	
+	@Override
 	public String generateFileRetrievalUrl(String path,String fileName,String subDirectory,boolean generateWithToken,Long tokenValidityMinutes) throws IOException
 	{
 		BlobData blobData=new BlobData();
@@ -327,12 +323,10 @@ public class BlobFileUtility extends ParentUtility{
 	
 	public ByteArrayInputStream downloadInputStreamFromBlob(String containerName,String subDirectory,String fileName) throws IOException, BusinessException 
 	{	
+		MyLogger.info("Accessing the download input stream function::::");
 		BlobData blobData=new BlobData();
-		if(!StringUtility.isStringPopulated(subDirectory))
-		subDirectory=DateUtility.getCurrentYearMonth();
-		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();
-		
-		ByteArrayInputStream byteArrayIntputStream = new ByteArrayInputStream(blobClient.downloadContent().toBytes());            
+		BlobClient blobClient = this.generateBlobClientAndFileName(containerName+"/"+subDirectory,fileName,blobData).getBlobClient();		
+		ByteArrayInputStream byteArrayIntputStream = new ByteArrayInputStream(blobClient.downloadContent().toBytes());
 		
 		byteArrayIntputStream.close();
 		return byteArrayIntputStream;

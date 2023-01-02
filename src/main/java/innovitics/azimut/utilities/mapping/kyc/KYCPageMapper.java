@@ -17,13 +17,14 @@ import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
+import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.GrandParentMapper;
 @Component
 public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 
 	
 	@Autowired protected QuestionMapper questionMapper;
-	@Autowired protected AnswerMapper answerMapper;
+	@Autowired public AnswerMapper answerMapper;
 	@Autowired protected ListUtility<Question> baseListUtility;
 	@Autowired protected ListUtility<BusinessQuestion> businessListUtility;
 	@Autowired protected ListUtility<BusinessSubmittedAnswer> businessSubmittedAnswerListUtility;
@@ -230,5 +231,42 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 				businessKYCPage.setQuestions(businessQuestions);
 			}
 		return businessKYCPage;
-		}	
+		}
+	
+	
+	public void matchAndAssignForList(List<BusinessSubmittedAnswer> businessSubmittedAnswers,List <BusinessQuestion> businessQuestions,List <BusinessQuestion> businessSubQuestions)
+	{
+		MyLogger.info("enter4::::");
+	   if(this.businessSubmittedAnswerListUtility.isListPopulated(businessSubmittedAnswers))
+	   {
+		 for(BusinessQuestion businessQuestion:businessQuestions)
+		  { 
+			 List<BusinessSubmittedAnswer> questionRelatedBusinessSubmittedAnswers=new ArrayList<BusinessSubmittedAnswer>();
+			 for(BusinessSubmittedAnswer businessSubmittedAnswer:businessSubmittedAnswers)
+			  {
+				 if(NumberUtility.areLongValuesMatching(businessQuestion.getId(),businessSubmittedAnswer.getQuestionId()))
+				 {
+					questionRelatedBusinessSubmittedAnswers.add(businessSubmittedAnswer);
+				 }
+			  }
+			   businessQuestion.setUserAnswers(questionRelatedBusinessSubmittedAnswers);	
+		  	}
+		 	if (this.businessListUtility.isListPopulated(businessSubQuestions)) 
+		 	{
+		 		for (BusinessQuestion businessSubQuestion : businessSubQuestions) 
+		 		{
+		 			List<BusinessSubmittedAnswer> subQuestionRelatedBusinessSubmittedAnswers = new ArrayList<BusinessSubmittedAnswer>();
+		 			for (BusinessSubmittedAnswer businessSubmittedAnswer : businessSubmittedAnswers) 
+		 			{
+		 				if (NumberUtility.areLongValuesMatching(businessSubQuestion.getId(),businessSubmittedAnswer.getQuestionId())) 
+		 				{
+		 					subQuestionRelatedBusinessSubmittedAnswers.add(businessSubmittedAnswer);
+		 				}
+		 			}
+		 			businessSubQuestion.setUserAnswers(subQuestionRelatedBusinessSubmittedAnswers);	
+		 		 }	
+			 }
+		  }
+	   }
+
 	}

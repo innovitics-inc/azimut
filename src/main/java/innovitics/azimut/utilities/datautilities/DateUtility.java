@@ -3,6 +3,7 @@ package innovitics.azimut.utilities.datautilities;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -18,6 +19,11 @@ public final class DateUtility extends ParentUtility{
 
 	protected static final Logger logger = LoggerFactory.getLogger(DateUtility.class);
 		
+	public static String getCurrentNanoSecond()
+	{
+		//return String.valueOf(Instant.now().getEpochSecond());
+		return String.valueOf(Math.abs(System.nanoTime()));
+	}
 	public static Date getCurrentDate()
 	{
 		return new Date();

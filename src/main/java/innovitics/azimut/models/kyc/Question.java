@@ -68,6 +68,7 @@ public class Question extends BaseEntity{
 		
 	private String  questionPlaceHolder;
 	private String  questionPlaceHolderAr;
+	private String  pdfField;
 	
 	/*
 	@OneToMany(mappedBy="question")
@@ -173,6 +174,14 @@ public class Question extends BaseEntity{
 	}
 	public void setQuestionPlaceHolderAr(String questionPlaceHolderAr) {
 		this.questionPlaceHolderAr = questionPlaceHolderAr;
+	}
+	
+	
+	public String getPdfField() {
+		return pdfField;
+	}
+	public void setPdfField(String pdfField) {
+		this.pdfField = pdfField;
 	}
 	@Override
 	public String toString() {
