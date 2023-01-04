@@ -81,7 +81,10 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 			inputBaseAzimutTrading.setCurrencyId(currencyId);
 			inputBaseAzimutTrading.setAccountId(accountId);
 			inputBaseAzimutTrading.setBankId(bankId);
-			inputBaseAzimutTrading.setInjectionDocument(file);
+			if(file!=null&&!file.isEmpty())
+			{
+				inputBaseAzimutTrading.setInjectionDocument(file);
+			}
 			
 			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.injectRest(this.getCurrentRequestHolder(token),inputBaseAzimutTrading),null,null);
 		}

@@ -72,6 +72,7 @@ public class UserBlockageFilter extends GenericFilter implements Filter
 				else
 					{
 						chain.doFilter(request, response);
+						return;
 					}
 				} 			
 				catch (IOException e) 
@@ -92,7 +93,6 @@ public class UserBlockageFilter extends GenericFilter implements Filter
 
 	@Override
 	List<String> getFilterablePaths() {
-		//return Arrays.asList("/api/azimut/trading/inject","/api/azimut/trading/withdraw","/api/azimut/trading/placeOrder","/api/forgotPassword","/api/saveUserTemporarily");
 		return Arrays.asList(PATH+"placeOrder",PATH+"inject",PATH+"withdraw");
 	}
 

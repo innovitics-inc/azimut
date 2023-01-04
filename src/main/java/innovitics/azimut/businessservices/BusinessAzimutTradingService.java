@@ -20,8 +20,6 @@ import innovitics.azimut.utilities.mapping.UserMapper;
 @Service
 public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAzimutTrading> {
 
-	@Autowired UserMapper userMapper;
-
 	public BaseAzimutTrading placeOrder(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException
 	{				
 		@SuppressWarnings("unchecked")
@@ -86,7 +84,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		} 
 		catch (Exception exception) 
 		{
-			this.exceptionHandler.handleException(exception);
+			throw this.exceptionHandler.handleException(exception);
 		}
 		
 		return responseBaseAzimutTrading;
@@ -101,7 +99,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 		}
 	catch (Exception exception) 
 	{
-		this.exceptionHandler.handleException(exception);
+		throw this.exceptionHandler.handleException(exception);
 	}
 	
 		return responseBaseAzimutTrading;
@@ -118,7 +116,7 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	 
 	catch (Exception exception) 
 	{
-		this.exceptionHandler.handleException(exception);
+		throw this.exceptionHandler.handleException(exception);
 	}
 	
 		return responseBaseAzimutTrading;
@@ -312,14 +310,21 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 			addBaseAzimutTrading.setModuleTypeId(ModuleType.CASH.getTypeId());
 			addBaseAzimutTrading.setReferenceNo(baseAzimutTrading.getReferenceNo());
 			if(baseAzimutTrading.getInjectionDocument()!=null)
-			try 
 			{
-				addBaseAzimutTrading.setFileBytes(baseAzimutTrading.getInjectionDocument().getBytes().toString());
-			} 
-			catch (IOException ioException) 
+				MyLogger.info("Document available");
+				try 
+				{
+					addBaseAzimutTrading.setFileBytes(baseAzimutTrading.getInjectionDocument().getBytes().toString());
+				}	 
+				catch (IOException ioException) 
+				{
+					MyLogger.info("Could not extract the file bytes");
+					ioException.printStackTrace();
+				}
+			}
+			else
 			{
-				MyLogger.info("Could not extract the file bytes");
-				ioException.printStackTrace();
+				MyLogger.info("Document empty");
 			}
 		 }
 		
