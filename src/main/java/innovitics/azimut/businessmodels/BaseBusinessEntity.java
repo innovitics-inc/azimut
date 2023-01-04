@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import innovitics.azimut.models.kyc.Review;
 
-public class BaseBusinessEntity implements BusinessInterface,Serializable{
+public class BaseBusinessEntity implements Serializable{
 	/**
 	 * 
 	 */

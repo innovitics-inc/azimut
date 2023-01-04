@@ -79,24 +79,48 @@ public class BusinessAzimutTradingService extends AbstractBusinessService<BaseAz
 	
 	public BaseAzimutTrading placeOrderRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException,Exception
 	{
-		BaseAzimutTrading responseBaseAzimutTrading=(BaseAzimutTrading)this.restContract.getData(this.restContract.placeOrderMapper, this.prepareOrderPlacingInputs(tokenizedBusinessUser, baseAzimutTrading), null);
+		BaseAzimutTrading responseBaseAzimutTrading=new BaseAzimutTrading();
+		try 
+		{
+		 responseBaseAzimutTrading=(BaseAzimutTrading)this.restContract.getData(this.restContract.placeOrderMapper, this.prepareOrderPlacingInputs(tokenizedBusinessUser, baseAzimutTrading), null);	
+		} 
+		catch (Exception exception) 
+		{
+			this.exceptionHandler.handleException(exception);
+		}
+		
 		return responseBaseAzimutTrading;
 	}
 	
 	public BaseAzimutTrading injectRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws Exception
 	{		
-		BaseAzimutTrading responseBaseAzimutTrading=		
-		 (BaseAzimutTrading)this.restContract.getData(this.restContract.injectWithdrawMapper, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_DEPOSIT);
-		
+		BaseAzimutTrading responseBaseAzimutTrading=new BaseAzimutTrading();
+		try 
+		{
+		responseBaseAzimutTrading=(BaseAzimutTrading)this.restContract.getData(this.restContract.injectWithdrawMapper, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_DEPOSIT);
+		}
+	catch (Exception exception) 
+	{
+		this.exceptionHandler.handleException(exception);
+	}
+	
 		return responseBaseAzimutTrading;
 	
 	}
 	
 	public BaseAzimutTrading withdrawRest(BusinessUser tokenizedBusinessUser,BaseAzimutTrading baseAzimutTrading) throws IntegrationException, BusinessException,Exception
 	{
-		BaseAzimutTrading responseBaseAzimutTrading=				
-				 (BaseAzimutTrading)this.restContract.getData(this.restContract.injectWithdrawMapper, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_WITHDRAW);
-		
+		BaseAzimutTrading responseBaseAzimutTrading=new BaseAzimutTrading();
+		try 
+		{
+			responseBaseAzimutTrading=(BaseAzimutTrading)this.restContract.getData(this.restContract.injectWithdrawMapper, this.prepareInjectWithdrawInputs(tokenizedBusinessUser, baseAzimutTrading), StringUtility.INFORM_WITHDRAW);
+		}
+	 
+	catch (Exception exception) 
+	{
+		this.exceptionHandler.handleException(exception);
+	}
+	
 		return responseBaseAzimutTrading;
 	}
 	

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import innovitics.azimut.controllers.BaseGenericResponse;
 import innovitics.azimut.utilities.ParentUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
+import innovitics.azimut.utilities.threading.CurrentRequestHolder;
 
 public final class StringUtility extends ParentUtility{
 	
@@ -109,7 +110,7 @@ public final class StringUtility extends ParentUtility{
         BaseGenericResponse<String> baseGenericResponse = new BaseGenericResponse<String>();
 		baseGenericResponse.setMessage(errorCode.getMessage());
 		baseGenericResponse.setStatus(errorCode.getCode());
-
+		baseGenericResponse.setTransactionId(CurrentRequestHolder.get().getSystemTrx());
         return mapper.writeValueAsString(baseGenericResponse);
     }
 	public static String convertToJson(Object object) {

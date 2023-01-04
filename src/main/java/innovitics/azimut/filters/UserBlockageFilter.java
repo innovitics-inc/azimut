@@ -32,7 +32,7 @@ import innovitics.azimut.utilities.threading.CurrentRequestHolder;
 @Component
 public class UserBlockageFilter extends GenericFilter implements Filter 
 {
-	private static final String AUTHORIZATION_HEADER = "Authorization";
+	private static final String PATH = "/azimut-0.0.1-SNAPSHOT/api/azimut/trading/";
 	@Autowired BusinessUserService businessUserService;
 	@Autowired UserBlockageUtility userBlockageUtility;
 	@Autowired PhoneNumberBlockageUtility phoneNumberBlockageUtility;
@@ -93,7 +93,7 @@ public class UserBlockageFilter extends GenericFilter implements Filter
 	@Override
 	List<String> getFilterablePaths() {
 		//return Arrays.asList("/api/azimut/trading/inject","/api/azimut/trading/withdraw","/api/azimut/trading/placeOrder","/api/forgotPassword","/api/saveUserTemporarily");
-		return Arrays.asList("/azimut-0.0.1-SNAPSHOT/api/azimut/trading/cancelOrder");
+		return Arrays.asList(PATH+"placeOrder",PATH+"inject",PATH+"withdraw");
 	}
 
 	

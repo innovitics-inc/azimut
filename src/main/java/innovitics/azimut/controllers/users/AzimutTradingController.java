@@ -37,10 +37,10 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> placeOrder(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
 			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
-			@RequestBody BaseAzimutTrading baseAzimutTrading) throws BusinessException, IOException, IntegrationException {
+			@RequestBody BaseAzimutTrading baseAzimutTrading) throws BusinessException,Exception {
 		try
 		{
-			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.placeOrder(this.getCurrentRequestHolder(token),baseAzimutTrading),null,null);
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.placeOrderRest(this.getCurrentRequestHolder(token),baseAzimutTrading),null,null);
 		}		
 		catch(BusinessException businessException)
 		{
@@ -73,7 +73,7 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 			@RequestParam ("currencyId") Long currencyId,
 			@RequestParam ("accountId") Long accountId,
 			@RequestParam ("bankId") Long bankId,
-			@RequestParam (name="file",required=false) MultipartFile file) throws BusinessException,MaxUploadSizeExceededException,IllegalStateException, IOException, IntegrationException {
+			@RequestParam (name="file",required=false) MultipartFile file) throws BusinessException,MaxUploadSizeExceededException,IllegalStateException, IOException, IntegrationException,Exception {
 		try
 		{
 			BaseAzimutTrading inputBaseAzimutTrading=new BaseAzimutTrading();
@@ -83,7 +83,7 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 			inputBaseAzimutTrading.setBankId(bankId);
 			inputBaseAzimutTrading.setInjectionDocument(file);
 			
-			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.inject(this.getCurrentRequestHolder(token),inputBaseAzimutTrading),null,null);
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.injectRest(this.getCurrentRequestHolder(token),inputBaseAzimutTrading),null,null);
 		}
 		
 		catch(BusinessException businessException)
@@ -116,10 +116,10 @@ public class AzimutTradingController extends BaseGenericRestController<BaseAzimu
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}) 
 	protected ResponseEntity<BaseGenericResponse<BaseAzimutTrading>> withdraw(@RequestHeader(StringUtility.AUTHORIZATION_HEADER) String  token,
 			@RequestHeader(name=StringUtility.LANGUAGE,required=false) String  language,
-			@RequestBody BaseAzimutTrading baseAzimutTrading) throws BusinessException, IOException, IntegrationException {
+			@RequestBody BaseAzimutTrading baseAzimutTrading) throws BusinessException, IOException, IntegrationException,Exception {
 		try
 		{
-			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.withdraw(this.getCurrentRequestHolder(token),baseAzimutTrading),null,null);
+			return this.generateBaseGenericResponse(BaseAzimutTrading.class,this.businessAzimutTradingService.withdrawRest(this.getCurrentRequestHolder(token),baseAzimutTrading),null,null);
 		}		
 		catch(BusinessException businessException)
 		{
