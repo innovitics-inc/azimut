@@ -56,7 +56,6 @@ import innovitics.azimut.validations.validators.user.FindUserByUserPhone;
 import innovitics.azimut.validations.validators.user.ForgottenUserPassword;
 @Service
 public class BusinessUserService extends AbstractBusinessService<BusinessUser> {
-	@Autowired UserService userService;
 	@Autowired EditUserProfile editUserProfile;
 	@Autowired ChangeUserPassword changeUserPassword;
 	@Autowired ForgottenUserPassword forgottenUserPassword;

@@ -62,7 +62,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 			
 			HttpEntity<MultiValueMap<String, String>> mappedHttpEntity= this.generateMappedRequestFromInput(input);
 			
-			if(httpEntity!=null)
+			//if(httpEntity!=null)
 			{
 				//logger.info("Request::" + httpEntity.toString());
 				String url=this.generateURL(params);
@@ -73,7 +73,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				
 				
 				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
-				responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params,input);
+				responseEntity=this.consumeRestAPI(httpEntity!=null?httpEntity:mappedHttpEntity, this.chooseHttpMethod(), clazz,params,input);
 				
 				this.populateResponse(url, responseEntity);
 				
@@ -88,7 +88,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				MyLogger.info("Output:::" +output!=null?output.toString():null);
 				return output;
 			}
-			if(mappedHttpEntity!=null)
+			/*if(mappedHttpEntity!=null)
 			{
 				//logger.info("Request::" + mappedHttpEntity.toString());
 				String url=this.generateURL(params);
@@ -105,10 +105,10 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				MyLogger.info("Output:::" +output!=null?output.toString():null);
 				return output;
 	
-			}
+			}*/
 			
 			
-			return null;
+			//return null;
 			
 		} 
 		
@@ -139,7 +139,7 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 	
 	@Override
 	public
-	ResponseEntity<RES> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException
+	ResponseEntity<RES> consumeRestAPI(HttpEntity<?> httpEntity,HttpMethod httpMethod,Class<RES> clazz,String params,I input) throws Exception,HttpClientErrorException, IntegrationException
 	{						
 		MyLogger.info("Request right before invocation::::"+httpEntity.toString());
 		MyLogger.info("Method:::"+httpMethod);

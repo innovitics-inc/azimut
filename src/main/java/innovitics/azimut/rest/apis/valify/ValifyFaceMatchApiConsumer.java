@@ -83,12 +83,6 @@ public class ValifyFaceMatchApiConsumer extends RestValifyApiConsumer<ValifyFaci
 	}
 
 	@Override
-	public HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(ValifyFacialImageInput input) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Class<ValifyFacialImageResponse> getResponseClassType() {
 		// TODO Auto-generated method stub
 		return ValifyFacialImageResponse.class;

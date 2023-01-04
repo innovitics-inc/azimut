@@ -60,7 +60,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 	
 	@Override
 	public
-	ResponseEntity<TeaComputerResponse> consumeRestAPI(HttpEntity<String> httpEntity,HttpMethod httpMethod,Class<TeaComputerResponse> clazz,String params,TeaComputerInput input) throws Exception,HttpClientErrorException, IntegrationException
+	ResponseEntity<TeaComputerResponse> consumeRestAPI(HttpEntity<?> httpEntity,HttpMethod httpMethod,Class<TeaComputerResponse> clazz,String params,TeaComputerInput input) throws Exception,HttpClientErrorException, IntegrationException
 	{					
 		try {
 		MyLogger.info("Tea Computer Rest::::");

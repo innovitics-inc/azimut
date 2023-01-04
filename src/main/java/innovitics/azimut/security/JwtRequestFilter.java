@@ -94,6 +94,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			businessUser.setSystemTrx(transaction);
 			CurrentRequestHolder.set(businessUser);
 			MyLogger.info("authorization header:::"+authorizationHeader);
+			MyLogger.info("Used profile::::"+this.configProperties.getUsedProfile());
 			filterChain.doFilter(request, response);
 			
 			

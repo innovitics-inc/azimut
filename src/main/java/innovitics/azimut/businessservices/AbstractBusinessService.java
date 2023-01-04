@@ -25,6 +25,7 @@ import innovitics.azimut.rest.mappers.RestMapper;
 import innovitics.azimut.security.AES;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.services.payment.PaymentService;
+import innovitics.azimut.services.user.UserService;
 import innovitics.azimut.utilities.businessutilities.BusinessSearchOperation;
 import innovitics.azimut.utilities.businessutilities.PaymentTransactionUtility;
 import innovitics.azimut.utilities.businessutilities.PhoneNumberBlockageUtility;
@@ -63,7 +64,7 @@ public abstract class AbstractBusinessService <T extends BaseBusinessEntity> ext
 	@Autowired protected UserBlockageUtility userBlockageUtility;
 	@Autowired protected PhoneNumberBlockageUtility phoneNumberBlockageUtility;
 	@Autowired protected PaymentTransactionUtility paymentTransactionUtility;
-
+	@Autowired protected UserService userService;
 	@Autowired AES aes;
 	
 	

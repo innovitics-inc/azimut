@@ -14,8 +14,10 @@ import innovitics.azimut.businessmodels.kyc.BusinessSubmittedAnswer;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.models.kyc.KYCPage;
+import innovitics.azimut.models.kyc.Review;
 import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.services.kyc.KYCPageService;
+import innovitics.azimut.utilities.businessutilities.ReviewUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
@@ -29,6 +31,7 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 	@Autowired KYCPageMapper kycPageMapper;
 	@Autowired ListUtility<BusinessQuestion> childListUtility;
 	@Autowired ListUtility<BusinessSubmittedAnswer> grandChildListUtility;
+	@Autowired ReviewUtility reviewUtility; 
 	
 	public BusinessKYCPage getKycPagebyId(BusinessUser businessUser,Long id,Boolean draw,String language) throws BusinessException
 	{
@@ -37,12 +40,13 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 		
 		try 
 			{
-				KYCPage kycPage=this.kycPageService.getById(id);
+				/*KYCPage kycPage=this.kycPageService.getById(id);
 				kycPage.setAppUserId(businessUser.getId());
 				kycPage.setDraw(draw);
 				BusinessKYCPage businessKYCPage=this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language,true);
 				businessKYCPage.setVerificationPercentage(businessUser.getVerificationPercentage());
-				return this.generateUrls(businessKYCPage);
+				return this.generateUrls(businessKYCPage);*/
+				return this.getPageWithDetails(businessUser, id, draw, language);
 		
 			}
 		catch (Exception exception) 
@@ -50,7 +54,23 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 				throw this.handleBusinessException(exception,ErrorCode.PAGE_NOT_FOUND);
 			}
 	}
+	public BusinessKYCPage getPageWithDetails(BusinessUser businessUser,Long id,Boolean draw,String language) throws BusinessException
+	{
+		try 
+		{
+			KYCPage kycPage=this.kycPageService.getById(id);
+			kycPage.setAppUserId(businessUser.getId());
+			kycPage.setDraw(draw);
+			BusinessKYCPage businessKYCPage=this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language,true);
+			businessKYCPage.setVerificationPercentage(businessUser.getVerificationPercentage());
+			return this.generateUrls(businessKYCPage);
 	
+		}
+		catch (Exception exception) 
+		{
+			throw this.handleBusinessException(exception,ErrorCode.PAGE_NOT_FOUND);
+		}
+	}
 	public List<BusinessKYCPage> getUserKycPages(BusinessUser tokenizedBusinessUser,Boolean draw,String language) throws BusinessException
 	{
 		MyLogger.info("enter::::");
@@ -176,4 +196,15 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 		return progress;
 	}
 	
+	
+	BusinessKYCPage getReviewedPage(BusinessUser businessUser,BusinessKYCPage page,Boolean draw,String language)
+	{
+		if(true&&page!=null&&this.childListUtility.isListPopulated(page.getQuestions()))
+		{
+			List<Review> reviews=new ArrayList<Review>();
+			this.reviewUtility.getReviews();
+		}
+			
+		return page;
+	}
 }

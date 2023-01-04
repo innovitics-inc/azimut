@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import innovitics.azimut.exceptions.IntegrationException;
 import innovitics.azimut.rest.AbstractBaseRestConsumer;
+import innovitics.azimut.rest.entities.valify.ValifyAccessTokenInput;
+import innovitics.azimut.rest.entities.valify.ValifyOCRInput;
 import innovitics.azimut.rest.models.valify.ValifyResponse;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
@@ -48,14 +50,21 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 	}
 	
 	
-	public abstract HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(ValifyInput valifyInput);
-	
+	@Override
+	public HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(ValifyInput input) {
+		
+		return null;
+	}	
 	protected void populateResponse(String url,ResponseEntity<ValifyResponse> responseEntity)
 	{
 		
 	};
 
-	
+	@Override
+	public HttpEntity<String> generateRequestFromInput(ValifyInput input) {
+		
+		return null;
+	}
 	
 	
 	protected IntegrationException handleValifyError(String errorMessage,String errorCode) throws IntegrationException

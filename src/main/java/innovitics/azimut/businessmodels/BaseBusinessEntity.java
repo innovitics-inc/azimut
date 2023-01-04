@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class BaseBusinessEntity implements Serializable{
+import innovitics.azimut.models.kyc.Review;
+
+public class BaseBusinessEntity implements BusinessInterface,Serializable{
 	/**
 	 * 
 	 */
@@ -57,6 +59,7 @@ public class BaseBusinessEntity implements Serializable{
 	protected Long transactionId;
 	protected String deviceId;
 	protected String systemTrx;
+	protected List<Review> reviews;
 
 	
 	public Date getCreatedAt() {
@@ -311,6 +314,12 @@ public class BaseBusinessEntity implements Serializable{
 	}
 	public void setSystemTrx(String systemTrx) {
 		this.systemTrx = systemTrx;
+	}
+	public List<Review> getReviews() {
+		return reviews;
+	}
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
 	}
 	
 	

@@ -327,10 +327,7 @@ private BaseAzimutTrading prepareInjectWithdrawInputs(BusinessUser tokenizedBusi
 		catch (Exception exception) 
 		{
 			exception.printStackTrace();
-			if(exception instanceof IntegrationException)
-			throw this.exceptionHandler.handleIntegrationExceptionAsBusinessException((IntegrationException)exception, ErrorCode.OPERATION_FAILURE);
-			else
-			throw new BusinessException(ErrorCode.OPERATION_FAILURE);
+			this.exceptionHandler.handleException(exception);
 		}
 		return responseBaseAzimutTrading;
 	}

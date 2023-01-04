@@ -21,11 +21,7 @@ import innovitics.azimut.utilities.logging.MyLogger;
 public class ValifyAccessTokenApiConsumer extends RestValifyApiConsumer<ValifyAccessTokenRequest, ValifyAccessTokenResponse,ValifyAccessTokenInput ,ValifyAccessTokenOutput> {
 
 	final static String PATH="/o/token/";
-	@Override
-	public HttpEntity<String> generateRequestFromInput(ValifyAccessTokenInput input) {
-		
-		return null;
-	}
+
 	@Override
 	public ValifyAccessTokenOutput generateOutPutFromResponse(ResponseEntity<ValifyAccessTokenResponse> responseEntity) {
 		ValifyAccessTokenOutput output=new ValifyAccessTokenOutput();

@@ -84,12 +84,6 @@ public class ValifyOCRPassportApiConsumer extends RestValifyApiConsumer<ValifyOC
 	}
 
 	@Override
-	public HttpEntity<MultiValueMap<String, String>> generateMappedRequestFromInput(ValifyOCRInput valifyInput) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Class<ValifyOCRPassportResponse> getResponseClassType() {
 		// TODO Auto-generated method stub
 		return ValifyOCRPassportResponse.class;

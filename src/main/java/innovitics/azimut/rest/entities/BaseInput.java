@@ -1,8 +1,6 @@
 package innovitics.azimut.rest.entities;
 
-import innovitics.azimut.AzimutParent;
-
-public abstract class BaseInput extends AzimutParent {
+public abstract class BaseInput{
 
 	protected String url;
 	

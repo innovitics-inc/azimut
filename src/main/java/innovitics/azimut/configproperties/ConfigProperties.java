@@ -3,7 +3,9 @@ package innovitics.azimut.configproperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 @Component
 @Configuration
@@ -12,6 +14,10 @@ import org.springframework.stereotype.Component;
 
 public class ConfigProperties {
 
+	@Value("${used.profile}")
+    private String usedProfile;
+
+	
     @Value("${blob.connection.string}")
     private String blobConnectionString;
 
@@ -195,6 +201,9 @@ public class ConfigProperties {
     private String appUrl;
     
     
+	public String getUsedProfile() {
+		return usedProfile;
+	}
 	public String getBlobConnectionString() {
 		return blobConnectionString;
 	}
@@ -378,6 +387,20 @@ public class ConfigProperties {
 		return appUrl;
 	}
     
-    
+	@Profile("dev")
+	@Bean
+	public String devDatabaseConnection() {
+		System.out.println("DEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+		return "DB connection for DEV - H2";
+	}
+
+	@Profile("test")
+	@Bean
+	public String testDatabaseConnection() {
+		System.out.println("TEEEEEEEEEEEEEESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST");
+		return "DB Connection to RDS_TEST - Low Cost Instance";
+	}
+
+	
 
 }

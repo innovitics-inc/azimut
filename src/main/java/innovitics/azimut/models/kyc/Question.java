@@ -53,22 +53,22 @@ public class Question extends BaseEntity{
 	@OneToMany(mappedBy="question")
 	@Fetch(FetchMode.JOIN)
 	@OrderBy("answerOrder ASC")
-	private Set<Answer> answers;
+	protected Set<Answer> answers;
 	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="parent_question_id")
-	private Question parentQuestion;
+	protected Question parentQuestion;
 	
 	
 	@OneToMany(mappedBy="parentQuestion")
 	@Fetch(FetchMode.JOIN)
 	@OrderBy("questionOrder ASC")
-	private Set<Question> subQuestions;
+	protected Set<Question> subQuestions;
 		
-	private String  questionPlaceHolder;
-	private String  questionPlaceHolderAr;
-	private String  pdfField;
+	protected String  questionPlaceHolder;
+	protected String  questionPlaceHolderAr;
+	protected String  pdfField;
 	
 	/*
 	@OneToMany(mappedBy="question")

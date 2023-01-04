@@ -27,12 +27,12 @@ import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.logging.MyLogger;
 import innovitics.azimut.utilities.mapping.UserMapper;
+import innovitics.azimut.utilities.threading.CurrentRequestHolder;
 
 @Component
 public class UserBlockageFilter extends GenericFilter implements Filter 
 {
 	private static final String AUTHORIZATION_HEADER = "Authorization";
-	@Autowired private JwtUtil jwtUtil;
 	@Autowired BusinessUserService businessUserService;
 	@Autowired UserBlockageUtility userBlockageUtility;
 	@Autowired PhoneNumberBlockageUtility phoneNumberBlockageUtility;
@@ -42,15 +42,13 @@ public class UserBlockageFilter extends GenericFilter implements Filter
 			throws IOException, ServletException {
 		HttpServletRequest wrapper= ((HttpServletRequest)request);
 		MyLogger.info("URI:::"+wrapper.getRequestURI());
-		final String authorizationHeader = wrapper.getHeader(AUTHORIZATION_HEADER);			
-		Boolean hasToken=authorizationHeader != null &&StringUtility.isStringPopulated(authorizationHeader)&&authorizationHeader.startsWith("Bearer ");
-		BusinessUser businessUser=new BusinessUser();
+		Boolean hasToken=CurrentRequestHolder.get()!=null&&CurrentRequestHolder.get().getId()!=null;
 			try {
 				if(this.applyFilterOnPath(this.getFilterablePaths(), wrapper.getRequestURI()))
 				{
 					MyLogger.info("User Blockage Filter::");
 					int actualNumberOfTrials= this.configProperties.getBlockageNumberOfTrials()!=null?this.configProperties.getBlockageNumberOfTrials().intValue():0;
-					UserBlockage userBlockage=this.checkUserBlockageType(businessUser, wrapper,hasToken,authorizationHeader);
+					UserBlockage userBlockage=this.checkUserBlockageType(wrapper,hasToken);
 					
 						if(userBlockage!=null)
 						{
@@ -61,9 +59,7 @@ public class UserBlockageFilter extends GenericFilter implements Filter
 								else				
 								{		
 									chain.doFilter(request, response);
-									this.updateUserBlockage(hasToken, userBlockage, businessUser, wrapper);
-									userBlockage.setErrorCount(0);
-									userBlockageUtility.updateUserBlockage(userBlockage);
+									this.updateUserBlockage(hasToken, userBlockage,wrapper);
 									return;
 								}								
 						}
@@ -101,14 +97,13 @@ public class UserBlockageFilter extends GenericFilter implements Filter
 	}
 
 	
-	UserBlockage checkUserBlockageType(BusinessUser businessUser,HttpServletRequest wrapper,boolean hasToken,String authorizationHeader) throws BusinessException
+	UserBlockage checkUserBlockageType(HttpServletRequest wrapper,boolean hasToken) throws BusinessException
 	{
 		
 		
 		if (hasToken) 
 		{
-				businessUser=this.businessUserService.getByUserPhone(jwtUtil.extractUsername(authorizationHeader.substring(7)));
-				UserBlockage userBlockage = userBlockageUtility.getUserBlockage(businessUser.getId(),false);
+				UserBlockage userBlockage = userBlockageUtility.getUserBlockage(CurrentRequestHolder.get().getId(),false);
 				return userBlockage;
 		}
 		else
@@ -124,15 +119,17 @@ public class UserBlockageFilter extends GenericFilter implements Filter
 		return "+"+wrapper.getParameter("countryPhoneCode")+wrapper.getParameter("phoneNumber");
 	}
 	
-	void updateUserBlockage(boolean hasToken,UserBlockage userBlockage,BusinessUser businessUser,HttpServletRequest wrapper)
+	void updateUserBlockage(boolean hasToken,UserBlockage userBlockage,HttpServletRequest wrapper)
 	{
 		if(hasToken)
 		{
-			userBlockage.setUser(userMapper.convertBusinessUnitToBasicUnit(businessUser, false));
+			userBlockage.setUser(userMapper.convertBusinessUnitToBasicUnit(CurrentRequestHolder.get(), false));
 		}
 		else
 		{
 			userBlockage.setUserPhone(this.getUserPhone(wrapper));
 		}
+		userBlockage.setErrorCount(0);
+		userBlockageUtility.updateUserBlockage(userBlockage);
 	}
 }
