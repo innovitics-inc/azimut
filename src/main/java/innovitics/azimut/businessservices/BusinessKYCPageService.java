@@ -18,7 +18,9 @@ import innovitics.azimut.models.kyc.Review;
 import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.services.kyc.KYCPageService;
 import innovitics.azimut.utilities.businessutilities.ReviewUtility;
+import innovitics.azimut.utilities.datautilities.BooleanUtility;
 import innovitics.azimut.utilities.datautilities.ListUtility;
+import innovitics.azimut.utilities.datautilities.NumberUtility;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.logging.MyLogger;
@@ -63,6 +65,7 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 			kycPage.setDraw(draw);
 			BusinessKYCPage businessKYCPage=this.kycPageMapper.convertBasicUnitToBusinessUnit(kycPage,language,true);
 			businessKYCPage.setVerificationPercentage(businessUser.getVerificationPercentage());
+			this.getReviewedPage(businessUser, businessKYCPage, draw, language);
 			return this.generateUrls(businessKYCPage);
 	
 		}
@@ -73,7 +76,6 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 	}
 	public List<BusinessKYCPage> getUserKycPages(BusinessUser tokenizedBusinessUser,Boolean draw,String language) throws BusinessException
 	{
-		MyLogger.info("enter::::");
 		List<BusinessKYCPage> businessKYCPages=new ArrayList<BusinessKYCPage>();
 		List<BusinessQuestion> businessQuestions=new LinkedList<BusinessQuestion>();
 		List<BusinessQuestion> businessSubQuestions=new LinkedList<BusinessQuestion>();
@@ -87,7 +89,6 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 						businessQuestions.addAll(businessKYCPage.getQuestions());
 						if(childListUtility.isListPopulated(businessQuestions))
 						{
-							MyLogger.info("enter2::::");
 							for(BusinessQuestion businessQuestion:businessQuestions)
 							{
 								if(childListUtility.isListPopulated(businessQuestion.getSubQuestions()))
@@ -129,7 +130,6 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 	
 	public List<BusinessKYCPage> generateUrlsForList(List<BusinessKYCPage> inputBusinessKYCPages) throws IOException
 	{
-		MyLogger.info("enter5::::");
 		List<BusinessKYCPage> businessKYCPages=new ArrayList<BusinessKYCPage>();
 		for(BusinessKYCPage businessKYCPage:inputBusinessKYCPages)
 		{
@@ -199,10 +199,24 @@ public class BusinessKYCPageService extends AbstractBusinessService<BusinessKYCP
 	
 	BusinessKYCPage getReviewedPage(BusinessUser businessUser,BusinessKYCPage page,Boolean draw,String language)
 	{
-		if(true&&page!=null&&this.childListUtility.isListPopulated(page.getQuestions()))
+		if(BooleanUtility.isTrue(businessUser.getIsReviewed())&&page!=null&&this.childListUtility.isListPopulated(page.getQuestions()))
 		{
 			List<Review> reviews=new ArrayList<Review>();
-			this.reviewUtility.getReviews();
+			reviews=this.reviewUtility.getReviews();
+			if(reviewUtility.isListPopulated(reviews))
+			{
+				for(BusinessQuestion businessQuestion:page.getQuestions())
+				{
+					for(Review review:reviews)
+					{
+						if(businessQuestion!=null&&review!=null&&NumberUtility.areLongValuesMatching(businessQuestion.getId(),review.getQuestionId()))
+						{
+							businessQuestion.setReview(reviewUtility.convertReviewToBusinessReview(review, language));
+						}
+					}
+				}
+			}
+			
 		}
 			
 		return page;

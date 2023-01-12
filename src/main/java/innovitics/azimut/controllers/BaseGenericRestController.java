@@ -17,6 +17,7 @@ import java.lang.IllegalStateException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.businessmodels.admin.BusinessAdminUser;
 import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.businessservices.AbstractBusinessService;
 import innovitics.azimut.businessutilities.BusinessSearchCriteria;
@@ -54,7 +55,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity>{
 	private BaseGenericResponse<T> constructGenericBaseResponseCodeAndMessage(BaseGenericResponse<T> baseResponse) {
 		baseResponse.setMessage(StringUtility.SUCCESS);
 		baseResponse.setStatus(StringUtility.SUCCESS_CODE);
-		baseResponse.setTransactionId(CurrentRequestHolder.get().getSystemTrx());
+		baseResponse.setTransactionId(Thread.currentThread().getName());
 		MyLogger.info(baseResponse.toString());
 		return baseResponse;
 	}
@@ -124,7 +125,7 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity>{
 		BaseGenericResponse<T> baseGenericResponse = new BaseGenericResponse<T>();
 		baseGenericResponse.setMessage(errorMessage);
 		baseGenericResponse.setStatus(errorCode);
-		baseGenericResponse.setTransactionId(CurrentRequestHolder.get().getSystemTrx());
+		baseGenericResponse.setTransactionId(Thread.currentThread().getName());
 		return baseGenericResponse;
 
 	}
@@ -179,16 +180,28 @@ public abstract class BaseGenericRestController<T extends BaseBusinessEntity>{
 	
 	protected BusinessUser getCurrentRequestHolder(String token) throws BusinessException
 	{
-		BusinessUser businessUser =CurrentRequestHolder.get();
-				//this.jwtUtil.getBusinessUserFromToken(StringUtility.generateSubStringStartingFromCertainIndex(token,' '));
+		BusinessUser businessUser =
+		//CurrentRequestHolder.get();
+		this.jwtUtil.getBusinessUserFromToken(StringUtility.generateSubStringStartingFromCertainIndex(token,' '));
 		if(businessUser!=null)
 		{
-			MyLogger.info("Current Request Holder::"+businessUser.getUserPhone());
+			MyLogger.info("Current Request Holder::"+businessUser.getUsername());
 		}
 		
 		return businessUser;		
 	}
-	
+	protected BusinessAdminUser getCurrentAdminRequestHolder(String token) throws BusinessException
+	{
+		BusinessAdminUser businessAdminUser =
+		//CurrentRequestHolder.get();
+		this.jwtUtil.getBusinessAdminUserFromToken(StringUtility.generateSubStringStartingFromCertainIndex(token,' '));
+		if(businessAdminUser!=null)
+		{
+			MyLogger.info("Current Request Holder::"+businessAdminUser.getUsername());
+		}
+		
+		return businessAdminUser;		
+	}	
 	
 	protected ResponseEntity<BaseGenericResponse<T>> handleBaseGenericResponseException(Exception exception) {
 		MyLogger.info("Exception Caught::::");

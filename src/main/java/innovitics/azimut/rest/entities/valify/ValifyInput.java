@@ -6,7 +6,7 @@ public class ValifyInput extends BaseInput {
 
 	private String bundleKey;
 	private String token;
-	private String lang;
+	
 	public String getBundleKey() {
 		return bundleKey;
 	}
@@ -19,12 +19,5 @@ public class ValifyInput extends BaseInput {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	public String getLang() {
-		return lang;
-	}
-	public void setLang(String lang) {
-		this.lang = lang;
-	}
-	
 	
 }

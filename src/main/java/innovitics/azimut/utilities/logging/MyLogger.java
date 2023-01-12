@@ -16,7 +16,8 @@ public final class MyLogger {
 	
 	private  static String idgen()
 	{
-		return CurrentRequestHolder.get()!=null&&StringUtility.isStringPopulated(CurrentRequestHolder.get().getSystemTrx())?CurrentRequestHolder.get().getSystemTrx():"";
+		//return CurrentRequestHolder.get()!=null&&StringUtility.isStringPopulated(CurrentRequestHolder.get().getSystemTrx())?CurrentRequestHolder.get().getSystemTrx():"";
+		return Thread.currentThread().getName();
 	}
 	
 	public static void info(String value)

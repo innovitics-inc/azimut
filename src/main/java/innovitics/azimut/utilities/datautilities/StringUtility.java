@@ -23,6 +23,7 @@ import innovitics.azimut.utilities.threading.CurrentRequestHolder;
 public final class StringUtility extends ParentUtility{
 	
 	protected static final Logger logger = LoggerFactory.getLogger(StringUtility.class);
+	public static final	List<String> TRUE=Arrays.asList("TRUE","true","1");
 	public static final String SUCCESS="success";
 	public static final int SUCCESS_CODE=0;
 	public static final String AUTHORIZATION_HEADER="Authorization";
@@ -110,7 +111,7 @@ public final class StringUtility extends ParentUtility{
         BaseGenericResponse<String> baseGenericResponse = new BaseGenericResponse<String>();
 		baseGenericResponse.setMessage(errorCode.getMessage());
 		baseGenericResponse.setStatus(errorCode.getCode());
-		baseGenericResponse.setTransactionId(CurrentRequestHolder.get().getSystemTrx());
+		baseGenericResponse.setTransactionId(Thread.currentThread().getName());
         return mapper.writeValueAsString(baseGenericResponse);
     }
 	public static String convertToJson(Object object) {

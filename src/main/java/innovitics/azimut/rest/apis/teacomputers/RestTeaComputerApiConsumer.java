@@ -67,9 +67,9 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		MyLogger.info("Request right before invocation::::"+httpEntity.toString());
 		MyLogger.info("Method:::"+httpMethod);
 		MyLogger.info("Class:::"+clazz.getName());
-		final RestTemplate authRestTemplate = new RestTemplate();	
-		authRestTemplate.setRequestFactory(new HttpComponentsClientHttpRequestWithBodyFactory());
-		ResponseEntity<TeaComputerResponse> responseEntity=authRestTemplate.exchange(this.generateURL(params), httpMethod, httpEntity, clazz);
+		//final RestTemplate authRestTemplate = new RestTemplate();	
+		this.restTemplate().setRequestFactory(new HttpComponentsClientHttpRequestWithBodyFactory());
+		ResponseEntity<TeaComputerResponse> responseEntity=this.restTemplate().exchange(this.generateURL(params), httpMethod, httpEntity, clazz);
 		return responseEntity;
 		}
 		catch(HttpClientErrorException clientErrorException)
@@ -125,7 +125,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 	  
 	
 	}
-	
+	@Override
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
 		MyLogger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();
@@ -153,7 +153,7 @@ extends AbstractBaseRestConsumer<TeaComputerRequest, TeaComputerResponse, TeaCom
 		IntegrationException integrationException=new IntegrationException(errorCode, new Date(), errorMessage,null, errorMessage,httpClientErrorException.getStackTrace());
 		return  integrationException; 
 }
-	
+	@Override
 	protected void populateResponse(String url,ResponseEntity<TeaComputerResponse> responseEntity)
 	{
 		

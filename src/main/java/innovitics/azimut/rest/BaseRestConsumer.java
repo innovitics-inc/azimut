@@ -35,7 +35,7 @@ import innovitics.azimut.exceptions.IntegrationException;
 	
 	HttpMethod chooseHttpMethod();
 	
-	IntegrationException handleError(HttpClientErrorException httpClientErrorException) throws IntegrationException;
+	IntegrationException handleError(HttpClientErrorException httpClientErrorException);
 	
 	O invoke (I input,Class<RES> clazz,String params) throws IntegrationException, HttpClientErrorException, Exception;
 	

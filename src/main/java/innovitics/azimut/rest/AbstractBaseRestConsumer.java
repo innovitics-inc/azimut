@@ -62,17 +62,12 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 			
 			HttpEntity<MultiValueMap<String, String>> mappedHttpEntity= this.generateMappedRequestFromInput(input);
 			
-			//if(httpEntity!=null)
-			{
-				//logger.info("Request::" + httpEntity.toString());
+			
+				MyLogger.info("Request::" +httpEntity!=null?httpEntity.toString():null);
+			
 				String url=this.generateURL(params);
 				
 				MyLogger.info("URL:::"+url);
-				
-				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), );
-				
-				
-				//ResponseEntity<RES> responseEntity=this.consumeRestAPI(httpEntity, this.chooseHttpMethod(), clazz,params);
 				responseEntity=this.consumeRestAPI(httpEntity!=null?httpEntity:mappedHttpEntity, this.chooseHttpMethod(), clazz,params,input);
 				
 				this.populateResponse(url, responseEntity);
@@ -87,28 +82,6 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 				
 				MyLogger.info("Output:::" +output!=null?output.toString():null);
 				return output;
-			}
-			/*if(mappedHttpEntity!=null)
-			{
-				//logger.info("Request::" + mappedHttpEntity.toString());
-				String url=this.generateURL(params);
-				
-				MyLogger.info("URL:::"+url);
-				
-				//ResponseEntity<RES> responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params);
-				responseEntity=this.consumeURLEncodedRequestRestAPI(mappedHttpEntity, this.chooseHttpMethod(), clazz,params,input);
-				MyLogger.info("Response::" + responseEntity!=null?responseEntity.toString():null);
-				
-				this.validateResponse(responseEntity);
-				
-				O output=this.generateOutPutFromResponse(responseEntity);
-				MyLogger.info("Output:::" +output!=null?output.toString():null);
-				return output;
-	
-			}*/
-			
-			
-			//return null;
 			
 		} 
 		
@@ -223,5 +196,52 @@ implements BaseRestConsumer<REQ,RES,I,O> {
 		HttpEntity<String> httpEntity= new HttpEntity<String>(json, headers);
 		return httpEntity;
 	}
+	
+	protected HttpEntity<String> stringfy(REQ request)
+	{
+		ObjectMapper objectMapper = new ObjectMapper();
+		String json ="";
+	    try 
+	    {
+			objectMapper.setSerializationInclusion(Include.NON_NULL);
+			objectMapper.setSerializationInclusion(Include.NON_ABSENT);
+			objectMapper.setSerializationInclusion(Include.NON_EMPTY);
 
+			json = objectMapper.writeValueAsString(request);
+			//MyLogger.info("Json:::::"+json);
+		} catch (JsonProcessingException e) 
+	    {
+			MyLogger.info("Could not stringfy to json object");
+			e.printStackTrace();
+		}
+
+	
+		HttpEntity<String> httpEntity= new HttpEntity<String>(json);
+		return httpEntity;
+	}
+
+	protected IntegrationException validateExceptionType(Exception exception)
+	{
+		MyLogger.info("Stack trace:::");
+		
+		exception.printStackTrace();
+		
+		if(exception instanceof IntegrationException)
+		{
+			return (IntegrationException)exception;
+		}
+		
+		if(exception instanceof HttpClientErrorException)
+		{
+			
+			IntegrationException integrationException=this.handleError((HttpClientErrorException)exception);			
+			return  integrationException;
+		}
+		
+		
+		return  new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
+	
+	}	
+	
+	
 }

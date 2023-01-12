@@ -15,7 +15,7 @@ import innovitics.azimut.utilities.CustomJsonRootName;
 
 
 @CustomJsonRootName(plural = "users", singular = "user")
-public class BusinessUser  extends BaseBusinessEntity{
+public class BusinessUser  extends BaseBusinessEntity implements BusinessUserInterface{
 	
 
 	protected Long id;
@@ -68,6 +68,8 @@ public class BusinessUser  extends BaseBusinessEntity{
 	private String[] dates;
 	private Boolean isOld;
 	private String mailingAddress;
+	private Boolean isReviewed;
+	private Long firstReviewedPageId;
 	
 	
 	public Date getCreatedAt() {
@@ -409,6 +411,20 @@ public class BusinessUser  extends BaseBusinessEntity{
 	public void setMailingAddress(String mailingAddress) {
 		this.mailingAddress = mailingAddress;
 	}
+	
+	public Boolean getIsReviewed() {
+		return isReviewed;
+	}
+	public void setIsReviewed(Boolean isReviewed) {
+		this.isReviewed = isReviewed;
+	}
+	
+	public Long getFirstReviewedPageId() {
+		return firstReviewedPageId;
+	}
+	public void setFirstReviewedPageId(Long firstReviewedPageId) {
+		this.firstReviewedPageId = firstReviewedPageId;
+	}
 	public void concatinate()
 	{
 		this.setUserPhone(this.getCountryPhoneCode()+this.getPhoneNumber());
@@ -431,6 +447,10 @@ public class BusinessUser  extends BaseBusinessEntity{
 				+ Arrays.toString(clientBankAccounts) + ", solvedPages=" + solvedPages + ", azimutAccounts="
 				+ azimutAccounts + ", userDevices=" + userDevices + ", dates=" + Arrays.toString(dates) + ", isOld="
 				+ isOld + "]";
+	}
+	@Override
+	public String getUsername() {
+		return this.getUserPhone();
 	}
 	
 

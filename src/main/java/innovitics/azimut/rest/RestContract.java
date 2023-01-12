@@ -13,6 +13,7 @@ import innovitics.azimut.rest.entities.BaseInput;
 import innovitics.azimut.rest.entities.BaseOutput;
 import innovitics.azimut.rest.mappers.AddAccountMapper;
 import innovitics.azimut.rest.mappers.AddClientBankAccountMapper;
+import innovitics.azimut.rest.mappers.AdminUserLoginMapper;
 import innovitics.azimut.rest.mappers.CancelOrderMapper;
 import innovitics.azimut.rest.mappers.CheckAccountMapper;
 import innovitics.azimut.rest.mappers.GetClientBalanceMapper;
@@ -66,6 +67,7 @@ public class RestContract<I, O, REQ, RES, B extends BaseBusinessEntity>
 	@Autowired public PaytabsQueryPaymentMapper paytabsQueryPaymentMapper;
 	@Autowired public SendVerificationCodeMapper sendVerificationCodeMapper;
 	@Autowired public VerifyMapper verifyMapper;
+	@Autowired public AdminUserLoginMapper adminUserLoginMapper;
 
 	public B getData(RestMapper<BaseInput, BaseOutput, REQ, RES, B> restMapper,B baseBusinessEntity,String param) throws IntegrationException
 	{

@@ -93,6 +93,8 @@ public class User extends BaseEntity {
 	private Boolean isOld;
 	private String mailingAddress;
 	
+	private Boolean isReviewed;
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -422,6 +424,12 @@ public class User extends BaseEntity {
 		this.mailingAddress = mailingAddress;
 	}
 	
+	public Boolean getIsReviewed() {
+		return isReviewed;
+	}
+	public void setIsReviewed(Boolean isReviewed) {
+		this.isReviewed = isReviewed;
+	}
 	public void concatinate()
 	{
 		this.setUserPhone(this.getCountryPhoneCode()+this.getPhoneNumber());

@@ -37,7 +37,8 @@ public class Review extends BaseEntity{
 	protected String comment;
 	
 	protected Long userId;
-
+	
+	protected String commentAr;
 	public Long getId() {
 		return id;
 	}
@@ -84,6 +85,25 @@ public class Review extends BaseEntity{
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	public Long getPageId() {
+		return pageId;
+	}
+	public void setPageId(Long pageId) {
+		this.pageId = pageId;
+	}
+	public Integer getPageOrder() {
+		return pageOrder;
+	}
+	public void setPageOrder(Integer pageOrder) {
+		this.pageOrder = pageOrder;
+	}
+	public String getCommentAr() {
+		return commentAr;
+	}
+	public void setCommentAr(String commentAr) {
+		this.commentAr = commentAr;
+	}
+	
 
 	
 	

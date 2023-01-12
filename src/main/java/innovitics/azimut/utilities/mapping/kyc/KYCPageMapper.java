@@ -236,7 +236,6 @@ public class KYCPageMapper extends GrandParentMapper<KYCPage, BusinessKYCPage>{
 	
 	public void matchAndAssignForList(List<BusinessSubmittedAnswer> businessSubmittedAnswers,List <BusinessQuestion> businessQuestions,List <BusinessQuestion> businessSubQuestions)
 	{
-		MyLogger.info("enter4::::");
 	   if(this.businessSubmittedAnswerListUtility.isListPopulated(businessSubmittedAnswers))
 	   {
 		 for(BusinessQuestion businessQuestion:businessQuestions)

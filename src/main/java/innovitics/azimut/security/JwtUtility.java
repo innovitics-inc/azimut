@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.businessmodels.user.BusinessUserInterface;
 import innovitics.azimut.businessmodels.user.Token;
 import innovitics.azimut.exceptions.BusinessException;
 import innovitics.azimut.utilities.datautilities.DateUtility;
@@ -16,20 +17,21 @@ public class JwtUtility extends JwtUtil{
 
 	
 	@Override 
-	public Token generateTokenUsingUserDetails(BusinessUser businessUser)
+	public Token generateTokenUsingUserDetails(BusinessUserInterface businessUser)
 	{
 		Token token=new Token();
 		StringBuffer valueToEncrypt=new StringBuffer();
 		
 		if(businessUser!=null)
 		{	
-			
+			/*
 			valueToEncrypt.append(businessUser.getCountryPhoneCode());
 			valueToEncrypt.append(businessUser.getPhoneNumber());
 			valueToEncrypt.append(".");
 			valueToEncrypt.append(businessUser.getId());
 			valueToEncrypt.append(".");
 			valueToEncrypt.append(businessUser.getUserId());
+			*/
 			valueToEncrypt.append(".");
 			valueToEncrypt.append(UUID.randomUUID());
 			valueToEncrypt.append(".");
@@ -45,15 +47,8 @@ public class JwtUtility extends JwtUtil{
 		token.setRefreshTokenString(this.aes.encrypt(tokenString));
 		token.setRefreshTokenExpiry(this.calculateExpirationDate());
 		
-		try 
-		{
-			this.businessUserService.editUser(businessUser);
-		} 
-		catch (BusinessException exception) 
-		{
-			exception.printStackTrace();
-		}
-		
+		//this.businessUserService.editUser(businessUser);
+	
 		return token;
 		
 	}

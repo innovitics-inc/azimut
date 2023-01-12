@@ -39,7 +39,8 @@ public class JwtAuthenticationController extends BaseGenericRestController<Authe
 	{
 		BusinessUser businessUser = new BusinessUser();
 		try {
-			MyLogger.info("Authentication Request:::"+authenticationRequest.toString());
+			
+			
 			this.validation.validateAuthenticationCredentials(authenticationRequest);
 			businessUser=this.businessUserService.beautifyUser(this.businessUserService.getByUserPhoneAndPassword(authenticationRequest.getCountryPhoneCode()+authenticationRequest.getPhoneNumber(),authenticationRequest.getPassword(),authenticationRequest.getDeviceId()));			
 			return this.generateBaseGenericResponse(AuthenticationResponse.class, new AuthenticationResponse(this.jwtUtil.generateTokenUsingUserDetails(businessUser),businessUser),null,null);

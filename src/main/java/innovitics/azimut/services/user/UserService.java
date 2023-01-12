@@ -110,6 +110,8 @@ public class UserService extends AbstractService<User,String>{
 		return this.userDynamicRepository.findOne(this.userSpecification.findByCriteria(searchCriteriaList)).get();
 	}
 	
-	
+	public void flagTheUserAsReviewed(Long userId) {
+		this.userDynamicRepository.flagTheUserAsReviewed(userId);
+	}	
 
 }

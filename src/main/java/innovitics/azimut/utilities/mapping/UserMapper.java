@@ -7,6 +7,7 @@ import innovitics.azimut.businessmodels.user.BusinessUser;
 import innovitics.azimut.models.user.User;
 import innovitics.azimut.models.user.UserType;
 import innovitics.azimut.security.AES;
+import innovitics.azimut.services.kyc.ReviewService;
 import innovitics.azimut.services.kyc.UserTypeService;
 import innovitics.azimut.utilities.crosslayerenums.UserIdType;
 import innovitics.azimut.utilities.crosslayerenums.UserStep;
@@ -20,6 +21,7 @@ public class UserMapper extends Mapper<User, BusinessUser>{
 public static final long TEACOMPUTERS_CLIENT_AML=1L;
 @Autowired AES aes;
 @Autowired UserTypeService userTypeService;
+@Autowired ReviewService reviewService;
 @Autowired ExceptionHandler exceptionHandler;
 	@Override
 	public User convertBusinessUnitToBasicUnit(BusinessUser businessUser, boolean save) {
@@ -171,6 +173,10 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			if(businessUser.getMailingAddress()!=null)
 			{
 				user.setMailingAddress(businessUser.getMailingAddress());
+			}
+			if(businessUser.getIsReviewed()!=null)
+			{
+				user.setIsReviewed(businessUser.getIsReviewed());
 			}
 			user.concatinate();
 			
@@ -387,7 +393,11 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			{
 				businessUser.setMailingAddress(user.getMailingAddress());
 			}
-			
+			if(user.getIsReviewed()!=null)
+			{
+				businessUser.setIsReviewed(user.getIsReviewed());
+				businessUser.setFirstReviewedPageId(getFirstReviewPageId(user.getId()));
+			}
 			businessUser.concatinate();
 
 		}
@@ -522,6 +532,11 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 				{
 					oldBusinessUser.setMailingAddress(businessUser.getMailingAddress());
 				}
+				if(businessUser.getIsReviewed()!=null)
+				{
+					oldBusinessUser.setIsReviewed(businessUser.getIsReviewed());
+				}
+				
 			businessUser.concatinate();
 			oldBusinessUser.concatinate();
 
@@ -549,5 +564,17 @@ public static final long TEACOMPUTERS_CLIENT_AML=1L;
 			return null;
 		}
 	}
-
+	private Long getFirstReviewPageId(Long id)
+	{
+		try
+		{
+			return reviewService.getIdOfThePageWithLeastOrder(id);
+		}
+		catch(Exception exception)
+		{
+			MyLogger.info("Could not retireve the First reviewd page Id::: ");
+			exception.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -11,6 +11,7 @@ public class AuthenticationRequest extends BaseBusinessEntity {
 	private String password;
 	private String refreshToken;
 	private String newPassword;
+	private String email;
 
 	public String getUserPhone() {
 		return userPhone;
@@ -50,12 +51,24 @@ public class AuthenticationRequest extends BaseBusinessEntity {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public AuthenticationRequest(String userPhone, String countryPhoneCode, String phoneNumber, String password) {
 		super();
 		this.userPhone = userPhone;
 		this.countryPhoneCode = countryPhoneCode;
 		this.phoneNumber = phoneNumber;
 		this.password = password;
+	}
+	
+	public AuthenticationRequest(String password, String email) {
+		super();
+		this.password = password;
+		this.email = email;
 	}
 	public AuthenticationRequest() {
 	}

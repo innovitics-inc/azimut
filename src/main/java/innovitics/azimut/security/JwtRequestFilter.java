@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
@@ -23,7 +24,9 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.businessmodels.admin.BusinessAdminUser;
 import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.businessmodels.user.BusinessUserInterface;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.controllers.BaseGenericRestController;
 import innovitics.azimut.exceptions.BusinessException;
@@ -40,50 +43,33 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private MyUserDetailsService myUserDetailsService;
+	@Autowired
+	private MyAdminDetailsService myAdminDetailsService;
 	@Autowired 
 	private JwtUtil jwtUtil;
 	@Autowired ConfigProperties configProperties;
 	
 	private static final String AUTHORIZATION_HEADER = "Authorization";
 	private static final String CONTENT_TYPE = "Content-Type";
-	
+	private static final String ADMIN_HEADER = "Is-Admin";
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
 		try {
 						
-			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);			
+			final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
+			final String adminHeader=request.getHeader(ADMIN_HEADER);
+			final boolean isAdmin=StringUtility.isStringPopulated(adminHeader)&&StringUtility.TRUE.contains(adminHeader);
+			
 		    long start = System.nanoTime();
 		    String username = null;
 			String jwt = null;
 			String transaction=DateUtility.getCurrentNanoSecond();
-			BusinessUser businessUser=new BusinessUser();
-			//Thread.currentThread().setName(transaction);
-			
-			
+			Thread.currentThread().setName(transaction);
+			BusinessUserInterface businessUser=isAdmin?new BusinessAdminUser():new BusinessUser();
 
-			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-				jwt = authorizationHeader.substring(7);
-				username = jwtUtil.extractUsername(jwt);
-			}
-			
-
-			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-				BusinessUserHolder userDetails = this.myUserDetailsService.loadUserByUsername(username);
-				if (jwtUtil.validateToken(jwt, userDetails)) {
-					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-							userDetails, null, userDetails.getAuthorities());
-					usernamePasswordAuthenticationToken
-							.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-					
-					businessUser=userDetails.getBusinessUser();
-					
-				}
-			}
-			
-			
+			this.prepareToken(isAdmin?myAdminDetailsService:myUserDetailsService, authorizationHeader, jwt, username, businessUser, request);
 			
 			    response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 			    response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -92,7 +78,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 
 			businessUser.setSystemTrx(transaction);
-			CurrentRequestHolder.set(businessUser);
+			//CurrentRequestHolder.set(businessUser);
 			MyLogger.info("authorization header:::"+authorizationHeader);
 			MyLogger.info("Used profile::::"+this.configProperties.getUsedProfile());
 			filterChain.doFilter(request, response);
@@ -106,7 +92,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			
 			MyLogger.info("Request Done in :::" + (elapsedTimeInSecond)+" seconds");
-			CurrentRequestHolder.clear();
+			//CurrentRequestHolder.clear();
 		} 
 		
 		catch (JwtException e) {
@@ -128,4 +114,31 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
+	
+	
+	
+	void prepareToken(UserDetailsService userDetailsService,String authorizationHeader,String jwt,String username,BusinessUserInterface businessUser,HttpServletRequest request)
+	{
+		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) 
+		{
+			jwt = authorizationHeader.substring(7);
+			username = jwtUtil.extractUsername(jwt);
+		}
+
+
+		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) 
+		{
+			BusinessUserHolder userDetails = (BusinessUserHolder) userDetailsService.loadUserByUsername(username);
+		  if (jwtUtil.validateToken(jwt, userDetails)) 
+			{
+			  UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+			  usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+			  SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			  businessUser=userDetails.getBusinessUser();		
+			}
+		}
+
+	}
+
+	
 }

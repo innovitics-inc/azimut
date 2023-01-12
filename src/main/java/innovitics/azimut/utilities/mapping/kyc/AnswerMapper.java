@@ -183,7 +183,6 @@ public class AnswerMapper extends Mapper<Answer, BusinessAnswer> {
 	
 	public List<BusinessSubmittedAnswer> populateUserAnswersForAllPages(Long userId)
 	{
-		MyLogger.info("enter3::::");
 		List<UserAnswer> userAnswers=new ArrayList<UserAnswer>();
 		List<BusinessSubmittedAnswer> parentAnswers=new LinkedList<BusinessSubmittedAnswer>();
 		List<BusinessSubmittedAnswer> childAnswers=new LinkedList<BusinessSubmittedAnswer>();

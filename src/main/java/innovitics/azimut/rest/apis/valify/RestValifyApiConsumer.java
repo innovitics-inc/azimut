@@ -138,7 +138,7 @@ extends AbstractBaseRestConsumer<ValifyRequest, ValifyResponse, ValifyInput, Val
 		return  new IntegrationException(ErrorCode.FAILED_TO_INTEGRATE);
 	
 	}
-	
+	@Override
 	public IntegrationException handleError(HttpClientErrorException httpClientErrorException)  {
 		MyLogger.info("httpClientErrorException:::"+httpClientErrorException.toString());
 		int errorCode=ErrorCode.FAILED_TO_INTEGRATE.getCode();

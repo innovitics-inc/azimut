@@ -1,7 +1,11 @@
 package innovitics.azimut.businessmodels.kyc;
 
-import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import java.util.List;
 
+import innovitics.azimut.businessmodels.BaseBusinessEntity;
+import innovitics.azimut.utilities.CustomJsonRootName;
+
+@CustomJsonRootName(plural = "data", singular = "data")
 public class BusinessReview extends BaseBusinessEntity{
 	
 	protected Long id;
@@ -12,13 +16,15 @@ public class BusinessReview extends BaseBusinessEntity{
 	
 	protected Integer pageOrder;
 	
-	protected Long result;
+	protected Long status;
 	
 	protected Long actionMaker;
 	
-	protected String comment;
+	protected String reason;
 	
 	protected Long userId;
+	
+	protected List<Long> pageIds;
 
 	public Long getId() {
 		return id;
@@ -52,14 +58,6 @@ public class BusinessReview extends BaseBusinessEntity{
 		this.pageOrder = pageOrder;
 	}
 
-	public Long getResult() {
-		return result;
-	}
-
-	public void setResult(Long result) {
-		this.result = result;
-	}
-
 	public Long getActionMaker() {
 		return actionMaker;
 	}
@@ -67,21 +65,37 @@ public class BusinessReview extends BaseBusinessEntity{
 	public void setActionMaker(Long actionMaker) {
 		this.actionMaker = actionMaker;
 	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
+	
 	public Long getUserId() {
 		return userId;
 	}
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public List<Long> getPageIds() {
+		return pageIds;
+	}
+
+	public void setPageIds(List<Long> pageIds) {
+		this.pageIds = pageIds;
+	}
+
+	public Long getStatus() {
+		return status;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
 	

@@ -15,12 +15,16 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import innovitics.azimut.businessmodels.admin.BusinessAdminUser;
 import innovitics.azimut.businessmodels.user.AuthenticationRequest;
 import innovitics.azimut.businessmodels.user.BusinessUser;
+import innovitics.azimut.businessmodels.user.BusinessUserInterface;
 import innovitics.azimut.businessmodels.user.Token;
+import innovitics.azimut.businessservices.BusinessAdminUserService;
 import innovitics.azimut.businessservices.BusinessUserService;
 import innovitics.azimut.configproperties.ConfigProperties;
 import innovitics.azimut.exceptions.BusinessException;
+import innovitics.azimut.services.admin.AdminUserService;
 import innovitics.azimut.utilities.datautilities.StringUtility;
 import innovitics.azimut.utilities.exceptionhandling.ErrorCode;
 import innovitics.azimut.utilities.exceptionhandling.ExceptionHandler;
@@ -36,6 +40,7 @@ public class JwtUtil {
 
 	
 	@Autowired BusinessUserService businessUserService;
+	@Autowired BusinessAdminUserService businessAdminUserService;
 	@Autowired ConfigProperties configProperties;
 	@Autowired RefreshToken  refreshToken;
 	@Autowired Validation<AuthenticationRequest> validation;
@@ -100,53 +105,11 @@ public class JwtUtil {
 		return this.businessUserService.getByUserPhone(this.extractUsername(token));
 		
 	}
-	
-	 public Token refreshToken(AuthenticationRequest authenticationRequest) throws BusinessException 
-	 {
-		 /*
-		 Token token=new Token();
-		 this.validation.validate(authenticationRequest, refreshToken, StringUtility.AUTHENTICATION_CLASS_NAME);
-		 //try
-		 //{
-	       if(StringUtility.isStringPopulated(this.extractUsername(authenticationRequest.getOldToken())))
-	       {	
-	    	   if(this.isTokenExpired(authenticationRequest.getOldToken()))
-	    	   {
-	    		   MyLogger.info("Token was found to be expired::::::");
-	    		   throw new BusinessException(ErrorCode.FAILED_TO_VALIDATE_TOKEN);
-	    	   }
-	    	   
-	    	   
-	    	   final Date createdDate = new Date();
-	    	   final Date expirationDate = this.calculateExpirationDate();
-	    	   final Claims claims = getAllClaimsFromToken(authenticationRequest.getOldToken());
-	    	   claims.setIssuedAt(createdDate);
-	    	   claims.setExpiration(expirationDate);
-	    	   
-	    	   token.setTokenString(Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, this.configProperties.getJwTokenKey()).compact());
-	    	   token.setTokenExpiry(expirationDate);
-	    	   
-	       }
-	       else
-	       {
-	    	   MyLogger.info("User was not found::::::");
-	    	   throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-	       }
-	       
-		 //}
-	/*	   catch(ExpiredJwtException expiredJwtException)
-  	   {
-			   
-		  MyLogger.info("ExpiredJwtException caught:::::");
-		  MyLogger.info("ExpiredJwtException caught:::::"+expiredJwtException.getMessage());
-  		  throw this.exceptionHandler.handleAsBusinessException(expiredJwtException, ErrorCode.FAILED_TO_VALIDATE_TOKEN); 
-  	   }*/
-
-	       
-	    //   return token;
-	    return null;
-	    }
-	 
+	public BusinessAdminUser getBusinessAdminUserFromToken(String token) throws BusinessException
+	{
+		return this.businessAdminUserService.findAdminUserByUsername(this.extractUsername(token));
+		
+	}		 
 	 protected Date calculateExpirationDate() {
 	        return new Date(System.currentTimeMillis()+(1000*60)*Long.parseLong(this.configProperties.getJwTokenDurationInMinutes()));
 	    }
@@ -156,9 +119,9 @@ public class JwtUtil {
 	    }
 
 		
-	public Token generateTokenUsingUserDetails(BusinessUser businessUser)
+	public Token generateTokenUsingUserDetails(BusinessUserInterface businessUser)
 	{
-		UserDetails userDetails = new User(businessUser.getUserPhone(), " ",
+		UserDetails userDetails = new User(businessUser.getUsername(), " ",
 				new ArrayList<>());
 
 		Token token = this.generateToken(userDetails);
